@@ -38,7 +38,7 @@ public class UsuarioController {
         return ResponseEntity.ok(new DatosJWTtoken(JWTtoken));
     }
 
-    @PostMapping("/registrar")
+    @PostMapping
     public ResponseEntity registrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
         usuarioService.save(usuarioDTO);
         return ResponseEntity.ok().build();
