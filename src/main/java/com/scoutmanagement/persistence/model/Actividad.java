@@ -23,7 +23,7 @@ public class Actividad {
     @Column(nullable = false)
     private String descripcion;
 
-    @ManyToOne(targetEntity = Rama.class, optional = false)
+    @Enumerated(EnumType.STRING)
     private Rama rama;
 
     @Column(columnDefinition = "DATE")
