@@ -33,7 +33,7 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public Usuario cambiarRegistroUsuarioDTO(UsuarioDTO usuarioDTO) {
         String contraseniaEncriptada = bCryptPasswordEncoder.encode(usuarioDTO.password());
-        return new Usuario(null,
+        return new Usuario(
                 usuarioDTO.username(),
                 contraseniaEncriptada);
     }
