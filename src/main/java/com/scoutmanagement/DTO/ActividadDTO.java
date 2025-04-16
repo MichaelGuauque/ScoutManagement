@@ -2,6 +2,8 @@ package com.scoutmanagement.DTO;
 
 import com.scoutmanagement.persistence.model.Rama;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 
 public record ActividadDTO (
@@ -9,9 +11,9 @@ public record ActividadDTO (
         String nombre,
         @NotBlank
         String descripcion,
-        @NotBlank
+        @NotNull
         Rama rama,
-        @NotBlank
+        @NotNull
         LocalDate fecha,
 
         String ubicacion
