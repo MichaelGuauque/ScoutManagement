@@ -4,20 +4,13 @@ import lombok.*;
 
 @Getter
 public enum Cargo {
+    JEFE_MANADA,
+    JEFE_TROPA,
+    JEFE_COMUNIDAD,
+    JEFE_CLAN,
 
-    JEFE_MANADA(RoleEnum.ADMIN),
-    JEFE_TROPA(RoleEnum.ADMIN),
-    JEFE_COMUNIDAD(RoleEnum.ADMIN),
-    JEFE_CLAN(RoleEnum.ADMIN),
-
-    LOBATO(RoleEnum.USER),
-    SCOUT(RoleEnum.USER),
-    CAMINANTE(RoleEnum.USER),
-    ROVER(RoleEnum.USER);
-
-    private final RoleEnum rol;
-
-    Cargo(RoleEnum rol){
-        this.rol=rol;
-    }
+    LOBATO,
+    SCOUT,
+    CAMINANTE,
+    ROVER
 }

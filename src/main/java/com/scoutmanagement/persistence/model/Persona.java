@@ -16,36 +16,34 @@ public class Persona {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPersona;
+    private Long id;
 
     @Column (nullable = false, columnDefinition = "VARCHAR(25)")
-    private String priNombre;
+    private String primerNombre;
     @Column (nullable = true, columnDefinition = "VARCHAR(25)")
-    private String segNombre;
+    private String segundoNombre;
     @Column (nullable = false, columnDefinition = "VARCHAR(25)")
-    private String priApellido;
+    private String primerApellido;
     @Column (nullable = false, columnDefinition = "VARCHAR(25)")
-    private String segApellido;
-    @Column (nullable = false, unique = true)
+    private String segundoApellido;
+    @Column (nullable = false, unique = true, length = 10)
     private Long numeroDocumento;
 
     @Column (nullable = false)
     private LocalDate fechaNacimiento;
     @Column (nullable = false, columnDefinition = "VARCHAR(30)")
-    private String correo;
-    @Column (nullable = false, columnDefinition = "VARCHAR(30)")
     private String direccion;
     @Column (nullable = false, columnDefinition = "VARCHAR(15)")
     private String eps;
 
-    @Column (nullable = false)
+    @Column (nullable = false, columnDefinition = "VARCHAR(3)")
     private String tipoSangre;
     @Column (nullable = false)
     private boolean tomaMedicamentos;
     @Column (nullable = true, columnDefinition = "VARCHAR(400)")
     private String especificacionMedicamentos;
     @Column (nullable = true, columnDefinition = "VARCHAR(400)")
-    private String alergiasYRestr;
+    private String especificacionAlergiasYRestricciones;
 
     @Enumerated(EnumType.STRING)
     private Genero genero;
@@ -55,7 +53,6 @@ public class Persona {
     private Cargo cargo;
     @ManyToOne(targetEntity = Responsable.class)
     private Responsable responsable;
-    @OneToOne()
-    @JoinColumn(name = "usuario_id", unique = true, nullable = false)
-    private UserEntity usuario;
+    @Column (nullable = false)
+    private String usuario;
 }
