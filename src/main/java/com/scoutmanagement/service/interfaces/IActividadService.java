@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.interfaces;
 
+import com.scoutmanagement.DTO.ActividadDTO;
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 
@@ -10,7 +11,7 @@ public interface IActividadService {
 
     public List<Actividad> findAllActividad();
 
-    public void crearActividad(Actividad actividad);
+    public void crearActividad(ActividadDTO actividadDTO);
 
     public Actividad modificarActividad(Actividad actividad);
 
@@ -19,5 +20,7 @@ public interface IActividadService {
     public List<Actividad> findAllByRama(Rama rama);
 
     public Optional<Actividad> findByNombre(String nombre);
+
+    Actividad cambiarActividadDTO(ActividadDTO actividadDTO);
 
 }

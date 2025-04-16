@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.implementation;
 
+import com.scoutmanagement.DTO.ActividadDTO;
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
@@ -22,8 +23,8 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
-    public void crearActividad(Actividad actividad){
-        actividadRepository.save(actividad);
+    public void crearActividad(ActividadDTO actividadDTO){
+        actividadRepository.save(cambiarActividadDTO(actividadDTO));
     }
 
     @Override
@@ -42,6 +43,18 @@ public class ActividadService implements IActividadService {
     @Override
     public Optional<Actividad> findByNombre(String nombre) {
         return actividadRepository.findByNombre(nombre);
+    }
+
+    @Override
+    public Actividad cambiarActividadDTO(ActividadDTO actividadDTO) {
+        Actividad actividad = Actividad.builder()
+                .nombre(actividadDTO.nombre())
+                .descripcion(actividadDTO.descripcion())
+                .rama(actividadDTO.rama())
+                .fecha(actividadDTO.fecha())
+                .ubicacion(actividadDTO.ubicacion())
+                .build();
+        return actividad;
     }
 
     @Override
