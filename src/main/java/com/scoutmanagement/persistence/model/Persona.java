@@ -47,7 +47,7 @@ public class Persona {
 
     @Enumerated(EnumType.STRING)
     private Genero genero;
-    @ManyToOne (targetEntity = Rama.class)
+    @Enumerated(EnumType.STRING)
     private Rama rama;
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
