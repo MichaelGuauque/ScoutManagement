@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "person")
 public class Persona {
 
     @Id
@@ -27,7 +26,10 @@ public class Persona {
     @Column (nullable = false, columnDefinition = "VARCHAR(25)")
     private String segundoApellido;
     @Column (nullable = false, unique = true, length = 10)
-    private Long numeroDocumento;
+    private Long numeroDeDocumento;
+
+    @Enumerated(EnumType.STRING)
+    private TipoDeDocumento tipoDeDocumento;
 
     @Column (nullable = false)
     private LocalDate fechaNacimiento;
@@ -36,8 +38,8 @@ public class Persona {
     @Column (nullable = false, columnDefinition = "VARCHAR(15)")
     private String eps;
 
-    @Column (nullable = false, columnDefinition = "VARCHAR(3)")
-    private String tipoSangre;
+    @Enumerated(EnumType.STRING)
+    private TipoDeSangre tipoDeSangre;
     @Column (nullable = false)
     private boolean tomaMedicamentos;
     @Column (nullable = true, columnDefinition = "VARCHAR(400)")

@@ -9,7 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "responsible")
 public class Responsable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
