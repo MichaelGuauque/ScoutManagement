@@ -18,10 +18,11 @@ public class PersonaService implements IPersonaService {
 
     @Override
     public void save(PersonaDTO personaDTO) {
-        personaRepository.save(CambiarRegistroPersonaDTO(personaDTO));
+        personaRepository.save(cambiarRegistroPersonaDTO(personaDTO));
     }
 
-    public  Persona CambiarRegistroPersonaDTO(PersonaDTO personaDTO){
+    @Override
+    public Persona cambiarRegistroPersonaDTO(PersonaDTO personaDTO){
         Persona persona= Persona.builder()
                 .primerNombre(personaDTO.primerNombre())
                 .segundoNombre(personaDTO.segundoNombre())
