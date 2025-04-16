@@ -53,6 +53,8 @@ public class Persona {
     private Rama rama;
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
     @ManyToOne(targetEntity = Responsable.class)
     private Responsable responsable;
     @Column (nullable = false)
