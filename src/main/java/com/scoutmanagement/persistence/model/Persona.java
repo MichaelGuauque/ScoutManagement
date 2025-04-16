@@ -31,16 +31,16 @@ public class Persona {
     @Enumerated(EnumType.STRING)
     private TipoDeDocumento tipoDeDocumento;
 
-    @Column (nullable = false)
+    @Column (nullable = true)
     private LocalDate fechaNacimiento;
-    @Column (nullable = false, columnDefinition = "VARCHAR(30)")
+    @Column (nullable = true, columnDefinition = "VARCHAR(30)")
     private String direccion;
-    @Column (nullable = false, columnDefinition = "VARCHAR(15)")
+    @Column (nullable = true, columnDefinition = "VARCHAR(15)")
     private String eps;
 
     @Enumerated(EnumType.STRING)
     private TipoDeSangre tipoDeSangre;
-    @Column (nullable = false)
+    @Column (nullable = true)
     private boolean tomaMedicamentos;
     @Column (nullable = true, columnDefinition = "VARCHAR(400)")
     private String especificacionMedicamentos;
@@ -57,6 +57,6 @@ public class Persona {
     private Rol rol;
     @ManyToOne(targetEntity = Responsable.class)
     private Responsable responsable;
-    @Column (nullable = false)
+    @Column (nullable = true)
     private String usuario;
 }
