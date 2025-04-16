@@ -18,6 +18,7 @@ public class PersonaService implements IPersonaService {
 
     @Override
     public void save(PersonaDTO personaDTO) {
+
         personaRepository.save(CambiarRegistroPersonaDTO(personaDTO));
     }
 
