@@ -27,15 +27,21 @@ public class ActividadController {
     @GetMapping()
     public String actividades(Model model) {
         model.addAttribute("ramas", Rama.values());
-        return "actividades";
+        return "actividades/vistaActividadesAdmin";
+    }
+
+    @GetMapping("/crear")
+    public String crearActividadFormulario(Model model) {
+        model.addAttribute("ramas", Rama.values());
+        return "actividades/vistaCrearActividad";
     }
 
     @PostMapping("/crear")
-    public String crearActividad(@RequestBody @Valid ActividadDTO actividadDTO) {
+    public String crearActividad(@Valid ActividadDTO actividadDTO) {
         logger.info("Creando actividad");
         logger.info("Esta es la actividad {}", actividadDTO);
         actividadService.crearActividad(actividadDTO);
-        return "actividades";
+        return "actividades/vistaActividadesAdmin";
     }
 
 
