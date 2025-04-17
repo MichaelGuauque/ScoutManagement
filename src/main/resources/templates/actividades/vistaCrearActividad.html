@@ -71,8 +71,16 @@
                             <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
                         </div>
                         <ul class="submenu">
-                            <li class="nav-link"><img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar Actividades</li>
-                            <li class="nav-link"><img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear Actividad</li>
+                            <li class="nav-link">
+                                <a th:href="@{/actividades}">
+                                    <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar Actividades
+                                </a>
+                            </li>
+                            <li class="nav-link">
+                                <a th:href="@{/actividades/crear}">
+                                    <img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear Actividad
+                                </a>
+                            </li>
                         </ul>
                     </li>
 

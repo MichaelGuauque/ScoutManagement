@@ -294,6 +294,11 @@ main {
     padding-left: 12px;
 }
 
+.submenu li a{
+    text-decoration: none;
+    color: inherit;
+}
+
 .submenu li:before {
     content: "•";
     color: white;

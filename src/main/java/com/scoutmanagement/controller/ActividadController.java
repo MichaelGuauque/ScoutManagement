@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/actividades")
@@ -26,7 +28,10 @@ public class ActividadController {
 
     @GetMapping()
     public String actividades(Model model) {
+        List<Actividad> listaActividades = actividadService.findAllActividad();
+        model.addAttribute("actividades", listaActividades);
         model.addAttribute("ramas", Rama.values());
+
         return "actividades/vistaActividadesAdmin";
     }
 
@@ -41,7 +46,7 @@ public class ActividadController {
         logger.info("Creando actividad");
         logger.info("Esta es la actividad {}", actividadDTO);
         actividadService.crearActividad(actividadDTO);
-        return "actividades/vistaActividadesAdmin";
+        return "redirect:/actividades";
     }
 
 

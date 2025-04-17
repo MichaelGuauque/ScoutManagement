@@ -63,6 +63,19 @@
                         </div>
                     </li>
 
+<!--                    <li class="menu-item">-->
+<!--                        <div class="main-button">-->
+<!--                            <img th:src="@{/img/Calendario.svg}" alt="Actividades">-->
+<!--                            <span>Actividades</span>-->
+<!--                            <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">-->
+<!--                        </div>-->
+<!--                        <ul class="submenu">-->
+<!--                            <li class="nav-link">-->
+<!--                                <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar Actividades</li>-->
+<!--                            <li class="nav-link"><img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear Actividad</li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+
                     <li class="menu-item">
                         <div class="main-button">
                             <img th:src="@{/img/Calendario.svg}" alt="Actividades">
@@ -70,8 +83,16 @@
                             <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
                         </div>
                         <ul class="submenu">
-                            <li class="nav-link"><img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar Actividades</li>
-                            <li class="nav-link"><img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear Actividad</li>
+                            <li class="nav-link">
+                                <a th:href="@{/actividades}">
+                                    <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar Actividades
+                                </a>
+                            </li>
+                            <li class="nav-link">
+                                <a th:href="@{/actividades/crear}">
+                                    <img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear Actividad
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
@@ -174,168 +195,69 @@
                                 <img src="./img/lupa.svg" alt="Search" width="16" height="16">
                             </div>
                         </button>
+
+                        <button class="search-btn">
+                            <div class="icon-placeholder search-icon">
+                                <img src="./img/cancelFiltro.svg" alt="Search" width="16" height="16">
+                            </div>
+                        </button>
                     </div>
                 </div>
                 <div class="divider-line"></div>
             </div>
-            
-        <!-- Actividad 1 -->
-        <div class="activity-card">
-            <div class="date-column">
-                <div class="month">Abril</div>
-                <div class="day">26</div>
-            </div>
-            <div class="activity-content">
-                <div class="activity-left">
-                    <h3 class="activity-title">Orientación con Brújula y Mapa</h3>
-                    <div class="activity-details">
-                        <div class="detail-item">
-                            <img src="./img/cale.svg" class="detail-icon" style="height: 17px; width: 17px;">
-                            26-04-2025
-                        </div>
-                        <div class="detail-item">
-                            <img src="./img/ubicacionNg.svg" alt="Ubicación" class="detail-icon">
-                            Centro Scout Norte, Zona de Prácticas
-                        </div>
-                    </div>
-                </div>
-                <div class="activity-right">
-                    <div class="activity-description">
-                        Explora la naturaleza y fortalece el espíritu en esta travesía hacia uno de los puntos más altos del sector.
-                        
-                    </div>
-                    <div class="tag">
-                        <img src="./img/rama.svg" alt="Rama" class="tag-icon">
-                        <p>MANADA</p>
-                    </div>
-                    <div class="dropdown-container">
-                        <button class="expand-btn">
-                            <img src="./img/Vector.svg" alt="Expandir" class="expand-icon">
-                        </button>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-item">
-                                <img src="./img/asistencia.svg" alt="Asistencia" class="dropdown-icon">
-                                <span>Asistencia</span>
-                            </div>
-                            <div class="dropdown-item">
-                                <img src="./img/modifiAct.svg" alt="Modificar" class="dropdown-icon">
-                                <span>Modificar</span>
-                            </div>
-                            <div class="dropdown-item">
-                                <img src="./img/elimAct.svg" alt="Eliminar" class="dropdown-icon">
-                                <span>Eliminar</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Actividad 2 -->
-        <div class="activity-card">
-            <div class="date-column">
-                <div class="month" style="color: #595959;">Abril</div>
-                <div class="day" style="color: #595959;">26</div>
-            </div>
-            <div class="activity-content">
-                <div class="activity-left">
-                    <h3 class="activity-title">Orientación con Brújula y Mapa</h3>
-                    <div class="activity-details">
-                        <div class="detail-item">
-                            <img src="./img/cale.svg" class="detail-icon" style="height: 17px; width: 17px;">
-                            26-04-2025
-                        </div>
-                        <div class="detail-item">
-                            <img src="./img/ubicacionNg.svg" alt="Ubicación" class="detail-icon">
-                            Centro Scout Norte, Zona de Prácticas
-                        </div>
-                    </div>
-                </div>
-                <div class="activity-right">
-                    <div class="activity-description">
-                        Explora la naturaleza y fortalece el espíritu en esta travesía hacia uno de los puntos más altos del sector.
 
-                    </div>
-                    <div class="tag">
-                        <img src="./img/rama.svg" alt="Rama" class="tag-icon">
-                        <p>MANADA</p>
-                    </div>
-                    <div class="dropdown-container">
-                        <button class="expand-btn">
-                            <img src="./img/Vector.svg" alt="Expandir" class="expand-icon">
-                        </button>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-item">
-                                <img src="./img/asistencia.svg" alt="Asistencia" class="dropdown-icon">
-                                <span>Asistencia</span>
+            <div th:each="actividad : ${actividades}" class="activity-card">
+                <div class="date-column">
+                    <div class="month" th:text="${#temporals.format(actividad.fecha, 'MMMM')}" style="text-transform: capitalize;"></div>
+                    <div class="day" th:text="${#temporals.format(actividad.fecha, 'dd')}"></div>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-left">
+                        <h3 class="activity-title" th:text="${actividad.nombre}">Nombre Actividad</h3>
+                        <div class="activity-details">
+                            <div class="detail-item">
+                                <img src="./img/cale.svg" class="detail-icon" style="height: 17px; width: 17px;">
+                                <span th:text="${#temporals.format(actividad.fecha, 'dd-MM-yyyy')}"></span>
                             </div>
-                            <div class="dropdown-item">
-                                <img src="./img/modifiAct.svg" alt="Modificar" class="dropdown-icon">
-                                <span>Modificar</span>
+                            <div class="detail-item">
+                                <img src="./img/ubicacionNg.svg" alt="Ubicación" class="detail-icon">
+                                <span th:text="${actividad.ubicacion}">Ubicación</span>
                             </div>
-                            <div class="dropdown-item">
-                                <img src="./img/elimAct.svg" alt="Eliminar" class="dropdown-icon">
-                                <span>Eliminar</span>
+                        </div>
+                    </div>
+                    <div class="activity-right">
+                        <div class="activity-description" th:text="${actividad.descripcion}">
+                            Descripción de la actividad.
+                        </div>
+                        <div class="tag" th:classappend="${actividad.rama.name()}">
+                            <img src="./img/rama.svg" alt="Rama" class="tag-icon">
+                            <p th:text="${actividad.rama}">RAMA</p>
+                        </div>
+                        <div class="dropdown-container">
+                            <button class="expand-btn">
+                                <img src="./img/Vector.svg" alt="Expandir" class="expand-icon">
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" th:href="@{'/actividades/asistencia/' + ${actividad.id}}">
+                                    <img src="./img/asistencia.svg" alt="Asistencia" class="dropdown-icon">
+                                    <span>Asistencia</span>
+                                </a>
+                                <a class="dropdown-item" th:href="@{'/actividades/modificar/' + ${actividad.id}}">
+                                    <img src="./img/modifiAct.svg" alt="Modificar" class="dropdown-icon">
+                                    <span>Modificar</span>
+                                </a>
+                                <a class="dropdown-item" th:href="@{'/actividades/eliminar/' + ${actividad.id}}">
+                                    <img src="./img/elimAct.svg" alt="Eliminar" class="dropdown-icon">
+                                    <span>Eliminar</span>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Actividad 3 -->
-        <div class="activity-card">
-            <div class="date-column">
-                <div class="month" style="color: #595959;">Abril</div>
-                <div class="day" style="color: #595959;">26</div>
-            </div>
-            <div class="activity-content">
-                <div class="activity-left">
-                    <h3 class="activity-title">Orientación con Brújula y Mapa</h3>
-                    <div class="activity-details">
-                        <div class="detail-item">
-                            <img src="./img/cale.svg" class="detail-icon" style="height: 17px; width: 17px;">
-                            26-04-2025
-                        </div>
-                        <div class="detail-item">
-                            <img src="./img/ubicacionNg.svg" alt="Ubicación" class="detail-icon">
-                            Centro Scout Norte, Zona de Prácticas
-                        </div>
-                    </div>
-                </div>
-                <div class="activity-right">
-                    <div class="activity-description">
-                        Explora la naturaleza y fortalece el espíritu en esta travesía hacia uno de los puntos más altos del sector.
 
-                    </div>
-                    <div class="tag">
-                        <img src="./img/rama.svg" alt="Rama" class="tag-icon">
-                        <p>MANADA</p>
-                    </div>
-                    <div class="dropdown-container">
-                        <button class="expand-btn">
-                            <img src="./img/Vector.svg" alt="Expandir" class="expand-icon">
-                        </button>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-item">
-                                <img src="./img/asistencia.svg" alt="Asistencia" class="dropdown-icon">
-                                <span>Asistencia</span>
-                            </div>
-                            <div class="dropdown-item">
-                                <img src="./img/modifiAct.svg" alt="Modificar" class="dropdown-icon">
-                                <span>Modificar</span>
-                            </div>
-                            <div class="dropdown-item">
-                                <img src="./img/elimAct.svg" alt="Eliminar" class="dropdown-icon">
-                                <span>Eliminar</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        
+
 
         </div>
 

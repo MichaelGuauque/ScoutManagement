@@ -289,6 +289,11 @@ main {
     padding-left: 12px;
 }
 
+.submenu li a{
+    text-decoration: none;
+    color: inherit;
+}
+
 .submenu li:before {
     content: "•";
     color: white;
@@ -940,6 +945,7 @@ perfil-menu li:hover span {
     transition: background-color 0.2s ease;
     height: 40px;
     margin-left: 16px;
+    text-decoration: none;
 }
 
 .create-activity-btn:hover {
@@ -1101,16 +1107,12 @@ perfil-menu li:hover span {
 
 .tag {
     border-radius: 6px;
-    border: 2px solid #C0B942;
-    background: #FCFBEE;
-
     display: inline-flex;
     align-items: center;
     padding: 8px;
 }
 
 .tag p {
-    color: #C6C064;
     font-family: Figtree;
     font-size: 14px;
     font-style: normal;
@@ -1125,6 +1127,41 @@ perfil-menu li:hover span {
     margin-top: 1px;
 }
 
+.tag.MANADA {
+    border: 2px solid #C0B942;
+    background: #FCFBEE;
+}
+
+.tag.MANADA p {
+    color: #C6C064;
+}
+
+.tag.TROPA {
+    border: 2px solid #6F956B;
+    background: #EAF3E9;
+}
+
+.tag.TROPA p {
+    color: #60985A;
+}
+
+.tag.COMUNIDAD {
+    border: 2px solid #5B7593;
+    background: #EEF3F8;
+}
+
+.tag.COMUNIDAD p {
+    color: #3F628A;
+}
+
+.tag.CLAN {
+    border: 2px solid #B44941;
+    background: #FCF4F4;
+}
+
+.tag.CLAN p {
+    color: #AA5851;
+}
 
 .expand-icon {
     width: 20px;
@@ -1210,6 +1247,7 @@ perfil-menu li:hover span {
 }
 
 .dropdown-item {
+    text-decoration: none;
     display: flex;
     align-items: center;
     padding: 12px 16px;
