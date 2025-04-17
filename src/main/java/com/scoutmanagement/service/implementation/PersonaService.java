@@ -33,7 +33,7 @@ public class PersonaService implements IPersonaService {
                 .genero(personaDTO.genero())
                 .rama(personaDTO.rama())
                 .cargo(personaDTO.cargo())
-                .rol(personaDTO.rol())
+                .usuario(personaDTO.usuario())
                 .build();
 
         return persona;

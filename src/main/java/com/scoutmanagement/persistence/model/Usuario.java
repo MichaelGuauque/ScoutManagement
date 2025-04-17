@@ -23,10 +23,15 @@ public class Usuario implements UserDetails {
     private Long id;
     private String username;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Persona persona;
 
-    public Usuario(String username, String password) {
+    public Usuario(String username, String password, Rol rol) {
         this.username = username;
         this.password = password;
+        this.rol = rol;
     }
 
     public Long getId() {
@@ -40,6 +45,8 @@ public class Usuario implements UserDetails {
     public String getPassword() {
         return password;
     }
+
+    public Rol getRol() {return rol;}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

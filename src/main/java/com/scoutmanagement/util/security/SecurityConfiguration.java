@@ -28,6 +28,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests.requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/miembros/crearNuevo").permitAll()
+                                .requestMatchers("/style/", "/img/", "/js/").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )

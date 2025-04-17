@@ -1,6 +1,8 @@
 package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.DTO.UsuarioDTO;
+import com.scoutmanagement.DTO.UsuarioRegistroDTO;
+import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.persistence.model.Usuario;
 import com.scoutmanagement.persistence.repository.UsuarioRepository;
 import com.scoutmanagement.service.interfaces.IUsuarioService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UsuarioService implements IUsuarioService {
@@ -21,8 +24,8 @@ public class UsuarioService implements IUsuarioService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Override
-    public void save(UsuarioDTO usuarioDTO) {
-        usuarioRepository.save(cambiarRegistroUsuarioDTO(usuarioDTO));
+    public void save(UsuarioRegistroDTO usuarioRegistroDTO) {
+        usuarioRepository.save(cambiarRegistroUsuarioDTO(usuarioRegistroDTO));
     }
 
     @Override
@@ -31,11 +34,15 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public Usuario cambiarRegistroUsuarioDTO(UsuarioDTO usuarioDTO) {
-        String contraseniaEncriptada = bCryptPasswordEncoder.encode(usuarioDTO.password());
+    public Usuario cambiarRegistroUsuarioDTO(UsuarioRegistroDTO usuarioRegistroDTO) {
+        //Generador del metodo pw
+        String randomPassword = UUID.randomUUID().toString().substring(0, 10);;
+        System.out.println("Contraseña generada (sin encriptar): " + randomPassword);
+        String contraseniaEncriptada = bCryptPasswordEncoder.encode(randomPassword);
         return new Usuario(
-                usuarioDTO.username(),
-                contraseniaEncriptada);
+                usuarioRegistroDTO.username(),
+                contraseniaEncriptada,
+                usuarioRegistroDTO.rol());
     }
 
     @Override
@@ -46,4 +53,6 @@ public class UsuarioService implements IUsuarioService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
     }
+
+
 }

@@ -36,8 +36,10 @@ public record PersonaDTO(
         @NotNull(message = "El cargo es obligatorio")
         Cargo cargo,
 
-        @NotNull(message = "El rol es obligatorio")
-        Rol rol
+        @NotBlank
+        Usuario usuario
+
+
 
 ) {}
 
