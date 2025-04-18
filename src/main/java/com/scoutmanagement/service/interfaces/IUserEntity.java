@@ -1,6 +1,7 @@
 package com.scoutmanagement.service.interfaces;
 
 import com.scoutmanagement.DTO.UserDTO;
+import com.scoutmanagement.DTO.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.UserEntity;
 
 import java.util.Optional;
@@ -10,7 +11,7 @@ public interface IUserEntity {
 
     void updatePassword(String username, String oldPassword, String newPassword);
 
-    UserEntity cambioUserDTO(UserDTO userDTO);
+    UserEntity cambioUserDTO(UserRegistroDTO userDTO);
 
     Optional<UserEntity> findByEmail(UserDTO userDTO);
 

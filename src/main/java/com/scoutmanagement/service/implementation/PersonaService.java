@@ -1,12 +1,9 @@
 package com.scoutmanagement.service.implementation;
 
-import com.scoutmanagement.DTO.PersonaDTO;
+import com.scoutmanagement.DTO.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
 import com.scoutmanagement.service.interfaces.IPersonaService;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,23 +14,25 @@ public class PersonaService implements IPersonaService {
     private PersonaRepository personaRepository;
 
     @Override
-    public void save(PersonaDTO personaDTO) {
-        personaRepository.save(cambiarRegistroPersonaDTO(personaDTO));
+    public void save(PersonaRegistroDTO personaRegistroDTO) {
+        personaRepository.save(cambiarRegistroPersonaRegistroDTO(personaRegistroDTO));
     }
 
+
+
     @Override
-    public Persona cambiarRegistroPersonaDTO(PersonaDTO personaDTO){
+    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO){
         Persona persona= Persona.builder()
-                .primerNombre(personaDTO.primerNombre())
-                .segundoNombre(personaDTO.segundoNombre())
-                .primerApellido(personaDTO.primerApellido())
-                .segundoApellido(personaDTO.segundoApellido())
-                .numeroDeDocumento(personaDTO.numeroDeDocumento())
-                .tipoDeDocumento(personaDTO.tipoDeDocumento())
-                .genero(personaDTO.genero())
-                .rama(personaDTO.rama())
-                .cargo(personaDTO.cargo())
-                .usuario(personaDTO.usuario())
+                .primerNombre(personaRegistroDTO.getPrimerNombre())
+                .segundoNombre(personaRegistroDTO.getSegundoNombre())
+                .primerApellido(personaRegistroDTO.getPrimerApellido())
+                .segundoApellido(personaRegistroDTO.getSegundoApellido())
+                .numeroDeDocumento(personaRegistroDTO.getNumeroDeDocumento())
+                .tipoDeDocumento(personaRegistroDTO.getTipoDeDocumento())
+                .genero(personaRegistroDTO.getGenero())
+                .rama(personaRegistroDTO.getRama())
+                .cargo(personaRegistroDTO.getCargo())
+                .userEntity(personaRegistroDTO.getUserEntity())
                 .build();
 
         return persona;

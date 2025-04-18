@@ -3,11 +3,9 @@ package com.scoutmanagement.controller;
 
 import com.scoutmanagement.DTO.PersonaDTO;
 import com.scoutmanagement.DTO.RegistroCompletoDTO;
-import com.scoutmanagement.DTO.UsuarioDTO;
 import com.scoutmanagement.DTO.UsuarioRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
-import com.scoutmanagement.service.interfaces.IUsuarioService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +24,8 @@ public class PersonaController {
 
     @Autowired
     IPersonaService personaService;
-    @Autowired
-    IUsuarioService usuarioService;
+    //@Autowired
+    //IUsuarioService usuarioService;
 
     private final Logger logger = LoggerFactory.getLogger(PersonaController.class);
 
@@ -40,17 +38,8 @@ public class PersonaController {
         return "VistaNotFound";
     }
 
-    @PostMapping("/crear")
-    public String crearMiembro(@RequestBody @Valid PersonaDTO personaDTO, UsuarioRegistroDTO usuarioRegistroDTO) {
-        Usuario usuario= usuarioService.cambiarRegistroUsuarioDTO(usuarioRegistroDTO);
-        logger.info("Creando miembro");
-        logger.info("Esta es la Persona {}", personaDTO);
-        personaDTO.usuario();
-        usuarioService.save(usuarioRegistroDTO);
-        personaService.save(personaDTO);
-        return "VistaNotFound";
 
-    }
+/*
 
     @PostMapping("/crearNuevo")
     public String crearMiembroNuevo(@RequestBody @Valid RegistroCompletoDTO dto) {
@@ -59,15 +48,19 @@ public class PersonaController {
         // 1. Crear el usuario
 
         UsuarioRegistroDTO usuarioDTO = new UsuarioRegistroDTO(dto.username(), dto.rol());
+        logger.info("UsuarioRegistroDTO construido: {}", usuarioDTO);
 
+        logger.info("Transformando UsuarioRegistroDTO a entidad Usuario");
         // 2. Crear el Usuario desde el DTO
-        Usuario usuario = usuarioService.cambiarRegistroUsuarioDTO(usuarioDTO);
+        //Usuario usuario = usuarioService.cambiarRegistroUsuarioDTO(usuarioDTO);
+        //logger.info("Usuario transformado: {}", usuario);
 
 
         // 3. Guardar el Usuario para que obtenga su ID
         usuarioService.save(usuarioDTO);
 
 
+        logger.info("Construyendo PersonaDTO con los datos recibidos y el usuario creado");
         // 2. Crear la persona
         PersonaDTO personaDTO = new PersonaDTO(
                 dto.primerNombre(),
@@ -81,21 +74,15 @@ public class PersonaController {
                 dto.cargo(),
                 usuario
         );
+
+        logger.info("PersonaDTO construido: {}", personaDTO);
+
+        logger.info("Guardando persona en la base de datos");
         personaService.save(personaDTO);
 
         return "VistaNotFound"; // o la vista que vos quieras retornar
     }
 
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 }

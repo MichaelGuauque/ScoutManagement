@@ -1,9 +1,13 @@
 package com.scoutmanagement.controller;
 
+import com.scoutmanagement.DTO.PersonaRegistroDTO;
 import com.scoutmanagement.DTO.UserDTO;
+import com.scoutmanagement.DTO.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
+import com.scoutmanagement.persistence.repository.RoleRepository;
+import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -12,14 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/")
 public class UserController {
 
@@ -27,6 +29,12 @@ public class UserController {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private IUserEntity userService;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private IPersonaService personaService;
 
     @GetMapping()
     public String login() {
@@ -62,13 +70,24 @@ public class UserController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(UserDTO usuario /*Persona persona*/) {
-//        logger.info("Usuario registrado: {}", usuario);
-//        logger.info("Cliente registrado: {}", cliente);
+    public String guardar(@RequestBody UserRegistroDTO usuario  /*PersonaRegistroDTO personaRegistroDTO*/) {
+        logger.info("Usuario registrado: {}", usuario);
+        for (Rol rol : Rol.values()) {
+            // Verificar si el rol existe en la base de datos
+            if (roleRepository.findByRole(rol) == null) {
+                RoleEntity roleEntity = new RoleEntity();
+                roleEntity.setRole(rol);
+                roleRepository.save(roleEntity);
+                logger.info("✅ Rol creado: {}", rol);
+            }
+        }
+      //logger.info("Persona registrado: {}", personaRegistroDTO);
         UserEntity user = userService.cambioUserDTO(usuario);
-        //cliente.setUsuario(user);
+        logger.info("Usuario cambiado: {}", user);
+        //personaRegistroDTO.setUserEntity(user);
         userService.save(user);
-        //clienteService.save(cliente);
+        //personaService.save(personaRegistroDTO);
         return "redirect:login";
     }
+
 }

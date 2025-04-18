@@ -57,5 +57,5 @@ public class Persona {
     private Responsable responsable;
     @OneToOne()
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
-    private Usuario usuario;
+    private UserEntity userEntity;
 }

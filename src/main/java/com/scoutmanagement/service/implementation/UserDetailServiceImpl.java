@@ -1,6 +1,8 @@
 package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.DTO.UserDTO;
+import com.scoutmanagement.DTO.UserRegistroDTO;
+import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;
@@ -58,11 +60,14 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     }
 
     @Override
-    public UserEntity cambioUserDTO(UserDTO userDTO) {
-        RoleEntity userRole = roleRepository.findByRole(userDTO.rol());
+    public UserEntity cambioUserDTO(UserRegistroDTO userDTO) {
+
+       RoleEntity userRole = roleRepository.findByRole(userDTO.rol());
+
         UserEntity user = UserEntity.builder()
                 .username(userDTO.username())
-                .password(bCryptPasswordEncoder.encode(userDTO.password()))
+                //.password(bCryptPasswordEncoder.encode(userDTO.password()))
+                .password(bCryptPasswordEncoder.encode("Holis123"))
                 .roles(Set.of(userRole))
                 .accountNoExpired(true)
                 .accountNoLocked(true)

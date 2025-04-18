@@ -37,7 +37,7 @@ public record PersonaDTO(
         Cargo cargo,
 
         @NotBlank
-        Usuario usuario
+        UserEntity userEntity
 
 
 
