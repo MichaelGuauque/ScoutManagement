@@ -23,4 +23,5 @@ public interface IActividadService {
 
     Actividad cambiarActividadDTO(ActividadDTO actividadDTO);
 
+    List<Actividad> findAllActividadesOrdenadas();
 }

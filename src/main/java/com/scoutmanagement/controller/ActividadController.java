@@ -10,13 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -30,8 +30,12 @@ public class ActividadController {
     private IActividadService actividadService;
 
     @GetMapping()
-    public String actividades(Model model,@RequestParam(required = false, defaultValue = "proximas") String tab) {
-        List<Actividad> listaActividades = actividadService.findAllActividad();
+    public String actividades(Model model,
+                              @RequestParam(required = false, defaultValue = "proximas") String tab,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "4") int size) {
+
+        List<Actividad> listaActividades = actividadService.findAllActividadesOrdenadas();
         LocalDate hoy = LocalDate.now();
         List<Actividad> actividadesFiltradas;
 
@@ -45,10 +49,34 @@ public class ActividadController {
                     .collect(Collectors.toList());
         }
 
+        int totalActividades = actividadesFiltradas.size();
+        int totalPaginas = (int) Math.ceil((double) totalActividades / size);
+        if (totalPaginas == 0) {
+            totalPaginas = 1;
+        }
+
+        int paginaActual = page;
+        List<Actividad> paginaActividades = actividadesFiltradas.stream()
+                .skip(page * size)
+                .limit(size)
+                .collect(Collectors.toList());
+
+        Map<Long, Boolean> actividadEsMasProxima = new HashMap<>();
+        if (tab.equals("proximas")) {
+            paginaActividades.stream()
+                    .min(Comparator.comparing(actividad -> actividad.getFecha()))
+                    .ifPresent(actividad -> actividadEsMasProxima.put(actividad.getId(), true));
+        }
+
+        model.addAttribute("actividades", paginaActividades);
+        model.addAttribute("actividadEsMasProxima", actividadEsMasProxima);
+        model.addAttribute("paginaActual", paginaActual);
+        model.addAttribute("totalPaginas", totalPaginas);
         model.addAttribute("tabSeleccionada", tab);
-        model.addAttribute("actividades", actividadesFiltradas);
+
         return "actividades/vistaActividadesAdmin";
     }
+
 
     @GetMapping("/crear")
     public String crearActividadFormulario(Model model) {
@@ -62,5 +90,11 @@ public class ActividadController {
         logger.info("Esta es la actividad {}", actividadDTO);
         actividadService.crearActividad(actividadDTO);
         return "redirect:/actividades";
+    }
+
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Long id, @RequestParam String tab) {
+        actividadService.eliminarActividad(id);
+        return "redirect:/actividades?tab=" + tab;
     }
 }

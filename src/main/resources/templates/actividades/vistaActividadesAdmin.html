@@ -129,7 +129,7 @@
                 <p class="description">Desde aquí puedes crear nuevas actividades, revisar las ya agendadas, eliminar las que no se realicen y registrar o consultar la asistencia de los participantes.</p>
             </div>
 
-            <div class="activities-container">
+            <div id="actividadesSection" class="activities-container">
                 <div class="header-row">
                     <div class="left-section">
                         <div class="tab-container">
@@ -152,7 +152,7 @@
                             <input type="text"
                                    class="filter-date"
                                    id="display-date"
-                                   placeholder="Selecciona la Fecha..."
+                                   placeholder="¿Buscas una fecha?"
                                    readonly>
                             <div class="icon-placeholder calendar-icon" id="calendar-trigger">
                                 <img src="./img/filtroCalendario.svg" alt="Calendar" width="16" height="16">
@@ -193,7 +193,8 @@
 
 
             <div th:each="actividad : ${actividades}" class="activity-card">
-                <div class="date-column">
+                <div class="date-column"
+                     th:classappend="${actividadEsMasProxima[actividad.id]} ? 'highlight-purple' : 'highlight-gray'">
                     <div class="month" th:text="${#temporals.format(actividad.fecha, 'MMMM')}" style="text-transform: capitalize;"></div>
                     <div class="day" th:text="${#temporals.format(actividad.fecha, 'dd')}"></div>
                 </div>
@@ -232,7 +233,7 @@
                                     <img src="./img/modifiAct.svg" alt="Modificar" class="dropdown-icon">
                                     <span>Modificar</span>
                                 </a>
-                                <a class="dropdown-item" th:href="@{'/actividades/eliminar/' + ${actividad.id}}">
+                                <a class="dropdown-item" th:href="@{'/actividades/eliminar/' + ${actividad.id} + '?tab=' + ${tabSeleccionada}}">
                                     <img src="./img/elimAct.svg" alt="Eliminar" class="dropdown-icon">
                                     <span>Eliminar</span>
                                 </a>
@@ -242,9 +243,16 @@
                 </div>
             </div>
 
+            <div class="pagination-container" th:if="${totalPaginas > 1}">
+                <div class="pagination">
+                    <a th:if="${paginaActual > 0}"
+                       th:href="@{'/actividades#actividadesSection'(tab=${tabSeleccionada}, page=${paginaActual - 1}, size=4)}" class="pagination-btn">Anterior</a>
+                    <span class="pagination-info">Página [[${paginaActual + 1}]] de [[${totalPaginas}]]</span>
 
-
-
+                    <a th:if="${paginaActual + 1 < totalPaginas}"
+                       th:href="@{'/actividades#actividadesSection'(tab=${tabSeleccionada}, page=${paginaActual + 1}, size=4)}" class="pagination-btn">Siguiente</a>
+                </div>
+            </div>
         </div>
 
 
@@ -553,5 +561,25 @@ tabs.forEach(tab => {
             });
         });
     </script>
+
+    <script>
+        // Espera a que el documento cargue
+        document.addEventListener("DOMContentLoaded", function() {
+            // Captura todos los enlaces de paginación
+            const paginationLinks = document.querySelectorAll(".pagination a");
+
+            // Añadir un listener para cada enlace de paginación
+            paginationLinks.forEach(function(link) {
+                link.addEventListener("click", function(e) {
+                    // Realiza el scroll hacia la sección de actividades
+                    document.getElementById("actividadesSection").scrollIntoView({
+                        behavior: "smooth", // Desplazamiento suave
+                        block: "start"      // Inicia el scroll desde la parte superior de la sección
+                    });
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>
