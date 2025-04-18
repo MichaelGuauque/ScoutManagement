@@ -59,7 +59,7 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
 
     @Override
     public UserEntity cambioUserDTO(UserDTO userDTO) {
-        RoleEntity userRole = roleRepository.findByRoleEnum(userDTO.rol());
+        RoleEntity userRole = roleRepository.findByRole(userDTO.rol());
         UserEntity user = UserEntity.builder()
                 .username(userDTO.username())
                 .password(bCryptPasswordEncoder.encode(userDTO.password()))
