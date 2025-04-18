@@ -63,19 +63,6 @@
                         </div>
                     </li>
 
-<!--                    <li class="menu-item">-->
-<!--                        <div class="main-button">-->
-<!--                            <img th:src="@{/img/Calendario.svg}" alt="Actividades">-->
-<!--                            <span>Actividades</span>-->
-<!--                            <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">-->
-<!--                        </div>-->
-<!--                        <ul class="submenu">-->
-<!--                            <li class="nav-link">-->
-<!--                                <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar Actividades</li>-->
-<!--                            <li class="nav-link"><img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear Actividad</li>-->
-<!--                        </ul>-->
-<!--                    </li>-->
-
                     <li class="menu-item">
                         <div class="main-button">
                             <img th:src="@{/img/Calendario.svg}" alt="Actividades">
@@ -141,55 +128,37 @@
                 <h1 class="encabezado">Actividades Programadas</h1>
                 <p class="description">Desde aquí puedes crear nuevas actividades, revisar las ya agendadas, eliminar las que no se realicen y registrar o consultar la asistencia de los participantes.</p>
             </div>
-            
-    
-            
+
             <div class="activities-container">
                 <div class="header-row">
                     <div class="left-section">
                         <div class="tab-container">
-                            <button class="tab active" data-tab="proximas">Próximas</button>
-                            <button class="tab" data-tab="finalizadas">Finalizadas</button>
+                            <!-- Pestaña Próximas -->
+                            <a class="tab" th:classappend="${tabSeleccionada == 'proximas' ? 'active' : ''}" th:href="@{/actividades(tab='proximas')}">Próximas</a>
+
+                            <!-- Pestaña Pasadas -->
+                            <a class="tab" th:classappend="${tabSeleccionada == 'pasadas' ? 'active' : ''}" th:href="@{/actividades(tab='pasadas')}">Pasadas</a>
                         </div>
-                        
-                        <!-- Botón "Crear Actividad" colocado junto a las pestañas -->
-<!--                        <button class="create-activity-btn">-->
-<!--                            <span>Crear Actividad</span>-->
-<!--                            <img src="./img/nuevaActividad.svg" alt="Arrow" width="16" height="16">-->
-<!--                        </button>-->
+
                         <a th:href="@{/actividades/crear}" class="create-activity-btn">
                             <span>Crear Actividad</span>
                             <img th:src="@{/img/nuevaActividad.svg}" alt="Arrow" width="16" height="16">
                         </a>
-
                     </div>
-                    
+
                     <div class="search-container">
-                        <div class="select-container">
-                            <select class="filter-select">
-                                <option value="" disabled selected>Selecciona la Rama...</option>
-                                <option value="1">Manada</option>
-                                <option value="2">Tropa</option>
-                                <option value="3">Comunidad</option>
-                                <option value="4">Clan</option>
-                            </select>
-                            <div class="icon-placeholder arrow-icon">
-                                <img src="./img/selectFlecha.svg" alt="Arrow" width="16" height="16">
-                            </div>
-                        </div>
-                        
                         <div class="date-container">
                             <input type="date" id="real-date">
-                            <input type="text" 
-                                   class="filter-date" 
+                            <input type="text"
+                                   class="filter-date"
                                    id="display-date"
-                                   placeholder="Selecciona la Fecha..." 
+                                   placeholder="Selecciona la Fecha..."
                                    readonly>
                             <div class="icon-placeholder calendar-icon" id="calendar-trigger">
                                 <img src="./img/filtroCalendario.svg" alt="Calendar" width="16" height="16">
                             </div>
                         </div>
-                        
+
                         <button class="search-btn">
                             <div class="icon-placeholder search-icon">
                                 <img src="./img/lupa.svg" alt="Search" width="16" height="16">
@@ -204,7 +173,24 @@
                     </div>
                 </div>
                 <div class="divider-line"></div>
+
+                <div th:switch="${tabSeleccionada}">
+                    <div th:case="'proximas'">
+                        <h3>Próximas Actividades</h3>
+                        <div th:if="${#lists.isEmpty(actividades)}">
+                            <p>No hay actividades próximas registradas aún.</p>
+                        </div>
+                    </div>
+
+                    <div th:case="'pasadas'">
+                        <h3>Actividades Pasadas</h3>
+                        <div th:if="${#lists.isEmpty(actividades)}">
+                            <p>No hay actividades pasadas registradas aún.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
             <div th:each="actividad : ${actividades}" class="activity-card">
                 <div class="date-column">
@@ -313,7 +299,7 @@
     </main>
 
     <!-- Footer -->
-    
+
     <!-- JavaScript para la funcionalidad -->
     <script>
                   const tabs = document.querySelectorAll(".tab");
@@ -537,6 +523,34 @@ tabs.forEach(tab => {
                 overlay.classList.remove('active');
                 sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
             }
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab');
+            const actividadesProximas = document.querySelector('.actividades-proximas');
+            const actividadesPasadas = document.querySelector('.actividades-pasadas');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabSeleccionada = tab.getAttribute('data-tab');
+
+                    // Mostrar u ocultar actividades según la pestaña seleccionada
+                    if (tabSeleccionada === 'proximas') {
+                        actividadesProximas.style.display = 'block';
+                        actividadesPasadas.style.display = 'none';
+                    } else if (tabSeleccionada === 'pasadas') {
+                        actividadesProximas.style.display = 'none';
+                        actividadesPasadas.style.display = 'block';
+                    }
+
+                    // Marcar la pestaña activa
+                    tabs.forEach(button => button.classList.remove('active'));
+                    tab.classList.add('active');
+                });
+            });
         });
     </script>
 </body>
