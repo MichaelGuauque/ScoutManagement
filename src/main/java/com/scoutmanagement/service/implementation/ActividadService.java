@@ -58,6 +58,11 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
+    public List<Actividad> findAllActividadesOrdenadas() {
+        return (List<Actividad>) actividadRepository.findAllOrderByFechaAsc();
+    }
+
+    @Override
     public List<Actividad> findAllByRama(Rama rama) {
         return actividadRepository.findByRama(rama);
     }

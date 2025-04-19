@@ -833,6 +833,61 @@ perfil-menu li:hover span {
     width: 300px;
 }
 
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.pagination-btn {
+    padding: 6px 14px;
+    background-color: #e0e0e0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-btn:hover {
+    background-color: #c7c7c7;
+}
+
+.pagination-info {
+    color: #585858;
+}
+
+/*.date-column.proxima .month,*/
+/*.date-column.proxima .day {*/
+/*    color: #9273CC;*/
+/*}*/
+
+/*.date-column.normal .month,*/
+/*.date-column.normal .day {*/
+/*    color: #595959;*/
+/*}*/
+
+/*.date-column.highlighted .month,*/
+/*.date-column.highlighted .day {*/
+/*    color: #9273CC;*/
+/*}*/
+
+.highlight-purple .month,
+.highlight-purple .day {
+    color: #9273CC;
+    font-weight: bold;
+}
+
+.highlight-gray .month,
+.highlight-gray .day {
+    color: #595959;
+}
+
 .tab {
     border: none;
     width: 150px;
@@ -850,6 +905,10 @@ perfil-menu li:hover span {
     z-index: 2;
     line-height: 1.3;
     font-weight: 400;
+    text-decoration: none;
+    /*color: inherit;*/
+    display: inline-block;
+    text-align: center;
 }
 
 .tab.active {
@@ -1663,8 +1722,10 @@ perfil-menu li:hover span {
     background-color: #f0f0f0;
     border: none;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     transition: background-color 0.3s;
+    text-decoration: none;
+    color: inherit;
 }
 
 .tab.active {
@@ -1827,3 +1888,4 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-top: 2px solid #dcdcdc;
     margin: 20px 0;
 }
+
