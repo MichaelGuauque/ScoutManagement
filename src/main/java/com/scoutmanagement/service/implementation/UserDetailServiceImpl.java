@@ -70,10 +70,10 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
         String passwordGenerada = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
         logger.info("Contrasena sin Encriptar: {}",passwordGenerada);
 
-        RoleEntity userRole = roleRepository.findByRole(userDTO.rol());
+        RoleEntity userRole = roleRepository.findByRole(userDTO.getRol());
 
         UserEntity user = UserEntity.builder()
-                .username(userDTO.username())
+                .username(userDTO.getUsername())
                 //.password(bCryptPasswordEncoder.encode(userDTO.password()))
                 .password(bCryptPasswordEncoder.encode(passwordGenerada))
                 .roles(Set.of(userRole))

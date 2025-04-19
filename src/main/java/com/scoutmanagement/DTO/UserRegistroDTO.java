@@ -1,9 +1,16 @@
 package com.scoutmanagement.DTO;
 
 import com.scoutmanagement.persistence.model.Rol;
+import lombok.*;
 
-public record UserRegistroDTO(
-        String username,
-        Rol rol
-) {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UserRegistroDTO{
+    private String username;
+    private Rol rol;
 }
+
+

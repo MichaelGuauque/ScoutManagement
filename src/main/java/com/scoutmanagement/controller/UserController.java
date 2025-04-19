@@ -4,9 +4,7 @@ import com.scoutmanagement.DTO.PersonaConUsuarioDTO;
 import com.scoutmanagement.DTO.PersonaRegistroDTO;
 import com.scoutmanagement.DTO.UserDTO;
 import com.scoutmanagement.DTO.UserRegistroDTO;
-import com.scoutmanagement.persistence.model.Rol;
-import com.scoutmanagement.persistence.model.RoleEntity;
-import com.scoutmanagement.persistence.model.UserEntity;
+import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/")
 public class UserController {
 
@@ -70,8 +68,18 @@ public class UserController {
         return "redirect:login";
     }
 
+
+    @GetMapping("/registrar")
+    public String registrarUsuario(Model model) {
+
+        model.addAttribute("ramas", Rama.values());
+        model.addAttribute("roles", Rol.values());
+        model.addAttribute("cargos", Cargo.values());
+        model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+        return "CrearMiembro";
+    }
     @PostMapping("/guardar")
-    public String guardar(@RequestBody PersonaConUsuarioDTO dto ) {
+    public String guardar( PersonaConUsuarioDTO dto ) {
 
         UserEntity user = userService.cambioUserDTO(dto.getUsuario());
         userService.save(user);
@@ -88,7 +96,7 @@ public class UserController {
         persona.setCargo(dto.getCargo());
         persona.setUserEntity(user);
         personaService.save(persona);
-        return "redirect:login";
+        return "redirect:registrar";
     }
 
 
