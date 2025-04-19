@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style/styles.css">
+</head>
+<body>
+    <!-- Botón hamburguesa para móviles -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </button>
+    
+    <!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="logo-contenedor">
+            <img src="img/logoApli.svg" alt="Scout Management" class="logo">
+        </div>
+
+        <div class="perfil-contenedor">
+            <img src="img/perfil.svg" alt="Perfil" class="perfil">
+            <div class="perfil-info">
+                <p class="nombre-perfil">Miguel Andres M...</p>
+                <p class="cargo-perfil">Adulto - Jefe Manada</p>
+            </div>
+            <div class="perfil-flecha">
+                <img src="img/flechita.svg" alt="Desplegar">
+            </div>
+
+            <!-- Menú desplegable del perfil -->
+            <div class="perfil-menu" id="perfilMenu">
+                <ul>
+                    <li class="nav-link">
+                        <img src="img/sesion.svg" alt="Ver Perfil" class="perfil-menu-icon">
+                        <span>Ver Perfil</span>
+                    </li>
+                    <li class="nav-link">
+                        <img src="img/cierreSesion.svg" alt="Cerrar Sesión" class="perfil-menu-icon">
+                        <span>Cerrar Sesión</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+       
+        <div class="linea-divisoria"></div>
+
+        <div class="contenido-central">
+            <nav class="menu">
+                <ul>
+                    <li class="menu-item">
+                        <div class="main-button nav-link">
+                            <img src="img/Casa.svg" alt="Inicio">
+                            <span>Inicio</span>
+                        </div>
+                    </li>
+
+                    <li class="menu-item">
+                        <div class="main-button">
+                            <img src="img/Calendario.svg" alt="Actividades">
+                            <span>Actividades</span>
+                            <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        </div>
+                        <ul class="submenu">
+                            <li class="nav-link"><img src="img/calendario(consulta).svg" alt="Consultar" class="submenu-icon">Consultar Actividades</li>
+                            <li class="nav-link"><img src="img/calendario(agregar).svg" alt="Agregar" class="submenu-icon">Crear Actividad</li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-item">
+                        <div class="main-button">
+                            <img src="img/grafico.svg" alt="Progresiones">
+                            <span>Progresiones</span>
+                            <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        </div>
+                        <ul class="submenu">
+                            <li class="nav-link"><img src="img/retos.svg" alt="Consultar" class="submenu-icon">Gestionar Retos</li>
+                            <li class="nav-link"><img src="img/retos(miembros).svg" alt="Agregar" class="submenu-icon">Progresion Miembros</li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-item">
+                        <div class="main-button">
+                            <img src="img/usuarios.svg" alt="Miembros">
+                            <span>Miembros</span>
+                            <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        </div>
+                        <ul class="submenu">
+                            <li class="nav-link"><img src="img/usuario(buscar).svg" alt="Consultar" class="submenu-icon">Consultar Miembros</li>
+                            <li class="nav-link"><img src="img/usuario(consulJefe).svg" alt="Agregar" class="submenu-icon">Consultar Jefes</li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+       
+        <div class="linea-divisoria"></div>
+
+        <div class="configuracion nav-link">
+            <img src="img/tuerca.svg" alt="Configuración">
+            <span>Configuración de Cuenta</span>
+        </div>        
+    </div>
+
+    <!-- Contenido principal -->
+    <main>
+        <!-- Aquí va el contenido de la página -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-top">
+                    <div class="footer-logo">
+                        <img src="img/logo605.png" alt="Scouts Jaguares 605" class="logo-img">
+                    </div>
+                    
+                    <div class="footer-info">
+                        <div class="footer-title">
+                            <div class="dot"></div>
+                            <h2>Scouts Jaguares 605</h2>
+                        </div>
+                        <p class="footer-slogan">Listos para servir, listos para rugir.</p>
+                        
+                        <div class="footer-address">
+                            <img src="img/ubicacion.svg" alt="Ubicación" class="ubicacion-icon">
+                            <p class="footer-ubi">Palmira, Valle del Cauca – Barrio Las Delicias<br>
+                            Sede: Casa de la Juventud, Calle 30 #29-15</p>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-social">
+                        <a href="#" class="social-icon">
+                            <img src="img/facebook.svg" alt="Facebook">
+                        </a>
+                        <a href="#" class="social-icon">
+                            <img src="img/instagram.svg" alt="Instagram">
+                        </a>
+                        <a href="#" class="social-icon">
+                            <img src="img/tiktok.svg" alt="TikTok">
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <nav class="footer-nav">
+                        <a href="#" class="footer-link">Inicio</a>
+                        <a href="#" class="footer-link">Política de Tratamiento de Datos</a>
+                        <a href="#" class="footer-link">Configuración</a>
+                    </nav>
+                    <p class="footer-copyright">© 2025 Todos los derechos reservados</p>
+                </div>
+            </div>
+        </footer>
+
+
+    </main>
+
+    <!-- Footer -->
+    
+    <!-- JavaScript para la funcionalidad -->
+    <script>
+        // Script para el menú de perfil
+        document.querySelector('.perfil-flecha').addEventListener('click', function() {
+            const perfilMenu = document.getElementById('perfilMenu');
+            perfilMenu.classList.toggle('show-menu');
+        });
+    
+        // Cerrar el menú al hacer clic fuera de él
+        document.addEventListener('click', function(event) {
+            const perfilMenu = document.getElementById('perfilMenu');
+            const perfilFlecha = document.querySelector('.perfil-flecha');
+            
+            // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+            if (!perfilMenu.contains(event.target) && !perfilFlecha.contains(event.target)) {
+                perfilMenu.classList.remove('show-menu');
+            }
+        });
+    
+        // Script para los menús desplegables de navegación
+        document.querySelectorAll('.main-button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+                event.stopPropagation();
+                
+                const parent = button.parentElement;
+                const wasActive = parent.classList.contains('active');
+                
+                // Cerrar todos los menús activos
+                document.querySelectorAll('.menu-item.active').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Si no estaba activo, activarlo
+                if (!wasActive) {
+                    parent.classList.add('active');
+                }
+            });
+        });
+
+        // Script para toggle del sidebar en móviles
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const hamburger = document.getElementById('hamburger');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+            hamburger.classList.toggle('open');
+            overlay.classList.toggle('active');
+            
+            // Mover el botón también cuando el sidebar está abierto
+            sidebarToggle.classList.toggle('moved');
+        });
+        
+        // Cerrar sidebar al hacer clic en el overlay
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            hamburger.classList.remove('open');
+            overlay.classList.remove('active');
+            sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+        });
+        
+        // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+        document.querySelectorAll('.nav-link').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                    hamburger.classList.remove('open');
+                    overlay.classList.remove('active');
+                    sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+                }
+            });
+        });
+        
+        // Ajustar al cambiar el tamaño de la ventana
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('open');
+                hamburger.classList.remove('open');
+                overlay.classList.remove('active');
+                sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+            }
+        });
+    </script>
+</body>
+</html>

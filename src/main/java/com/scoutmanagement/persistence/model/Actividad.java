@@ -31,4 +31,5 @@ public class Actividad {
 
     @Column(nullable = false)
     private String ubicacion;
+
 }
