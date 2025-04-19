@@ -9,12 +9,11 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.Optional;
@@ -34,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/acceder")
-    public String acceder(UserDTO userDTO, HttpSession session, Model model) {
+    public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model) {
         logger.info("Usuario accedido: {}", userDTO);
         Optional<UserEntity> user = userService.findByEmail(userDTO);
         if (user.isPresent()) {
@@ -46,19 +45,22 @@ public class UserController {
                     .findFirst();
             Rol rolEnum = optionalRol.get();
             String rol = rolEnum.name();
+            session.setAttribute("rol", rol);
+            logger.info("Rol del usuario accedido: {}", usuarioBuscado.getRoles().stream().findFirst());
             logger.info("Rol del usuario: {}", rol);
 
             if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
                 if (rol.equals("ADULTO")) {
-                    return "redirect:/administrador/home";
+                    return "redirect:/home-admin";
                 } else {
                     // ACÁ IRIA LA LOGICA PARA REDIRIGIR AL HOME DE JOVEN
-                    return "redirect:login";
+                    return "user/login";
                 }
             }
         }
         logger.info("Usuario no encontrado");
-        return "redirect:login";
+        model.addAttribute("error", "Usuario o contraseña incorrectos.");
+        return "user/login";
     }
 
     @PostMapping("/guardar")
@@ -70,5 +72,14 @@ public class UserController {
         userService.save(user);
         //clienteService.save(cliente);
         return "redirect:login";
+    }
+
+
+    @GetMapping("/home-admin")
+    public String showAdminHomePage(HttpSession session) {
+        if(session.getAttribute("rol") == Rol.ADULTO.name()) {
+            return "admin/home";
+        }
+        return "error/pageNotFound";
     }
 }
