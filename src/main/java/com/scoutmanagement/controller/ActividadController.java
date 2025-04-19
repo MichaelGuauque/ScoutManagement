@@ -1,8 +1,7 @@
 package com.scoutmanagement.controller;
 
 import com.scoutmanagement.DTO.ActividadDTO;
-import com.scoutmanagement.persistence.model.Actividad;
-import com.scoutmanagement.persistence.model.Rama;
+import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -97,4 +96,5 @@ public class ActividadController {
         actividadService.eliminarActividad(id);
         return "redirect:/actividades?tab=" + tab;
     }
+
 }

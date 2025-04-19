@@ -11,14 +11,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.mysql.cj.conf.PropertyKey.logger;
-import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest // Esto arranca el contexto completo de Spring
-    class ActividadServiceTest {
+@SpringBootTest
+class ActividadServiceTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ActividadServiceTest.class);
 
@@ -30,35 +29,36 @@ import static org.junit.jupiter.api.Assertions.*;
 
     @BeforeEach
     void setUp() {
-        // Limpiar la base de datos antes de cada prueba (si es necesario)
         actividadRepository.deleteAll();
     }
 
-        @Test
-        void testCrearActividad() {
-            ActividadDTO actividadDTO = new ActividadDTO(
-                    "Campamento de Invierno",
-                    "Un campamento para todos los miembros",
-                    Rama.MANADA,
-                    LocalDate.now().plusDays(7),
-                    "Cabaña en la montaña"
-            );
+    @Test
+    void testCrearActividad() {
 
-            actividadService.crearActividad(actividadDTO);
+        ActividadDTO actividadDTO = new ActividadDTO(
+                "Campamento de Invierno",
+                "Un campamento para todos los miembros",
+                Rama.MANADA,
+                LocalDate.now().plusDays(7),
+                "Cabaña en la montaña"
+        );
 
-            List<Actividad> actividadesGuardadas = actividadService.findAllActividad();
+        actividadService.crearActividad(actividadDTO);
 
-            if (!actividadesGuardadas.isEmpty()) {
-                String nombreActividad = actividadesGuardadas.get(0).getNombre();
-                logger.info("Actividad guardada: {}", nombreActividad);
-            } else {
-                logger.info("No se encontró ninguna actividad guardada.");
-            }
+        List<Actividad> actividadesGuardadas = actividadService.findAllActividad();
 
-            assertEquals("Campamento de Invierno", actividadDTO.nombre(), "El nombre no coincide.");
-            assertEquals("Un campamento para todos los miembros", actividadDTO.descripcion(), "La descripción no coincide.");
-            assertEquals("Cabaña en la montaña", actividadDTO.ubicacion(), "La ubicación no coincide.");
-            assertEquals(Rama.MANADA, actividadDTO.rama(), "La rama no coincide.");
-
+        if (!actividadesGuardadas.isEmpty()) {
+            String nombreActividad = actividadesGuardadas.get(0).getNombre();
+            logger.info("Actividad guardada: {}", nombreActividad);
+        } else {
+            logger.info("No se encontró ninguna actividad guardada.");
         }
+
+        assertEquals("Campamento de Invierno", actividadDTO.nombre(), "El nombre no coincide.");
+        assertEquals("Un campamento para todos los miembros", actividadDTO.descripcion(), "La descripción no coincide.");
+        assertEquals("Cabaña en la montaña", actividadDTO.ubicacion(), "La ubicación no coincide.");
+        assertEquals(Rama.MANADA, actividadDTO.rama(), "La rama no coincide.");
+
     }
+
+}

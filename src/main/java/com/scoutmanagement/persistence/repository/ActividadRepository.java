@@ -14,9 +14,12 @@ import java.util.Optional;
 public interface ActividadRepository extends CrudRepository<Actividad, Long> {
 
     Optional<Actividad> findByNombre(String nombre);
+
     Optional<Actividad> findByFecha(LocalDate fecha);
+
     List<Actividad> findByRama(Rama rama);
 
     @Query("SELECT a FROM Actividad a ORDER BY a.fecha ASC")
     List<Actividad> findAllOrderByFechaAsc();
+
 }

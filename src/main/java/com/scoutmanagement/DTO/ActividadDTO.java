@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public record ActividadDTO (
+public record ActividadDTO(
+
         @NotBlank
         String nombre,
         @NotBlank
@@ -17,6 +18,6 @@ public record ActividadDTO (
         LocalDate fecha,
 
         String ubicacion
-){
+) {
 }
 

@@ -294,7 +294,7 @@ main {
     padding-left: 12px;
 }
 
-.submenu li a{
+.submenu li a {
     text-decoration: none;
     color: inherit;
 }
@@ -787,10 +787,7 @@ perfil-menu li:hover span {
     padding: 40px;
     border-radius: 10px;
     margin: -35px;
-  }
-
-
-
+}
 
 
 .container {
@@ -927,7 +924,7 @@ perfil-menu li:hover span {
     background-color: #fff;
     border-radius: 14px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     min-width: 0;
     position: relative; /* Establecemos posición relativa para el dropdown */
     z-index: auto;
@@ -944,7 +941,6 @@ perfil-menu li:hover span {
 }
 
 
-
 /* Media queries para hacer el diseño responsive */
 
 /* Para tablets medianas */
@@ -954,26 +950,26 @@ perfil-menu li:hover span {
         gap: 20px;
         align-items: flex-start;
     }
-    
-        .tab-container {
+
+    .tab-container {
         width: 100%;
         max-width: 500px;
     }
-    
+
     .tab {
         width: 50%;
     }
-    
+
     .search-container {
         width: 100%;
         flex-wrap: wrap;
         gap: 10px;
     }
-    
+
     .filter-select {
         width: 150px;
     }
-    
+
     .filter-date {
         width: 100px;
     }
@@ -981,7 +977,7 @@ perfil-menu li:hover span {
     .container {
         padding: 25px;
     }
-    
+
     .activity-content {
         flex-direction: column;
         padding: 40px 15px 15px 20px;
@@ -989,9 +985,9 @@ perfil-menu li:hover span {
         position: relative;
         padding-bottom: 60px; /* Espacio para el botón si cae abajo */
     }
-    
-     /* Reposicionamos el dropdown */
-     .dropdown-container {
+
+    /* Reposicionamos el dropdown */
+    .dropdown-container {
         position: absolute;
         top: auto;
         bottom: 15px;
@@ -1008,18 +1004,18 @@ perfil-menu li:hover span {
         flex: 0 0 40%;
         padding-right: 0;
     }
-    
+
     .activity-right {
         padding-right: 10px; /* Reducimos el padding derecho */
         position: relative;
         width: 100%;
     }
-    
+
     .filter-container {
         flex-wrap: wrap;
         justify-content: flex-start;
     }
-    
+
     .filter-select, .filter-date {
         width: calc(50% - 30px);
     }
@@ -1032,54 +1028,54 @@ perfil-menu li:hover span {
         gap: 20px;
         align-items: stretch;
     }
-    
+
     .tab-container {
         width: 100%;
         justify-content: space-between;
     }
-    
+
     .tab {
         flex: 1;
         text-align: center;
         padding: 10px 15px;
         font-size: 18px;
     }
-    
+
     .search-container {
         display: flex;
         align-items: center;
         gap: 10px;
     }
-    
+
     .filter-date, .filter-select {
         width: 100%;
         min-width: unset;
     }
-    
+
     .select-container {
         flex: 2;
     }
-    
+
     .date-container {
         flex: 2;
     }
-    
+
     .search-btn {
         flex-shrink: 0;
         width: 42px;
         height: 42px;
         margin-top: -8px;
     }
-    
+
     .container {
         padding: 20px 15px;
     }
-    
+
     .date-column {
         padding: 15px;
         width: 100px;
     }
-    
+
     .day {
         font-size: 48px;
     }
@@ -1088,7 +1084,7 @@ perfil-menu li:hover span {
         padding-right: 60px; /* Espacio para el botón */
         position: relative;
     }
-    
+
     .dropdown-container {
         top: 15px;
         right: 15px;
@@ -1098,20 +1094,20 @@ perfil-menu li:hover span {
     .activity-content {
         padding: 15px 15px 15px 15px;
     }
-    
+
     h1 {
         font-size: 24px;
     }
-    
+
     .description {
         font-size: 15px;
     }
-    
+
     .tab {
         padding: 10px 25px;
         font-size: 15px;
     }
-    
+
     .tag {
         margin-bottom: 10px;
     }
@@ -1120,7 +1116,7 @@ perfil-menu li:hover span {
         width: 100%;
         margin-bottom: 10px;
     }
-    
+
     .search-btn {
         width: 40px;
         height: 40px;
@@ -1129,17 +1125,17 @@ perfil-menu li:hover span {
 
 /* Para móviles medianos */
 @media screen and (max-width: 576px) {
-    
-    
+
+
     .container {
         padding: 15px 10px;
     }
-    
+
     .activity-card {
         flex-direction: column;
         position: relative;
     }
-    
+
     .date-column {
         flex-direction: row;
         width: 100%;
@@ -1148,11 +1144,11 @@ perfil-menu li:hover span {
         background-color: #f8f7fc;
         border-radius: 14px 14px 0 0;
     }
-    
+
     .date-column::after {
         display: none;
     }
-    
+
     .month {
         margin-bottom: 0;
         margin-right: 5px;
@@ -1160,41 +1156,42 @@ perfil-menu li:hover span {
         display: flex;
         align-items: center;
     }
-    
+
     .day {
         font-size: 32px;
     }
-    
+
     .activity-title {
         font-size: 18px;
         padding-right: 50px; /* Espacio para el botón */
     }
-    
+
     .activity-content {
         padding: 15px;
     }
-    
+
     /* Reorganización específica que solicitaste */
     .activity-right {
         flex-direction: column;
         padding-right: 0;
     }
-    
+
     .dropdown-container {
         position: absolute;
         top: 70px; /* Ajustar según sea necesario */
         right: 15px;
         transform: none;
     }
-    
+
     .activity-description {
         order: -1; /* Mover descripción arriba */
         margin-top: 0;
     }
-    
+
     .tag {
         margin-top: 10px;
     }
+
     main {
         margin-left: 0;
     }
@@ -1205,34 +1202,34 @@ perfil-menu li:hover span {
     main {
         margin: auto;
     }
-    
+
     .tab-container {
         width: 100%;
     }
-    
+
     .tab {
         flex: 1;
         text-align: center;
         padding: 8px 15px;
         font-size: 14px;
     }
-    
+
     .activity-details {
         font-size: 14px;
     }
-    
+
     .detail-item {
         font-size: 14px;
     }
-    
+
     .day {
         font-size: 28px;
     }
-    
+
     .month {
         font-size: 16px;
     }
-    
+
     .expand-btn {
         width: 35px;
         height: 35px;
@@ -1249,22 +1246,22 @@ perfil-menu li:hover span {
         position: relative;
         padding-right: 50px; /* Espacio para el botón */
     }
-    
+
     .activity-right {
         display: flex;
         flex-direction: column;
     }
-    
+
     .activity-description {
         order: 1; /* La descripción será lo primero que se ve */
     }
-    
+
     .tag {
         order: 2; /* La etiqueta de rama va después */
         margin-top: 10px;
         align-self: flex-start;
     }
-    
+
     /* Al desplegar el menú, asegurarse que esté sobre todo */
     .dropdown-menu.active {
         z-index: 1001;
@@ -1587,7 +1584,7 @@ button {
     border: none;
     cursor: pointer;
     transition: background-color 0.2s;
-    
+
     /* Replace padding with flexbox for centering */
     padding: 0;
     display: flex;
@@ -1619,7 +1616,7 @@ button {
 /* Estilos personalizados para Flatpickr */
 .flatpickr-calendar {
     border-radius: 4px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 
 .flatpickr-day.selected {

@@ -18,17 +18,17 @@ public class ActividadService implements IActividadService {
     private ActividadRepository actividadRepository;
 
     @Override
-    public List<Actividad> findAllActividad(){
+    public List<Actividad> findAllActividad() {
         return (List<Actividad>) actividadRepository.findAll();
     }
 
     @Override
-    public void crearActividad(ActividadDTO actividadDTO){
+    public void crearActividad(ActividadDTO actividadDTO) {
         actividadRepository.save(cambiarActividadDTO(actividadDTO));
     }
 
     @Override
-    public Actividad modificarActividad(Actividad actividad){
+    public Actividad modificarActividad(Actividad actividad) {
         if (actividadRepository.existsById(actividad.getId())) {
             return actividadRepository.save(actividad);
         }
