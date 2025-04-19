@@ -8,6 +8,9 @@ import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.interfaces.IUserEntity;
+import jakarta.validation.constraints.Email;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,10 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
@@ -30,7 +30,12 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder() ;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailServiceImpl.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -62,18 +67,28 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     @Override
     public UserEntity cambioUserDTO(UserRegistroDTO userDTO) {
 
-       RoleEntity userRole = roleRepository.findByRole(userDTO.rol());
+        String passwordGenerada = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+        logger.info("Contrasena sin Encriptar: {}",passwordGenerada);
+
+        RoleEntity userRole = roleRepository.findByRole(userDTO.rol());
 
         UserEntity user = UserEntity.builder()
                 .username(userDTO.username())
                 //.password(bCryptPasswordEncoder.encode(userDTO.password()))
-                .password(bCryptPasswordEncoder.encode("Holis123"))
+                .password(bCryptPasswordEncoder.encode(passwordGenerada))
                 .roles(Set.of(userRole))
                 .accountNoExpired(true)
                 .accountNoLocked(true)
                 .credentialNoExpired(true)
                 .isEnabled(true)
                 .build();
+
+        String asunto="Tu cuenta ha sido creada";
+        String cuerpo=String.format("Hola, \n\nTu cuenta ha sido creada correctamente.\nTu contraseña temporal es: %s\n\npor favor cámbiala después de iniciar sesión",
+                passwordGenerada);
+
+        emailService.enviarCorreo(user.getUsername(),asunto,cuerpo);
+
         return user;
     }
 

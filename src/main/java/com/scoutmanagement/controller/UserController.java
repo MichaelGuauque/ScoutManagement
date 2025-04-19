@@ -1,5 +1,6 @@
 package com.scoutmanagement.controller;
 
+import com.scoutmanagement.DTO.PersonaConUsuarioDTO;
 import com.scoutmanagement.DTO.PersonaRegistroDTO;
 import com.scoutmanagement.DTO.UserDTO;
 import com.scoutmanagement.DTO.UserRegistroDTO;
@@ -70,24 +71,25 @@ public class UserController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@RequestBody UserRegistroDTO usuario  /*PersonaRegistroDTO personaRegistroDTO*/) {
-        logger.info("Usuario registrado: {}", usuario);
-        for (Rol rol : Rol.values()) {
-            // Verificar si el rol existe en la base de datos
-            if (roleRepository.findByRole(rol) == null) {
-                RoleEntity roleEntity = new RoleEntity();
-                roleEntity.setRole(rol);
-                roleRepository.save(roleEntity);
-                logger.info("✅ Rol creado: {}", rol);
-            }
-        }
-      //logger.info("Persona registrado: {}", personaRegistroDTO);
-        UserEntity user = userService.cambioUserDTO(usuario);
-        logger.info("Usuario cambiado: {}", user);
-        //personaRegistroDTO.setUserEntity(user);
+    public String guardar(@RequestBody PersonaConUsuarioDTO dto ) {
+
+        UserEntity user = userService.cambioUserDTO(dto.getUsuario());
         userService.save(user);
-        //personaService.save(personaRegistroDTO);
+
+        PersonaRegistroDTO persona = new PersonaRegistroDTO();
+        persona.setPrimerNombre(dto.getPrimerNombre());
+        persona.setSegundoNombre(dto.getSegundoNombre());
+        persona.setPrimerApellido(dto.getPrimerApellido());
+        persona.setSegundoApellido(dto.getSegundoApellido());
+        persona.setNumeroDeDocumento(dto.getNumeroDeDocumento());
+        persona.setTipoDeDocumento(dto.getTipoDeDocumento());
+        persona.setGenero(dto.getGenero());
+        persona.setRama(dto.getRama());
+        persona.setCargo(dto.getCargo());
+        persona.setUserEntity(user);
+        personaService.save(persona);
         return "redirect:login";
     }
+
 
 }
