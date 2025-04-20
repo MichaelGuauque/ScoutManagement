@@ -1,9 +1,12 @@
 package com.scoutmanagement.controller;
 
+import com.scoutmanagement.DTO.PersonaConUsuarioDTO;
+import com.scoutmanagement.DTO.PersonaRegistroDTO;
 import com.scoutmanagement.DTO.UserDTO;
-import com.scoutmanagement.persistence.model.Rol;
-import com.scoutmanagement.persistence.model.RoleEntity;
-import com.scoutmanagement.persistence.model.UserEntity;
+import com.scoutmanagement.DTO.UserRegistroDTO;
+import com.scoutmanagement.persistence.model.*;
+import com.scoutmanagement.persistence.repository.RoleRepository;
+import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -26,6 +29,12 @@ public class UserController {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private IUserEntity userService;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private IPersonaService personaService;
 
     @GetMapping()
     public String login() {
@@ -62,15 +71,35 @@ public class UserController {
         return "user/login";
     }
 
+
+    @GetMapping("/registrar")
+    public String registrarUsuario(Model model) {
+
+        model.addAttribute("ramas", Rama.values());
+        model.addAttribute("roles", Rol.values());
+        model.addAttribute("cargos", Cargo.values());
+        model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+        return "CrearMiembro";
+    }
     @PostMapping("/guardar")
-    public String guardar(UserDTO usuario /*Persona persona*/) {
-//        logger.info("Usuario registrado: {}", usuario);
-//        logger.info("Cliente registrado: {}", cliente);
-        UserEntity user = userService.cambioUserDTO(usuario);
-        //cliente.setUsuario(user);
+    public String guardar( PersonaConUsuarioDTO dto ) {
+
+        UserEntity user = userService.cambioUserDTO(dto.getUsuario());
         userService.save(user);
-        //clienteService.save(cliente);
-        return "redirect:login";
+
+        PersonaRegistroDTO persona = new PersonaRegistroDTO();
+        persona.setPrimerNombre(dto.getPrimerNombre());
+        persona.setSegundoNombre(dto.getSegundoNombre());
+        persona.setPrimerApellido(dto.getPrimerApellido());
+        persona.setSegundoApellido(dto.getSegundoApellido());
+        persona.setNumeroDeDocumento(dto.getNumeroDeDocumento());
+        persona.setTipoDeDocumento(dto.getTipoDeDocumento());
+        persona.setGenero(dto.getGenero());
+        persona.setRama(dto.getRama());
+        persona.setCargo(dto.getCargo());
+        persona.setUserEntity(user);
+        personaService.save(persona);
+        return "redirect:registrar";
     }
 
 

@@ -1,11 +1,16 @@
 package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.DTO.UserDTO;
+import com.scoutmanagement.DTO.UserRegistroDTO;
+import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.interfaces.IUserEntity;
+import jakarta.validation.constraints.Email;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,10 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
@@ -28,7 +30,12 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder() ;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailServiceImpl.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -58,17 +65,30 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     }
 
     @Override
-    public UserEntity cambioUserDTO(UserDTO userDTO) {
-        RoleEntity userRole = roleRepository.findByRole(userDTO.rol());
+    public UserEntity cambioUserDTO(UserRegistroDTO userDTO) {
+
+        String passwordGenerada = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+        logger.info("Contrasena sin Encriptar: {}",passwordGenerada);
+
+        RoleEntity userRole = roleRepository.findByRole(userDTO.getRol());
+
         UserEntity user = UserEntity.builder()
-                .username(userDTO.username())
-                .password(bCryptPasswordEncoder.encode(userDTO.password()))
+                .username(userDTO.getUsername())
+                //.password(bCryptPasswordEncoder.encode(userDTO.password()))
+                .password(bCryptPasswordEncoder.encode(passwordGenerada))
                 .roles(Set.of(userRole))
                 .accountNoExpired(true)
                 .accountNoLocked(true)
                 .credentialNoExpired(true)
                 .isEnabled(true)
                 .build();
+
+        String asunto="Tu cuenta ha sido creada";
+        String cuerpo=String.format("Hola, \n\nTu cuenta ha sido creada correctamente.\nTu contraseña temporal es: %s\n\npor favor cámbiala después de iniciar sesión",
+                passwordGenerada);
+
+        emailService.enviarCorreo(user.getUsername(),asunto,cuerpo);
+
         return user;
     }
 
