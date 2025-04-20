@@ -153,12 +153,12 @@
                     <div class="form-group">
                         <label for="activity-name">Nombre de la actividad</label>
                         <input type="text" id="activity-name" name="nombre"
-                               placeholder="Ingresa aquí el nombre de la actividad...">
+                               placeholder="Ingresa aquí el nombre de la actividad..." required maxlength="100">
                     </div>
 
                     <div class="form-group-branch">
                         <label for="activity-branch">Rama a la que está dirigida</label>
-                        <select id="activity-branch" name="rama">
+                        <select id="activity-branch" name="rama" required>
                             <option value="" selected>Selecciona la Rama...</option>
                             <th:block th:each="rama : ${ramas}">
                                 <option th:value="${rama}" th:text="${rama}"></option>
@@ -171,7 +171,7 @@
                     <div class="form-group">
                         <label for="activity-description">Descripción de la actividad</label>
                         <textarea id="activity-description" name="descripcion"
-                                  placeholder="Ingresa aquí la descripción de la actividad..."></textarea>
+                                  placeholder="Ingresa aquí la descripción de la actividad..." required maxlength="500"></textarea>
                     </div>
                 </div>
             </div>
@@ -185,14 +185,14 @@
                         <label for="start-date">Fecha de la actividad</label>
                         <div class="date-input-container">
                             <input type="text" id="start-date" name="fecha" class="date-input"
-                                   placeholder="Seleccione aquí la fecha de la actividad...">
+                                   placeholder="Seleccione aquí la fecha de la actividad..." required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="location">Ubicación de la actividad</label>
                         <input type="text" id="location" name="ubicacion"
-                               placeholder="Ingresa aquí la ubicacion de la actividad...">
+                               placeholder="Ingresa aquí la ubicacion de la actividad..." maxlength="500">
                     </div>
                 </div>
             </div>
@@ -204,7 +204,6 @@
         </form>
 
     </div>
-
 
     <footer class="footer">
         <div class="footer-container">
@@ -251,9 +250,7 @@
         </div>
     </footer>
 
-
 </main>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
 <!-- JavaScript para la funcionalidad -->
@@ -275,7 +272,7 @@
         dateFormat: "Y-m-d",
         altInput: true,
         altFormat: "d/m/Y",
-        allowInput: false
+        allowInput: true
     };
 
     // Inicializar datepickers
