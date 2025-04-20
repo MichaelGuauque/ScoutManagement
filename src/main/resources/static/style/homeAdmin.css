@@ -1,0 +1,28 @@
+.cuadricula {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
+    gap: 10px; /* Espacio entre las columnas */
+}
+
+/* Estilo para cada columna */
+.columna {
+    padding: 20px;
+    background-color: lightblue;
+    border: 1px solid #ccc;
+}
+
+/* Cuadrícula 2x2 dentro de la primera columna */
+.sub-cuadricula {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
+    grid-template-rows: 1fr 1fr; /* Dos filas de igual tamaño */
+    gap: 10px; /* Espacio entre las celdas */
+    height: 100%; /* Asegura que la sub-cuadrícula ocupe todo el espacio disponible */
+}
+
+/* Estilo para las celdas de la sub-cuadrícula */
+.sub-columna {
+    padding: 10px;
+    background-color: lightcoral;
+    border: 1px solid #bbb;
+}
