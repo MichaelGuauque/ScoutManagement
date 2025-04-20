@@ -76,9 +76,20 @@ public class UserController {
 
     @GetMapping("/home-admin")
     public String showAdminHomePage(HttpSession session) {
+        Object rol = session.getAttribute("rol");
         if(session.getAttribute("rol") == Rol.ADULTO.name()) {
             return "admin/home";
         }
+        if(rol == null){
+            return "redirect:/";
+        }
         return "error/pageNotFound";
+    }
+
+    @GetMapping("/cerrar")
+    public String cerrarSesion(HttpSession session){
+        session.removeAttribute("idUsuario");
+        session.removeAttribute("rol");
+        return "redirect:/";
     }
 }
