@@ -1,0 +1,19 @@
+<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="10" height="10" fill="#DADADA"/>
+<g id="Side-bar">
+<rect x="-275.5" y="-179.5" width="1974" height="1063" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
+<g id="Property 1=Hover(Inicio)">
+<rect id="Cuerpo" x="-256" y="-160" width="307" height="1024" rx="15" fill="#1F1F1F"/>
+<rect id="Rectangle 8" x="-5.5" y="-6.5" width="21" height="21" rx="4.5" fill="#2B2B2B" stroke="#626262"/>
+<g id="flecha">
+<path id="Vector" d="M8.125 3.4375L5 6.5625L1.875 3.4375" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g id="Component 14">
+<rect id="Rectangle 8_2" x="-5.5" y="-6.5" width="21" height="21" rx="4.5" fill="#2B2B2B" stroke="#626262"/>
+<g id="flecha_2">
+<path id="Vector_2" d="M8.125 3.4375L5 6.5625L1.875 3.4375" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+</g>
+</svg>

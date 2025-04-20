@@ -1,0 +1,47 @@
+### 📌 Registrar nuevo usuario
+POST http://localhost:8080/usuarios
+Content-Type: application/json
+
+{
+  "username" : "mc@gmail.com",
+  "password" : "1234"
+}
+
+###
+
+### 🔐 Login (obtener token o sesión)
+POST http://localhost:8080/usuarios/login
+Content-Type: application/json
+
+{
+  "username" : "mc@gmail.com",
+  "password" : "1234"
+}
+
+###
+
+### Crear Actividad
+POST http://localhost:8080/actividades/crear
+Content-Type: application/json
+
+{
+  "nombre" : "Ruta de los lamentos",
+  "descripcion" : "Caminata",
+  "rama" : "COMUNIDAD",
+  "fecha" : "2025-04-19",
+  "ubicacion" : "La Honda"
+}
+
+###
+
+### Crear Actividad 2
+POST http://localhost:8080/actividades/crear
+Content-Type: application/json
+
+{
+  "nombre" : "Comiendo Sabroso",
+  "descripcion" : "Reunion social con comida",
+  "rama" : "COMUNIDAD",
+  "fecha" : "2025-04-26",
+  "ubicacion" : "Donde Aristi"
+}
