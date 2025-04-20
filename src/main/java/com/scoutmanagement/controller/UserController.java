@@ -78,7 +78,7 @@ public class UserController {
             model.addAttribute("roles", Rol.values());
             model.addAttribute("cargos", Cargo.values());
             model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
-            return "user/CrearMiembro";
+            return "/user/crearMiembro";
         }
         if(rol == null){
             return "redirect:/";

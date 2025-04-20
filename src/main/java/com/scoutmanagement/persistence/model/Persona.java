@@ -25,7 +25,7 @@ public class Persona {
     private String primerApellido;
     @Column (nullable = true, columnDefinition = "VARCHAR(25)")
     private String segundoApellido;
-    @Column (nullable = false, unique = true, length = 10)
+    @Column (nullable = false, unique = true, length = 11)
     private Long numeroDeDocumento;
 
     @Enumerated(EnumType.STRING)
@@ -33,7 +33,7 @@ public class Persona {
 
     @Column (nullable = true)
     private LocalDate fechaNacimiento;
-    @Column (nullable = true, columnDefinition = "VARCHAR(30)")
+    @Column (nullable = true, columnDefinition = "VARCHAR(100)")
     private String direccion;
     @Column (nullable = true, columnDefinition = "VARCHAR(15)")
     private String eps;
