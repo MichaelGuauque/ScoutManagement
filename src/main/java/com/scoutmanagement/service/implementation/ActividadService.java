@@ -5,8 +5,10 @@ import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
 import com.scoutmanagement.service.interfaces.IActividadService;
+import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,14 @@ public class ActividadService implements IActividadService {
 
     @Autowired
     private ActividadRepository actividadRepository;
+    
+    @Autowired
+    private IAsistenciaService asistenciaService;
+
+    @Override
+    public Optional<Actividad> findById(Long id) {
+        return actividadRepository.findById(id);
+    }
 
     @Override
     public List<Actividad> findAllActividad() {
@@ -23,8 +33,13 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
+    @Transactional
     public void crearActividad(ActividadDTO actividadDTO) {
-        actividadRepository.save(cambiarActividadDTO(actividadDTO));
+        // Crear la actividad primero
+        Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
+        
+        // Crear automáticamente registros de asistencia para todos los miembros de la rama
+        asistenciaService.crearAsistenciasAutomaticas(nuevaActividad);
     }
 
     @Override

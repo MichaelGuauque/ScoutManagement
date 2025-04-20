@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface IActividadService {
 
+    public Optional<Actividad> findById(Long id);
+
     public List<Actividad> findAllActividad();
 
     public void crearActividad(ActividadDTO actividadDTO);

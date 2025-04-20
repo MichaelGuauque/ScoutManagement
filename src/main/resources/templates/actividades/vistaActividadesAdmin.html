@@ -243,10 +243,19 @@
                             <img src="./img/Vector.svg" alt="Expandir" class="expand-icon">
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" th:href="@{'/actividades/asistencia/' + ${actividad.id}}">
+                            <!--<a class="dropdown-item"
+                               th:href="@{'/actividades?tab=' + ${tabSeleccionada} + '&asistenciaActividadId=' + ${actividad.id}}">
+                                <img src="./img/asistencia.svg" alt="Asistencia" class="dropdown-icon">
+                                <span>Asistencia</span>
+                            </a>-->
+                            <a href="javascript:void(0);"
+                               th:data-id="${actividad.id}"
+                               th:data-tab="${tabSeleccionada}"
+                               class="asistencia-button btn-asistencia  ">
                                 <img src="./img/asistencia.svg" alt="Asistencia" class="dropdown-icon">
                                 <span>Asistencia</span>
                             </a>
+
                             <a class="dropdown-item" th:href="@{'/actividades/modificar/' + ${actividad.id}}">
                                 <img src="./img/modifiAct.svg" alt="Modificar" class="dropdown-icon">
                                 <span>Modificar</span>
@@ -261,6 +270,14 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal de Asistencia -->
+
+
+
+        <div id="contenedor-modal-asistencia"></div>
+
+
 
         <div class="pagination-container" th:if="${totalPaginas > 1}">
             <div class="pagination">
@@ -329,6 +346,98 @@
 
 <!-- JavaScript para la funcionalidad -->
 <script>
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Botones de asistencia para abrir modal
+        document.querySelectorAll('.btn-asistencia').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const actividadId = this.getAttribute('data-id');
+                const tab = this.getAttribute('data-tab');
+
+                console.log(`Cargando modal para actividad ${actividadId} en pestaña ${tab}`);
+
+                fetch(`/asistencias/modal/${actividadId}?tab=${tab}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error: ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        const contenedor = document.getElementById('contenedor-modal-asistencia');
+                        if (!contenedor) {
+                            console.error("No se encontró el contenedor del modal");
+                            return;
+                        }
+
+                        contenedor.innerHTML = html;
+
+                        // Asegurarse de que el modal existe antes de manipularlo
+                        const modal = contenedor.querySelector('#modal-asistencia');
+                        if (modal) {
+                            modal.classList.add('show');
+                            modal.style.display = 'block';
+                        } else {
+                            console.error("El modal no se renderizó correctamente");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error cargando modal:", err);
+                    });
+            });
+        });
+
+        // Función para cerrar el modal
+        window.cerrarModal = function() {
+            const contenedor = document.getElementById('contenedor-modal-asistencia');
+            if (contenedor) {
+                contenedor.innerHTML = '';
+            }
+        };
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('modal-asistencia');
+        if (modal) {
+            modal.classList.add('show');
+            modal.style.display = 'block';
+        }
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('modal-asistencia');
+
+        if (!modal) return; // Evita que el código siga si no existe el modal
+
+        // Abrir el modal al hacer clic en cualquier botón con clase .btn-asistencia
+        document.querySelectorAll('.btn-asistencia').forEach(btn => {
+            btn.addEventListener('click', function () {
+                modal.classList.add('show');
+                modal.style.display = 'block';
+            });
+        });
+
+        // Cerrar el modal al hacer clic en el botón de cerrar o fuera del contenido
+        document.addEventListener('click', function (event) {
+            const modalContent = modal.querySelector('.modal-content');
+            const isClickInside = modalContent && modalContent.contains(event.target);
+            const isCloseBtn = event.target.classList.contains('close');
+
+            if (modal.classList.contains('show') && (!isClickInside || isCloseBtn)) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+            }
+        });
+    });
+
+
+
+
+
     const tabs = document.querySelectorAll(".tab");
 
     tabs.forEach(tab => {
@@ -403,18 +512,34 @@
                 });
 
                 // Toggle el dropdown actual
-                this.classList.toggle('active');
-                const dropdownMenu = this.nextElementSibling;
-                if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
-                    dropdownMenu.classList.toggle('active');
+                if (this && this.classList) {
+                    this.classList.toggle('active');
 
-                    // Añadir o remover clase menu-active al contenedor
-                    const container = this.closest('.dropdown-container');
-                    if (container) {
-                        if (dropdownMenu.classList.contains('active')) {
-                            container.classList.add('menu-active');
+                    // Guardamos el estado activo para usarlo más tarde
+                    const isActive = this.classList.contains('active');
+
+                    // Obtenemos el dropdown menu con una verificación adicional
+                    const dropdownMenu = this && this.nextElementSibling;
+
+                    // Verificar que dropdownMenu existe y tiene la clase necesaria
+                    if (dropdownMenu && typeof dropdownMenu.classList !== 'undefined' &&
+                        dropdownMenu.classList.contains('dropdown-menu')) {
+
+                        // Aplicar toggle basado en el estado activo previo
+                        if (isActive) {
+                            dropdownMenu.classList.add('active');
                         } else {
-                            container.classList.remove('menu-active');
+                            dropdownMenu.classList.remove('active');
+                        }
+
+                        // Añadir o remover clase menu-active del contenedor
+                        const container = this.closest('.dropdown-container');
+                        if (container && typeof container.classList !== 'undefined') {
+                            if (isActive) {
+                                container.classList.add('menu-active');
+                            } else {
+                                container.classList.remove('menu-active');
+                            }
                         }
                     }
                 }
@@ -597,6 +722,67 @@
                 });
             });
         });
+    });
+
+
+    // Función para mostrar el modal
+    function showModal() {
+        document.getElementById('modal-asistencia').style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Evita el scroll del body
+    }
+
+    // Función para ocultar el modal
+    function hideModal() {
+        document.getElementById('modal-asistencia').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restaura el scroll del body
+    }
+
+    // Agregar event listeners a los elementos necesarios
+    document.addEventListener('DOMContentLoaded', function() {
+        // Seleccionar todos los botones de dropdown que contienen "Asistencia"
+        const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+
+        dropdownMenus.forEach(menu => {
+            const asistenciaItem = menu.querySelector('.dropdown-item:nth-child(1)');
+            if (asistenciaItem) {
+                asistenciaItem.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    showModal();
+
+                    // Cierra el dropdown
+                    document.querySelectorAll('.dropdown-menu.active').forEach(d => d.classList.remove('active'));
+                    document.querySelectorAll('.expand-btn.active').forEach(b => b.classList.remove('active'));
+                });
+            }
+        });
+
+        // Cerrar modal con botón de Cancelar
+        const cancelButton = document.querySelector('.cancel-button');
+        if (cancelButton) {
+            cancelButton.addEventListener('click', hideModal);
+        }
+
+        // Cerrar modal con botón de Guardar (en un caso real, aquí guardarías la información primero)
+        const saveButton = document.querySelector('.save-button');
+        if (saveButton) {
+            saveButton.addEventListener('click', hideModal);
+        }
+
+        // Cerrar modal al hacer clic en el overlay
+        const modalOverlay = document.querySelector('.modal-overlay');
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', hideModal);
+        }
+
+        // Evitar que al hacer clic en el contenido del modal, este se cierre
+        const modalContent = document.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
     });
 </script>
 

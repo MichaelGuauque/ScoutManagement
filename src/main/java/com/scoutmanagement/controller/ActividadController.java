@@ -3,6 +3,7 @@ package com.scoutmanagement.controller;
 import com.scoutmanagement.DTO.ActividadDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
+import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +29,16 @@ public class ActividadController {
     @Autowired
     private IActividadService actividadService;
 
+    @Autowired
+    private IAsistenciaService asistenciaService;
+
+
     @GetMapping()
     public String actividades(Model model,
                               @RequestParam(required = false, defaultValue = "proximas") String tab,
                               @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "4") int size) {
+                              @RequestParam(defaultValue = "4") int size,
+                              @RequestParam(value = "asistenciaActividadId", required = false) Long asistenciaActividadId) {
 
         List<Actividad> listaActividades = actividadService.findAllActividadesOrdenadas();
         LocalDate hoy = LocalDate.now();
@@ -67,6 +73,12 @@ public class ActividadController {
                     .ifPresent(actividad -> actividadEsMasProxima.put(actividad.getId(), true));
         }
 
+        if (asistenciaActividadId != null) {
+            List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
+            model.addAttribute("asistencias", asistencias);
+            model.addAttribute("actividadSeleccionada", asistenciaActividadId);
+        }
+
         model.addAttribute("actividades", paginaActividades);
         model.addAttribute("actividadEsMasProxima", actividadEsMasProxima);
         model.addAttribute("paginaActual", paginaActual);
@@ -75,6 +87,7 @@ public class ActividadController {
 
         return "actividades/vistaActividadesAdmin";
     }
+
 
 
     @GetMapping("/crear")

@@ -15,7 +15,7 @@ public class Asistencia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // esto está bien si usas JOIN FETCH
     @JoinColumn(name = "miembro_id", nullable = false)
     private Persona miembro;
 
