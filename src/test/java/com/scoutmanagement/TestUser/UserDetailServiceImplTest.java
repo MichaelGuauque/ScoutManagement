@@ -7,6 +7,7 @@ import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
+import com.scoutmanagement.service.implementation.EmailService;
 import com.scoutmanagement.service.implementation.UserDetailServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,9 @@ class UserDetailServiceImplTest {
 
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Mock
+    private EmailService emailService;
 
     private UserRegistroDTO userDTO;
     private UserEntity userEntity;

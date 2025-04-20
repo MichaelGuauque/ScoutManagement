@@ -23,7 +23,7 @@ public class Persona {
     private String segundoNombre;
     @Column (nullable = false, columnDefinition = "VARCHAR(25)")
     private String primerApellido;
-    @Column (nullable = false, columnDefinition = "VARCHAR(25)")
+    @Column (nullable = true, columnDefinition = "VARCHAR(25)")
     private String segundoApellido;
     @Column (nullable = false, unique = true, length = 10)
     private Long numeroDeDocumento;

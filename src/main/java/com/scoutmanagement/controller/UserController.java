@@ -3,7 +3,6 @@ package com.scoutmanagement.controller;
 import com.scoutmanagement.DTO.PersonaConUsuarioDTO;
 import com.scoutmanagement.DTO.PersonaRegistroDTO;
 import com.scoutmanagement.DTO.UserDTO;
-import com.scoutmanagement.DTO.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.service.interfaces.IPersonaService;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,35 +71,37 @@ public class UserController {
 
 
     @GetMapping("/registrar")
-    public String registrarUsuario(Model model) {
-
-        model.addAttribute("ramas", Rama.values());
-        model.addAttribute("roles", Rol.values());
-        model.addAttribute("cargos", Cargo.values());
-        model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
-        return "CrearMiembro";
+    public String registrarUsuario(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if(session.getAttribute("rol") == Rol.ADULTO.name()) {
+            model.addAttribute("ramas", Rama.values());
+            model.addAttribute("roles", Rol.values());
+            model.addAttribute("cargos", Cargo.values());
+            model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+            return "user/CrearMiembro";
+        }
+        if(rol == null){
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
+
     @PostMapping("/guardar")
-    public String guardar( PersonaConUsuarioDTO dto ) {
-
-        UserEntity user = userService.cambioUserDTO(dto.getUsuario());
-        userService.save(user);
-
-        PersonaRegistroDTO persona = new PersonaRegistroDTO();
-        persona.setPrimerNombre(dto.getPrimerNombre());
-        persona.setSegundoNombre(dto.getSegundoNombre());
-        persona.setPrimerApellido(dto.getPrimerApellido());
-        persona.setSegundoApellido(dto.getSegundoApellido());
-        persona.setNumeroDeDocumento(dto.getNumeroDeDocumento());
-        persona.setTipoDeDocumento(dto.getTipoDeDocumento());
-        persona.setGenero(dto.getGenero());
-        persona.setRama(dto.getRama());
-        persona.setCargo(dto.getCargo());
-        persona.setUserEntity(user);
-        personaService.save(persona);
-        return "redirect:registrar";
+    public String guardar(PersonaConUsuarioDTO dto, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if(session.getAttribute("rol") == Rol.ADULTO.name()) {
+            UserEntity user = userService.cambioUserDTO(dto.getUsuario());
+            userService.save(user);
+            PersonaRegistroDTO personaDTO = new PersonaRegistroDTO(dto);
+            personaDTO.setUserEntity(user);
+            personaService.save(personaDTO);
+            return "redirect:registrar";
+        }
+        if(rol == null){
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
-
 
     @GetMapping("/home-admin")
     public String showAdminHomePage(HttpSession session) {

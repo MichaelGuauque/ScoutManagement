@@ -44,4 +44,16 @@ public class PersonaRegistroDTO {
 
     @NotBlank
     private UserEntity userEntity;
+
+    public PersonaRegistroDTO(PersonaConUsuarioDTO personaConUsuarioDTO) {
+        this.primerNombre = personaConUsuarioDTO.getPrimerNombre();
+        this.segundoNombre = personaConUsuarioDTO.getSegundoNombre();
+        this.primerApellido = personaConUsuarioDTO.getPrimerApellido();
+        this.segundoApellido = personaConUsuarioDTO.getSegundoApellido();
+        this.numeroDeDocumento = personaConUsuarioDTO.getNumeroDeDocumento();
+        this.tipoDeDocumento = personaConUsuarioDTO.getTipoDeDocumento();
+        this.genero = personaConUsuarioDTO.getGenero();
+        this.rama = personaConUsuarioDTO.getRama();
+        this.cargo = personaConUsuarioDTO.getCargo();
+    }
 }

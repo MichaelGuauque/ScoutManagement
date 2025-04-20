@@ -46,11 +46,6 @@ public class ScoutManagementApplication {
                     .permissions(Set.of(createPermission, readPermission))
                     .build();
 
-            RoleEntity publicRole = RoleEntity.builder()
-                    .role(Rol.PUBLICO)  // Nuevo rol PUBLIC
-                    .permissions(Set.of(readPermission))
-                    .build();
-
             //Crear usuarios
             UserEntity userAdmin = UserEntity.builder()
                         .username("admin@gmail.com")
@@ -72,16 +67,7 @@ public class ScoutManagementApplication {
                     .roles(Set.of(userRole))
                     .build();
 
-            UserEntity userPublic = UserEntity.builder()
-                    .username("publicUser@gmail.com")
-                    .password("$2a$10$eeTu3yyhB9G8J1ZzFTEF8ORHLLh4XV9iKq0nhOHSPP5gt2zOi42dy")
-                    .isEnabled(true)
-                    .accountNoExpired(true)
-                    .accountNoLocked(true)
-                    .credentialNoExpired(true)
-                    .roles(Set.of(publicRole))
-                    .build();
-            userRepository.saveAll(List.of(userAdmin, userMaigu,userPublic));
+            userRepository.saveAll(List.of(userAdmin, userMaigu));
         };
 
     }
