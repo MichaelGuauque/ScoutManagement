@@ -1,20 +1,14 @@
 package com.scoutmanagement.controller;
 
 
-import com.scoutmanagement.DTO.PersonaDTO;
-import com.scoutmanagement.DTO.RegistroCompletoDTO;
-import com.scoutmanagement.DTO.UsuarioRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 

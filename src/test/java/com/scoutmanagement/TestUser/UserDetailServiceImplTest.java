@@ -1,6 +1,7 @@
 package com.scoutmanagement.TestUser;
 
 import com.scoutmanagement.DTO.UserDTO;
+import com.scoutmanagement.DTO.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
@@ -36,7 +37,7 @@ class UserDetailServiceImplTest {
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
 
-    private UserDTO userDTO;
+    private UserRegistroDTO userDTO;
     private UserEntity userEntity;
     private RoleEntity roleEntity;
 
@@ -45,13 +46,13 @@ class UserDetailServiceImplTest {
         MockitoAnnotations.openMocks(this);
 
         // Mockeamos el DTO y la entidad de usuario
-        userDTO = new UserDTO("john.doe", "password123", null, Rol.ADULTO);
+        userDTO = new UserRegistroDTO("correito@gmail.com", Rol.ADULTO);
 
         roleEntity = new RoleEntity();
-        roleEntity.setRole(userDTO.rol());
+        roleEntity.setRole(userDTO.getRol());
 
         userEntity = UserEntity.builder()
-                .username("john.doe")
+                .username("correito@gmail.com")
                 .password("passwordEncoded")
                 .roles(Set.of(roleEntity))
                 .accountNoExpired(true)
@@ -64,25 +65,25 @@ class UserDetailServiceImplTest {
     @Test
     void testLoadUserByUsername_UserFound() {
         // Preparar el mock de la base de datos
-        when(userRepository.findUserEntityByUsername("john.doe")).thenReturn(Optional.of(userEntity));
+        when(userRepository.findUserEntityByUsername("correito@gmail.com")).thenReturn(Optional.of(userEntity));
 
         // Llamamos al método
-        UserDetails userDetails = userDetailService.loadUserByUsername("john.doe");
+        UserDetails userDetails = userDetailService.loadUserByUsername("correito@gmail.com");
 
         // Verificar los resultados
         assertNotNull(userDetails);
-        assertEquals("john.doe", userDetails.getUsername());
-        verify(userRepository, times(1)).findUserEntityByUsername("john.doe");
+        assertEquals("correito@gmail.com", userDetails.getUsername());
+        verify(userRepository, times(1)).findUserEntityByUsername("correito@gmail.com");
     }
 
     @Test
     void testLoadUserByUsername_UserNotFound() {
         // Preparar el mock para devolver un usuario no encontrado
-        when(userRepository.findUserEntityByUsername("john.doe")).thenReturn(Optional.empty());
+        when(userRepository.findUserEntityByUsername("correito@gmail.com")).thenReturn(Optional.empty());
 
         // Llamamos al método y verificamos que lanza la excepción
-        assertThrows(UsernameNotFoundException.class, () -> userDetailService.loadUserByUsername("john.doe"));
-        verify(userRepository, times(1)).findUserEntityByUsername("john.doe");
+        assertThrows(UsernameNotFoundException.class, () -> userDetailService.loadUserByUsername("correito@gmail.com"));
+        verify(userRepository, times(1)).findUserEntityByUsername("correito@gmail.com");
     }
 
     @Test
@@ -95,7 +96,7 @@ class UserDetailServiceImplTest {
 
         // Verificar que el resultado es el esperado
         assertNotNull(result);
-        assertEquals("john.doe", result.getUsername());
+        assertEquals("correito@gmail.com", result.getUsername());
         assertTrue(result.getRoles().contains(roleEntity));
         verify(roleRepository, times(1)).findByRole(Rol.ADULTO);
     }
@@ -105,12 +106,12 @@ class UserDetailServiceImplTest {
     @Test
     void testUpdatePassword_UserFoundAndPasswordMatches() {
         // Mockeamos la base de datos para un usuario existente
-        when(userRepository.findUserEntityByUsername("john.doe")).thenReturn(Optional.of(userEntity));
+        when(userRepository.findUserEntityByUsername("correito@gmail.com")).thenReturn(Optional.of(userEntity));
         when(passwordEncoder.matches("password123", userEntity.getPassword())).thenReturn(true);
         when(passwordEncoder.encode("newPassword")).thenReturn("newEncodedPassword");
 
         // Llamamos al método
-        userDetailService.updatePassword("john.doe", "password123", "newPassword");
+        userDetailService.updatePassword("correito@gmail.com", "password123", "newPassword");
 
         // Verificamos que el método save fue llamado
         verify(userRepository, times(1)).save(any(UserEntity.class));
@@ -119,10 +120,10 @@ class UserDetailServiceImplTest {
     @Test
     void testUpdatePassword_UserNotFound() {
         // Mockeamos la base de datos para que el usuario no sea encontrado
-        when(userRepository.findUserEntityByUsername("john.doe")).thenReturn(Optional.empty());
+        when(userRepository.findUserEntityByUsername("correito@gmail.com")).thenReturn(Optional.empty());
 
         // Llamamos al método y verificamos que no hace nada
-        userDetailService.updatePassword("john.doe", "password123", "newPassword");
+        userDetailService.updatePassword("correito@gmail.com", "password123", "newPassword");
 
         // Verificamos que el método save nunca fue llamado
         verify(userRepository, times(0)).save(any(UserEntity.class));
@@ -131,11 +132,11 @@ class UserDetailServiceImplTest {
     @Test
     void testUpdatePassword_InvalidOldPassword() {
         // Mockeamos la base de datos para un usuario existente
-        when(userRepository.findUserEntityByUsername("john.doe")).thenReturn(Optional.of(userEntity));
+        when(userRepository.findUserEntityByUsername("correito@gmail.com")).thenReturn(Optional.of(userEntity));
         when(passwordEncoder.matches("wrongOldPassword", userEntity.getPassword())).thenReturn(false);
 
         // Llamamos al método
-        userDetailService.updatePassword("john.doe", "wrongOldPassword", "newPassword");
+        userDetailService.updatePassword("correito@gmail.com", "wrongOldPassword", "newPassword");
 
         // Verificamos que el método save nunca fue llamado porque la contraseña no coincide
         verify(userRepository, times(0)).save(any(UserEntity.class));
