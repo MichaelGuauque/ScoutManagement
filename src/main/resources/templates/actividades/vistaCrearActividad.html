@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Miembro</title>
+    <title>Crear Actividad</title>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/style/crear-miembroStyle.css}">
+    <link rel="stylesheet" th:href="@{/style/crear-actividadStyle.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css}">
 </head>
 <body>
@@ -25,29 +25,29 @@
 
 <div class="sidebar" id="sidebar">
     <div class="logo-contenedor">
-        <img src="img/logoApli.svg" alt="Scout Management" class="logo">
+        <img th:src="@{/img/logoApli.svg}" alt="Scout Management" class="logo">
     </div>
 
     <div class="perfil-contenedor">
-        <img src="img/perfil.svg" alt="Perfil" class="perfil">
+        <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
         <div class="perfil-info">
             <p class="nombre-perfil">Miguel Andres M...</p>
             <p class="cargo-perfil">Adulto - Jefe Manada</p>
         </div>
         <div class="perfil-flecha">
-            <img class="flecha-perfil" src="img/flechita.svg" alt="Desplegar">
+            <img class="flecha-perfil" th:src="@{/img/flechita.svg}" alt="Desplegar">
         </div>
 
         <!-- Menú desplegable del perfil -->
         <div class="perfil-menu" id="perfilMenu">
             <ul>
                 <li class="nav-link">
-                    <img src="img/sesion.svg" alt="Ver Perfil" class="perfil-menu-icon">
+                    <img th:src="@{/img/sesion.svg}" alt="Ver Perfil" class="perfil-menu-icon">
                     <span>Ver Perfil</span>
                 </li>
                 <li class="nav-link">
                     <img th:src="@{/img/cierreSesion.svg}" alt="Cerrar Sesión" class="perfil-menu-icon">
-                    <a class="cerrar-sesion" th:href="@{/cerrar}">Cerrar Sesión</a>
+                    <span>Cerrar Sesión</span>
                 </li>
             </ul>
         </div>
@@ -60,16 +60,17 @@
             <ul>
                 <li class="menu-item">
                     <div class="main-button nav-link">
-                        <img src="img/Casa.svg" alt="Inicio">
+                        <img th:src="@{/img/Casa.svg}" alt="Inicio">
                         <span>Inicio</span>
                     </div>
                 </li>
 
                 <li class="menu-item">
                     <div class="main-button">
-                        <img src="img/Calendario.svg" alt="Actividades">
+                        <img th:src="@{/img/Calendario.svg}" alt="Actividades">
                         <span>Actividades</span>
-                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
                     </div>
                     <ul class="submenu">
                         <li class="nav-link">
@@ -89,38 +90,34 @@
 
                 <li class="menu-item">
                     <div class="main-button">
-                        <img src="img/grafico.svg" alt="Progresiones">
+                        <img th:src="@{/img/grafico.svg}" alt="Progresiones">
                         <span>Progresiones</span>
-                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
                     </div>
                     <ul class="submenu">
-                        <li class="nav-link"><img src="img/retos.svg" alt="Consultar" class="submenu-icon">Gestionar
+                        <li class="nav-link"><img th:src="@{/img/retos.svg}" alt="Consultar" class="submenu-icon">Gestionar
                             Retos
                         </li>
-                        <li class="nav-link"><img src="img/retos(miembros).svg" alt="Agregar" class="submenu-icon">Progresion
-                            Miembros
+                        <li class="nav-link"><img th:src="@{/img/retos(miembros).svg}" alt="Agregar"
+                                                  class="submenu-icon">Progresion Miembros
                         </li>
                     </ul>
                 </li>
 
                 <li class="menu-item">
                     <div class="main-button">
-                        <img src="img/usuarios.svg" alt="Miembros">
+                        <img th:src="@{/img/usuarios.svg}" alt="Miembros">
                         <span>Miembros</span>
-                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
                     </div>
                     <ul class="submenu">
-                        <li class="nav-link">
-                            <a th:href="@{/miembros}">
-                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar" class="submenu-icon">Consultar
-                                Miembros
-                            </a>
+                        <li class="nav-link"><img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
+                                                  class="submenu-icon">Consultar Miembros
                         </li>
-                        <li class="nav-link">
-                            <a th:href="@{/miembros/jefes}">
-                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar" class="submenu-icon">Consultar
-                                Jefes
-                            </a>
+                        <li class="nav-link"><img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
+                                                  class="submenu-icon">Consultar Jefes
                         </li>
                     </ul>
                 </li>
@@ -131,7 +128,7 @@
     <div class="linea-divisoria"></div>
 
     <div class="configuracion nav-link">
-        <img src="img/tuerca.svg" alt="Configuración">
+        <img th:src="@{/img/tuerca.svg}" alt="Configuración">
         <span>Configuración de Cuenta</span>
     </div>
 </div>
@@ -143,116 +140,76 @@
 
     <div class="container">
         <div class="header">
-            <h1 class="encabezado">Agregar un Miembro al Grupo</h1>
-            <p class="description">Ingresa los datos principales del nuevo integrante para incluirlo en el sistema.</p>
+            <h1 class="encabezado">Crear Una Actividad</h1>
+            <p class="description">Desde aquí puedes crear nuevas actividades para las diferentes ramas.</p>
         </div>
 
-        <form th:action="@{/guardar}" method="post">
+        <form th:action="@{/actividades/crear}" method="post">
             <div class="section">
-                <h2 class="section-title">Información Básica</h2>
-                <p class="section-subtitle">Datos básicos sobre el miembro.</p>
+                <h2 class="section-title">Información de la Actividad</h2>
+                <p class="section-subtitle">Datos básicos sobre la actividad.</p>
+
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="primerNombre">Primer Nombre</label>
-                        <input type="text" name="primerNombre" id="primerNombre" required maxlength="25"
-                               placeholder="Ingresa aquí el nombre...">
+                        <label for="activity-name">Nombre de la actividad</label>
+                        <input type="text" id="activity-name" name="nombre"
+                               placeholder="Ingresa aquí el nombre de la actividad..." required maxlength="100">
                     </div>
 
-                    <div class="form-group">
-                        <label for="segundoNombre">Segundo Nombre</label>
-                        <input type="text" name="segundoNombre" id="segundoNombre" maxlength="25"
-                               placeholder="Ingresa aquí el nombre...">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="primerApellido">Primer Apellido</label>
-                        <input type="text" name="primerApellido" id="primerApellido" maxlength="25" required
-                               placeholder="Ingresa aquí el apellido...">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="segundoApellido">Segundo Apellido</label>
-                        <input type="text" name="segundoApellido" id="segundoApellido" maxlength="25"
-                               placeholder="Ingresa aquí el apellido...">
-                    </div>
-                </div>
-
-                <!-- Segunda fila: 1 select, 1 numérico, 1 texto -->
-                <div class="form-row">
-                    <div class="form-group" style="max-width: 185px;">
-                        <label for="tipoDeDocumento">Tipo de Documento</label>
-                        <select class="form-select" name="tipoDeDocumento" id="tipoDeDocumento" required>
-                            <option value="" disabled selected>Seleccione...</option>
-                            <th:block th:each="tipoDeDocumento : ${tiposDeDocumento}">
-                                <option th:value="${tipoDeDocumento}" th:text="${tipoDeDocumento}"></option>
-                            </th:block>
-                        </select>
-                    </div>
-
-                    <div class="form-group" style="max-width: 390px;">
-                        <label for="numeroDeDocumento">Número Documento</label>
-                        <input type="number" name="numeroDeDocumento" id="numeroDeDocumento" minlength="7"
-                               maxlength="11" required placeholder="Ingresa aquí el documento...">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Correo Electrónico</label>
-                        <input type="email" name="usuario.username" id="usuario.username" maxlength="30" required
-                               placeholder="Ingresa aquí el correo...">
-                    </div>
-                </div>
-            </div>
-            <!-- Título para la sección de función -->
-            <div class="section">
-                <h2 class="section-title">Función dentro del Grupo</h2>
-                <p class="section-subtitle">Selecciona el rol, el cargo y la rama a la que pertenece el miembro.</p>
-
-
-                <!-- Tercera fila: 3 selects -->
-                <div class="form-row">
-                    <div class="form-group" style="max-width: 185px;">
-                        <label for="rol">Rol</label>
-                        <select class="form-select" name="usuario.rol" id="rol" onchange="actualizarCargos()" required>
-                            <option value="" disabled selected>Seleccione...</option>
-                            <th:block th:each="rol : ${roles}">
-                                <option th:value="${rol}" th:text="${rol}"></option>
-                            </th:block>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="cargo">Cargo</label>
-                        <select class="form-select" name="cargo" id="cargo" disabled required>
-                            <option value="" disabled selected>Selecciona el Cargo...</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="rama">Rama</label>
-                        <select class="form-select" name="rama" id="rama"
-                                style="pointer-events: none;background-color: #f3f3f3;">
-                            <option value="" selected="">Seleccione...</option>
+                    <div class="form-group-branch">
+                        <label for="activity-branch">Rama a la que está dirigida</label>
+                        <select id="activity-branch" name="rama" required>
+                            <option value="" selected>Selecciona la Rama...</option>
                             <th:block th:each="rama : ${ramas}">
                                 <option th:value="${rama}" th:text="${rama}"></option>
                             </th:block>
                         </select>
                     </div>
                 </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="activity-description">Descripción de la actividad</label>
+                        <textarea id="activity-description" name="descripcion"
+                                  placeholder="Ingresa aquí la descripción de la actividad..." required maxlength="500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Planeación de la Actividad</h2>
+                <p class="section-subtitle">Datos sobre la ubicación, fecha y hora de la actividad.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="start-date">Fecha de la actividad</label>
+                        <div class="date-input-container">
+                            <input type="text" id="start-date" name="fecha" class="date-input"
+                                   placeholder="Seleccione aquí la fecha de la actividad..." required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Ubicación de la actividad</label>
+                        <input type="text" id="location" name="ubicacion"
+                               placeholder="Ingresa aquí la ubicacion de la actividad..." maxlength="200">
+                    </div>
+                </div>
             </div>
 
             <div class="buttons">
                 <button type="submit" class="btn-primary">Guardar</button>
-                <button type="button" class="btn-secondary">Cancelar</button>
+                <button type="button" class="btn-secondary" onclick="resetFormAndShowAlert()">Cancelar</button>
             </div>
         </form>
-    </div>
 
+    </div>
 
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-top">
                 <div class="footer-logo">
-                    <img src="img/logo605.png" alt="Scouts Jaguares 605" class="logo-img">
+                    <img th:src="@{/img/logo605.png}" alt="Scouts Jaguares 605" class="logo-img">
                 </div>
 
                 <div class="footer-info">
@@ -263,7 +220,7 @@
                     <p class="footer-slogan">Listos para servir, listos para rugir.</p>
 
                     <div class="footer-address">
-                        <img src="img/ubicacion.svg" alt="Ubicación" class="ubicacion-icon">
+                        <img th:src="@{/img/ubicacion.svg}" alt="Ubicación" class="ubicacion-icon">
                         <p class="footer-ubi">Palmira, Valle del Cauca – Barrio Las Delicias<br>
                             Sede: Casa de la Juventud, Calle 30 #29-15</p>
                     </div>
@@ -271,13 +228,13 @@
 
                 <div class="footer-social">
                     <a href="#" class="social-icon">
-                        <img src="img/facebook.svg" alt="Facebook">
+                        <img th:src="@{/img/facebook.svg}" alt="Facebook">
                     </a>
                     <a href="#" class="social-icon">
-                        <img src="img/instagram.svg" alt="Instagram">
+                        <img th:src="@{/img/instagram.svg}" alt="Instagram">
                     </a>
                     <a href="#" class="social-icon">
-                        <img src="img/tiktok.svg" alt="TikTok">
+                        <img th:src="@{/img/tiktok.svg}" alt="TikTok">
                     </a>
                 </div>
             </div>
@@ -293,12 +250,11 @@
         </div>
     </footer>
 
-
 </main>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
 <!-- JavaScript para la funcionalidad -->
+
 <script>
     // Configurar los datepickers
     const dateConfig = {
@@ -313,10 +269,10 @@
                 longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
             }
         },
-        dateFormat: "d/m/Y",
+        dateFormat: "Y-m-d",
         altInput: true,
         altFormat: "d/m/Y",
-        allowInput: false
+        allowInput: true
     };
 
     // Inicializar datepickers
@@ -352,7 +308,7 @@
             const day = date.getDate().toString().padStart(2, '0');
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
+            return `${year}-${month}-${day}`;
         }
 
         // Cuando el campo real de fecha cambia
@@ -572,75 +528,6 @@
                 toggleMenu();
             }
         });
-    });
-</script>
-<script>
-    const cargosPorRol = {
-        ADULTO: [
-            {value: 'JEFE_MANADA', text: 'Jefe de Manada'},
-            {value: 'JEFE_TROPA', text: 'Jefe de Tropa'},
-            {value: 'JEFE_COMUNIDAD', text: 'Jefe de Comunidad'},
-            {value: 'JEFE_CLAN', text: 'Jefe de Clan'}
-        ],
-        JOVEN: [
-            {value: 'LOBATO', text: 'Lobato'},
-            {value: 'SCOUT', text: 'Scout'},
-            {value: 'CAMINANTE', text: 'Caminante'},
-            {value: 'ROVER', text: 'Rover'}
-        ],
-        PUBLICO: []
-    };
-
-    const ramaPorCargo = {
-        JEFE_MANADA: 'MANADA',
-        LOBATO: 'MANADA',
-        JEFE_TROPA: 'TROPA',
-        SCOUT: 'TROPA',
-        JEFE_COMUNIDAD: 'COMUNIDAD',
-        CAMINANTE: 'COMUNIDAD',
-        JEFE_CLAN: 'CLAN',
-        ROVER: 'CLAN'
-    };
-
-    function actualizarCargos() {
-        const rolSelect = document.getElementById('rol');
-        const cargoSelect = document.getElementById('cargo');
-        const ramaSelect = document.getElementById('rama');
-        const rolSeleccionado = rolSelect.value;
-
-        cargoSelect.innerHTML = '<option value="" disabled selected >Selecciona el Cargo...</option>';
-
-        cargoSelect.disabled = true;
-
-        if (rolSeleccionado && cargosPorRol[rolSeleccionado]) {
-            cargosPorRol[rolSeleccionado].forEach(cargo => {
-                const option = document.createElement('option');
-                option.value = cargo.value;
-                option.text = cargo.text;
-                cargoSelect.appendChild(option);
-            });
-            cargoSelect.disabled = false;
-        }
-
-        // Limpiar rama si se cambia el rol
-        ramaSelect.value = '';
-    }
-
-    function actualizarRama() {
-        const cargoSelect = document.getElementById('cargo');
-        const ramaSelect = document.getElementById('rama');
-        const cargoSeleccionado = cargoSelect.value;
-
-        if (ramaPorCargo[cargoSeleccionado]) {
-            ramaSelect.value = ramaPorCargo[cargoSeleccionado];
-        } else {
-            ramaSelect.value = '';
-        }
-    }
-
-    // Vincular el evento al cambio de cargo
-    window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('cargo').addEventListener('change', actualizarRama);
     });
 </script>
 </body>
