@@ -13,15 +13,15 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "roles")
-public class RolePermiso {
+public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "role_name")
     @Enumerated(EnumType.STRING)
-    private RoleEnum roleEnum;
+    private Rol role;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private Set<Permiso> permissions = new HashSet<>();
+    private Set<PermissionEntity> permissions = new HashSet<>();
 }

@@ -23,9 +23,9 @@ public class Persona {
     private String segundoNombre;
     @Column (nullable = false, columnDefinition = "VARCHAR(25)")
     private String primerApellido;
-    @Column (nullable = false, columnDefinition = "VARCHAR(25)")
+    @Column (nullable = true, columnDefinition = "VARCHAR(25)")
     private String segundoApellido;
-    @Column (nullable = false, unique = true, length = 10)
+    @Column (nullable = false, unique = true, length = 11)
     private Long numeroDeDocumento;
 
     @Enumerated(EnumType.STRING)
@@ -33,7 +33,7 @@ public class Persona {
 
     @Column (nullable = true)
     private LocalDate fechaNacimiento;
-    @Column (nullable = true, columnDefinition = "VARCHAR(30)")
+    @Column (nullable = true, columnDefinition = "VARCHAR(100)")
     private String direccion;
     @Column (nullable = true, columnDefinition = "VARCHAR(15)")
     private String eps;
@@ -53,10 +53,9 @@ public class Persona {
     private Rama rama;
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
-    @Enumerated(EnumType.STRING)
-    private Rol rol;
     @ManyToOne(targetEntity = Responsable.class)
     private Responsable responsable;
-    @Column (nullable = true)
-    private String usuario;
+    @OneToOne()
+    @JoinColumn(name = "usuario_id", unique = true, nullable = false)
+    private UserEntity userEntity;
 }

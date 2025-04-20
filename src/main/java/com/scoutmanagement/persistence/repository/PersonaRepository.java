@@ -13,4 +13,5 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
     // Buscar personas por rama
     List<Persona> findByRama(Rama rama);
 
+
 }
