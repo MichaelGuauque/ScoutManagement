@@ -39,18 +39,17 @@ public class UserController {
         if (user.isPresent()) {
             UserEntity usuarioBuscado = user.get();
             logger.info("Usuario de la BD: {}", usuarioBuscado);
-            session.setAttribute("idUsuario", usuarioBuscado.getId());
             Optional<Rol> optionalRol = usuarioBuscado.getRoles().stream()
                     .map(RoleEntity::getRole)
                     .findFirst();
             Rol rolEnum = optionalRol.get();
             String rol = rolEnum.name();
-            session.setAttribute("rol", rol);
-            logger.info("Rol del usuario accedido: {}", usuarioBuscado.getRoles().stream().findFirst());
-            logger.info("Rol del usuario: {}", rol);
 
             if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
                 if (rol.equals("ADULTO")) {
+                    session.setAttribute("idUsuario", usuarioBuscado.getId());
+                    session.setAttribute("rol", rol);
+                    logger.info("Rol del usuario: {}", rol);
                     return "redirect:/home-admin";
                 } else {
                     // ACÁ IRIA LA LOGICA PARA REDIRIGIR AL HOME DE JOVEN
