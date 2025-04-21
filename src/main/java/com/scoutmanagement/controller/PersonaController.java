@@ -3,6 +3,7 @@ package com.scoutmanagement.controller;
 
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,27 @@ public class PersonaController {
     private final Logger logger = LoggerFactory.getLogger(PersonaController.class);
 
     @GetMapping()
-    public String Miembros(Model model) {
-        return "miembros/consultarMiembros";
+    public String Miembros(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            return "miembros/consultarMiembros";
+        }
+        if (rol == null) {
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
 
     @GetMapping("/jefes")
-    public String Jefes(Model model) {
-        return "miembros/consultarJefes";
+    public String Jefes(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            return "miembros/consultarJefes";
+        }
+        if (rol == null) {
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
 
 

@@ -2,8 +2,10 @@ package com.scoutmanagement.controller;
 
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Asistencia;
+import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,62 +29,74 @@ public class AsistenciaController {
     @Autowired
     private IActividadService actividadService;
 
-    // ✅ Modal individual (puedes usarlo con AJAX o testing directo)
     @GetMapping("/modal/{actividadId}")
     public String mostrarModalAsistencia(@PathVariable Long actividadId,
                                          @RequestParam("tab") String tab,
-                                         Model model) {
-        System.out.println("🟢 Entrando a mostrarModalAsistencia: actividadId=" + actividadId + ", tab=" + tab);
+                                         Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(actividadId);
+            model.addAttribute("asistencias", asistencias);
+            model.addAttribute("actividadSeleccionada", actividadId);
+            model.addAttribute("tabSeleccionada", tab);
 
-        List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(actividadId);
-        model.addAttribute("asistencias", asistencias);
-        model.addAttribute("actividadSeleccionada", actividadId);
-        model.addAttribute("tabSeleccionada", tab);
-
-        // Cambia esta línea para que coincida con la ubicación real de la plantilla
-        return "actividades/modalAsistencia"; // Antes era "asistencias/modalAsistencia"
+            return "actividades/modalAsistencia";
+        }
+        if (rol == null) {
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
 
 
-    // ✅ Guardar asistencia y redirigir
     @PostMapping("/guardar/{actividadId}")
     public String guardarAsistencias(@PathVariable Long actividadId,
                                      @RequestParam Map<String, String> params,
-                                     @RequestParam("tab") String tabSeleccionada) {
+                                     @RequestParam("tab") String tabSeleccionada, HttpSession session) {
 
-        List<Asistencia> asistenciasExistentes = asistenciaService.findByActividadOrdenado(actividadId);
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            List<Asistencia> asistenciasExistentes = asistenciaService.findByActividadOrdenado(actividadId);
 
-        Map<Long, Boolean> asistenciasPorMiembro = asistenciasExistentes.stream()
-                .collect(Collectors.toMap(
-                        asistencia -> asistencia.getMiembro().getId(),
-                        asistencia -> params.containsKey("asistio_" + asistencia.getMiembro().getId())
-                ));
+            Map<Long, Boolean> asistenciasPorMiembro = asistenciasExistentes.stream()
+                    .collect(Collectors.toMap(
+                            asistencia -> asistencia.getMiembro().getId(),
+                            asistencia -> params.containsKey("asistio_" + asistencia.getMiembro().getId())
+                    ));
 
-        asistenciaService.registrarAsistenciasMasivas(actividadId, asistenciasPorMiembro);
-        return "redirect:/actividades?tab=" + tabSeleccionada;
+            asistenciaService.registrarAsistenciasMasivas(actividadId, asistenciasPorMiembro);
+            return "redirect:/actividades?tab=" + tabSeleccionada;
+        }
+        if (rol == null) {
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
 
-    // ✅ Vista principal (actividades) que también carga el modal si corresponde
     @GetMapping
     public String mostrarActividades(@RequestParam(value = "tab", defaultValue = "activas") String tab,
                                      @RequestParam(value = "asistenciaActividadId", required = false) Long asistenciaActividadId,
-                                     Model model) {
-        List<Actividad> actividades = actividadService.findAllActividad();
-        model.addAttribute("actividades", actividades);
-        model.addAttribute("tabSeleccionada", tab);
+                                     Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            List<Actividad> actividades = actividadService.findAllActividad();
+            model.addAttribute("actividades", actividades);
+            model.addAttribute("tabSeleccionada", tab);
 
-        // ✅ Cargar asistencias si se solicitó mostrar el modal
-        if (asistenciaActividadId != null) {
-            List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
+            if (asistenciaActividadId != null) {
+                List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
 
-            // 🔍 Debug temporal (puedes quitar después)
-            System.out.println("Cargando asistencias para actividad " + asistenciaActividadId);
-            asistencias.forEach(a -> System.out.println(" - " + a.getMiembro().getPrimerNombre()));
+                asistencias.forEach(a -> System.out.println(" - " + a.getMiembro().getPrimerNombre()));
 
-            model.addAttribute("asistencias", asistencias);
-            model.addAttribute("actividadSeleccionada", asistenciaActividadId);
+                model.addAttribute("asistencias", asistencias);
+                model.addAttribute("actividadSeleccionada", asistenciaActividadId);
+            }
+
+            return "actividades/vistaActividadesAdmin";
         }
-
-        return "actividades/vistaActividadesAdmin"; // 👈 asegúrate que este sea el nombre real de la vista
+        if (rol == null) {
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
 }

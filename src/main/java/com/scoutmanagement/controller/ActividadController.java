@@ -4,6 +4,7 @@ import com.scoutmanagement.DTO.ActividadDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,79 +35,108 @@ public class ActividadController {
 
 
     @GetMapping()
-    public String actividades(Model model,
+    public String actividades(Model model, HttpSession session,
                               @RequestParam(required = false, defaultValue = "proximas") String tab,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "4") int size,
                               @RequestParam(value = "asistenciaActividadId", required = false) Long asistenciaActividadId) {
 
-        List<Actividad> listaActividades = actividadService.findAllActividadesOrdenadas();
-        LocalDate hoy = LocalDate.now();
-        List<Actividad> actividadesFiltradas;
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            List<Actividad> listaActividades = actividadService.findAllActividadesOrdenadas();
+            LocalDate hoy = LocalDate.now();
+            List<Actividad> actividadesFiltradas;
 
-        if (tab.equals("pasadas")) {
-            actividadesFiltradas = listaActividades.stream()
-                    .filter(actividad -> actividad.getFecha().isBefore(hoy))
+            if (tab.equals("pasadas")) {
+                actividadesFiltradas = listaActividades.stream()
+                        .filter(actividad -> actividad.getFecha().isBefore(hoy))
+                        .collect(Collectors.toList());
+            } else {
+                actividadesFiltradas = listaActividades.stream()
+                        .filter(actividad -> !actividad.getFecha().isBefore(hoy)) // hoy o después
+                        .collect(Collectors.toList());
+            }
+
+            int totalActividades = actividadesFiltradas.size();
+            int totalPaginas = (int) Math.ceil((double) totalActividades / size);
+            if (totalPaginas == 0) {
+                totalPaginas = 1;
+            }
+
+            int paginaActual = page;
+            List<Actividad> paginaActividades = actividadesFiltradas.stream()
+                    .skip(page * size)
+                    .limit(size)
                     .collect(Collectors.toList());
-        } else {
-            actividadesFiltradas = listaActividades.stream()
-                    .filter(actividad -> !actividad.getFecha().isBefore(hoy)) // hoy o después
-                    .collect(Collectors.toList());
+
+            Map<Long, Boolean> actividadEsMasProxima = new HashMap<>();
+            if (tab.equals("proximas")) {
+                paginaActividades.stream()
+                        .min(Comparator.comparing(actividad -> actividad.getFecha()))
+                        .ifPresent(actividad -> actividadEsMasProxima.put(actividad.getId(), true));
+            }
+
+            if (asistenciaActividadId != null) {
+                List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
+                model.addAttribute("asistencias", asistencias);
+                model.addAttribute("actividadSeleccionada", asistenciaActividadId);
+            }
+
+            model.addAttribute("actividades", paginaActividades);
+            model.addAttribute("actividadEsMasProxima", actividadEsMasProxima);
+            model.addAttribute("paginaActual", paginaActual);
+            model.addAttribute("totalPaginas", totalPaginas);
+            model.addAttribute("tabSeleccionada", tab);
+
+            return "actividades/vistaActividadesAdmin";
         }
-
-        int totalActividades = actividadesFiltradas.size();
-        int totalPaginas = (int) Math.ceil((double) totalActividades / size);
-        if (totalPaginas == 0) {
-            totalPaginas = 1;
+        if (rol == null) {
+            return "redirect:/";
         }
+        return "error/pageNotFound";
 
-        int paginaActual = page;
-        List<Actividad> paginaActividades = actividadesFiltradas.stream()
-                .skip(page * size)
-                .limit(size)
-                .collect(Collectors.toList());
-
-        Map<Long, Boolean> actividadEsMasProxima = new HashMap<>();
-        if (tab.equals("proximas")) {
-            paginaActividades.stream()
-                    .min(Comparator.comparing(actividad -> actividad.getFecha()))
-                    .ifPresent(actividad -> actividadEsMasProxima.put(actividad.getId(), true));
-        }
-
-        if (asistenciaActividadId != null) {
-            List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
-            model.addAttribute("asistencias", asistencias);
-            model.addAttribute("actividadSeleccionada", asistenciaActividadId);
-        }
-
-        model.addAttribute("actividades", paginaActividades);
-        model.addAttribute("actividadEsMasProxima", actividadEsMasProxima);
-        model.addAttribute("paginaActual", paginaActual);
-        model.addAttribute("totalPaginas", totalPaginas);
-        model.addAttribute("tabSeleccionada", tab);
-
-        return "actividades/vistaActividadesAdmin";
     }
 
 
     @GetMapping("/crear")
-    public String crearActividadFormulario(Model model) {
-        model.addAttribute("ramas", Rama.values());
-        return "actividades/vistaCrearActividad";
+    public String crearActividadFormulario(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            model.addAttribute("ramas", Rama.values());
+            return "actividades/vistaCrearActividad";
+        }
+        if (rol == null) {
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
 
     @PostMapping("/crear")
-    public String crearActividad(@Valid ActividadDTO actividadDTO) {
-        logger.info("Creando actividad");
-        logger.info("Esta es la actividad {}", actividadDTO);
-        actividadService.crearActividad(actividadDTO);
-        return "redirect:/actividades";
+    public String crearActividad(@Valid ActividadDTO actividadDTO, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+//            logger.info("Creando actividad");
+//            logger.info("Esta es la actividad {}", actividadDTO);
+            actividadService.crearActividad(actividadDTO);
+            return "redirect:/actividades";
+        }
+        if (rol == null) {
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id, @RequestParam String tab) {
-        actividadService.eliminarActividad(id);
-        return "redirect:/actividades?tab=" + tab;
+    public String eliminar(@PathVariable Long id, @RequestParam String tab, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            actividadService.eliminarActividad(id);
+            return "redirect:/actividades?tab=" + tab;
+        }
+        if (rol == null) {
+            return "redirect:/";
+        }
+        return "error/pageNotFound";
     }
 
 }
