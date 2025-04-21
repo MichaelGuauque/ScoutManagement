@@ -7,7 +7,7 @@
         </div>
 
         <form th:action="@{'/asistencias/guardar/' + ${actividadSeleccionada}}" method="post">
-            <input type="hidden" name="tab" th:value="${tabSeleccionada}" />
+            <input type="hidden" name="tab" th:value="${tabSeleccionada}"/>
             <div class="table-container">
                 <table class="participants-table">
                     <thead>
@@ -35,7 +35,7 @@
                                        th:id="${'check-' + asistencia.miembro.id}"
                                        th:name="${'asistio_' + asistencia.miembro.id}"
                                        class="attendance-checkbox"
-                                       th:checked="${asistencia.asistio}" />
+                                       th:checked="${asistencia.asistio}"/>
                                 <label th:for="${'check-' + asistencia.miembro.id}"></label>
                             </div>
                         </td>

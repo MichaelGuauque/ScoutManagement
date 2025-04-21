@@ -18,7 +18,7 @@ public class ActividadService implements IActividadService {
 
     @Autowired
     private ActividadRepository actividadRepository;
-    
+
     @Autowired
     private IAsistenciaService asistenciaService;
 
@@ -37,7 +37,7 @@ public class ActividadService implements IActividadService {
     public void crearActividad(ActividadDTO actividadDTO) {
         // Crear la actividad primero
         Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
-        
+
         // Crear automáticamente registros de asistencia para todos los miembros de la rama
         asistenciaService.crearAsistenciasAutomaticas(nuevaActividad);
     }

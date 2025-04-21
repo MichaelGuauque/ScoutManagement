@@ -1628,3 +1628,8 @@ button {
     background: #7851a9;
     border-color: #7851a9;
 }
+
+a{
+    text-decoration: none;
+    color: inherit;
+}

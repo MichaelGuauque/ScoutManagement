@@ -33,7 +33,7 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     @Autowired
     private EmailService emailService;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder() ;
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     private static final Logger logger = LoggerFactory.getLogger(UserDetailServiceImpl.class);
 
@@ -44,7 +44,7 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("El usuario " + username + " no existe"));
 
         //permisos
-        List<SimpleGrantedAuthority> authorityList= new ArrayList<>();
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
 
         //Obtiene los roles del usuario
         userEntity.getRoles()
@@ -68,7 +68,7 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     public UserEntity cambioUserDTO(UserRegistroDTO userDTO) {
 
         String passwordGenerada = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
-        logger.info("Contrasena sin Encriptar: {}",passwordGenerada);
+        logger.info("Contrasena sin Encriptar: {}", passwordGenerada);
 
         RoleEntity userRole = roleRepository.findByRole(userDTO.getRol());
 
@@ -83,11 +83,11 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
                 .isEnabled(true)
                 .build();
 
-        String asunto="Tu cuenta ha sido creada";
-        String cuerpo=String.format("Hola, \n\nTu cuenta ha sido creada correctamente.\nTu contraseña temporal es: %s\n\npor favor cámbiala después de iniciar sesión",
+        String asunto = "Tu cuenta ha sido creada";
+        String cuerpo = String.format("Hola, \n\nTu cuenta ha sido creada correctamente.\nTu contraseña temporal es: %s\n\npor favor cámbiala después de iniciar sesión",
                 passwordGenerada);
 
-        emailService.enviarCorreo(user.getUsername(),asunto,cuerpo);
+        emailService.enviarCorreo(user.getUsername(), asunto, cuerpo);
 
         return user;
     }
@@ -110,9 +110,9 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     @Override
     public void updatePassword(String username, String oldPassword, String newPassword) {
         Optional<UserEntity> userOptional = userRepository.findUserEntityByUsername(username);
-        if (userOptional.isPresent()){
+        if (userOptional.isPresent()) {
             UserEntity userEntity = userOptional.get();
-            if(bCryptPasswordEncoder.matches(oldPassword, userEntity.getPassword())){
+            if (bCryptPasswordEncoder.matches(oldPassword, userEntity.getPassword())) {
                 userEntity.setPassword(bCryptPasswordEncoder.encode(newPassword));
                 userRepository.save(userEntity);
             }

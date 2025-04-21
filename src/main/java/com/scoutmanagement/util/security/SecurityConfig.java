@@ -1,4 +1,5 @@
 package com.scoutmanagement.util.security;
+
 import com.scoutmanagement.service.implementation.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity //se coloca para autorizar el acceso a los endpoints a traves del controller con la anotacion @PreAuthorize
+@EnableMethodSecurity
+//se coloca para autorizar el acceso a los endpoints a traves del controller con la anotacion @PreAuthorize
 public class SecurityConfig {
 
     @Autowired
@@ -39,6 +41,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailServiceImpl userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

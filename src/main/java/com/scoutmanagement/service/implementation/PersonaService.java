@@ -19,10 +19,9 @@ public class PersonaService implements IPersonaService {
     }
 
 
-
     @Override
-    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO){
-        Persona persona= Persona.builder()
+    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO) {
+        Persona persona = Persona.builder()
                 .primerNombre(personaRegistroDTO.getPrimerNombre())
                 .segundoNombre(personaRegistroDTO.getSegundoNombre())
                 .primerApellido(personaRegistroDTO.getPrimerApellido())
@@ -37,6 +36,6 @@ public class PersonaService implements IPersonaService {
 
         return persona;
 
-        }
+    }
 }
 

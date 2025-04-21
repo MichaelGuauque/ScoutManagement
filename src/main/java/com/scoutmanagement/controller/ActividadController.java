@@ -89,7 +89,6 @@ public class ActividadController {
     }
 
 
-
     @GetMapping("/crear")
     public String crearActividadFormulario(Model model) {
         model.addAttribute("ramas", Rama.values());

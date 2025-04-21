@@ -64,6 +64,7 @@
                     </div>
                 </li>
 
+
                 <li class="menu-item">
                     <div class="main-button">
                         <img th:src="@{/img/Calendario.svg}" alt="Actividades">
@@ -112,11 +113,17 @@
                              style="width: 15px; height: 15px;">
                     </div>
                     <ul class="submenu">
-                        <li class="nav-link"><img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
-                                                  class="submenu-icon">Consultar Miembros
+                        <li class="nav-link">
+                            <a th:href="@{/miembros}">
+                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
+                                     class="submenu-icon">Consultar Miembros
+                            </a>
                         </li>
-                        <li class="nav-link"><img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
-                                                  class="submenu-icon">Consultar Jefes
+                        <li class="nav-link">
+                            <a th:href="@{/miembros/jefes}">
+                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
+                                     class="submenu-icon">Consultar Jefes
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -274,9 +281,7 @@
         <!-- Modal de Asistencia -->
 
 
-
         <div id="contenedor-modal-asistencia"></div>
-
 
 
         <div class="pagination-container" th:if="${totalPaginas > 1}">
@@ -348,7 +353,6 @@
 <script>
 
 
-
     document.addEventListener('DOMContentLoaded', function () {
         // Botones de asistencia para abrir modal
         document.querySelectorAll('.btn-asistencia').forEach(btn => {
@@ -390,7 +394,7 @@
         });
 
         // Función para cerrar el modal
-        window.cerrarModal = function() {
+        window.cerrarModal = function () {
             const contenedor = document.getElementById('contenedor-modal-asistencia');
             if (contenedor) {
                 contenedor.innerHTML = '';
@@ -405,7 +409,6 @@
             modal.style.display = 'block';
         }
     });
-
 
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -433,9 +436,6 @@
             }
         });
     });
-
-
-
 
 
     const tabs = document.querySelectorAll(".tab");
@@ -738,14 +738,14 @@
     }
 
     // Agregar event listeners a los elementos necesarios
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Seleccionar todos los botones de dropdown que contienen "Asistencia"
         const dropdownMenus = document.querySelectorAll('.dropdown-menu');
 
         dropdownMenus.forEach(menu => {
             const asistenciaItem = menu.querySelector('.dropdown-item:nth-child(1)');
             if (asistenciaItem) {
-                asistenciaItem.addEventListener('click', function(e) {
+                asistenciaItem.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -779,7 +779,7 @@
         // Evitar que al hacer clic en el contenido del modal, este se cierre
         const modalContent = document.querySelector('.modal-content');
         if (modalContent) {
-            modalContent.addEventListener('click', function(e) {
+            modalContent.addEventListener('click', function (e) {
                 e.stopPropagation();
             });
         }

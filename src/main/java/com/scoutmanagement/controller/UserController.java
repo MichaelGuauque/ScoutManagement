@@ -73,14 +73,14 @@ public class UserController {
     @GetMapping("/registrar")
     public String registrarUsuario(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
-        if(session.getAttribute("rol") == Rol.ADULTO.name()) {
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             model.addAttribute("ramas", Rama.values());
             model.addAttribute("roles", Rol.values());
             model.addAttribute("cargos", Cargo.values());
             model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
             return "/user/crearMiembro";
         }
-        if(rol == null){
+        if (rol == null) {
             return "redirect:/";
         }
         return "error/pageNotFound";
@@ -89,7 +89,7 @@ public class UserController {
     @PostMapping("/guardar")
     public String guardar(PersonaConUsuarioDTO dto, HttpSession session) {
         Object rol = session.getAttribute("rol");
-        if(session.getAttribute("rol") == Rol.ADULTO.name()) {
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             UserEntity user = userService.cambioUserDTO(dto.getUsuario());
             userService.save(user);
             PersonaRegistroDTO personaDTO = new PersonaRegistroDTO(dto);
@@ -97,7 +97,7 @@ public class UserController {
             personaService.save(personaDTO);
             return "redirect:registrar";
         }
-        if(rol == null){
+        if (rol == null) {
             return "redirect:/";
         }
         return "error/pageNotFound";
@@ -106,17 +106,17 @@ public class UserController {
     @GetMapping("/home-admin")
     public String showAdminHomePage(HttpSession session) {
         Object rol = session.getAttribute("rol");
-        if(session.getAttribute("rol") == Rol.ADULTO.name()) {
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             return "admin/home";
         }
-        if(rol == null){
+        if (rol == null) {
             return "redirect:/";
         }
         return "error/pageNotFound";
     }
 
     @GetMapping("/cerrar")
-    public String cerrarSesion(HttpSession session){
+    public String cerrarSesion(HttpSession session) {
         session.removeAttribute("idUsuario");
         session.removeAttribute("rol");
         return "redirect:/";

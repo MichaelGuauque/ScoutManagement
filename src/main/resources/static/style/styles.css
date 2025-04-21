@@ -771,3 +771,8 @@ perfil-menu li:hover span {
         margin-left: 310px;
     }
 }
+
+a{
+    text-decoration: none;
+    color: inherit;
+}

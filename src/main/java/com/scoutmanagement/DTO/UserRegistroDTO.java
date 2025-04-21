@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserRegistroDTO{
+public class UserRegistroDTO {
     private String username;
     private Rol rol;
 }
