@@ -200,16 +200,16 @@
 
             <div th:switch="${tabSeleccionada}">
                 <div th:case="'proximas'">
-                    <h3>Próximas Actividades</h3>
+                    <h1 class="subencabezado">Próximas Actividades</h1>
                     <div th:if="${#lists.isEmpty(actividades)}">
-                        <p>No hay actividades próximas registradas aún.</p>
+                        <p class="description">No hay actividades próximas registradas aún.</p>
                     </div>
                 </div>
 
                 <div th:case="'pasadas'">
-                    <h3>Actividades Pasadas</h3>
+                    <h1 class="subencabezado">Actividades Pasadas</h1>
                     <div th:if="${#lists.isEmpty(actividades)}">
-                        <p>No hay actividades pasadas registradas aún.</p>
+                        <p class="description">No hay actividades pasadas registradas aún.</p>
                     </div>
                 </div>
             </div>
