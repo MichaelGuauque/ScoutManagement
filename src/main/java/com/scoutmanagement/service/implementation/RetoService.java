@@ -37,11 +37,13 @@ public class RetoService implements IRetoService {
 
     @Override
     public List<Reto> findAll() {
-        return (List<Reto>) retoRepository.findAll();
+        return
+                (List<Reto>) retoRepository.findAll();
     }
 
     @Override
     public List<Reto> findAllRetosEtapa(Etapa etapa) {
+
         return (List<Reto>) retoRepository.findAllRetosByEtapa(etapa);
     }
 

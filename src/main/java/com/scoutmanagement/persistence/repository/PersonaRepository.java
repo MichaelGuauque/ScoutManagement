@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PersonaRepository extends CrudRepository<Persona, Long> {
@@ -13,5 +14,6 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
     // Buscar personas por rama
     List<Persona> findByRama(Rama rama);
 
+    Optional<Persona> findByUserEntity_Id(Long usuario_id);
 
 }

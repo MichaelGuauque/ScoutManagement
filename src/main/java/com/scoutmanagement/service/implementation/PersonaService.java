@@ -7,6 +7,8 @@ import com.scoutmanagement.service.interfaces.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PersonaService implements IPersonaService {
 
@@ -18,6 +20,15 @@ public class PersonaService implements IPersonaService {
         personaRepository.save(cambiarRegistroPersonaRegistroDTO(personaRegistroDTO));
     }
 
+    @Override
+    public Optional<Persona> findById(long id) {
+        return personaRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Persona> findByUsuario_Id(Long usuario_id) {
+        return personaRepository.findByUserEntity_Id(usuario_id);
+    }
 
     @Override
     public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO) {

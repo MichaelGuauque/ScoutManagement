@@ -1,5 +1,6 @@
 package com.scoutmanagement.persistence.repository;
 
+import com.scoutmanagement.persistence.model.Cargo;
 import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Rama;
 import org.springframework.data.repository.CrudRepository;

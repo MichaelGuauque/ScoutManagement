@@ -1,6 +1,7 @@
 package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.DTO.EtapaDTO;
+import com.scoutmanagement.persistence.model.Cargo;
 import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
@@ -50,4 +51,5 @@ public class EtapaService implements IEtapaService {
                 etapaDTO.orden(),
                 etapaDTO.rama());
     }
+
 }
