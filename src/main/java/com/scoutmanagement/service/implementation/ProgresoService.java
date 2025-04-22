@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.implementation;
 
+import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Progreso;
 import com.scoutmanagement.persistence.repository.ProgresoRepository;
 import com.scoutmanagement.service.interfaces.IProgresoService;
@@ -36,7 +37,7 @@ public class ProgresoService implements IProgresoService {
     }
 
     @Override
-    public List<Progreso> findAllByPersona(long idPersona) {
-        return (List<Progreso>) progresoRepository.findAllByPersona(idPersona);
+    public List<Progreso> findAllByPersona(Persona persona) {
+        return (List<Progreso>) progresoRepository.findAllByPersona(persona);
     }
 }

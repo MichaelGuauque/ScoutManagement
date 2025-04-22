@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.implementation;
 
+import com.scoutmanagement.DTO.EtapaDTO;
 import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
@@ -22,8 +23,8 @@ public class EtapaService implements IEtapaService {
     }
 
     @Override
-    public void save(Etapa etapa) {
-        etapaRepository.save(etapa);
+    public void save(EtapaDTO etapaDTO) {
+        etapaRepository.save(cambiarEtapaDTO(etapaDTO));
     }
 
     @Override
@@ -39,5 +40,14 @@ public class EtapaService implements IEtapaService {
     @Override
     public List<Etapa> findAllByRama(Rama rama) {
         return (List<Etapa>) etapaRepository.findAllByRamaOrderByOrdenAsc(rama);
+    }
+
+    @Override
+    public Etapa cambiarEtapaDTO(EtapaDTO etapaDTO) {
+        return new Etapa(
+                null,
+                etapaDTO.nombre(),
+                etapaDTO.orden(),
+                etapaDTO.rama());
     }
 }

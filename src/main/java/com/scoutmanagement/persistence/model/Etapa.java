@@ -10,14 +10,19 @@ import lombok.*;
 @Builder
 @ToString
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"orden", "rama"})
+        }
+)
 public class Etapa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private String orden;
-    @Column(name = "etapa")
+    private int orden;
+    @Column(name = "rama")
     @Enumerated(EnumType.STRING)
     private Rama rama;
 }

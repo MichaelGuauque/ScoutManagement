@@ -4,6 +4,6 @@ import com.scoutmanagement.persistence.model.Etapa;
 
 public record RetoDTO(
         int numero,
-        Etapa etapa,
+        String etapa,
         String descripcion) {
 }

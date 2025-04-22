@@ -1,7 +1,9 @@
 package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.DTO.RetoDTO;
+import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Reto;
+import com.scoutmanagement.persistence.repository.EtapaRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.service.interfaces.IRetoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ public class RetoService implements IRetoService {
 
     @Autowired
     private RetoRepository retoRepository;
+    @Autowired
+    private EtapaRepository etapaRepository;
 
     @Override
     public Optional<Reto> findById(long id) {
@@ -37,15 +41,16 @@ public class RetoService implements IRetoService {
     }
 
     @Override
-    public List<Reto> findAllRetosEtapa(long idEtapa) {
-        return (List<Reto>) retoRepository.findAllRetosByEtapa(idEtapa);
+    public List<Reto> findAllRetosEtapa(Etapa etapa) {
+        return (List<Reto>) retoRepository.findAllRetosByEtapa(etapa);
     }
 
     @Override
     public Reto cambiarRetoDTO(RetoDTO retoDTO) {
+        Etapa etapa = etapaRepository.findByNombre(retoDTO.etapa());
         return new Reto(null,
                 retoDTO.numero(),
                 retoDTO.descripcion(),
-                retoDTO.etapa());
+                etapa);
     }
 }

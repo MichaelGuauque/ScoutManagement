@@ -13,7 +13,7 @@ public interface IRetoService {
     void save(RetoDTO retoDTO);
     void update(Reto reto);
     List<Reto> findAll();
-    List<Reto> findAllRetosEtapa(long idEtapa);
+    List<Reto> findAllRetosEtapa(Etapa etapa);
 
     Reto cambiarRetoDTO(RetoDTO retoDTO);
 }

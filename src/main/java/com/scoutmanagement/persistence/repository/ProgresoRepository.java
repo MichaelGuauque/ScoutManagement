@@ -1,5 +1,6 @@
 package com.scoutmanagement.persistence.repository;
 
+import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Progreso;
 import com.scoutmanagement.persistence.model.Rama;
 import org.springframework.data.repository.CrudRepository;
@@ -9,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface ProgresoRepository extends CrudRepository<Progreso, Long> {
-    List<Progreso> findAllByPersona(long idPersona);
+    List<Progreso> findAllByPersona(Persona persona);
 }

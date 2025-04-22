@@ -13,5 +13,5 @@ public interface IProgresoService {
     void save(Progreso progreso);
     void update(Progreso progreso);
     List<Progreso> findAll();
-    List<Progreso> findAllByPersona(long idPersona);
+    List<Progreso> findAllByPersona(Persona persona);
 }
