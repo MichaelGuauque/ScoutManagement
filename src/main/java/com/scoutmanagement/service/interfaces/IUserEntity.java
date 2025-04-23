@@ -16,4 +16,6 @@ public interface IUserEntity {
     Optional<UserEntity> findByEmail(UserDTO userDTO);
 
     Optional<UserEntity> findById(long id);
+
+    Optional<UserEntity> findByEmail(String username);
 }

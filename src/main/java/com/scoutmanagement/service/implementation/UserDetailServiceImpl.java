@@ -103,6 +103,11 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     }
 
     @Override
+    public Optional<UserEntity> findByEmail(String username) {
+        return userRepository.findUserEntityByUsername(username);
+    }
+
+    @Override
     public void save(UserEntity userEntity) {
         userRepository.save(userEntity);
     }
