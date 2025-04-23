@@ -4,6 +4,7 @@ import com.scoutmanagement.DTO.ActividadDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
+import com.scoutmanagement.service.interfaces.IPersonaService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -29,10 +30,12 @@ public class ActividadController {
 
     @Autowired
     private IActividadService actividadService;
-
     @Autowired
     private IAsistenciaService asistenciaService;
+    @Autowired
+    private IPersonaService personaService;
 
+    private final String ID_USUARIO = "idUsuario";
 
     @GetMapping()
     public String actividades(Model model, HttpSession session,
@@ -43,6 +46,10 @@ public class ActividadController {
 
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
+
             List<Actividad> listaActividades = actividadService.findAllActividadesOrdenadas();
             LocalDate hoy = LocalDate.now();
             List<Actividad> actividadesFiltradas;
@@ -102,6 +109,10 @@ public class ActividadController {
     public String crearActividadFormulario(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
+
             model.addAttribute("ramas", Rama.values());
             return "actividades/vistaCrearActividad";
         }

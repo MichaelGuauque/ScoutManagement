@@ -27,8 +27,6 @@ public class RetoController {
     @Autowired
     private IEtapaService etapaService;
     @Autowired
-    private IUserEntity userService;
-    @Autowired
     private IPersonaService personaService;
 
     private final Logger logger = LoggerFactory.getLogger(RetoController.class);
