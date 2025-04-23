@@ -34,6 +34,8 @@ public class UserController {
     @Autowired
     private IPersonaService personaService;
 
+    private final String ID_USUARIO = "idUsuario";
+
     @GetMapping()
     public String login() {
         return "user/login";
@@ -74,6 +76,8 @@ public class UserController {
     public String registrarUsuario(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
             model.addAttribute("ramas", Rama.values());
             model.addAttribute("roles", Rol.values());
             model.addAttribute("cargos", Cargo.values());
@@ -104,9 +108,11 @@ public class UserController {
     }
 
     @GetMapping("/home-admin")
-    public String showAdminHomePage(HttpSession session) {
+    public String showAdminHomePage(HttpSession session, Model model) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
             return "admin/home";
         }
         if (rol == null) {

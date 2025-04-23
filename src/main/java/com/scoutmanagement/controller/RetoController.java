@@ -33,14 +33,6 @@ public class RetoController {
 
     private final Logger logger = LoggerFactory.getLogger(RetoController.class);
 
-    private Persona adultoSession(String nombreSession, HttpSession session) {
-        Optional<UserEntity> optionalUserEntity = userService.findById(Long.parseLong(session.getAttribute(nombreSession).toString()));
-        UserEntity usuario = optionalUserEntity.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Optional<Persona> optionalPersona = personaService.findByUsuario_Id(usuario.getId());
-        Persona persona = optionalPersona.orElseThrow(() -> new RuntimeException("Persona no encontrada"));
-        return persona;
-    }
-
     private final String ID_USUARIO = "idUsuario";
 
     @GetMapping("/registrar")
@@ -48,7 +40,8 @@ public class RetoController {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
 
-            Persona sesionDelJefe = adultoSession(ID_USUARIO,session);
+            //el metodo para buscar persona con el idUser de la sesion
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             model.addAttribute("persona", sesionDelJefe);
             logger.info("Persona: " + sesionDelJefe.getPrimerNombre() + " " + sesionDelJefe.getPrimerApellido());
 

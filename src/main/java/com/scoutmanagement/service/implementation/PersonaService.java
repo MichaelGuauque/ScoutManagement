@@ -3,7 +3,9 @@ package com.scoutmanagement.service.implementation;
 import com.scoutmanagement.DTO.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
+import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.interfaces.IPersonaService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ public class PersonaService implements IPersonaService {
 
     @Autowired
     private PersonaRepository personaRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public void save(PersonaRegistroDTO personaRegistroDTO) {
@@ -47,6 +51,15 @@ public class PersonaService implements IPersonaService {
 
         return persona;
 
+    }
+
+    @Override
+    public Persona personaModelSession(String nombreSession, HttpSession session) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(Long.parseLong(session.getAttribute(nombreSession).toString()));
+        UserEntity usuario = optionalUserEntity.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Optional<Persona> optionalPersona = findByUsuario_Id(usuario.getId());
+        Persona persona = optionalPersona.orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+        return persona;
     }
 }
 
