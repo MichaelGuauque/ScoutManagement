@@ -65,7 +65,7 @@ public class ActividadController {
 
             int paginaActual = page;
             List<Actividad> paginaActividades = actividadesFiltradas.stream()
-                    .skip(page * size)
+                    .skip((long) page * size)
                     .limit(size)
                     .collect(Collectors.toList());
 
