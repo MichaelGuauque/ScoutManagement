@@ -14,6 +14,28 @@ jobs:
   Analysis:
     runs-on: ubuntu-latest
 
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_NAME_SCOUT: ${{ secrets.DB_NAME_SCOUT }}
+      USER_DB: ${{ secrets.USER_DB }}
+      PASSWORD_DB: ${{ secrets.PASSWORD_DB }}
+      EMAIL_SCOUT: ${{ secrets.EMAIL_SCOUT }}
+      PASSWORD_APP_EMAIL: ${{ secrets.PASSWORD_APP_EMAIL }}
+      
+    services:
+      mysql:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.PASSWORD_DB }}
+          MYSQL_DATABASE: ${{ secrets.DB_NAME_SCOUT }}
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
