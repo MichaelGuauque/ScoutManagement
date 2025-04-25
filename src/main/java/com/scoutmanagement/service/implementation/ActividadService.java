@@ -35,10 +35,8 @@ public class ActividadService implements IActividadService {
     @Override
     @Transactional
     public void crearActividad(ActividadDTO actividadDTO) {
-        // Crear la actividad primero
         Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
 
-        // Crear automáticamente registros de asistencia para todos los miembros de la rama
         asistenciaService.crearAsistenciasAutomaticas(nuevaActividad);
     }
 
