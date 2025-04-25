@@ -20,8 +20,6 @@ import java.util.Optional;
 @SpringBootTest
 class ActividadServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(ActividadServiceTest.class);
-
     @Autowired
     private ActividadService actividadService;
 
@@ -52,7 +50,6 @@ class ActividadServiceTest {
         assertFalse(actividadesGuardadas.isEmpty(), "No se encontraron actividades guardadas.");
 
         Actividad actividadGuardada = ordenadas.get(0);
-
 
         assertEquals("Campamento de Invierno", actividadGuardada.getNombre(), "El nombre no coincide.");
         assertEquals("Un campamento para todos los miembros", actividadGuardada.getDescripcion(), "La descripción no coincide.");

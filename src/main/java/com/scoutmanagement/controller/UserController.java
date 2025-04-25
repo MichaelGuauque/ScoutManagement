@@ -88,7 +88,6 @@ public class UserController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             UserEntity user = userService.cambioUserDTO(dto.getUsuario());
             userService.save(user);
-            //personaDTO.setUserEntity(user);
             personaService.save(dto,user);
             return "redirect:registrar";
         }
