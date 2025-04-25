@@ -1,6 +1,5 @@
 package com.scoutmanagement.controller;
 
-import com.scoutmanagement.dto.PersonaConUsuarioDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.persistence.model.*;
