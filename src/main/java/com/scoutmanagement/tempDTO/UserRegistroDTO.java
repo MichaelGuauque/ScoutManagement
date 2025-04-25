@@ -1,4 +1,4 @@
-package com.scoutmanagement.DTO;
+package com.scoutmanagement.tempDTO;
 
 import com.scoutmanagement.persistence.model.Rol;
 import lombok.*;

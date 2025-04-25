@@ -1,14 +1,12 @@
 package com.scoutmanagement.service.implementation;
 
-import com.scoutmanagement.DTO.UserDTO;
-import com.scoutmanagement.DTO.UserRegistroDTO;
-import com.scoutmanagement.persistence.model.Rol;
+import com.scoutmanagement.tempDTO.UserDTO;
+import com.scoutmanagement.tempDTO.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.interfaces.IUserEntity;
-import jakarta.validation.constraints.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

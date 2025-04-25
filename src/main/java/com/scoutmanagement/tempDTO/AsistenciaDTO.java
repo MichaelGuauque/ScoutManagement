@@ -1,4 +1,4 @@
-package com.scoutmanagement.DTO;
+package com.scoutmanagement.tempDTO;
 
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Persona;

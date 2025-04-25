@@ -1,8 +1,8 @@
 package com.scoutmanagement.controller;
 
-import com.scoutmanagement.DTO.PersonaConUsuarioDTO;
-import com.scoutmanagement.DTO.PersonaRegistroDTO;
-import com.scoutmanagement.DTO.UserDTO;
+import com.scoutmanagement.tempDTO.PersonaConUsuarioDTO;
+import com.scoutmanagement.tempDTO.PersonaRegistroDTO;
+import com.scoutmanagement.tempDTO.UserDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.service.interfaces.IPersonaService;

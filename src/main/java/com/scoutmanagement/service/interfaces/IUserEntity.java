@@ -1,7 +1,7 @@
 package com.scoutmanagement.service.interfaces;
 
-import com.scoutmanagement.DTO.UserDTO;
-import com.scoutmanagement.DTO.UserRegistroDTO;
+import com.scoutmanagement.tempDTO.UserDTO;
+import com.scoutmanagement.tempDTO.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.UserEntity;
 
 import java.util.Optional;

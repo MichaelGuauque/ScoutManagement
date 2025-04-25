@@ -1,12 +1,9 @@
 package com.scoutmanagement.service.implementation;
 
-import com.scoutmanagement.DTO.PersonaRegistroDTO;
+import com.scoutmanagement.tempDTO.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PersonaServiceTest {
