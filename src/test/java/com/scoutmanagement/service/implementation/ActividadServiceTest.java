@@ -57,7 +57,7 @@ class ActividadServiceTest {
         assertEquals(Rama.MANADA, actividadGuardada.getRama(), "La rama no coincide.");
 
         actividadService.eliminarActividad(actividadGuardada.getId());
-        Optional<Actividad> actividadEliminada = actividadRepository.findById(actividadGuardada.getId());
+        Optional<Actividad> actividadEliminada = actividadService.findById(actividadGuardada.getId());
         assertFalse(actividadEliminada.isPresent(), "La actividad no fue eliminada correctamente.");
 
     }
