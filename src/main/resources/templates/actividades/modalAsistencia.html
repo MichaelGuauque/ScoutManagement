@@ -1,0 +1,54 @@
+<!-- templates/asistencias/modalAsistencia.html -->
+<div class="modal show d-block" id="modal-asistencia">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Asistencia</h2>
+            <p>Aquí puedes registrar o modificar la asistencia de los participantes para la actividad seleccionada.</p>
+        </div>
+
+        <form th:action="@{'/asistencias/guardar/' + ${actividadSeleccionada}}" method="post">
+            <input type="hidden" name="tab" th:value="${tabSeleccionada}"/>
+            <div class="table-container">
+                <table class="participants-table">
+                    <thead>
+                    <tr>
+                        <th style="padding-left: 78px;">Nombre</th>
+                        <th>Asistió</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="asistencia : ${asistencias}">
+                        <td class="participant-cell">
+                            <div class="participant-avatar">
+                                <img th:src="@{/img/miembro.svg}" alt="Avatar">
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name"
+                                     th:text="${asistencia.miembro.primerNombre + ' ' + asistencia.miembro.segundoNombre + ' ' + asistencia.miembro.primerApellido}"></div>
+                                <div class="participant-badge"
+                                     th:text="${asistencia.miembro.rama}"></div>
+                            </div>
+                        </td>
+                        <td class="action-cell">
+                            <div class="checkbox-container">
+                                <input type="checkbox"
+                                       th:id="${'check-' + asistencia.miembro.id}"
+                                       th:name="${'asistio_' + asistencia.miembro.id}"
+                                       class="attendance-checkbox"
+                                       th:checked="${asistencia.asistio}"/>
+                                <label th:for="${'check-' + asistencia.miembro.id}"></label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button onclick="cerrarModal()" class="modal-button cancel-button">Cancelar</button>
+                <button type="submit" class="modal-button save-button">Guardar</button>
+            </div>
+        </form>
+    </div>
+    <div class="modal-overlay"></div>
+</div>
