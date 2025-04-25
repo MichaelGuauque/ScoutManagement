@@ -1,7 +1,7 @@
 package com.scoutmanagement.service.implementation;
 
-import com.scoutmanagement.tempDTO.UserDTO;
-import com.scoutmanagement.tempDTO.UserRegistroDTO;
+import com.scoutmanagement.dto.UserDTO;
+import com.scoutmanagement.dto.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;

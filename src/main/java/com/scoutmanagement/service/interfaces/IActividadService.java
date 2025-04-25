@@ -1,6 +1,6 @@
 package com.scoutmanagement.service.interfaces;
 
-import com.scoutmanagement.tempDTO.ActividadDTO;
+import com.scoutmanagement.dto.ActividadDTO;
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 

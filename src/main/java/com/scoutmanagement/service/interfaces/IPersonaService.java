@@ -1,6 +1,6 @@
 package com.scoutmanagement.service.interfaces;
 
-import com.scoutmanagement.tempDTO.PersonaRegistroDTO;
+import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.Persona;
 
 public interface IPersonaService {

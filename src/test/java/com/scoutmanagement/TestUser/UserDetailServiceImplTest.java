@@ -1,6 +1,6 @@
 package com.scoutmanagement.TestUser;
 
-import com.scoutmanagement.tempDTO.UserRegistroDTO;
+import com.scoutmanagement.dto.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;

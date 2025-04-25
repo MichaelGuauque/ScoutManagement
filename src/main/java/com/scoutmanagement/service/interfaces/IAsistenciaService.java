@@ -1,6 +1,6 @@
 package com.scoutmanagement.service.interfaces;
 
-import com.scoutmanagement.tempDTO.AsistenciaDTO;
+import com.scoutmanagement.dto.AsistenciaDTO;
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Asistencia;
 import com.scoutmanagement.persistence.model.Persona;

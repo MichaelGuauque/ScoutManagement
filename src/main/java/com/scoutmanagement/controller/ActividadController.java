@@ -1,6 +1,6 @@
 package com.scoutmanagement.controller;
 
-import com.scoutmanagement.tempDTO.ActividadDTO;
+import com.scoutmanagement.dto.ActividadDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
