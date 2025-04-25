@@ -4,7 +4,7 @@ import com.scoutmanagement.dto.PersonaConUsuarioDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.persistence.model.*;
-import com.scoutmanagement.persistence.repository.RoleRepository;
+import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import jakarta.servlet.http.HttpSession;
@@ -27,9 +27,6 @@ public class UserController {
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private IUserEntity userService;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     private IPersonaService personaService;
@@ -81,9 +78,9 @@ public class UserController {
             return "/user/crearMiembro";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @PostMapping("/guardar")
@@ -98,9 +95,9 @@ public class UserController {
             return "redirect:registrar";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @GetMapping("/home-admin")
@@ -110,15 +107,15 @@ public class UserController {
             return "admin/home";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @GetMapping("/cerrar")
     public String cerrarSesion(HttpSession session) {
         session.removeAttribute("idUsuario");
         session.removeAttribute("rol");
-        return "redirect:/";
+        return VISTA_LOGIN;
     }
 }

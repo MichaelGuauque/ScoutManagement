@@ -2,12 +2,11 @@ package com.scoutmanagement.controller;
 
 import com.scoutmanagement.dto.ActividadDTO;
 import com.scoutmanagement.persistence.model.*;
+import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 @Controller
 @RequestMapping("/actividades")
 public class ActividadController {
-
-    private final Logger logger = LoggerFactory.getLogger(ActividadController.class);
 
     @Autowired
     private IActividadService actividadService;
@@ -91,9 +87,9 @@ public class ActividadController {
             return "actividades/vistaActividadesAdmin";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
 
     }
 
@@ -106,24 +102,22 @@ public class ActividadController {
             return "actividades/vistaCrearActividad";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @PostMapping("/crear")
     public String crearActividad(@Valid ActividadDTO actividadDTO, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-//            logger.info("Creando actividad");
-//            logger.info("Esta es la actividad {}", actividadDTO);
             actividadService.crearActividad(actividadDTO);
             return "redirect:/actividades";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @GetMapping("/eliminar/{id}")
@@ -134,9 +128,9 @@ public class ActividadController {
             return "redirect:/actividades?tab=" + tab;
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
 }

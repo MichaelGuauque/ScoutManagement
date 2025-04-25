@@ -3,20 +3,17 @@ package com.scoutmanagement.controller;
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Asistencia;
 import com.scoutmanagement.persistence.model.Rol;
+import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -43,9 +40,9 @@ public class AsistenciaController {
             return "actividades/modalAsistencia";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
 
@@ -68,9 +65,9 @@ public class AsistenciaController {
             return "redirect:/actividades?tab=" + tabSeleccionada;
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @GetMapping
@@ -86,8 +83,6 @@ public class AsistenciaController {
             if (asistenciaActividadId != null) {
                 List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
 
-                asistencias.forEach(a -> System.out.println(" - " + a.getMiembro().getPrimerNombre()));
-
                 model.addAttribute("asistencias", asistencias);
                 model.addAttribute("actividadSeleccionada", asistenciaActividadId);
             }
@@ -95,8 +90,8 @@ public class AsistenciaController {
             return "actividades/vistaActividadesAdmin";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 }

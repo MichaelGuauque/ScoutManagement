@@ -62,19 +62,19 @@ public class ActividadService implements IActividadService {
 
     @Override
     public Actividad cambiarActividadDTO(ActividadDTO actividadDTO) {
-        Actividad actividad = Actividad.builder()
+
+        return Actividad.builder()
                 .nombre(actividadDTO.nombre())
                 .descripcion(actividadDTO.descripcion())
                 .rama(actividadDTO.rama())
                 .fecha(actividadDTO.fecha())
                 .ubicacion(actividadDTO.ubicacion())
                 .build();
-        return actividad;
     }
 
     @Override
     public List<Actividad> findAllActividadesOrdenadas() {
-        return (List<Actividad>) actividadRepository.findAllOrderByFechaAsc();
+        return actividadRepository.findAllOrderByFechaAsc();
     }
 
     @Override

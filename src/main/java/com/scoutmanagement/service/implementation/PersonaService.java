@@ -21,7 +21,8 @@ public class PersonaService implements IPersonaService {
 
     @Override
     public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO) {
-        Persona persona = Persona.builder()
+
+        return Persona.builder()
                 .primerNombre(personaRegistroDTO.getPrimerNombre())
                 .segundoNombre(personaRegistroDTO.getSegundoNombre())
                 .primerApellido(personaRegistroDTO.getPrimerApellido())
@@ -33,8 +34,6 @@ public class PersonaService implements IPersonaService {
                 .cargo(personaRegistroDTO.getCargo())
                 .userEntity(personaRegistroDTO.getUserEntity())
                 .build();
-
-        return persona;
 
     }
 }

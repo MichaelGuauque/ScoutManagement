@@ -82,7 +82,7 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
                 .build();
 
         String asunto = "Tu cuenta ha sido creada";
-        String cuerpo = String.format("Hola, \n\nTu cuenta ha sido creada correctamente.\nTu contraseña temporal es: %s\n\npor favor cámbiala después de iniciar sesión",
+        String cuerpo = String.format("Hola, %n%nTu cuenta ha sido creada correctamente.%nTu contraseña temporal es: %s%n%n por favor cámbiala después de iniciar sesión",
                 passwordGenerada);
 
         emailService.enviarCorreo(user.getUsername(), asunto, cuerpo);
