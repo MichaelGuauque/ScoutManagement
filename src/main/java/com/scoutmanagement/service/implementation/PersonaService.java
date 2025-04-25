@@ -14,13 +14,13 @@ public class PersonaService implements IPersonaService {
     private PersonaRepository personaRepository;
 
     @Override
-    public void save(PersonaRegistroDTO personaRegistroDTO) {
-        personaRepository.save(cambiarRegistroPersonaRegistroDTO(personaRegistroDTO));
+    public void save(PersonaRegistroDTO personaRegistroDTO,UserEntity userEntity) {
+        personaRepository.save(cambiarRegistroPersonaRegistroDTO(personaRegistroDTO, userEntity));
     }
 
 
     @Override
-    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO) {
+    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO,UserEntity userEntity) {
 
         return Persona.builder()
                 .primerNombre(personaRegistroDTO.getPrimerNombre())
@@ -32,7 +32,7 @@ public class PersonaService implements IPersonaService {
                 .genero(personaRegistroDTO.getGenero())
                 .rama(personaRegistroDTO.getRama())
                 .cargo(personaRegistroDTO.getCargo())
-                .userEntity(personaRegistroDTO.getUserEntity())
+                .userEntity(userEntity)
                 .build();
 
     }

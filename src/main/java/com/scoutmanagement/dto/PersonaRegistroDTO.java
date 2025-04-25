@@ -42,18 +42,7 @@ public class PersonaRegistroDTO {
     @NotNull(message = "El cargo es obligatorio")
     private Cargo cargo;
 
-    @NotBlank
-    private UserEntity userEntity;
+    @NotNull(message = "El usuario es obligatorio")
+    private UserRegistroDTO usuario;
 
-    public PersonaRegistroDTO(PersonaConUsuarioDTO personaConUsuarioDTO) {
-        this.primerNombre = personaConUsuarioDTO.getPrimerNombre();
-        this.segundoNombre = personaConUsuarioDTO.getSegundoNombre();
-        this.primerApellido = personaConUsuarioDTO.getPrimerApellido();
-        this.segundoApellido = personaConUsuarioDTO.getSegundoApellido();
-        this.numeroDeDocumento = personaConUsuarioDTO.getNumeroDeDocumento();
-        this.tipoDeDocumento = personaConUsuarioDTO.getTipoDeDocumento();
-        this.genero = personaConUsuarioDTO.getGenero();
-        this.rama = personaConUsuarioDTO.getRama();
-        this.cargo = personaConUsuarioDTO.getCargo();
-    }
 }

@@ -84,14 +84,13 @@ public class UserController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(PersonaConUsuarioDTO dto, HttpSession session) {
+    public String guardar(PersonaRegistroDTO dto, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             UserEntity user = userService.cambioUserDTO(dto.getUsuario());
             userService.save(user);
-            PersonaRegistroDTO personaDTO = new PersonaRegistroDTO(dto);
-            personaDTO.setUserEntity(user);
-            personaService.save(personaDTO);
+            //personaDTO.setUserEntity(user);
+            personaService.save(dto,user);
             return "redirect:registrar";
         }
         if (rol == null) {
