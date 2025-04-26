@@ -75,6 +75,7 @@ public class UserController {
 
     @GetMapping("/registrar")
     public String registrarUsuario(Model model, HttpSession session) {
+
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             model.addAttribute("ramas", Rama.values());
@@ -90,18 +91,29 @@ public class UserController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(PersonaRegistroDTO dto, HttpSession session) {
+    public String guardar(PersonaRegistroDTO dto, HttpSession session,RedirectAttributes redirectAttributes) {
+        try{
         Object rol = session.getAttribute("rol");
+        if (rol == null) {
+                return VISTA_LOGIN;
+        }
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             UserEntity user = userService.cambioUserDTO(dto.getUsuario());
             userService.save(user);
             personaService.save(dto,user);
-            return "redirect:registrar";
+            redirectAttributes.addFlashAttribute("message", "Miembro guardado");
+            redirectAttributes.addFlashAttribute("type", "success");
+            return "redirect:/registrar";
         }
-        if (rol == null) {
-            return VISTA_LOGIN;
+            return VISTA_ERROR;
+
+
+    } catch (ServiceException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            redirectAttributes.addFlashAttribute("type", "error");
+            return "redirect:/registrar";
+
         }
-        return VISTA_ERROR;
     }
 
     @GetMapping("/home-admin")

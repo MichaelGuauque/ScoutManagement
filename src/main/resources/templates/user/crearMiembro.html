@@ -8,6 +8,7 @@
           rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/crear-miembroStyle.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css}">
+    <script th:src="@{/js/notification.js}"></script>
 </head>
 <body>
 <!-- Botón hamburguesa para móviles -->
@@ -191,8 +192,8 @@
 
                     <div class="form-group" style="max-width: 390px;">
                         <label for="numeroDeDocumento">Número Documento</label>
-                        <input type="number" name="numeroDeDocumento" id="numeroDeDocumento" minlength="7"
-                               maxlength="11" required placeholder="Ingresa aquí el documento...">
+                        <input type="number" name="numeroDeDocumento" id="numeroDeDocumento" min="1000000"
+                               max="99999999999" required placeholder="Ingresa aquí el documento...">
                     </div>
 
                     <div class="form-group">
@@ -643,5 +644,12 @@
         document.getElementById('cargo').addEventListener('change', actualizarRama);
     });
 </script>
+
+    <script th:if="${message != null}">
+        window.onload = function (){
+        showSimpleNotification("[[${message}]]", "[[${type}]]");
+    }
+
+    </script>
 </body>
 </html>
