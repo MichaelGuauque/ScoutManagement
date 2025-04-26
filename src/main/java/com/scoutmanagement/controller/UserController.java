@@ -6,6 +6,7 @@ import com.scoutmanagement.persistence.model.*;
 import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
+import com.scoutmanagement.util.exception.ServiceException;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.Optional;
@@ -36,9 +38,9 @@ public class UserController {
     }
 
     @PostMapping("/acceder")
-    public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model) {
+    public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
-            logger.info("Usuario accedido: {}", userDTO);
+//            logger.info("Usuario accedido: {}", userDTO);
             Optional<UserEntity> user = userService.findByEmail(userDTO);
             if (user.isPresent()) {
                 UserEntity usuarioBuscado = user.get();
@@ -61,10 +63,13 @@ public class UserController {
                     }
                 }
             }
-            logger.info("Usuario no encontrado");
-            model.addAttribute("error", "Usuario o contraseña incorrectos.");
-            return "user/login";
-        }catch (RuntimeException e) {}
+//            model.addAttribute("error", "Usuario o contraseña incorrectos.");
+        }catch (ServiceException e) {
+            logger.error("Error al acceder al sistema: ", e.getMessage());
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            redirectAttributes.addFlashAttribute("type", "error");
+        }
+        return "user/login";
     }
 
 
