@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/crear-actividadStyle.css}">
+    <link rel="stylesheet" th:href="@{/style/notification.css}">
+    <script th:src="@{/js/notification.js}"></script>
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css}">
 </head>
 <body>
@@ -208,7 +210,7 @@
 
             <div class="buttons">
                 <button type="submit" class="btn-primary">Guardar</button>
-                <button type="button" class="btn-secondary" onclick="resetFormAndShowAlert()">Cancelar</button>
+                <button type="button" class="btn-secondary" onclick="cancelarRegistro()">Cancelar</button>
             </div>
         </form>
 
@@ -260,6 +262,7 @@
     </footer>
 
 </main>
+<div id="notifications"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
 <!-- JavaScript para la funcionalidad -->
@@ -538,6 +541,17 @@
             }
         });
     });
+</script>
+<script>
+    function cancelarRegistro() {
+        // Redirige agregando un parámetro de cancelación
+        window.location.href = "/actividades?cancelado=true";
+    }
+</script>
+<script th:if="${message != null}">
+    window.onload = function () {
+        showSimpleNotification("[[${message}]]", "[[${type}]]");
+    }
 </script>
 </body>
 </html>
