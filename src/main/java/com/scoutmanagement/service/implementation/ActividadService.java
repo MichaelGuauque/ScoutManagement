@@ -36,7 +36,6 @@ public class ActividadService implements IActividadService {
     @Transactional
     public void crearActividad(ActividadDTO actividadDTO) {
         Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
-
         asistenciaService.crearAsistenciasAutomaticas(nuevaActividad);
     }
 

@@ -37,32 +37,34 @@ public class UserController {
 
     @PostMapping("/acceder")
     public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model) {
-        logger.info("Usuario accedido: {}", userDTO);
-        Optional<UserEntity> user = userService.findByEmail(userDTO);
-        if (user.isPresent()) {
-            UserEntity usuarioBuscado = user.get();
-            logger.info("Usuario de la BD: {}", usuarioBuscado);
-            Optional<Rol> optionalRol = usuarioBuscado.getRoles().stream()
-                    .map(RoleEntity::getRole)
-                    .findFirst();
-            Rol rolEnum = optionalRol.get();
-            String rol = rolEnum.name();
+        try {
+            logger.info("Usuario accedido: {}", userDTO);
+            Optional<UserEntity> user = userService.findByEmail(userDTO);
+            if (user.isPresent()) {
+                UserEntity usuarioBuscado = user.get();
+                logger.info("Usuario de la BD: {}", usuarioBuscado);
+                Optional<Rol> optionalRol = usuarioBuscado.getRoles().stream()
+                        .map(RoleEntity::getRole)
+                        .findFirst();
+                Rol rolEnum = optionalRol.get();
+                String rol = rolEnum.name();
 
-            if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
-                if (rol.equals("ADULTO")) {
-                    session.setAttribute("idUsuario", usuarioBuscado.getId());
-                    session.setAttribute("rol", rol);
-                    logger.info("Rol del usuario: {}", rol);
-                    return "redirect:/home-admin";
-                } else {
-                    // ACÁ IRIA LA LOGICA PARA REDIRIGIR AL HOME DE JOVEN
-                    return "user/login";
+                if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
+                    if (rol.equals("ADULTO")) {
+                        session.setAttribute("idUsuario", usuarioBuscado.getId());
+                        session.setAttribute("rol", rol);
+                        logger.info("Rol del usuario: {}", rol);
+                        return "redirect:/home-admin";
+                    } else {
+                        // ACÁ IRIA LA LOGICA PARA REDIRIGIR AL HOME DE JOVEN
+                        return "user/login";
+                    }
                 }
             }
-        }
-        logger.info("Usuario no encontrado");
-        model.addAttribute("error", "Usuario o contraseña incorrectos.");
-        return "user/login";
+            logger.info("Usuario no encontrado");
+            model.addAttribute("error", "Usuario o contraseña incorrectos.");
+            return "user/login";
+        }catch (RuntimeException e) {}
     }
 
 

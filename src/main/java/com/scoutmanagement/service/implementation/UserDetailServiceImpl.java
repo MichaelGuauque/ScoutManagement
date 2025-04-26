@@ -7,6 +7,7 @@ import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.interfaces.IUserEntity;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +62,8 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
                    userEntity.isCredentialNoExpired(),
                    userEntity.isAccountNoLocked(),
                    authorityList);
-       } catch (RuntimeException e) {
-           throw new RuntimeException(e);
+       } catch (Exception e) {
+           throw new ServiceException("Usuario no encontrado: " + e.getMessage());
        }
 
     }
@@ -94,8 +95,8 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
            emailService.enviarCorreo(user.getUsername(), asunto, cuerpo);
 
            return user;
-       } catch (RuntimeException e) {
-           throw new RuntimeException(e);
+       } catch (Exception e) {
+           throw new ServiceException("Error: no se pudo convertir el DTO de usuario. Excepcion: " + e.getMessage());
        }
     }
 
@@ -104,8 +105,8 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
         try {
             return userRepository.findUserEntityByUsername(userDTO.username());
 
-        }catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        }catch (Exception e) {
+            throw new ServiceException("Error: no se encontró el usuario " + e.getMessage());
         }
     }
 
@@ -113,8 +114,8 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     public Optional<UserEntity> findById(long id) {
         try {
             return userRepository.findById(id);
-        }catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        }catch (Exception e) {
+            throw new ServiceException("Error: no se encontró el usuario " + e.getMessage());
         }
 
     }
@@ -123,8 +124,8 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     public void save(UserEntity userEntity) {
         try {
             userRepository.save(userEntity);
-        }catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        }catch (Exception e) {
+            throw new ServiceException("No se pudo guardar el usuario: " + e.getMessage());
         }
     }
 
@@ -140,8 +141,8 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
                 }
 
             }
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new ServiceException("Contraseñas no coinciden " + e.getMessage());
         }
     }
 }
