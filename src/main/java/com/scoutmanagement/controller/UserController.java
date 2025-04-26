@@ -40,11 +40,9 @@ public class UserController {
     @PostMapping("/acceder")
     public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
-//            logger.info("Usuario accedido: {}", userDTO);
             Optional<UserEntity> user = userService.findByEmail(userDTO);
             if (user.isPresent()) {
                 UserEntity usuarioBuscado = user.get();
-                logger.info("Usuario de la BD: {}", usuarioBuscado);
                 Optional<Rol> optionalRol = usuarioBuscado.getRoles().stream()
                         .map(RoleEntity::getRole)
                         .findFirst();
@@ -55,21 +53,23 @@ public class UserController {
                     if (rol.equals("ADULTO")) {
                         session.setAttribute("idUsuario", usuarioBuscado.getId());
                         session.setAttribute("rol", rol);
-                        logger.info("Rol del usuario: {}", rol);
                         return "redirect:/home-admin";
                     } else {
                         // ACÁ IRIA LA LOGICA PARA REDIRIGIR AL HOME DE JOVEN
-                        return "user/login";
+                        return VISTA_LOGIN;
                     }
+                }else {
+                    throw new ServiceException("Contraseña incorrecta");
                 }
+            }else {
+                throw new ServiceException("El usuario no existe");
             }
-//            model.addAttribute("error", "Usuario o contraseña incorrectos.");
         }catch (ServiceException e) {
-            logger.error("Error al acceder al sistema: ", e.getMessage());
+            logger.error("Error al acceder al sistema: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("message", e.getMessage());
             redirectAttributes.addFlashAttribute("type", "error");
         }
-        return "user/login";
+        return VISTA_LOGIN;
     }
 
 
