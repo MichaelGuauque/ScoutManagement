@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/actividadesStyle.css}">
+    <link rel="stylesheet" th:href="@{/style/notification.css}">
+    <script th:src="@{/js/notification.js}"></script>
 </head>
 <body>
 <!-- Botón hamburguesa para móviles -->
@@ -346,8 +348,15 @@
 
 
 </main>
+<div id="notifications"></div>
 
 <!-- Footer -->
+
+<script th:if="${message != null}">
+    window.onload = function () {
+        showSimpleNotification("[[${message}]]", "[[${type}]]");
+    }
+</script>
 
 <!-- JavaScript para la funcionalidad -->
 <script>

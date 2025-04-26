@@ -2,7 +2,9 @@ package com.scoutmanagement.controller;
 
 import com.scoutmanagement.dto.ActividadDTO;
 import com.scoutmanagement.persistence.model.*;
+
 import static com.scoutmanagement.util.constants.AppConstants.*;
+
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import jakarta.servlet.http.HttpSession;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -35,7 +38,13 @@ public class ActividadController {
                               @RequestParam(required = false, defaultValue = "proximas") String tab,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "4") int size,
-                              @RequestParam(value = "asistenciaActividadId", required = false) Long asistenciaActividadId) {
+                              @RequestParam(value = "asistenciaActividadId", required = false) Long asistenciaActividadId,
+                              @RequestParam(required = false) Boolean cancelado) {
+
+        if (Boolean.TRUE.equals(cancelado)) {
+            model.addAttribute("message", "Acción cancelada.");
+            model.addAttribute("type", "info");
+        }
 
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
@@ -108,17 +117,28 @@ public class ActividadController {
     }
 
     @PostMapping("/crear")
-    public String crearActividad(@Valid ActividadDTO actividadDTO, HttpSession session) {
+    public String crearActividad(@Valid ActividadDTO actividadDTO, HttpSession session, RedirectAttributes redirectAttributes) {
         Object rol = session.getAttribute("rol");
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            actividadService.crearActividad(actividadDTO);
-            return "redirect:/actividades";
-        }
+
         if (rol == null) {
             return VISTA_LOGIN;
         }
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            try {
+                actividadService.crearActividad(actividadDTO);
+                redirectAttributes.addFlashAttribute("message", "Actividad creada con éxito.");
+                redirectAttributes.addFlashAttribute("type", "success");
+                return "redirect:/actividades";
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("message", e.getMessage());
+                redirectAttributes.addFlashAttribute("type", "error");
+                return "redirect:/actividades";
+
+            }
+        }
         return VISTA_ERROR;
     }
+
 
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id, @RequestParam String tab, HttpSession session) {
