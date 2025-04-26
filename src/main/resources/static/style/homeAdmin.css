@@ -25,6 +25,7 @@
     height: 504px;;
     display: block;
     object-fit: cover;
+    border-radius: 15px;
 }
 
 /* Grid layout for features */
