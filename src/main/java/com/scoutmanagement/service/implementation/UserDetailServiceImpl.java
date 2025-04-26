@@ -38,83 +38,110 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserEntity userEntity = userRepository.findUserEntityByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("El usuario " + username + " no existe"));
+       try {
+           UserEntity userEntity = userRepository.findUserEntityByUsername(username)
+                   .orElseThrow(() -> new UsernameNotFoundException("El usuario " + username + " no existe"));
 
-        //permisos
-        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+           //permisos
+           List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
 
-        //Obtiene los roles del usuario
-        userEntity.getRoles()
-                .forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_" + role)));
+           //Obtiene los roles del usuario
+           userEntity.getRoles()
+                   .forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_" + role)));
 
-        //Obtiene los permisos de los roles
-        userEntity.getRoles().stream()
-                .flatMap(role -> role.getPermissions().stream())
-                .forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getName())));
+           //Obtiene los permisos de los roles
+           userEntity.getRoles().stream()
+                   .flatMap(role -> role.getPermissions().stream())
+                   .forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getName())));
 
-        return new User(userEntity.getUsername(),
-                userEntity.getPassword(),
-                userEntity.isEnabled(),
-                userEntity.isAccountNoExpired(),
-                userEntity.isCredentialNoExpired(),
-                userEntity.isAccountNoLocked(),
-                authorityList);
+           return new User(userEntity.getUsername(),
+                   userEntity.getPassword(),
+                   userEntity.isEnabled(),
+                   userEntity.isAccountNoExpired(),
+                   userEntity.isCredentialNoExpired(),
+                   userEntity.isAccountNoLocked(),
+                   authorityList);
+       } catch (RuntimeException e) {
+           throw new RuntimeException(e);
+       }
+
     }
 
     @Override
     public UserEntity cambioUserDTO(UserRegistroDTO userDTO) {
 
-        String passwordGenerada = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
-        logger.info("Contrasena sin Encriptar: {}", passwordGenerada);
+       try {
+           String passwordGenerada = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+           logger.info("Contrasena sin Encriptar: {}", passwordGenerada);
 
-        RoleEntity userRole = roleRepository.findByRole(userDTO.getRol());
+           RoleEntity userRole = roleRepository.findByRole(userDTO.getRol());
 
-        UserEntity user = UserEntity.builder()
-                .username(userDTO.getUsername())
-                //.password(bCryptPasswordEncoder.encode(userDTO.password()))
-                .password(bCryptPasswordEncoder.encode(passwordGenerada))
-                .roles(Set.of(userRole))
-                .accountNoExpired(true)
-                .accountNoLocked(true)
-                .credentialNoExpired(true)
-                .isEnabled(true)
-                .build();
+           UserEntity user = UserEntity.builder()
+                   .username(userDTO.getUsername())
+                   //.password(bCryptPasswordEncoder.encode(userDTO.password()))
+                   .password(bCryptPasswordEncoder.encode(passwordGenerada))
+                   .roles(Set.of(userRole))
+                   .accountNoExpired(true)
+                   .accountNoLocked(true)
+                   .credentialNoExpired(true)
+                   .isEnabled(true)
+                   .build();
 
-        String asunto = "Tu cuenta ha sido creada";
-        String cuerpo = String.format("Hola, %n%nTu cuenta ha sido creada correctamente.%nTu contraseña temporal es: %s%n%n por favor cámbiala después de iniciar sesión",
-                passwordGenerada);
+           String asunto = "Tu cuenta ha sido creada";
+           String cuerpo = String.format("Hola, %n%nTu cuenta ha sido creada correctamente.%nTu contraseña temporal es: %s%n%n por favor cámbiala después de iniciar sesión",
+                   passwordGenerada);
 
-        emailService.enviarCorreo(user.getUsername(), asunto, cuerpo);
+           emailService.enviarCorreo(user.getUsername(), asunto, cuerpo);
 
-        return user;
+           return user;
+       } catch (RuntimeException e) {
+           throw new RuntimeException(e);
+       }
     }
 
     @Override
     public Optional<UserEntity> findByEmail(UserDTO userDTO) {
-        return userRepository.findUserEntityByUsername(userDTO.username());
+        try {
+            return userRepository.findUserEntityByUsername(userDTO.username());
+
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Optional<UserEntity> findById(long id) {
-        return userRepository.findById(id);
+        try {
+            return userRepository.findById(id);
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public void save(UserEntity userEntity) {
-        userRepository.save(userEntity);
+        try {
+            userRepository.save(userEntity);
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void updatePassword(String username, String oldPassword, String newPassword) {
-        Optional<UserEntity> userOptional = userRepository.findUserEntityByUsername(username);
-        if (userOptional.isPresent()) {
-            UserEntity userEntity = userOptional.get();
-            if (bCryptPasswordEncoder.matches(oldPassword, userEntity.getPassword())) {
-                userEntity.setPassword(bCryptPasswordEncoder.encode(newPassword));
-                userRepository.save(userEntity);
-            }
+        try {
+            Optional<UserEntity> userOptional = userRepository.findUserEntityByUsername(username);
+            if (userOptional.isPresent()) {
+                UserEntity userEntity = userOptional.get();
+                if (bCryptPasswordEncoder.matches(oldPassword, userEntity.getPassword())) {
+                    userEntity.setPassword(bCryptPasswordEncoder.encode(newPassword));
+                    userRepository.save(userEntity);
+                }
 
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
     }
 }
