@@ -735,11 +735,12 @@
         const miembro = /*[[${session.miembro}]]*/ 'miembro';
 
         if (miembro === 'jefe') {
-            window.location.href = "/miembros/jefes";
+            window.location.href = "/miembros/jefes?cancelado=true";
         } else {
-            window.location.href = "/miembros";
+            window.location.href = "/miembros?cancelado=true";
         }
     }
+
 </script>
 </script>
 </body>

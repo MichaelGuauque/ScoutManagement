@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -20,10 +21,14 @@ public class PersonaController {
     IPersonaService personaService;
 
     @GetMapping()
-    public String miembros(Model model, HttpSession session) {
+    public String miembros(Model model, HttpSession session,@RequestParam(required = false) Boolean cancelado) {
         Object rol = session.getAttribute("rol");
         session.setAttribute("miembro","miembro");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            if (Boolean.TRUE.equals(cancelado)) {
+                model.addAttribute("message", "Registro cancelado.");
+                model.addAttribute("type", "warning");
+            }
             return "miembros/consultarMiembros";
         }
         if (rol == null) {
@@ -33,10 +38,14 @@ public class PersonaController {
     }
 
     @GetMapping("/jefes")
-    public String jefes(Model model, HttpSession session) {
+    public String jefes(Model model, HttpSession session,@RequestParam(required = false) Boolean cancelado) {
         Object rol = session.getAttribute("rol");
         session.setAttribute("miembro", "jefe");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            if (Boolean.TRUE.equals(cancelado)) {
+                model.addAttribute("message", "Registro cancelado.");
+                model.addAttribute("type", "warning");
+            }
             return "miembros/consultarJefes";
         }
         if (rol == null) {
