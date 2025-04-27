@@ -40,9 +40,6 @@ class AsistenciaServiceTest {
         actividad = Actividad.builder().id(1L).build();
     }
 
-    // ----------------------------- TESTS -----------------------------
-
-    // --- findByActividadOrdenado ---
     @Test
     void findByActividadOrdenado_Success() {
         when(asistenciaRepository.findByActividadOrdenado(1L)).thenReturn(List.of());
@@ -62,7 +59,6 @@ class AsistenciaServiceTest {
         assertThrows(ServiceException.class, () -> asistenciaService.findByActividadOrdenado(1L));
     }
 
-    // --- registrarAsistencia ---
     @Test
     void registrarAsistencia_AsistioTrue_CrearNuevaAsistencia() {
         AsistenciaDTO asistenciaDTO = new AsistenciaDTO(persona, actividad, true);
@@ -122,7 +118,6 @@ class AsistenciaServiceTest {
         assertThrows(ServiceException.class, () -> asistenciaService.registrarAsistencia(asistenciaDTO));
     }
 
-    // --- registrarAsistenciasMasivas ---
     @Test
     void registrarAsistenciasMasivas_Success() {
         Map<Long, Boolean> asistencias = Map.of(1L, true);
@@ -157,7 +152,6 @@ class AsistenciaServiceTest {
         assertThrows(ServiceException.class, () -> asistenciaService.registrarAsistenciasMasivas(1L, Map.of(1L, true)));
     }
 
-    // --- prepararRegistroAsistencias ---
     @Test
     void prepararRegistroAsistencias_Success() {
         List<Persona> miembros = List.of(persona);
@@ -191,7 +185,6 @@ class AsistenciaServiceTest {
         assertThrows(ServiceException.class, () -> asistenciaService.prepararRegistroAsistencias(actividad, List.of(persona)));
     }
 
-    // --- convertirAsistenciaDTO ---
     @Test
     void convertirAsistenciaDTO_Success() {
         AsistenciaDTO asistenciaDTO = new AsistenciaDTO(persona, actividad, true);
@@ -207,7 +200,6 @@ class AsistenciaServiceTest {
         assertThrows(IllegalArgumentException.class, () -> asistenciaService.convertirAsistenciaDTO(null));
     }
 
-    // --- findPersonasByRama ---
     @Test
     void findPersonasByRama_Success() {
         when(personaRepository.findByRama(Rama.CLAN)).thenReturn(List.of(persona));
