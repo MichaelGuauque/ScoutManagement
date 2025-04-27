@@ -105,7 +105,7 @@ public class AsistenciaService implements IAsistenciaService {
                 throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
             }
             if (asistenciasPorMiembro == null || asistenciasPorMiembro.isEmpty()) {
-                throw new IllegalArgumentException("El mapa de asistencias no puede ser nulo o vacío");
+                throw new IllegalArgumentException("la lista de asistencias no puede ser nula o vacía");
             }
 
             Actividad actividad = actividadRepository.findById(actividadId)
@@ -145,9 +145,9 @@ public class AsistenciaService implements IAsistenciaService {
         } catch (ServiceException e) {
             throw e;
         } catch (DataAccessException e) {
-            throw new ServiceException("Error de acceso a datos al registrar asistencias masivas: " + e.getMessage(), e);
+            throw new ServiceException("Error de acceso a datos al registrar asistencias: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new ServiceException("Error al registrar asistencias masivas: " + e.getMessage(), e);
+            throw new ServiceException("Error al registrar asistencias: " + e.getMessage(), e);
         }
     }
 
@@ -271,9 +271,9 @@ public class AsistenciaService implements IAsistenciaService {
 
             return asistenciasGuardadas;
         } catch (DataAccessException e) {
-            throw new ServiceException("Error de acceso a datos al guardar asistencias masivas: " + e.getMessage(), e);
+            throw new ServiceException("Error de acceso a datos al guardar asistencias: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new ServiceException("Error al guardar asistencias masivas: " + e.getMessage(), e);
+            throw new ServiceException("Error al guardar asistencias: " + e.getMessage(), e);
         }
     }
 
