@@ -27,7 +27,7 @@ public class PersonaController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             if (Boolean.TRUE.equals(cancelado)) {
                 model.addAttribute("message", "Registro cancelado.");
-                model.addAttribute("type", "warning");
+                model.addAttribute("type", "info");
             }
             return "miembros/consultarMiembros";
         }
@@ -44,7 +44,7 @@ public class PersonaController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             if (Boolean.TRUE.equals(cancelado)) {
                 model.addAttribute("message", "Registro cancelado.");
-                model.addAttribute("type", "warning");
+                model.addAttribute("type", "info");
             }
             return "miembros/consultarJefes";
         }
