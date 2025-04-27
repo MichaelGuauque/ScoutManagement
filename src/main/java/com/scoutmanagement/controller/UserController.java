@@ -1,13 +1,14 @@
 package com.scoutmanagement.controller;
 
-import com.scoutmanagement.DTO.PersonaConUsuarioDTO;
-import com.scoutmanagement.DTO.PersonaRegistroDTO;
-import com.scoutmanagement.DTO.UserDTO;
+import com.scoutmanagement.dto.PersonaRegistroDTO;
+import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.persistence.model.*;
-import com.scoutmanagement.persistence.repository.RoleRepository;
+import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
+import com.scoutmanagement.util.exception.ServiceException;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.Optional;
@@ -29,9 +31,6 @@ public class UserController {
     private IUserEntity userService;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
     private IPersonaService personaService;
 
     @GetMapping()
@@ -40,38 +39,44 @@ public class UserController {
     }
 
     @PostMapping("/acceder")
-    public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model) {
-        logger.info("Usuario accedido: {}", userDTO);
-        Optional<UserEntity> user = userService.findByEmail(userDTO);
-        if (user.isPresent()) {
-            UserEntity usuarioBuscado = user.get();
-            logger.info("Usuario de la BD: {}", usuarioBuscado);
-            Optional<Rol> optionalRol = usuarioBuscado.getRoles().stream()
-                    .map(RoleEntity::getRole)
-                    .findFirst();
-            Rol rolEnum = optionalRol.get();
-            String rol = rolEnum.name();
+    public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Optional<UserEntity> user = userService.findByEmail(userDTO);
+            if (user.isPresent()) {
+                UserEntity usuarioBuscado = user.get();
+                Optional<Rol> optionalRol = usuarioBuscado.getRoles().stream()
+                        .map(RoleEntity::getRole)
+                        .findFirst();
+                Rol rolEnum = optionalRol.get();
+                String rol = rolEnum.name();
 
-            if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
-                if (rol.equals("ADULTO")) {
-                    session.setAttribute("idUsuario", usuarioBuscado.getId());
-                    session.setAttribute("rol", rol);
-                    logger.info("Rol del usuario: {}", rol);
-                    return "redirect:/home-admin";
-                } else {
-                    // ACÁ IRIA LA LOGICA PARA REDIRIGIR AL HOME DE JOVEN
-                    return "user/login";
+                if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
+                    if (rol.equals("ADULTO")) {
+                        session.setAttribute("idUsuario", usuarioBuscado.getId());
+                        session.setAttribute("rol", rol);
+                        return "redirect:/home-admin";
+                    } else {
+                        // ACÁ IRIA LA LOGICA PARA REDIRIGIR AL HOME DE JOVEN
+                        return VISTA_LOGIN;
+                    }
+                }else {
+                    throw new ServiceException("Contraseña incorrecta");
                 }
+            }else {
+                throw new ServiceException("El usuario no existe");
             }
+        }catch (ServiceException e) {
+            logger.error("Error al acceder al sistema: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            redirectAttributes.addFlashAttribute("type", "error");
         }
-        logger.info("Usuario no encontrado");
-        model.addAttribute("error", "Usuario o contraseña incorrectos.");
-        return "user/login";
+        return VISTA_LOGIN;
     }
 
 
     @GetMapping("/registrar")
     public String registrarUsuario(Model model, HttpSession session) {
+
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             model.addAttribute("ramas", Rama.values());
@@ -81,26 +86,55 @@ public class UserController {
             return "/user/crearMiembro";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @PostMapping("/guardar")
-    public String guardar(PersonaConUsuarioDTO dto, HttpSession session) {
+    public String guardar(@Valid PersonaRegistroDTO dto, HttpSession session, RedirectAttributes redirectAttributes) {
+        try{
         Object rol = session.getAttribute("rol");
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            UserEntity user = userService.cambioUserDTO(dto.getUsuario());
-            userService.save(user);
-            PersonaRegistroDTO personaDTO = new PersonaRegistroDTO(dto);
-            personaDTO.setUserEntity(user);
-            personaService.save(personaDTO);
-            return "redirect:registrar";
-        }
         if (rol == null) {
-            return "redirect:/";
+                return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
+            UserEntity user = userService.cambioUserDTO(dto.getUsuario());
+            if (documentoExiste) {
+                redirectAttributes.addFlashAttribute("message", "El número de documento ya está registrado.");
+                redirectAttributes.addFlashAttribute("type", "error");
+                redirectAttributes.addFlashAttribute("errorPersona", true);
+                redirectAttributes.addFlashAttribute("usuario", user);
+                redirectAttributes.addFlashAttribute("persona", dto);
+                return VISTA_REGISTRAR;
+            }
+            boolean correoExiste = userService.existsByUsername(user.getUsername());
+            if(correoExiste){
+                redirectAttributes.addFlashAttribute("message", "El correo electrónico ya está registrado.");
+                redirectAttributes.addFlashAttribute("type", "error");
+                redirectAttributes.addFlashAttribute("errorCorreo", true);
+                redirectAttributes.addFlashAttribute("usuario", user);
+                redirectAttributes.addFlashAttribute("persona", dto);
+                return VISTA_REGISTRAR;
+
+            }
+            userService.save(user);
+            personaService.save(dto,user);
+
+            redirectAttributes.addFlashAttribute("message", "Miembro guardado");
+            redirectAttributes.addFlashAttribute("type", "success");
+            return VISTA_REGISTRAR;
+        }
+            return VISTA_ERROR;
+
+
+    } catch (ServiceException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            redirectAttributes.addFlashAttribute("type", "error");
+            return VISTA_REGISTRAR;
+
+        }
     }
 
     @GetMapping("/home-admin")
@@ -110,15 +144,16 @@ public class UserController {
             return "admin/home";
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @GetMapping("/cerrar")
     public String cerrarSesion(HttpSession session) {
         session.removeAttribute("idUsuario");
         session.removeAttribute("rol");
-        return "redirect:/";
+        return VISTA_LOGIN;
     }
+
 }

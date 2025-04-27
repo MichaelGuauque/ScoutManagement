@@ -1,14 +1,14 @@
 package com.scoutmanagement.service.implementation;
 
-import com.scoutmanagement.DTO.ActividadDTO;
+import com.scoutmanagement.dto.ActividadDTO;
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
 import com.scoutmanagement.service.interfaces.IActividadService;
-import com.scoutmanagement.service.interfaces.IAsistenciaService;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +18,6 @@ public class ActividadService implements IActividadService {
 
     @Autowired
     private ActividadRepository actividadRepository;
-
-    @Autowired
-    private IAsistenciaService asistenciaService;
 
     @Override
     public Optional<Actividad> findById(Long id) {
@@ -33,13 +30,12 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
-    @Transactional
     public void crearActividad(ActividadDTO actividadDTO) {
-        // Crear la actividad primero
-        Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
-
-        // Crear automáticamente registros de asistencia para todos los miembros de la rama
-        asistenciaService.crearAsistenciasAutomaticas(nuevaActividad);
+        try {
+             actividadRepository.save(cambiarActividadDTO(actividadDTO));
+        } catch (Exception e) {
+            throw new ServiceException("Actividad no creada." + e.getMessage());
+        }
     }
 
     @Override
@@ -62,24 +58,22 @@ public class ActividadService implements IActividadService {
 
     @Override
     public Actividad cambiarActividadDTO(ActividadDTO actividadDTO) {
-        Actividad actividad = Actividad.builder()
+        return Actividad.builder()
                 .nombre(actividadDTO.nombre())
                 .descripcion(actividadDTO.descripcion())
                 .rama(actividadDTO.rama())
                 .fecha(actividadDTO.fecha())
                 .ubicacion(actividadDTO.ubicacion())
                 .build();
-        return actividad;
     }
 
     @Override
     public List<Actividad> findAllActividadesOrdenadas() {
-        return (List<Actividad>) actividadRepository.findAllOrderByFechaAsc();
+        return actividadRepository.findAllOrderByFechaAsc();
     }
 
     @Override
     public List<Actividad> findAllByRama(Rama rama) {
         return actividadRepository.findByRama(rama);
     }
-
 }

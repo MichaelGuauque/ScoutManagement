@@ -1,11 +1,13 @@
 package com.scoutmanagement.service.interfaces;
 
-import com.scoutmanagement.DTO.PersonaRegistroDTO;
+import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.Persona;
+import com.scoutmanagement.persistence.model.UserEntity;
 
 public interface IPersonaService {
-    void save(PersonaRegistroDTO personaRegistroDTO);
+    void save(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity);
 
-    Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO);
+    Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity);
+    boolean existsByNumeroDeDocumento(Long numeroDeDocumento);
 
 }

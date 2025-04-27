@@ -1,87 +1,99 @@
 package com.scoutmanagement.service.implementation;
 
-import com.scoutmanagement.DTO.PersonaRegistroDTO;
+import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
+import com.scoutmanagement.persistence.repository.PersonaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+@SpringBootTest
+public class PersonaServiceTest {
 
-class PersonaServiceTest {
+    @Mock
+    private PersonaRepository personaRepository;
 
-    @Test
-    void testSave() {
+    @InjectMocks
+    private PersonaService personaService;
 
-        PersonaRegistroDTO dto = new PersonaRegistroDTO();
-        dto.setPrimerNombre("Juan");
-        dto.setSegundoNombre("Carlos");
-        dto.setPrimerApellido("Pérez");
-        dto.setSegundoApellido("Gómez");
-        dto.setNumeroDeDocumento(12345678L);
-        dto.setTipoDeDocumento(TipoDeDocumento.CC);
-        dto.setGenero(Genero.MASCULINO);
-        dto.setRama(Rama.MANADA);
-        dto.setCargo(Cargo.LOBATO);
+    @Captor
+    private ArgumentCaptor<Persona> personaCaptor;
 
-
-        UserEntity user = new UserEntity();
-        user.setUsername("correo@correo.com");
-        user.setPassword("1234");
-        user.setEnabled(true);
-        user.setAccountNoExpired(true);
-        user.setAccountNoLocked(true);
-        user.setCredentialNoExpired(true);
-
-        RoleEntity role = new RoleEntity();
-        role.setRole(Rol.JOVEN); // Aquí usas directamente tu enum Rol
-        user.getRoles().add(role);
-
-        dto.setUserEntity(user);
-
-
-        PersonaService personaService = new PersonaService();
-        Persona persona = personaService.cambiarRegistroPersonaRegistroDTO(dto);
-
-
-        assertEquals("Juan", persona.getPrimerNombre());
-        assertEquals("Carlos", persona.getSegundoNombre());
-        assertEquals("Pérez", persona.getPrimerApellido());
-        assertEquals("Gómez", persona.getSegundoApellido());
-        assertEquals(12345678L, persona.getNumeroDeDocumento());
-        assertEquals(TipoDeDocumento.CC, persona.getTipoDeDocumento());
-        assertEquals(Genero.MASCULINO, persona.getGenero());
-        assertEquals(Rama.MANADA, persona.getRama());
-        assertEquals(Cargo.LOBATO, persona.getCargo());
-
-        UserEntity userEntity = persona.getUserEntity();
-        assertNotNull(userEntity);
-        assertEquals("correo@correo.com", userEntity.getUsername());
-        assertEquals("1234", userEntity.getPassword());
-        assertTrue(userEntity.isEnabled());
-        assertTrue(userEntity.isAccountNoExpired());
-        assertTrue(userEntity.isAccountNoLocked());
-        assertTrue(userEntity.isCredentialNoExpired());
-
-        System.out.println("Persona mapeada:");
-        System.out.println("Nombre completo: " + persona.getPrimerNombre() + " " + persona.getSegundoNombre() + " " +
-                persona.getPrimerApellido() + " " + persona.getSegundoApellido());
-        System.out.println("Documento: " + persona.getTipoDeDocumento() + " " + persona.getNumeroDeDocumento());
-        System.out.println("Género: " + persona.getGenero());
-        System.out.println("Rama: " + persona.getRama());
-        System.out.println("Cargo: " + persona.getCargo());
-
-        UserEntity u = persona.getUserEntity();
-        System.out.println("Usuario: " + u.getUsername());
-        System.out.println("Password: " + u.getPassword());
-        System.out.println("Habilitado: " + u.isEnabled());
-        System.out.println("Cuenta no expirada: " + u.isAccountNoExpired());
-        System.out.println("Cuenta no bloqueada: " + u.isAccountNoLocked());
-        System.out.println("Credencial no expirada: " + u.isCredentialNoExpired());
-        u.getRoles().forEach(rol -> System.out.println("Rol: " + rol.getRole()));
-
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
+    @Test
+    void testSave_shouldCallPersonaRepositorySaveOnce() {
+        PersonaRegistroDTO dto = PersonaRegistroDTO.builder()
+                .primerNombre("Ana")
+                .segundoNombre("Lucía")
+                .primerApellido("Torres")
+                .segundoApellido("Mejía")
+                .numeroDeDocumento(1122334455L)
+                .tipoDeDocumento(TipoDeDocumento.CC)
+                .rama(Rama.CLAN)
+                .cargo(Cargo.ROVER)
+                .build();
 
+        UserEntity user = UserEntity.builder()
+                .id(1L)
+                .username("ana_lucia@gmail.com")
+                .password("salchipapa123")
+                .isEnabled(true)
+                .accountNoExpired(true)
+                .accountNoLocked(true)
+                .credentialNoExpired(true)
+                .roles(Set.of())
+                .build();
+
+        personaService.save(dto, user);
+
+        verify(personaRepository).save(personaCaptor.capture());
+        Persona personaGuardada = personaCaptor.getValue();
+
+        assertEquals("Ana", personaGuardada.getPrimerNombre());
+        assertEquals("Lucía", personaGuardada.getSegundoNombre());
+        assertEquals("Torres", personaGuardada.getPrimerApellido());
+        assertEquals("Mejía", personaGuardada.getSegundoApellido());
+        assertEquals(1122334455L, personaGuardada.getNumeroDeDocumento());
+        assertEquals(TipoDeDocumento.CC, personaGuardada.getTipoDeDocumento());
+        assertEquals(Rama.CLAN, personaGuardada.getRama());
+        assertEquals(Cargo.ROVER, personaGuardada.getCargo());
+        assertEquals(user, personaGuardada.getUserEntity());
+    }
+
+    @Test
+    void testExistsByNumeroDeDocumento_WhenDocumentExists() {
+
+        Long numeroDeDocumento = 123456789L;  // Número de documento ficticio
+        when(personaRepository.existsByNumeroDeDocumento(numeroDeDocumento)).thenReturn(true);
+
+
+        boolean exists = personaService.existsByNumeroDeDocumento(numeroDeDocumento);
+
+        assertTrue(exists);  // Verificamos que el resultado sea true
+        verify(personaRepository).existsByNumeroDeDocumento(numeroDeDocumento);
+    }
+
+    @Test
+    void testExistsByNumeroDeDocumento_WhenDocumentDoesNotExist() {
+
+        Long numeroDeDocumento = 987654321L;
+        when(personaRepository.existsByNumeroDeDocumento(numeroDeDocumento)).thenReturn(false);
+
+
+        boolean exists = personaService.existsByNumeroDeDocumento(numeroDeDocumento);
+
+
+        assertFalse(exists);
+        verify(personaRepository).existsByNumeroDeDocumento(numeroDeDocumento);
+    }
 }

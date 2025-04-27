@@ -1,7 +1,7 @@
 package com.scoutmanagement.service.interfaces;
 
-import com.scoutmanagement.DTO.UserDTO;
-import com.scoutmanagement.DTO.UserRegistroDTO;
+import com.scoutmanagement.dto.UserDTO;
+import com.scoutmanagement.dto.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.UserEntity;
 
 import java.util.Optional;
@@ -16,4 +16,6 @@ public interface IUserEntity {
     Optional<UserEntity> findByEmail(UserDTO userDTO);
 
     Optional<UserEntity> findById(long id);
+
+    boolean existsByUsername(String email);
 }

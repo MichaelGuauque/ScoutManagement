@@ -1,6 +1,6 @@
 package com.scoutmanagement.service.implementation;
 
-import com.scoutmanagement.DTO.PersonaRegistroDTO;
+import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
 import com.scoutmanagement.service.interfaces.IPersonaService;
@@ -14,28 +14,33 @@ public class PersonaService implements IPersonaService {
     private PersonaRepository personaRepository;
 
     @Override
-    public void save(PersonaRegistroDTO personaRegistroDTO) {
-        personaRepository.save(cambiarRegistroPersonaRegistroDTO(personaRegistroDTO));
+    public void save(PersonaRegistroDTO personaRegistroDTO,UserEntity userEntity) {
+        personaRepository.save(cambiarRegistroPersonaRegistroDTO(personaRegistroDTO, userEntity));
     }
 
 
     @Override
-    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO) {
-        Persona persona = Persona.builder()
+    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO,UserEntity userEntity) {
+
+        return Persona.builder()
                 .primerNombre(personaRegistroDTO.getPrimerNombre())
                 .segundoNombre(personaRegistroDTO.getSegundoNombre())
                 .primerApellido(personaRegistroDTO.getPrimerApellido())
                 .segundoApellido(personaRegistroDTO.getSegundoApellido())
                 .numeroDeDocumento(personaRegistroDTO.getNumeroDeDocumento())
                 .tipoDeDocumento(personaRegistroDTO.getTipoDeDocumento())
-                .genero(personaRegistroDTO.getGenero())
                 .rama(personaRegistroDTO.getRama())
                 .cargo(personaRegistroDTO.getCargo())
-                .userEntity(personaRegistroDTO.getUserEntity())
+                .userEntity(userEntity)
                 .build();
 
-        return persona;
-
     }
+
+    @Override
+    public boolean existsByNumeroDeDocumento(Long numeroDeDocumento) {
+       return personaRepository.existsByNumeroDeDocumento(numeroDeDocumento);
+    }
+
+
 }
 

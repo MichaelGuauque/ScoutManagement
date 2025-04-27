@@ -1,4 +1,4 @@
-package com.scoutmanagement.DTO;
+package com.scoutmanagement.dto;
 
 import com.scoutmanagement.persistence.model.Rama;
 import jakarta.validation.constraints.NotBlank;
