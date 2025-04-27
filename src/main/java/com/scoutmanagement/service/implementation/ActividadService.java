@@ -5,7 +5,6 @@ import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
 import com.scoutmanagement.service.interfaces.IActividadService;
-import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +18,6 @@ public class ActividadService implements IActividadService {
 
     @Autowired
     private ActividadRepository actividadRepository;
-
-    @Autowired
-    private IAsistenciaService asistenciaService;
 
     @Override
     public Optional<Actividad> findById(Long id) {
@@ -38,7 +34,6 @@ public class ActividadService implements IActividadService {
     public void crearActividad(ActividadDTO actividadDTO) {
         try {
             Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
-            asistenciaService.crearAsistenciasAutomaticas(nuevaActividad);
         } catch (Exception e) {
             throw new ServiceException("Actividad no creada." + e.getMessage());
         }
@@ -64,7 +59,6 @@ public class ActividadService implements IActividadService {
 
     @Override
     public Actividad cambiarActividadDTO(ActividadDTO actividadDTO) {
-
         return Actividad.builder()
                 .nombre(actividadDTO.nombre())
                 .descripcion(actividadDTO.descripcion())
@@ -83,5 +77,4 @@ public class ActividadService implements IActividadService {
     public List<Actividad> findAllByRama(Rama rama) {
         return actividadRepository.findByRama(rama);
     }
-
 }
