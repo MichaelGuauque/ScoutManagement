@@ -8,6 +8,7 @@ import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.implementation.EmailService;
 import com.scoutmanagement.service.implementation.UserDetailServiceImpl;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -76,6 +77,16 @@ class UserDetailServiceImplTest {
         // Verificar los resultados
         assertNotNull(userDetails);
         assertEquals("correito@gmail.com", userDetails.getUsername());
+        verify(userRepository, times(1)).findUserEntityByUsername("correito@gmail.com");
+    }
+
+    @Test
+    void testLoadUserByUsername_UserNotFound() {
+        // Preparar el mock para devolver un usuario no encontrado
+        when(userRepository.findUserEntityByUsername("correito@gmail.com")).thenReturn(Optional.empty());
+
+        // Llamamos al método y verificamos que lanza la excepción
+        assertThrows(ServiceException.class, () -> userDetailService.loadUserByUsername("correito@gmail.com"));
         verify(userRepository, times(1)).findUserEntityByUsername("correito@gmail.com");
     }
 
