@@ -8,5 +8,6 @@ public interface IPersonaService {
     void save(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity);
 
     Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity);
+    boolean existsByNumeroDeDocumento(Long numeroDeDocumento);
 
 }

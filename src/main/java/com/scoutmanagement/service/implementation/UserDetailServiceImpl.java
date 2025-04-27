@@ -121,6 +121,11 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     }
 
     @Override
+    public boolean existsByUsername(String email) {
+        return userRepository.existsByUsername(email);
+    }
+
+    @Override
     public void save(UserEntity userEntity) {
         try {
             userRepository.save(userEntity);

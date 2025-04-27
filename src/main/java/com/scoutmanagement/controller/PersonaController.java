@@ -22,6 +22,7 @@ public class PersonaController {
     @GetMapping()
     public String miembros(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+        session.setAttribute("miembro","miembro");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             return "miembros/consultarMiembros";
         }
@@ -34,6 +35,7 @@ public class PersonaController {
     @GetMapping("/jefes")
     public String jefes(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+        session.setAttribute("miembro", "jefe");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             return "miembros/consultarJefes";
         }
