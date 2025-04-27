@@ -38,7 +38,6 @@ public class ActividadService implements IActividadService {
     public void crearActividad(ActividadDTO actividadDTO) {
         try {
             Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
-            asistenciaService.crearAsistenciasAutomaticas(nuevaActividad);
         } catch (Exception e) {
             throw new ServiceException("Actividad no creada." + e.getMessage());
         }
@@ -64,7 +63,6 @@ public class ActividadService implements IActividadService {
 
     @Override
     public Actividad cambiarActividadDTO(ActividadDTO actividadDTO) {
-
         return Actividad.builder()
                 .nombre(actividadDTO.nombre())
                 .descripcion(actividadDTO.descripcion())
@@ -83,5 +81,4 @@ public class ActividadService implements IActividadService {
     public List<Actividad> findAllByRama(Rama rama) {
         return actividadRepository.findByRama(rama);
     }
-
 }

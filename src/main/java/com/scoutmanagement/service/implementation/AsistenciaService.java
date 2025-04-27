@@ -9,7 +9,9 @@ import com.scoutmanagement.persistence.repository.ActividadRepository;
 import com.scoutmanagement.persistence.repository.AsistenciaRepository;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,106 +35,202 @@ public class AsistenciaService implements IAsistenciaService {
 
     @Override
     public List<Asistencia> findByActividad(Long actividadId) {
-        return asistenciaRepository.findByActividadId(actividadId);
+        try {
+            if (actividadId == null) {
+                throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
+            }
+            return asistenciaRepository.findByActividadId(actividadId);
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error al buscar asistencias por actividad: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public List<Asistencia> findByActividadOrdenado(Long actividadId) {
-        return asistenciaRepository.findByActividadOrdenado(actividadId);
+        try {
+            if (actividadId == null) {
+                throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
+            }
+            return asistenciaRepository.findByActividadOrdenado(actividadId);
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error al buscar asistencias ordenadas por actividad: " + e.getMessage(), e);
+        }
     }
 
     @Override
     @Transactional
     public Asistencia registrarAsistencia(AsistenciaDTO asistenciaDTO) {
-        // Verificar si ya existe un registro para ese miembro en esa actividad
-        Optional<Asistencia> asistenciaExistente = asistenciaRepository.findByMiembroIdAndActividadId(
-                asistenciaDTO.miembro().getId(),
-                asistenciaDTO.actividad().getId());
+        try {
+            if (asistenciaDTO == null) {
+                throw new IllegalArgumentException("La asistencia no puede ser nula");
+            }
+            if (asistenciaDTO.miembro() == null || asistenciaDTO.miembro().getId() == null) {
+                throw new IllegalArgumentException("El miembro de la asistencia no puede ser nulo");
+            }
+            if (asistenciaDTO.actividad() == null || asistenciaDTO.actividad().getId() == null) {
+                throw new IllegalArgumentException("La actividad de la asistencia no puede ser nula");
+            }
 
-        Asistencia asistencia;
-        if (asistenciaExistente.isPresent()) {
-            // Actualizar el registro existente
-            asistencia = asistenciaExistente.get();
-            asistencia.setAsistio(asistenciaDTO.asistio());
-        } else {
-            // Crear un nuevo registro
-            asistencia = convertirAsistenciaDTO(asistenciaDTO);
+            if (asistenciaDTO.asistio()) {
+                Optional<Asistencia> asistenciaExistente = asistenciaRepository.findByMiembroIdAndActividadId(
+                        asistenciaDTO.miembro().getId(),
+                        asistenciaDTO.actividad().getId());
+
+                Asistencia asistencia;
+                if (asistenciaExistente.isPresent()) {
+                    asistencia = asistenciaExistente.get();
+                    asistencia.setAsistio(true);
+                } else {
+                    asistencia = convertirAsistenciaDTO(asistenciaDTO);
+                }
+
+                return asistenciaRepository.save(asistencia);
+            } else {
+                Optional<Asistencia> asistenciaExistente = asistenciaRepository.findByMiembroIdAndActividadId(
+                        asistenciaDTO.miembro().getId(),
+                        asistenciaDTO.actividad().getId());
+
+                asistenciaExistente.ifPresent(a -> asistenciaRepository.delete(a));
+                return null;
+            }
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error al registrar asistencia: " + e.getMessage(), e);
         }
-
-        return asistenciaRepository.save(asistencia);
     }
 
     @Override
     @Transactional
     public void registrarAsistenciasMasivas(Long actividadId, Map<Long, Boolean> asistenciasPorMiembro) {
-        Actividad actividad = actividadRepository.findById(actividadId)
-                .orElseThrow(() -> new IllegalArgumentException("Actividad no encontrada con ID: " + actividadId));
-
-        asistenciasPorMiembro.forEach((miembroId, asistio) -> {
-            Persona miembro = personaRepository.findById(miembroId)
-                    .orElseThrow(() -> new IllegalArgumentException("Miembro no encontrado con ID: " + miembroId));
-
-            Optional<Asistencia> asistenciaExistente = asistenciaRepository.findByMiembroIdAndActividadId(miembroId, actividadId);
-
-            Asistencia asistencia;
-            if (asistenciaExistente.isPresent()) {
-                asistencia = asistenciaExistente.get();
-                asistencia.setAsistio(asistio);
-            } else {
-                asistencia = Asistencia.builder()
-                        .miembro(miembro)
-                        .actividad(actividad)
-                        .asistio(asistio)
-                        .build();
+        try {
+            if (actividadId == null) {
+                throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
+            }
+            if (asistenciasPorMiembro == null || asistenciasPorMiembro.isEmpty()) {
+                throw new IllegalArgumentException("El mapa de asistencias no puede ser nulo o vacío");
             }
 
-            asistenciaRepository.save(asistencia);
-        });
+            Actividad actividad = actividadRepository.findById(actividadId)
+                    .orElseThrow(() -> new ServiceException("Actividad no encontrada con ID: " + actividadId));
+
+            asistenciasPorMiembro.forEach((miembroId, asistio) -> {
+                try {
+                    if (miembroId == null) {
+                        throw new IllegalArgumentException("El ID del miembro no puede ser nulo");
+                    }
+
+                    Persona miembro = personaRepository.findById(miembroId)
+                            .orElseThrow(() -> new ServiceException("Miembro no encontrado con ID: " + miembroId));
+
+                    Optional<Asistencia> asistenciaExistente = asistenciaRepository.findByMiembroIdAndActividadId(miembroId, actividadId);
+
+                    if (asistio) {
+                        Asistencia asistencia;
+                        if (asistenciaExistente.isPresent()) {
+                            asistencia = asistenciaExistente.get();
+                            asistencia.setAsistio(true);
+                        } else {
+                            asistencia = Asistencia.builder()
+                                    .miembro(miembro)
+                                    .actividad(actividad)
+                                    .asistio(true)
+                                    .build();
+                        }
+                        asistenciaRepository.save(asistencia);
+                    } else {
+                        asistenciaExistente.ifPresent(a -> asistenciaRepository.delete(a));
+                    }
+                } catch (Exception e) {
+                    throw new ServiceException("Error al procesar asistencia para miembro ID " + miembroId + ": " + e.getMessage(), e);
+                }
+            });
+        } catch (ServiceException e) {
+            throw e;
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error de acceso a datos al registrar asistencias masivas: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new ServiceException("Error al registrar asistencias masivas: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public boolean existeAsistencia(Long miembroId, Long actividadId) {
-        return asistenciaRepository.existsByMiembroIdAndActividadId(miembroId, actividadId);
+        try {
+            if (miembroId == null) {
+                throw new IllegalArgumentException("El ID del miembro no puede ser nulo");
+            }
+            if (actividadId == null) {
+                throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
+            }
+            return asistenciaRepository.existsByMiembroIdAndActividadId(miembroId, actividadId);
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error al verificar existencia de asistencia: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public Asistencia findByMiembroAndActividad(Long miembroId, Long actividadId) {
-        return asistenciaRepository.findByMiembroIdAndActividadId(miembroId, actividadId).orElse(null);
+        try {
+            if (miembroId == null) {
+                throw new IllegalArgumentException("El ID del miembro no puede ser nulo");
+            }
+            if (actividadId == null) {
+                throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
+            }
+            return asistenciaRepository.findByMiembroIdAndActividadId(miembroId, actividadId).orElse(null);
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error al buscar asistencia por miembro y actividad: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public List<Asistencia> prepararRegistroAsistencias(Actividad actividad, List<Persona> miembros) {
-        List<Asistencia> asistencias = new ArrayList<>();
-
-        // Obtener asistencias existentes para esta actividad
-        List<Asistencia> asistenciasExistentes = asistenciaRepository.findByActividadId(actividad.getId());
-
-        // Preparar una nueva lista de asistencias
-        for (Persona miembro : miembros) {
-            // Buscar si ya existe un registro para este miembro en esta actividad
-            Optional<Asistencia> asistenciaExistente = asistenciasExistentes.stream()
-                    .filter(a -> a.getMiembro().getId().equals(miembro.getId()))
-                    .findFirst();
-
-            if (asistenciaExistente.isPresent()) {
-                // Si ya existe, usar ese registro
-                asistencias.add(asistenciaExistente.get());
-            } else {
-                // Si no existe, crear uno nuevo con asistencia en false por defecto
-                Asistencia nuevaAsistencia = Asistencia.builder()
-                        .miembro(miembro)
-                        .actividad(actividad)
-                        .asistio(false)
-                        .build();
-                asistencias.add(nuevaAsistencia);
+        try {
+            if (actividad == null) {
+                throw new IllegalArgumentException("La actividad no puede ser nula");
             }
-        }
+            if (miembros == null) {
+                throw new IllegalArgumentException("La lista de miembros no puede ser nula");
+            }
 
-        return asistencias;
+            List<Asistencia> asistencias = new ArrayList<>();
+
+            List<Asistencia> asistenciasExistentes = asistenciaRepository.findByActividadId(actividad.getId());
+
+            for (Persona miembro : miembros) {
+                if (miembro == null || miembro.getId() == null) {
+                    continue;
+                }
+
+                Optional<Asistencia> asistenciaExistente = asistenciasExistentes.stream()
+                        .filter(a -> a.getMiembro().getId().equals(miembro.getId()))
+                        .findFirst();
+
+                if (asistenciaExistente.isPresent()) {
+                    asistencias.add(asistenciaExistente.get());
+                } else {
+                    Asistencia asistenciaTemporal = Asistencia.builder()
+                            .miembro(miembro)
+                            .actividad(actividad)
+                            .asistio(false)
+                            .build();
+                    asistencias.add(asistenciaTemporal);
+                }
+            }
+
+            return asistencias;
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error al preparar registro de asistencias: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new ServiceException("Error inesperado al preparar registro de asistencias: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public Asistencia convertirAsistenciaDTO(AsistenciaDTO asistenciaDTO) {
+        if (asistenciaDTO == null) {
+            throw new IllegalArgumentException("El DTO de asistencia no puede ser nulo");
+        }
+
         return Asistencia.builder()
                 .miembro(asistenciaDTO.miembro())
                 .actividad(asistenciaDTO.actividad())
@@ -141,38 +239,52 @@ public class AsistenciaService implements IAsistenciaService {
     }
 
     @Override
-    @Transactional
-    public List<Asistencia> crearAsistenciasAutomaticas(Actividad actividad) {
-        // Obtener todos los miembros de la misma rama que la actividad
-        List<Persona> miembrosRama = findPersonasByRama(actividad.getRama());
-
-        // Crear registros de asistencia para cada miembro
-        List<Asistencia> asistencias = miembrosRama.stream()
-                .map(miembro -> Asistencia.builder()
-                        .miembro(miembro)
-                        .actividad(actividad)
-                        .asistio(false) // Inicialmente todos están como no asistentes
-                        .build())
-                .collect(Collectors.toList());
-
-        // Guardar todos los registros en la base de datos
-        return guardarAsistenciasMasivas(asistencias);
-    }
-
-    @Override
     public List<Persona> findPersonasByRama(Rama rama) {
-        return personaRepository.findByRama(rama);
+        try {
+            if (rama == null) {
+                throw new IllegalArgumentException("La rama no puede ser nula");
+            }
+            return personaRepository.findByRama(rama);
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error al buscar personas por rama: " + e.getMessage(), e);
+        }
     }
 
     @Override
     @Transactional
     public List<Asistencia> guardarAsistenciasMasivas(List<Asistencia> asistencias) {
-        List<Asistencia> asistenciasGuardadas = new ArrayList<>();
+        try {
+            if (asistencias == null) {
+                throw new IllegalArgumentException("La lista de asistencias no puede ser nula");
+            }
 
-        for (Asistencia asistencia : asistencias) {
-            asistenciasGuardadas.add(asistenciaRepository.save(asistencia));
+            List<Asistencia> asistenciasGuardadas = new ArrayList<>();
+
+            for (Asistencia asistencia : asistencias) {
+                if (asistencia == null) {
+                    continue;
+                }
+
+                if (asistencia.isAsistio()) {
+                    asistenciasGuardadas.add(asistenciaRepository.save(asistencia));
+                }
+            }
+
+            return asistenciasGuardadas;
+        } catch (DataAccessException e) {
+            throw new ServiceException("Error de acceso a datos al guardar asistencias masivas: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new ServiceException("Error al guardar asistencias masivas: " + e.getMessage(), e);
         }
+    }
 
-        return asistenciasGuardadas;
+    @Override
+    @Transactional
+    public List<Asistencia> crearAsistenciasAutomaticas(Actividad actividad) {
+
+        if (actividad == null) {
+            throw new IllegalArgumentException("La actividad no puede ser nula");
+        }
+        return new ArrayList<>();
     }
 }

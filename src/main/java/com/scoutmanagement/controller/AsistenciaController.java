@@ -2,19 +2,23 @@ package com.scoutmanagement.controller;
 
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Asistencia;
+import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Rol;
 import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
+import com.scoutmanagement.util.exception.ServiceException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/asistencias")
@@ -32,42 +36,86 @@ public class AsistenciaController {
                                          Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(actividadId);
-            model.addAttribute("asistencias", asistencias);
-            model.addAttribute("actividadSeleccionada", actividadId);
-            model.addAttribute("tabSeleccionada", tab);
+            try {
+                Optional<Actividad> actividadOptional = actividadService.findById(actividadId);
+                if (!actividadOptional.isPresent()) {
+                    model.addAttribute("message", "La actividad solicitada no existe");
+                    model.addAttribute("type", "error");
+                    return VISTA_ERROR;
+                }
 
-            return "actividades/modalAsistencia";
+                Actividad actividad = actividadOptional.get();
+
+                List<Persona> miembrosRama = asistenciaService.findPersonasByRama(actividad.getRama());
+
+                List<Asistencia> asistenciasExistentes = asistenciaService.findByActividadOrdenado(actividadId);
+
+                List<Asistencia> asistenciasDisplay = asistenciaService.prepararRegistroAsistencias(actividad, miembrosRama);
+
+                model.addAttribute("asistencias", asistenciasDisplay);
+                model.addAttribute("actividadSeleccionada", actividadId);
+                model.addAttribute("tabSeleccionada", tab);
+
+                return "actividades/modalAsistencia";
+            } catch (ServiceException e) {
+                model.addAttribute("message", e.getMessage());
+                model.addAttribute("type", "error");
+                return VISTA_ERROR;
+            }
         }
         if (rol == null) {
             return VISTA_LOGIN;
         }
+        model.addAttribute("message", "No tiene permisos para acceder a esta función");
+        model.addAttribute("type", "error");
         return VISTA_ERROR;
     }
-
 
     @PostMapping("/guardar/{actividadId}")
     public String guardarAsistencias(@PathVariable Long actividadId,
                                      @RequestParam Map<String, String> params,
-                                     @RequestParam("tab") String tabSeleccionada, HttpSession session) {
+                                     @RequestParam("tab") String tabSeleccionada,
+                                     RedirectAttributes redirectAttributes,
+                                     HttpSession session) {
 
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            List<Asistencia> asistenciasExistentes = asistenciaService.findByActividadOrdenado(actividadId);
+            try {
+                Optional<Actividad> actividadOptional = actividadService.findById(actividadId);
+                if (!actividadOptional.isPresent()) {
+                    redirectAttributes.addFlashAttribute("message", "La actividad solicitada no existe");
+                    redirectAttributes.addFlashAttribute("type", "error");
+                    return "redirect:/actividades?tab=" + tabSeleccionada;
+                }
 
-            Map<Long, Boolean> asistenciasPorMiembro = asistenciasExistentes.stream()
-                    .collect(Collectors.toMap(
-                            asistencia -> asistencia.getMiembro().getId(),
-                            asistencia -> params.containsKey("asistio_" + asistencia.getMiembro().getId())
-                    ));
+                Actividad actividad = actividadOptional.get();
 
-            asistenciaService.registrarAsistenciasMasivas(actividadId, asistenciasPorMiembro);
-            return "redirect:/actividades?tab=" + tabSeleccionada;
+                List<Persona> miembrosRama = asistenciaService.findPersonasByRama(actividad.getRama());
+
+                Map<Long, Boolean> asistenciasPorMiembro = new HashMap<>();
+
+                for (Persona miembro : miembrosRama) {
+                    boolean asistio = params.containsKey("asistio_" + miembro.getId());
+                    asistenciasPorMiembro.put(miembro.getId(), asistio);
+                }
+
+                asistenciaService.registrarAsistenciasMasivas(actividadId, asistenciasPorMiembro);
+
+                redirectAttributes.addFlashAttribute("message", "Registro de asistencias guardado correctamente");
+                redirectAttributes.addFlashAttribute("type", "success");
+                return "redirect:/actividades?tab=" + tabSeleccionada;
+            } catch (ServiceException e) {
+                redirectAttributes.addFlashAttribute("message", e.getMessage());
+                redirectAttributes.addFlashAttribute("type", "error");
+                return "redirect:/actividades?tab=" + tabSeleccionada;
+            }
         }
         if (rol == null) {
             return VISTA_LOGIN;
         }
-        return VISTA_ERROR;
+        redirectAttributes.addFlashAttribute("message", "No tiene permisos para acceder a esta función");
+        redirectAttributes.addFlashAttribute("type", "error");
+        return "redirect:/actividades?tab=" + tabSeleccionada;
     }
 
     @GetMapping
@@ -76,22 +124,38 @@ public class AsistenciaController {
                                      Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            List<Actividad> actividades = actividadService.findAllActividad();
-            model.addAttribute("actividades", actividades);
-            model.addAttribute("tabSeleccionada", tab);
+            try {
+                List<Actividad> actividades = actividadService.findAllActividad();
+                model.addAttribute("actividades", actividades);
+                model.addAttribute("tabSeleccionada", tab);
 
-            if (asistenciaActividadId != null) {
-                List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
+                if (asistenciaActividadId != null) {
 
-                model.addAttribute("asistencias", asistencias);
-                model.addAttribute("actividadSeleccionada", asistenciaActividadId);
+                    Optional<Actividad> actividadOptional = actividadService.findById(asistenciaActividadId);
+                    if (actividadOptional.isPresent()) {
+                        Actividad actividad = actividadOptional.get();
+
+                        List<Persona> miembrosRama = asistenciaService.findPersonasByRama(actividad.getRama());
+
+                        List<Asistencia> asistenciasDisplay = asistenciaService.prepararRegistroAsistencias(actividad, miembrosRama);
+
+                        model.addAttribute("asistencias", asistenciasDisplay);
+                        model.addAttribute("actividadSeleccionada", asistenciaActividadId);
+                    }
+                }
+
+                return "actividades/vistaActividadesAdmin";
+            } catch (ServiceException e) {
+                model.addAttribute("message", e.getMessage());
+                model.addAttribute("type", "error");
+                return "actividades/vistaActividadesAdmin";
             }
-
-            return "actividades/vistaActividadesAdmin";
         }
         if (rol == null) {
             return VISTA_LOGIN;
         }
+        model.addAttribute("message", "No tiene permisos para acceder a esta función");
+        model.addAttribute("type", "error");
         return VISTA_ERROR;
     }
 }
