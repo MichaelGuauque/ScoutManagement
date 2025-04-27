@@ -79,7 +79,6 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
 
            UserEntity user = UserEntity.builder()
                    .username(userDTO.getUsername())
-                   //.password(bCryptPasswordEncoder.encode(userDTO.password()))
                    .password(bCryptPasswordEncoder.encode(passwordGenerada))
                    .roles(Set.of(userRole))
                    .accountNoExpired(true)

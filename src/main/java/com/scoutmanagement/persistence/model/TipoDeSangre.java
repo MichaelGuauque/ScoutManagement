@@ -1,7 +1,5 @@
 package com.scoutmanagement.persistence.model;
 
-import lombok.Getter;
-
 
 public enum TipoDeSangre {
     O_POSITIVO("O+"),

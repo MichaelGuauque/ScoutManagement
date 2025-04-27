@@ -8,7 +8,7 @@ import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Optional;
