@@ -73,7 +73,6 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
 
        try {
            String passwordGenerada = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
-           logger.info("Contrasena sin Encriptar: {}", passwordGenerada);
 
            RoleEntity userRole = roleRepository.findByRole(userDTO.getRol());
 

@@ -17,13 +17,11 @@ public class PersonaRegistroDTO {
     @NotBlank(message = "El primer nombre es obligatorio")
     private String primerNombre;
 
-    @NotBlank(message = "El segundo nombre es obligatorio")
     private String segundoNombre;
 
     @NotBlank(message = "El primer apellido es obligatorio")
     private String primerApellido;
 
-    @NotBlank(message = "El segundo apellido es obligatorio")
     private String segundoApellido;
 
     @NotNull(message = "El número de documento es obligatorio")
@@ -32,9 +30,6 @@ public class PersonaRegistroDTO {
 
     @NotNull(message = "El tipo de documento es obligatorio")
     private TipoDeDocumento tipoDeDocumento;
-
-    @NotNull(message = "El género es obligatorio")
-    private Genero genero;
 
     @NotNull(message = "La rama es obligatoria")
     private Rama rama;

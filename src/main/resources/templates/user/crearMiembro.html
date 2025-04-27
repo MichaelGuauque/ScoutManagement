@@ -75,7 +75,7 @@
                     </div>
                     <ul class="submenu">
                         <li class="nav-link">
-                            <a th:href="@{/actividades}">
+                            <a th:href="@{/templates/actividades}">
                                 <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar
                                 Actividades
                             </a>
@@ -113,7 +113,7 @@
                     </div>
                     <ul class="submenu">
                         <li class="nav-link">
-                            <a th:href="@{/miembros}">
+                            <a th:href="@{/templates/miembros}">
                                 <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar" class="submenu-icon">Consultar
                                 Miembros
                             </a>
@@ -227,7 +227,7 @@
 
                     <div class="form-group">
                         <label>Correo Electrónico</label>
-                        <input type="email" name="usuario.username" id="usuario.username" maxlength="30" required
+                        <input type="email" name="usuario.username" id="usuario.username" maxlength="50" required
                                th:value="${(errorCorreo != null && errorCorreo) ? usuario?.username :
                                 persona?.usuario?.username}"
                                oninvalid="this.setCustomValidity('Por favor ingresa un correo válido')"

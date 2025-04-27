@@ -37,7 +37,6 @@ public class PersonaServiceTest {
                 .segundoApellido("Mejía")
                 .numeroDeDocumento(1122334455L)
                 .tipoDeDocumento(TipoDeDocumento.CC)
-                .genero(Genero.FEMENINO)
                 .rama(Rama.CLAN)
                 .cargo(Cargo.ROVER)
                 .build();
@@ -64,7 +63,6 @@ public class PersonaServiceTest {
         assertEquals("Mejía", personaGuardada.getSegundoApellido());
         assertEquals(1122334455L, personaGuardada.getNumeroDeDocumento());
         assertEquals(TipoDeDocumento.CC, personaGuardada.getTipoDeDocumento());
-        assertEquals(Genero.FEMENINO, personaGuardada.getGenero());
         assertEquals(Rama.CLAN, personaGuardada.getRama());
         assertEquals(Cargo.ROVER, personaGuardada.getCargo());
         assertEquals(user, personaGuardada.getUserEntity());

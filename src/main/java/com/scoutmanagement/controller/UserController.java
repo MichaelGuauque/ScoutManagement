@@ -8,6 +8,7 @@ import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,7 @@ public class UserController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(PersonaRegistroDTO dto, HttpSession session,RedirectAttributes redirectAttributes) {
+    public String guardar(@Valid PersonaRegistroDTO dto, HttpSession session, RedirectAttributes redirectAttributes) {
         try{
         Object rol = session.getAttribute("rol");
         if (rol == null) {

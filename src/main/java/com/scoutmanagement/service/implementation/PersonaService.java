@@ -29,7 +29,6 @@ public class PersonaService implements IPersonaService {
                 .segundoApellido(personaRegistroDTO.getSegundoApellido())
                 .numeroDeDocumento(personaRegistroDTO.getNumeroDeDocumento())
                 .tipoDeDocumento(personaRegistroDTO.getTipoDeDocumento())
-                .genero(personaRegistroDTO.getGenero())
                 .rama(personaRegistroDTO.getRama())
                 .cargo(personaRegistroDTO.getCargo())
                 .userEntity(userEntity)
