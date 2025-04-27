@@ -1,5 +1,6 @@
 package com.scoutmanagement.TestUser;
 
+import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.dto.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.persistence.model.RoleEntity;
@@ -14,8 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -24,6 +25,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class UserDetailServiceImplTest {
 
     @InjectMocks
@@ -44,6 +46,7 @@ class UserDetailServiceImplTest {
     private UserRegistroDTO userDTO;
     private UserEntity userEntity;
     private RoleEntity roleEntity;
+
 
     @BeforeEach
     void setUp() {
@@ -91,18 +94,38 @@ class UserDetailServiceImplTest {
     }
 
     @Test
-    void testCambioUserDTO() {
-        // Mockeamos el repositorio de roles
-        when(roleRepository.findByRole(Rol.ADULTO)).thenReturn(roleEntity);
+    void testCambioUserDTO_Success() {
 
-        // Llamamos al método
+        UserRegistroDTO userDTO = new UserRegistroDTO();
+        userDTO.setUsername("correito@gmail.com");
+        userDTO.setRol(Rol.JOVEN);
+
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setRole(Rol.JOVEN);
+
+        // Mockear dependencias
+        when(roleRepository.findByRole(Rol.JOVEN)).thenReturn(roleEntity);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
+        doNothing().when(emailService).enviarCorreo(anyString(), anyString(), anyString());
+
+        // Ejecutar
         UserEntity result = userDetailService.cambioUserDTO(userDTO);
 
-        // Verificar que el resultado es el esperado
+        // Verificar
         assertNotNull(result);
         assertEquals("correito@gmail.com", result.getUsername());
+        assertEquals("encodedPassword", result.getPassword());
         assertTrue(result.getRoles().contains(roleEntity));
-        verify(roleRepository, times(1)).findByRole(Rol.ADULTO);
+        assertTrue(result.isAccountNoExpired());
+        assertTrue(result.isAccountNoLocked());
+        assertTrue(result.isCredentialNoExpired());
+        assertTrue(result.isEnabled());
+
+        // Verificar interacciones
+        verify(roleRepository, times(1)).findByRole(Rol.JOVEN);
+        verify(passwordEncoder, times(1)).encode(anyString());
+        verify(emailService, times(1)).enviarCorreo(anyString(), anyString(), anyString());
     }
 
 
@@ -170,5 +193,99 @@ class UserDetailServiceImplTest {
         assertFalse(exists);
 
         verify(userRepository).existsByUsername(email);
+    }
+    @Test
+    public void testCambioUserDTO_ExceptionRoleNotFound() {
+
+        UserRegistroDTO userDTO = new UserRegistroDTO();
+        userDTO.setUsername("testUser@gmail.com");
+        userDTO.setRol(Rol.ADULTO); // Rol que no existe en el repositorio
+
+
+        when(roleRepository.findByRole(Rol.ADULTO)).thenReturn(null);
+
+
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            userDetailService.cambioUserDTO(userDTO);
+        });
+
+        assertTrue(exception.getMessage().contains("Error: no se pudo convertir el DTO de usuario"));
+    }
+
+    @Test
+    public void testFindByEmail_ExceptionThrown() {
+        // Preparar
+        UserDTO userDTO = new UserDTO(
+                "testUser@gmail.com",
+                "password123",
+                "newPassword123",
+                Rol.JOVEN
+        );
+
+        when(userRepository.findUserEntityByUsername(userDTO.username()))
+                .thenThrow(new RuntimeException("Base de datos caída"));
+
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            userDetailService.findByEmail(userDTO);
+        });
+
+
+        assertTrue(exception.getMessage().contains("Error: no se encontró el usuario"));
+    }
+
+    @Test
+    public void testFindById_ExceptionThrown() {
+
+        long id = 1L;
+
+
+        when(userRepository.findById(id))
+                .thenThrow(new RuntimeException("Base de datos caída"));
+
+
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            userDetailService.findById(id);
+        });
+
+        assertTrue(exception.getMessage().contains("Error: no se encontró el usuario"));
+    }
+
+    @Test
+    public void testSave_ExceptionThrown() {
+
+        UserEntity userEntity = UserEntity.builder()
+                .username("testUser@gmail.com")
+                .password("password")
+                .build();
+
+
+        doThrow(new RuntimeException("Base de datos caída"))
+                .when(userRepository).save(userEntity);
+
+
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            userDetailService.save(userEntity);
+        });
+
+        assertTrue(exception.getMessage().contains("No se pudo guardar el usuario"));
+    }
+    @Test
+    public void testUpdatePassword_ExceptionThrown() {
+        // Preparar datos de entrada
+        String username = "testUser@gmail.com";
+        String oldPassword = "oldPass";
+        String newPassword = "newPass";
+
+
+        when(userRepository.findUserEntityByUsername(username))
+                .thenThrow(new RuntimeException("Error en la base de datos"));
+
+
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            userDetailService.updatePassword(username, oldPassword, newPassword);
+        });
+
+
+        assertTrue(exception.getMessage().contains("Contraseñas no coinciden"));
     }
 }

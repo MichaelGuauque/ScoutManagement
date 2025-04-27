@@ -4,10 +4,9 @@ import com.scoutmanagement.dto.ActividadDTO;
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -60,6 +59,26 @@ class ActividadServiceTest {
         Optional<Actividad> actividadEliminada = actividadService.findById(actividadGuardada.getId());
         assertFalse(actividadEliminada.isPresent(), "La actividad no fue eliminada correctamente.");
 
+    }
+
+    @Test
+    void testCrearActividadFallo() {
+
+        ActividadDTO actividadDTO = new ActividadDTO(null,null,null,null,null);
+
+        assertThrows(ServiceException.class, () -> {
+            actividadService.crearActividad(actividadDTO);
+        });
+    }
+
+    @Test
+    void testModificarActividadFallo() {
+        Actividad actividad = new Actividad();
+        actividad.setId(123L);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            actividadService.modificarActividad(actividad);
+        });
     }
 
     @Test
