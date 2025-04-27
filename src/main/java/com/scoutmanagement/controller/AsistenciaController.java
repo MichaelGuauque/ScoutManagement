@@ -38,7 +38,7 @@ public class AsistenciaController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             try {
                 Optional<Actividad> actividadOptional = actividadService.findById(actividadId);
-                if (!actividadOptional.isEmpty()) {
+                if (!actividadOptional.isPresent()) {
                     model.addAttribute("message", "La actividad solicitada no existe");
                     model.addAttribute("type", "error");
                     return VISTA_ERROR;
@@ -80,7 +80,7 @@ public class AsistenciaController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             try {
                 Optional<Actividad> actividadOptional = actividadService.findById(actividadId);
-                if (!actividadOptional.isEmpty()) {
+                if (!actividadOptional.isPresent()) {
                     redirectAttributes.addFlashAttribute("message", "La actividad solicitada no existe");
                     redirectAttributes.addFlashAttribute("type", "error");
                     return "redirect:/actividades?tab=" + tabSeleccionada;

@@ -5,7 +5,6 @@ import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
 import com.scoutmanagement.service.interfaces.IActividadService;
-import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

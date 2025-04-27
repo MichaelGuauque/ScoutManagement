@@ -2,9 +2,7 @@ package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.dto.AsistenciaDTO;
 import com.scoutmanagement.persistence.model.*;
-import com.scoutmanagement.persistence.repository.ActividadRepository;
 import com.scoutmanagement.persistence.repository.AsistenciaRepository;
-import com.scoutmanagement.persistence.repository.PersonaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
