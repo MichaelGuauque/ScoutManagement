@@ -8,7 +8,7 @@ import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -30,10 +30,9 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
-    @Transactional
     public void crearActividad(ActividadDTO actividadDTO) {
         try {
-            Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
+             actividadRepository.save(cambiarActividadDTO(actividadDTO));
         } catch (Exception e) {
             throw new ServiceException("Actividad no creada." + e.getMessage());
         }

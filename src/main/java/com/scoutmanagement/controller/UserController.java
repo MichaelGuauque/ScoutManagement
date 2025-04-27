@@ -75,6 +75,7 @@ public class UserController {
 
     @GetMapping("/registrar")
     public String registrarUsuario(Model model, HttpSession session) {
+
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             model.addAttribute("ramas", Rama.values());
@@ -90,18 +91,49 @@ public class UserController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(PersonaRegistroDTO dto, HttpSession session) {
+    public String guardar(PersonaRegistroDTO dto, HttpSession session,RedirectAttributes redirectAttributes) {
+        try{
         Object rol = session.getAttribute("rol");
+        if (rol == null) {
+                return VISTA_LOGIN;
+        }
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
             UserEntity user = userService.cambioUserDTO(dto.getUsuario());
+            if (documentoExiste) {
+                redirectAttributes.addFlashAttribute("message", "El número de documento ya está registrado.");
+                redirectAttributes.addFlashAttribute("type", "error");
+                redirectAttributes.addFlashAttribute("errorPersona", true);
+                redirectAttributes.addFlashAttribute("usuario", user);
+                redirectAttributes.addFlashAttribute("persona", dto);
+                return VISTA_REGISTRAR;
+            }
+            boolean correoExiste = userService.existsByUsername(user.getUsername());
+            if(correoExiste){
+                redirectAttributes.addFlashAttribute("message", "El correo electrónico ya está registrado.");
+                redirectAttributes.addFlashAttribute("type", "error");
+                redirectAttributes.addFlashAttribute("errorCorreo", true);
+                redirectAttributes.addFlashAttribute("usuario", user);
+                redirectAttributes.addFlashAttribute("persona", dto);
+                return VISTA_REGISTRAR;
+
+            }
             userService.save(user);
             personaService.save(dto,user);
-            return "redirect:registrar";
+
+            redirectAttributes.addFlashAttribute("message", "Miembro guardado");
+            redirectAttributes.addFlashAttribute("type", "success");
+            return VISTA_REGISTRAR;
         }
-        if (rol == null) {
-            return VISTA_LOGIN;
+            return VISTA_ERROR;
+
+
+    } catch (ServiceException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            redirectAttributes.addFlashAttribute("type", "error");
+            return VISTA_REGISTRAR;
+
         }
-        return VISTA_ERROR;
     }
 
     @GetMapping("/home-admin")
@@ -122,4 +154,5 @@ public class UserController {
         session.removeAttribute("rol");
         return VISTA_LOGIN;
     }
+
 }

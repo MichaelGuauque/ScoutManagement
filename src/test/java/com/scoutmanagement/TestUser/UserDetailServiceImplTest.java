@@ -144,4 +144,30 @@ class UserDetailServiceImplTest {
         // Verificamos que el método save nunca fue llamado porque la contraseña no coincide
         verify(userRepository, times(0)).save(any(UserEntity.class));
     }
+    @Test
+    void testExistsByUsername_WhenUserExists() {
+
+        String email = "test@example.com";
+
+        when(userRepository.existsByUsername(email)).thenReturn(true);
+
+        boolean exists = userDetailService.existsByUsername(email);
+
+        assertTrue(exists);
+
+        verify(userRepository).existsByUsername(email);
+    }
+
+    @Test
+    void testExistsByUsername_WhenUserDoesNotExist() {
+        String email = "nonexistent@example.com";
+
+        when(userRepository.existsByUsername(email)).thenReturn(false);
+
+        boolean exists = userDetailService.existsByUsername(email);
+
+        assertFalse(exists);
+
+        verify(userRepository).existsByUsername(email);
+    }
 }

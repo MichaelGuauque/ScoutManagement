@@ -36,5 +36,12 @@ public class PersonaService implements IPersonaService {
                 .build();
 
     }
+
+    @Override
+    public boolean existsByNumeroDeDocumento(Long numeroDeDocumento) {
+       return personaRepository.existsByNumeroDeDocumento(numeroDeDocumento);
+    }
+
+
 }
 

@@ -9,7 +9,7 @@ import org.mockito.*;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class PersonaServiceTest {
@@ -68,5 +68,32 @@ public class PersonaServiceTest {
         assertEquals(Rama.CLAN, personaGuardada.getRama());
         assertEquals(Cargo.ROVER, personaGuardada.getCargo());
         assertEquals(user, personaGuardada.getUserEntity());
+    }
+
+    @Test
+    void testExistsByNumeroDeDocumento_WhenDocumentExists() {
+
+        Long numeroDeDocumento = 123456789L;  // Número de documento ficticio
+        when(personaRepository.existsByNumeroDeDocumento(numeroDeDocumento)).thenReturn(true);
+
+
+        boolean exists = personaService.existsByNumeroDeDocumento(numeroDeDocumento);
+
+        assertTrue(exists);  // Verificamos que el resultado sea true
+        verify(personaRepository).existsByNumeroDeDocumento(numeroDeDocumento);
+    }
+
+    @Test
+    void testExistsByNumeroDeDocumento_WhenDocumentDoesNotExist() {
+
+        Long numeroDeDocumento = 987654321L;
+        when(personaRepository.existsByNumeroDeDocumento(numeroDeDocumento)).thenReturn(false);
+
+
+        boolean exists = personaService.existsByNumeroDeDocumento(numeroDeDocumento);
+
+
+        assertFalse(exists);
+        verify(personaRepository).existsByNumeroDeDocumento(numeroDeDocumento);
     }
 }

@@ -794,6 +794,17 @@
         }
     });
 </script>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('cancelado')) {
+
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+    });
+</script>
 
 </body>
 </html>

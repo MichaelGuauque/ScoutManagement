@@ -7,7 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/crear-miembroStyle.css}">
+    <link rel="stylesheet" th:href="@{/style/notification.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css}">
+    <script th:src="@{/js/notification.js}"></script>
 </head>
 <body>
 <!-- Botón hamburguesa para móviles -->
@@ -147,7 +149,7 @@
             <p class="description">Ingresa los datos principales del nuevo integrante para incluirlo en el sistema.</p>
         </div>
 
-        <form th:action="@{/guardar}" method="post">
+        <form id="formularioMiembro" th:action="@{/guardar}" method="post">
             <div class="section">
                 <h2 class="section-title">Información Básica</h2>
                 <p class="section-subtitle">Datos básicos sobre el miembro.</p>
@@ -155,25 +157,45 @@
                     <div class="form-group">
                         <label for="primerNombre">Primer Nombre</label>
                         <input type="text" name="primerNombre" id="primerNombre" required maxlength="25"
-                               placeholder="Ingresa aquí el nombre...">
+                               pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
+                               oninvalid="validarPrimerNombre(this)"
+                               oninput="this.setCustomValidity('')"
+                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.primerNombre :
+                               ((errorPersona != null && errorPersona) ? persona?.primerNombre : '')}"
+                               placeholder="Ingresa el primer nombre...">
                     </div>
 
                     <div class="form-group">
                         <label for="segundoNombre">Segundo Nombre</label>
                         <input type="text" name="segundoNombre" id="segundoNombre" maxlength="25"
-                               placeholder="Ingresa aquí el nombre...">
+                               pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+"
+                               oninvalid="validarSegundoNombre(this)"
+                               oninput="this.setCustomValidity('')"
+                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.segundoNombre :
+                               ((errorPersona != null && errorPersona) ? persona?.segundoNombre : '')}"
+                               placeholder="Ingresa el segundo nombre...">
                     </div>
 
                     <div class="form-group">
                         <label for="primerApellido">Primer Apellido</label>
                         <input type="text" name="primerApellido" id="primerApellido" maxlength="25" required
-                               placeholder="Ingresa aquí el apellido...">
+                               pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
+                               oninvalid="validarPrimerApellido(this)"
+                               oninput="this.setCustomValidity('')"
+                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.primerApellido :
+                               ((errorPersona != null && errorPersona) ? persona?.primerApellido : '')}"
+                               placeholder="Ingresa el primer apellido...">
                     </div>
 
                     <div class="form-group">
                         <label for="segundoApellido">Segundo Apellido</label>
                         <input type="text" name="segundoApellido" id="segundoApellido" maxlength="25"
-                               placeholder="Ingresa aquí el apellido...">
+                               pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
+                               oninvalid="validarSegundoApellido(this)"
+                               oninput="this.setCustomValidity('')"
+                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.segundoApellido :
+                               ((errorPersona != null && errorPersona) ? persona?.segundoApellido : '')}"
+                               placeholder="Ingresa el segundo apellido...">
                     </div>
                 </div>
 
@@ -181,23 +203,35 @@
                 <div class="form-row">
                     <div class="form-group" style="max-width: 185px;">
                         <label for="tipoDeDocumento">Tipo de Documento</label>
-                        <select class="form-select" name="tipoDeDocumento" id="tipoDeDocumento" required>
+                        <select class="form-select" name="tipoDeDocumento" id="tipoDeDocumento" required
+                                oninvalid="this.setCustomValidity('Por favor selecciona un tipo de documento')"
+                                oninput="this.setCustomValidity('')">
                             <option value="" disabled selected>Seleccione...</option>
                             <th:block th:each="tipoDeDocumento : ${tiposDeDocumento}">
-                                <option th:value="${tipoDeDocumento}" th:text="${tipoDeDocumento}"></option>
+                                <option th:value="${tipoDeDocumento}" th:text="${tipoDeDocumento}"
+                                        th:selected="${(errorCorreo != null || errorPersona != null)
+                                        and persona?.tipoDeDocumento == tipoDeDocumento}">
+                                </option>
                             </th:block>
                         </select>
                     </div>
 
                     <div class="form-group" style="max-width: 390px;">
                         <label for="numeroDeDocumento">Número Documento</label>
-                        <input type="number" name="numeroDeDocumento" id="numeroDeDocumento" minlength="7"
-                               maxlength="11" required placeholder="Ingresa aquí el documento...">
+                        <input type="number" name="numeroDeDocumento" id="numeroDeDocumento" min="1000000"
+                               max="99999999999" required placeholder="Ingresa aquí el documento..."
+                               oninvalid="this.setCustomValidity('Por favor ingresa un número de documento válido')"
+                               oninput="this.setCustomValidity('')"
+                               th:value="${(errorCorreo != null || errorPersona != null) ? persona?.numeroDeDocumento : ''}">
                     </div>
 
                     <div class="form-group">
                         <label>Correo Electrónico</label>
                         <input type="email" name="usuario.username" id="usuario.username" maxlength="30" required
+                               th:value="${(errorCorreo != null && errorCorreo) ? usuario?.username :
+                                persona?.usuario?.username}"
+                               oninvalid="this.setCustomValidity('Por favor ingresa un correo válido')"
+                               oninput="this.setCustomValidity('')"
                                placeholder="Ingresa aquí el correo...">
                     </div>
                 </div>
@@ -227,13 +261,15 @@
                         </select>
                     </div>
 
+
                     <div class="form-group">
                         <label for="rama">Rama</label>
                         <select class="form-select" name="rama" id="rama"
                                 style="pointer-events: none;background-color: #f3f3f3;">
                             <option value="" selected="">Seleccione...</option>
                             <th:block th:each="rama : ${ramas}">
-                                <option th:value="${rama}" th:text="${rama}"></option>
+                                <option th:value="${rama}" th:text="${rama}" th:selected="${(errorCorreo != null || errorPersona != null)
+                                        and persona?.rama == rama}"></option>
                             </th:block>
                         </select>
                     </div>
@@ -242,7 +278,8 @@
 
             <div class="buttons">
                 <button type="submit" class="btn-primary">Guardar</button>
-                <button type="button" class="btn-secondary">Cancelar</button>
+                <button type="button" class="btn-secondary" onclick="cancelarRegistro()" >Cancelar</button>
+
             </div>
         </form>
     </div>
@@ -642,6 +679,69 @@
     window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('cargo').addEventListener('change', actualizarRama);
     });
+</script>
+
+    <script th:if="${message != null}">
+        window.onload = function (){
+        showSimpleNotification("[[${message}]]", "[[${type}]]");
+    }
+
+    </script>
+
+<script>
+    function validarPrimerNombre(input) {
+        if (input.validity.valueMissing) {
+            input.setCustomValidity('Por favor, ingresa el primer nombre');
+        }else if (input.value.includes(' ')) {
+            input.setCustomValidity('Por favor, ingresa únicamente el primer nombre');
+        } else if (input.validity.patternMismatch) {
+            input.setCustomValidity('Por favor, ingresa un primer nombre válido');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+    function validarSegundoNombre(input) {
+
+         if (input.validity.patternMismatch) {
+            input.setCustomValidity('Por favor, ingresa un segundo nombre válido');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+    function validarPrimerApellido(input) {
+        if (input.validity.valueMissing) {
+            input.setCustomValidity('Por favor, ingresa el primer apellido');
+        } else if (input.value.includes(' ')) {
+            input.setCustomValidity('Por favor, ingresa únicamente el primer apellido');
+        } else if (input.validity.patternMismatch) {
+            input.setCustomValidity('Por favor, ingresa un primer apellido valido.');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+    function validarSegundoApellido(input) {
+        if (input.value.includes(' ')) {
+            input.setCustomValidity('Por favor, ingresa únicamente el segundo apellido');
+        } else if (input.validity.patternMismatch) {
+            input.setCustomValidity('Por favor, ingresa un segundo apellido válido');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+
+</script>
+<script th:inline="javascript">
+    function cancelarRegistro() {
+        const miembro = /*[[${session.miembro}]]*/ 'miembro';
+
+        if (miembro === 'jefe') {
+            window.location.href = "/miembros/jefes?cancelado=true";
+        } else {
+            window.location.href = "/miembros?cancelado=true";
+        }
+    }
+
+</script>
 </script>
 </body>
 </html>

@@ -79,7 +79,6 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
 
            UserEntity user = UserEntity.builder()
                    .username(userDTO.getUsername())
-                   //.password(bCryptPasswordEncoder.encode(userDTO.password()))
                    .password(bCryptPasswordEncoder.encode(passwordGenerada))
                    .roles(Set.of(userRole))
                    .accountNoExpired(true)
@@ -118,6 +117,11 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
             throw new ServiceException("Error: no se encontró el usuario " + e.getMessage());
         }
 
+    }
+
+    @Override
+    public boolean existsByUsername(String email) {
+        return userRepository.existsByUsername(email);
     }
 
     @Override
