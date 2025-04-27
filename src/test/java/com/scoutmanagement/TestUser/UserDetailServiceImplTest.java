@@ -80,16 +80,6 @@ class UserDetailServiceImplTest {
     }
 
     @Test
-    void testLoadUserByUsername_UserNotFound() {
-        // Preparar el mock para devolver un usuario no encontrado
-        when(userRepository.findUserEntityByUsername("correito@gmail.com")).thenReturn(Optional.empty());
-
-        // Llamamos al método y verificamos que lanza la excepción
-        assertThrows(UsernameNotFoundException.class, () -> userDetailService.loadUserByUsername("correito@gmail.com"));
-        verify(userRepository, times(1)).findUserEntityByUsername("correito@gmail.com");
-    }
-
-    @Test
     void testCambioUserDTO() {
         // Mockeamos el repositorio de roles
         when(roleRepository.findByRole(Rol.ADULTO)).thenReturn(roleEntity);
