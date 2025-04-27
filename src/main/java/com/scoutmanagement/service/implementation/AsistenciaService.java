@@ -32,17 +32,7 @@ public class AsistenciaService implements IAsistenciaService {
     @Autowired
     private PersonaRepository personaRepository;
 
-    @Override
-    public List<Asistencia> findByActividad(Long actividadId) {
-        try {
-            if (actividadId == null) {
-                throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
-            }
-            return asistenciaRepository.findByActividadId(actividadId);
-        } catch (DataAccessException e) {
-            throw new ServiceException("Error al buscar asistencias por actividad: " + e.getMessage(), e);
-        }
-    }
+
 
     @Override
     public List<Asistencia> findByActividadOrdenado(Long actividadId) {
@@ -151,35 +141,9 @@ public class AsistenciaService implements IAsistenciaService {
         }
     }
 
-    @Override
-    public boolean existeAsistencia(Long miembroId, Long actividadId) {
-        try {
-            if (miembroId == null) {
-                throw new IllegalArgumentException("El ID del miembro no puede ser nulo");
-            }
-            if (actividadId == null) {
-                throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
-            }
-            return asistenciaRepository.existsByMiembroIdAndActividadId(miembroId, actividadId);
-        } catch (DataAccessException e) {
-            throw new ServiceException("Error al verificar existencia de asistencia: " + e.getMessage(), e);
-        }
-    }
 
-    @Override
-    public Asistencia findByMiembroAndActividad(Long miembroId, Long actividadId) {
-        try {
-            if (miembroId == null) {
-                throw new IllegalArgumentException("El ID del miembro no puede ser nulo");
-            }
-            if (actividadId == null) {
-                throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
-            }
-            return asistenciaRepository.findByMiembroIdAndActividadId(miembroId, actividadId).orElse(null);
-        } catch (DataAccessException e) {
-            throw new ServiceException("Error al buscar asistencia por miembro y actividad: " + e.getMessage(), e);
-        }
-    }
+
+
 
     @Override
     public List<Asistencia> prepararRegistroAsistencias(Actividad actividad, List<Persona> miembros) {
@@ -249,41 +213,5 @@ public class AsistenciaService implements IAsistenciaService {
         }
     }
 
-    @Override
-    @Transactional
-    public List<Asistencia> guardarAsistenciasMasivas(List<Asistencia> asistencias) {
-        try {
-            if (asistencias == null) {
-                throw new IllegalArgumentException("La lista de asistencias no puede ser nula");
-            }
 
-            List<Asistencia> asistenciasGuardadas = new ArrayList<>();
-
-            for (Asistencia asistencia : asistencias) {
-                if (asistencia == null) {
-                    continue;
-                }
-
-                if (asistencia.isAsistio()) {
-                    asistenciasGuardadas.add(asistenciaRepository.save(asistencia));
-                }
-            }
-
-            return asistenciasGuardadas;
-        } catch (DataAccessException e) {
-            throw new ServiceException("Error de acceso a datos al guardar asistencias: " + e.getMessage(), e);
-        } catch (Exception e) {
-            throw new ServiceException("Error al guardar asistencias: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    @Transactional
-    public List<Asistencia> crearAsistenciasAutomaticas(Actividad actividad) {
-
-        if (actividad == null) {
-            throw new IllegalArgumentException("La actividad no puede ser nula");
-        }
-        return new ArrayList<>();
-    }
 }
