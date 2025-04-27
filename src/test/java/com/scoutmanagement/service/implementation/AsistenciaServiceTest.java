@@ -5,7 +5,6 @@ import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
 import com.scoutmanagement.persistence.repository.AsistenciaRepository;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
-import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
