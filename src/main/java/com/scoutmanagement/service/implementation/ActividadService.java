@@ -30,10 +30,9 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
-    @Transactional
     public void crearActividad(ActividadDTO actividadDTO) {
         try {
-            Actividad nuevaActividad = actividadRepository.save(cambiarActividadDTO(actividadDTO));
+             actividadRepository.save(cambiarActividadDTO(actividadDTO));
         } catch (Exception e) {
             throw new ServiceException("Actividad no creada." + e.getMessage());
         }
