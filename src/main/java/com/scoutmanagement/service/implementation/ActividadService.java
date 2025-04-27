@@ -20,9 +20,6 @@ public class ActividadService implements IActividadService {
     @Autowired
     private ActividadRepository actividadRepository;
 
-    @Autowired
-    private IAsistenciaService asistenciaService;
-
     @Override
     public Optional<Actividad> findById(Long id) {
         return actividadRepository.findById(id);

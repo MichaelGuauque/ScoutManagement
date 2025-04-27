@@ -5,10 +5,8 @@ import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
 import com.scoutmanagement.persistence.repository.AsistenciaRepository;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
-import com.scoutmanagement.service.implementation.AsistenciaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -23,12 +21,6 @@ class AsistenciaServiceTest {
 
     @Mock
     private AsistenciaRepository asistenciaRepository;
-
-    @Mock
-    private ActividadRepository actividadRepository;
-
-    @Mock
-    private PersonaRepository personaRepository;
 
     @InjectMocks
     private AsistenciaService asistenciaService;
