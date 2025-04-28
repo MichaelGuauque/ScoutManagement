@@ -31,7 +31,7 @@ public class EtapaService implements IEtapaService {
     public void save(EtapaDTO etapaDTO) {
         try {
             etapaRepository.save(cambiarEtapaDTO(etapaDTO));
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ServiceException("No se pudo guardar la etapa: " + e.getMessage());
         }
     }
@@ -56,7 +56,7 @@ public class EtapaService implements IEtapaService {
 
     @Override
     public List<Etapa> findAllByRama(Rama rama) {
-        try{
+        try {
             return (List<Etapa>) etapaRepository.findAllByRamaOrderByOrdenAsc(rama);
 
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class EtapaService implements IEtapaService {
 
     @Override
     public Etapa cambiarEtapaDTO(EtapaDTO etapaDTO) {
-        try{
+        try {
             return new Etapa(
                     null,
                     etapaDTO.nombre(),

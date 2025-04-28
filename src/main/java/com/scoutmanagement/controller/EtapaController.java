@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import static com.scoutmanagement.util.constants.AppConstants.*;
 
 import java.util.*;
@@ -43,11 +44,11 @@ public class EtapaController {
     private final String ID_USUARIO = "idUsuario";
 
     @GetMapping()
-    public String progresiones (@RequestParam(name = "etapaSeleccionada", required = false) String etapaSeleccionada, Model model, HttpSession session) {
+    public String progresiones(@RequestParam(name = "etapaSeleccionada", required = false) String etapaSeleccionada, Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
 
-            Persona sesionDelJefe = adultoSession(ID_USUARIO,session);
+            Persona sesionDelJefe = adultoSession(ID_USUARIO, session);
             model.addAttribute("persona", sesionDelJefe);
             logger.info("Persona: " + sesionDelJefe.getPrimerNombre() + " " + sesionDelJefe.getPrimerApellido());
 
@@ -91,7 +92,7 @@ public class EtapaController {
 
     @PostMapping("/registrar")
     public String registrarEtapa(HttpSession session, @ModelAttribute @Valid EtapaDTO etapaDTO) {
-        logger.info("Etapa ",etapaDTO);
+        logger.info("Etapa ", etapaDTO);
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             etapaService.save(etapaDTO);

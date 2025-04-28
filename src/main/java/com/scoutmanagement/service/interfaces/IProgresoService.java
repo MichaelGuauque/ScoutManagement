@@ -9,8 +9,12 @@ import java.util.Optional;
 public interface IProgresoService {
 
     Optional<Progreso> findById(long id);
+
     void save(Progreso progreso);
+
     void update(Progreso progreso);
+
     List<Progreso> findAll();
+
     List<Progreso> findAllByPersona(Persona persona);
 }
