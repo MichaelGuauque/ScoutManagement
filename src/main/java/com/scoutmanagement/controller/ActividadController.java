@@ -17,11 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/actividades")
@@ -38,13 +35,14 @@ public class ActividadController {
 
     private final String ID_USUARIO = "idUsuario";
 
-    @GetMapping()
+    @GetMapping
     public String actividades(Model model, HttpSession session,
                               @RequestParam(required = false, defaultValue = "proximas") String tab,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "4") int size,
                               @RequestParam(value = "asistenciaActividadId", required = false) Long asistenciaActividadId,
-                              @RequestParam(required = false) Boolean cancelado) {
+                              @RequestParam(required = false) Boolean cancelado,
+                              @RequestParam(required = false, defaultValue = "") Rama ramaSeleccionada) {
 
         if (Boolean.TRUE.equals(cancelado)) {
             model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
@@ -52,41 +50,20 @@ public class ActividadController {
         }
 
         Object rol = session.getAttribute("rol");
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+        if (Rol.ADULTO.name().equals(rol)) {
 
-            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", sesionDelJefe);
+            Persona jefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", jefe);
 
-            Rama rama = sesionDelJefe.getRama();
-
-            List<Actividad> listaActividades = actividadService.findAllActividadesOrdenadas();
+            List<Actividad> actividades = actividadService.findAllActividadesOrdenadas();
             LocalDate hoy = LocalDate.now();
-            List<Actividad> actividadesFiltradas;
 
-            actividadesFiltradas = listaActividades.stream()
-                    .filter(actividad -> actividad.getRama().equals(rama))
-                    .filter(actividad -> tab.equals("pasadas") ? actividad.getFecha().isBefore(hoy) : !actividad.getFecha().isBefore(hoy))
-                    .sorted(tab.equals("pasadas") ? Comparator.comparing(Actividad::getFecha).reversed() : Comparator.comparing(Actividad::getFecha))
-                    .collect(Collectors.toList());
-
+            List<Actividad> actividadesFiltradas = actividadService.filtrarYOrdenarActividadesPorTab(actividades, ramaSeleccionada, tab, hoy);
             int totalActividades = actividadesFiltradas.size();
-            int totalPaginas = (int) Math.ceil((double) totalActividades / size);
-            if (totalPaginas == 0) {
-                totalPaginas = 1;
-            }
+            int totalPaginas = Math.max((int) Math.ceil((double) totalActividades / size), 1);
 
-            int paginaActual = page;
-            List<Actividad> paginaActividades = actividadesFiltradas.stream()
-                    .skip((long) page * size)
-                    .limit(size)
-                    .collect(Collectors.toList());
-
-            Map<Long, Boolean> actividadEsMasProxima = new HashMap<>();
-            if (tab.equals("proximas")) {
-                paginaActividades.stream()
-                        .min(Comparator.comparing(actividad -> actividad.getFecha()))
-                        .ifPresent(actividad -> actividadEsMasProxima.put(actividad.getId(), true));
-            }
+            List<Actividad> paginaActividades = actividadService.paginarActividades(actividadesFiltradas, page, size);
+            Map<Long, Boolean> actividadEsMasProxima = actividadService.encontrarActividadMasProxima(paginaActividades, page, tab);
 
             if (asistenciaActividadId != null) {
                 List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
@@ -96,9 +73,11 @@ public class ActividadController {
 
             model.addAttribute("actividades", paginaActividades);
             model.addAttribute("actividadEsMasProxima", actividadEsMasProxima);
-            model.addAttribute("paginaActual", paginaActual);
+            model.addAttribute("paginaActual", page);
             model.addAttribute("totalPaginas", totalPaginas);
             model.addAttribute("tabSeleccionada", tab);
+            model.addAttribute("ramaSeleccionada", ramaSeleccionada);
+            model.addAttribute("ramas", Rama.values());
 
             return "actividades/vistaActividadesAdmin";
         }
@@ -106,8 +85,8 @@ public class ActividadController {
             return VISTA_LOGIN;
         }
         return VISTA_ERROR;
-
     }
+
 
 
     @GetMapping("/crear")
