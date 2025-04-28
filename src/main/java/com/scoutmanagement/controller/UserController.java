@@ -67,8 +67,8 @@ public class UserController {
             }
         }catch (ServiceException e) {
             logger.error("Error al acceder al sistema: {}", e.getMessage());
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
-            redirectAttributes.addFlashAttribute("type", "error");
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
         }
         return VISTA_LOGIN;
     }
@@ -102,8 +102,8 @@ public class UserController {
             boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
             UserEntity user = userService.cambioUserDTO(dto.getUsuario());
             if (documentoExiste) {
-                redirectAttributes.addFlashAttribute("message", "El número de documento ya está registrado.");
-                redirectAttributes.addFlashAttribute("type", "error");
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "El número de documento ya está registrado.");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 redirectAttributes.addFlashAttribute("errorPersona", true);
                 redirectAttributes.addFlashAttribute("usuario", user);
                 redirectAttributes.addFlashAttribute("persona", dto);
@@ -111,8 +111,8 @@ public class UserController {
             }
             boolean correoExiste = userService.existsByUsername(user.getUsername());
             if(correoExiste){
-                redirectAttributes.addFlashAttribute("message", "El correo electrónico ya está registrado.");
-                redirectAttributes.addFlashAttribute("type", "error");
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "El correo electrónico ya está registrado.");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 redirectAttributes.addFlashAttribute("errorCorreo", true);
                 redirectAttributes.addFlashAttribute("usuario", user);
                 redirectAttributes.addFlashAttribute("persona", dto);
@@ -122,16 +122,16 @@ public class UserController {
             userService.save(user);
             personaService.save(dto,user);
 
-            redirectAttributes.addFlashAttribute("message", "Miembro guardado");
-            redirectAttributes.addFlashAttribute("type", "success");
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro guardado");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
             return VISTA_REGISTRAR;
         }
             return VISTA_ERROR;
 
 
     } catch (ServiceException e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
-            redirectAttributes.addFlashAttribute("type", "error");
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
             return VISTA_REGISTRAR;
 
         }

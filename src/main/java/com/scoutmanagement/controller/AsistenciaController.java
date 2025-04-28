@@ -39,8 +39,8 @@ public class AsistenciaController {
             try {
                 Optional<Actividad> actividadOptional = actividadService.findById(actividadId);
                 if (!actividadOptional.isPresent()) {
-                    model.addAttribute("message", "La actividad solicitada no existe");
-                    model.addAttribute("type", "error");
+                    model.addAttribute(EXCEPTION_MESSAGE, "La actividad solicitada no existe");
+                    model.addAttribute("type", EXCEPTION_ERROR);
                     return VISTA_ERROR;
                 }
 
@@ -56,16 +56,16 @@ public class AsistenciaController {
 
                 return "actividades/modalAsistencia";
             } catch (ServiceException e) {
-                model.addAttribute("message", e.getMessage());
-                model.addAttribute("type", "error");
+                model.addAttribute(EXCEPTION_MESSAGE, e.getMessage());
+                model.addAttribute("type", EXCEPTION_ERROR);
                 return VISTA_ERROR;
             }
         }
         if (rol == null) {
             return VISTA_LOGIN;
         }
-        model.addAttribute("message", "No tiene permisos para acceder a esta función");
-        model.addAttribute("type", "error");
+        model.addAttribute(EXCEPTION_MESSAGE, "No tiene permisos para acceder a esta función");
+        model.addAttribute("type", EXCEPTION_ERROR);
         return VISTA_ERROR;
     }
 
@@ -81,9 +81,9 @@ public class AsistenciaController {
             try {
                 Optional<Actividad> actividadOptional = actividadService.findById(actividadId);
                 if (!actividadOptional.isPresent()) {
-                    redirectAttributes.addFlashAttribute("message", "La actividad solicitada no existe");
-                    redirectAttributes.addFlashAttribute("type", "error");
-                    return "redirect:/actividades?tab=" + tabSeleccionada;
+                    redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "La actividad solicitada no existe");
+                    redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+                    return VISTA_ACTIVIDADES_TAB + tabSeleccionada;
                 }
 
                 Actividad actividad = actividadOptional.get();
@@ -99,21 +99,21 @@ public class AsistenciaController {
 
                 asistenciaService.registrarAsistenciasMasivas(actividadId, asistenciasPorMiembro);
 
-                redirectAttributes.addFlashAttribute("message", "Registro de asistencias guardado correctamente");
-                redirectAttributes.addFlashAttribute("type", "success");
-                return "redirect:/actividades?tab=" + tabSeleccionada;
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Registro de asistencias guardado correctamente");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+                return VISTA_ACTIVIDADES_TAB + tabSeleccionada;
             } catch (ServiceException e) {
-                redirectAttributes.addFlashAttribute("message", e.getMessage());
-                redirectAttributes.addFlashAttribute("type", "error");
-                return "redirect:/actividades?tab=" + tabSeleccionada;
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+                return VISTA_ACTIVIDADES_TAB + tabSeleccionada;
             }
         }
         if (rol == null) {
             return VISTA_LOGIN;
         }
-        redirectAttributes.addFlashAttribute("message", "No tiene permisos para acceder a esta función");
-        redirectAttributes.addFlashAttribute("type", "error");
-        return "redirect:/actividades?tab=" + tabSeleccionada;
+        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "No tiene permisos para acceder a esta función");
+        redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+        return VISTA_ACTIVIDADES_TAB + tabSeleccionada;
     }
 
     @GetMapping
@@ -144,16 +144,16 @@ public class AsistenciaController {
 
                 return "actividades/vistaActividadesAdmin";
             } catch (ServiceException e) {
-                model.addAttribute("message", e.getMessage());
-                model.addAttribute("type", "error");
+                model.addAttribute(EXCEPTION_MESSAGE, e.getMessage());
+                model.addAttribute("type", EXCEPTION_ERROR);
                 return "actividades/vistaActividadesAdmin";
             }
         }
         if (rol == null) {
             return VISTA_LOGIN;
         }
-        model.addAttribute("message", "No tiene permisos para acceder a esta función");
-        model.addAttribute("type", "error");
+        model.addAttribute(EXCEPTION_MESSAGE, "No tiene permisos para acceder a esta función");
+        model.addAttribute("type", EXCEPTION_ERROR);
         return VISTA_ERROR;
     }
 }

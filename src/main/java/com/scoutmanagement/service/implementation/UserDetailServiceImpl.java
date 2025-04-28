@@ -8,8 +8,6 @@ import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -33,8 +31,6 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
     private EmailService emailService;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
-    private static final Logger logger = LoggerFactory.getLogger(UserDetailServiceImpl.class);
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

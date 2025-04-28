@@ -2,6 +2,7 @@ package com.scoutmanagement.controller;
 
 
 import com.scoutmanagement.persistence.model.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import static com.scoutmanagement.util.constants.AppConstants.*;
 import org.springframework.stereotype.Controller;
@@ -17,37 +18,35 @@ public class PersonaController {
 
 
 
-    @GetMapping()
-    public String miembros(Model model, HttpSession session,@RequestParam(required = false) Boolean cancelado) {
+    @GetMapping({ "", "/jefes" })
+    public String miembrosYJefes(Model model, HttpSession session,
+                                 @RequestParam(required = false) Boolean cancelado,
+                                 HttpServletRequest request) {
         Object rol = session.getAttribute("rol");
-        session.setAttribute("miembro","miembro");
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            if (Boolean.TRUE.equals(cancelado)) {
-                model.addAttribute("message", "Registro cancelado.");
-                model.addAttribute("type", "info");
-            }
-            return "miembros/consultarMiembros";
-        }
-        if (rol == null) {
-            return VISTA_LOGIN;
-        }
-        return VISTA_ERROR;
-    }
+        String path = request.getRequestURI(); //
 
-    @GetMapping("/jefes")
-    public String jefes(Model model, HttpSession session,@RequestParam(required = false) Boolean cancelado) {
-        Object rol = session.getAttribute("rol");
-        session.setAttribute("miembro", "jefe");
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            if (Boolean.TRUE.equals(cancelado)) {
-                model.addAttribute("message", "Registro cancelado.");
-                model.addAttribute("type", "info");
-            }
-            return "miembros/consultarJefes";
-        }
         if (rol == null) {
             return VISTA_LOGIN;
         }
+
+        if (rol.equals(Rol.ADULTO.name())) {
+            if (path.endsWith("/jefes")) {
+                session.setAttribute("miembro", "jefe");
+                if (Boolean.TRUE.equals(cancelado)) {
+                    model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
+                    model.addAttribute("type", EXCEPTION_INFO);
+                }
+                return "miembros/consultarJefes";
+            } else {
+                session.setAttribute("miembro", "miembro");
+                if (Boolean.TRUE.equals(cancelado)) {
+                    model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
+                    model.addAttribute("type", EXCEPTION_INFO);
+                }
+                return "miembros/consultarMiembros";
+            }
+        }
+
         return VISTA_ERROR;
     }
 
