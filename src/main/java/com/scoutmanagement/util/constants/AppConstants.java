@@ -10,6 +10,7 @@ public class AppConstants {
     public static final String EXCEPTION_INFO = "info";
     public static final String EXCEPTION_SUCCESS = "success";
     public static final String EXCEPTION_ERROR = "error";
+    public static final String VISTA_PROGRESIONES = "redirect:/progresiones";
 
     private AppConstants() {
     }
