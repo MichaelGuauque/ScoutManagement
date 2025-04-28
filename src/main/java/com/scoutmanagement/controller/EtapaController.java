@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import static com.scoutmanagement.util.constants.AppConstants.*;
 
 import java.util.*;
 
@@ -72,7 +73,7 @@ public class EtapaController {
         if (rol == null) {
             return "redirect:/";
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
 
@@ -85,7 +86,7 @@ public class EtapaController {
         if (rol == null) {
             return null; //poner vista
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @PostMapping("/registrar")
@@ -99,7 +100,7 @@ public class EtapaController {
         if (rol == null) {
             return null; //poner vista
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
 

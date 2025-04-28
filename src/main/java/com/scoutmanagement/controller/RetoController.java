@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.scoutmanagement.util.constants.AppConstants.*;
+
 @Controller
 @RequestMapping("/retos")
 public class RetoController {
@@ -46,12 +48,12 @@ public class RetoController {
             List<Etapa> etapas = etapaService.findAllByRama(rama);
             model.addAttribute("etapas", etapas);
 
-            return "redirect:/progresiones";
+            return VISTA_PROGRESIONES;
         }
         if (rol == null) {
-            return "redirect:/";
+            return VISTA_LOGIN;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
     @PostMapping("/registrar")
@@ -60,12 +62,12 @@ public class RetoController {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             retoService.save(retoDTO);
-            return "redirect:/progresiones"; //poner vista
+            return VISTA_PROGRESIONES;
         }
         if (rol == null) {
-            return null; //poner vista
+            return null;
         }
-        return "error/pageNotFound";
+        return VISTA_ERROR;
     }
 
 
