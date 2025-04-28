@@ -57,19 +57,17 @@ public class ActividadController {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             model.addAttribute("persona", sesionDelJefe);
 
+            Rama rama = sesionDelJefe.getRama();
+
             List<Actividad> listaActividades = actividadService.findAllActividadesOrdenadas();
             LocalDate hoy = LocalDate.now();
             List<Actividad> actividadesFiltradas;
 
-            if (tab.equals("pasadas")) {
-                actividadesFiltradas = listaActividades.stream()
-                        .filter(actividad -> actividad.getFecha().isBefore(hoy))
-                        .collect(Collectors.toList());
-            } else {
-                actividadesFiltradas = listaActividades.stream()
-                        .filter(actividad -> !actividad.getFecha().isBefore(hoy)) // hoy o después
-                        .collect(Collectors.toList());
-            }
+            actividadesFiltradas = listaActividades.stream()
+                    .filter(actividad -> actividad.getRama().equals(rama))
+                    .filter(actividad -> tab.equals("pasadas") ? actividad.getFecha().isBefore(hoy) : !actividad.getFecha().isBefore(hoy))
+                    .sorted(tab.equals("pasadas") ? Comparator.comparing(Actividad::getFecha).reversed() : Comparator.comparing(Actividad::getFecha))
+                    .collect(Collectors.toList());
 
             int totalActividades = actividadesFiltradas.size();
             int totalPaginas = (int) Math.ceil((double) totalActividades / size);
