@@ -1,6 +1,6 @@
 package com.scoutmanagement.service.implementation;
 
-import com.scoutmanagement.DTO.RetoDTO;
+import com.scoutmanagement.dto.RetoDTO;
 import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.EtapaRepository;

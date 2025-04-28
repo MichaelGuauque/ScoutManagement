@@ -1,6 +1,6 @@
 package com.scoutmanagement.service.interfaces;
 
-import com.scoutmanagement.DTO.EtapaDTO;
+import com.scoutmanagement.dto.EtapaDTO;
 import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Rama;
 
