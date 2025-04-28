@@ -43,7 +43,7 @@
         <div id="retosSection" class="controls">
             <div class="tabs">
                 <a th:each="etapa : ${etapas}"
-                   th:href="@{'/progresiones?etapaSeleccionada=' + ${etapa.nombre} + '#retosSection'}"
+                   th:href="@{'/progresiones?etapaSeleccionada=' + ${etapa.nombre}}"
                    th:classappend="${etapa.nombre == etapaSeleccionada} ? 'active'" class="tab-button">
                     <span th:text="${etapa.nombre}"></span>
                 </a>
@@ -60,9 +60,9 @@
             <table>
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Descripción</th>
-                    <th>Acciones</th>
+                    <th style="text-align: center">#</th>
+                    <th style="text-align: center">Descripción</th>
+                    <th style="text-align: center">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -94,6 +94,14 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="pagination-container">
+            <div class="pagination">
+                <a class="pagination-btn" id="prevPage" style="display: none;">Anterior</a>
+                <span class="pagination-info" id="pageInfo"></span>
+                <a class="pagination-btn" id="nextPage" style="display: none;">Siguiente</a>
+            </div>
         </div>
     </div>
 
@@ -202,6 +210,58 @@
     </div>
 
     <div th:include="admin/template_admin.html::footer"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const rowsPerPage = 10;
+            const table = document.querySelector('table tbody');
+            const rows = Array.from(table.querySelectorAll('tr'));
+            const prevButton = document.getElementById('prevPage');
+            const nextButton = document.getElementById('nextPage');
+            const pageInfo = document.getElementById('pageInfo');
+            const paginationContainer = document.querySelector('.pagination-container'); // Agregamos
+            const retosSection = document.getElementById('retosSection');
+            let currentPage = 1;
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+            function renderTablePage(page) {
+                table.innerHTML = '';
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                rows.slice(start, end).forEach(row => {
+                    table.appendChild(row);
+                });
+
+                // Mostrar solo si hay más de una página
+                if (totalPages > 1) {
+                    paginationContainer.style.display = 'flex';
+                    pageInfo.textContent = `Página ${page} de ${totalPages}`;
+                    prevButton.style.display = page > 1 ? 'inline-block' : 'none';
+                    nextButton.style.display = page < totalPages ? 'inline-block' : 'none';
+                } else {
+                    paginationContainer.style.display = 'none'; // Ocultamos todo si solo hay una página
+                }
+            }
+
+            prevButton.addEventListener('click', function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTablePage(currentPage);
+                    retosSection.scrollIntoView({behavior: 'smooth'});
+                }
+            });
+
+            nextButton.addEventListener('click', function () {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTablePage(currentPage);
+                    retosSection.scrollIntoView({behavior: 'smooth'});
+                }
+            });
+
+            renderTablePage(currentPage);
+        });
+    </script>
 
 
 </main>
