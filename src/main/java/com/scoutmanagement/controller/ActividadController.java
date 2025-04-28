@@ -42,8 +42,8 @@ public class ActividadController {
                               @RequestParam(required = false) Boolean cancelado) {
 
         if (Boolean.TRUE.equals(cancelado)) {
-            model.addAttribute("message", "Acción cancelada.");
-            model.addAttribute("type", "info");
+            model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
+            model.addAttribute("type", EXCEPTION_INFO);
         }
 
         Object rol = session.getAttribute("rol");
@@ -126,12 +126,12 @@ public class ActividadController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             try {
                 actividadService.crearActividad(actividadDTO);
-                redirectAttributes.addFlashAttribute("message", "Actividad creada con éxito.");
-                redirectAttributes.addFlashAttribute("type", "success");
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Actividad creada con éxito.");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
                 return "redirect:/actividades";
             } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("message", e.getMessage());
-                redirectAttributes.addFlashAttribute("type", "error");
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 return "redirect:/actividades";
 
             }
