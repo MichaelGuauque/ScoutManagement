@@ -27,24 +27,24 @@
 
 <div class="sidebar" id="sidebar">
     <div class="logo-contenedor">
-        <img src="img/logoApli.svg" alt="Scout Management" class="logo">
+        <img th:src="@{/img/logoApli.svg}" alt="Scout Management" class="logo">
     </div>
 
     <div class="perfil-contenedor">
-        <img src="img/perfil.svg" alt="Perfil" class="perfil">
+        <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
         <div class="perfil-info">
             <p class="nombre-perfil">Miguel Andres M...</p>
             <p class="cargo-perfil">Adulto - Jefe Manada</p>
         </div>
         <div class="perfil-flecha">
-            <img class="flecha-perfil" src="img/flechita.svg" alt="Desplegar">
+            <img class="flecha-perfil" th:src="@{/img/flechita.svg}" alt="Desplegar">
         </div>
 
         <!-- Menú desplegable del perfil -->
         <div class="perfil-menu" id="perfilMenu">
             <ul>
                 <li class="nav-link">
-                    <img src="img/sesion.svg" alt="Ver Perfil" class="perfil-menu-icon">
+                    <img th:src="@{/img/sesion.svg}" alt="Ver Perfil" class="perfil-menu-icon">
                     <span>Ver Perfil</span>
                 </li>
                 <li class="nav-link">
@@ -61,21 +61,23 @@
         <nav class="menu">
             <ul>
                 <li class="menu-item">
-                    <div class="main-button nav-link">
-                        <img src="img/Casa.svg" alt="Inicio">
+                    <a th:href="@{/home-admin}" class="main-button nav-link" style="text-decoration: none;">
+                        <img th:src="@{/img/Casa.svg}" alt="Inicio">
                         <span>Inicio</span>
-                    </div>
+                    </a>
                 </li>
+
 
                 <li class="menu-item">
                     <div class="main-button">
-                        <img src="img/Calendario.svg" alt="Actividades">
+                        <img th:src="@{/img/Calendario.svg}" alt="Actividades">
                         <span>Actividades</span>
-                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
                     </div>
                     <ul class="submenu">
                         <li class="nav-link">
-                            <a th:href="@{/templates/actividades}">
+                            <a th:href="@{/actividades}">
                                 <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar
                                 Actividades
                             </a>
@@ -91,37 +93,39 @@
 
                 <li class="menu-item">
                     <div class="main-button">
-                        <img src="img/grafico.svg" alt="Progresiones">
+                        <img th:src="@{/img/grafico.svg}" alt="Progresiones">
                         <span>Progresiones</span>
-                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
                     </div>
                     <ul class="submenu">
-                        <li class="nav-link"><img src="img/retos.svg" alt="Consultar" class="submenu-icon">Gestionar
+                        <li class="nav-link"><img th:src="@{/img/retos.svg}" alt="Consultar" class="submenu-icon">Gestionar
                             Retos
                         </li>
-                        <li class="nav-link"><img src="img/retos(miembros).svg" alt="Agregar" class="submenu-icon">Progresion
-                            Miembros
+                        <li class="nav-link"><img th:src="@{/img/retos(miembros).svg}" alt="Agregar"
+                                                  class="submenu-icon">Progresion Miembros
                         </li>
                     </ul>
                 </li>
 
                 <li class="menu-item">
                     <div class="main-button">
-                        <img src="img/usuarios.svg" alt="Miembros">
+                        <img th:src="@{/img/usuarios.svg}" alt="Miembros">
                         <span>Miembros</span>
-                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
                     </div>
                     <ul class="submenu">
                         <li class="nav-link">
-                            <a th:href="@{/templates/miembros}">
-                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar" class="submenu-icon">Consultar
-                                Miembros
+                            <a th:href="@{/miembros}">
+                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
+                                     class="submenu-icon">Consultar Miembros
                             </a>
                         </li>
                         <li class="nav-link">
                             <a th:href="@{/miembros/jefes}">
-                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar" class="submenu-icon">Consultar
-                                Jefes
+                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
+                                     class="submenu-icon">Consultar Jefes
                             </a>
                         </li>
                     </ul>
@@ -133,7 +137,7 @@
     <div class="linea-divisoria"></div>
 
     <div class="configuracion nav-link">
-        <img src="img/tuerca.svg" alt="Configuración">
+        <img th:src="@{/img/tuerca.svg}" alt="Configuración">
         <span>Configuración de Cuenta</span>
     </div>
 </div>

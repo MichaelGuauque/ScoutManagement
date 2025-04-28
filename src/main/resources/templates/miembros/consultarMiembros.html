@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actividades</title>
+    <title>Consultar Miembros</title>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/actividadesStyle.css}">
@@ -60,11 +60,12 @@
         <nav class="menu">
             <ul>
                 <li class="menu-item">
-                    <div class="main-button nav-link">
+                    <a th:href="@{/home-admin}" class="main-button nav-link" style="text-decoration: none;">
                         <img th:src="@{/img/Casa.svg}" alt="Inicio">
                         <span>Inicio</span>
-                    </div>
+                    </a>
                 </li>
+
 
                 <li class="menu-item">
                     <div class="main-button">
@@ -116,14 +117,14 @@
                     <ul class="submenu">
                         <li class="nav-link">
                             <a th:href="@{/miembros}">
-                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar" class="submenu-icon">Consultar
-                                Miembros
+                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
+                                     class="submenu-icon">Consultar Miembros
                             </a>
                         </li>
                         <li class="nav-link">
                             <a th:href="@{/miembros/jefes}">
-                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar" class="submenu-icon">Consultar
-                                Jefes
+                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
+                                     class="submenu-icon">Consultar Jefes
                             </a>
                         </li>
                     </ul>
