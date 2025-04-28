@@ -5,6 +5,7 @@ import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -109,5 +110,80 @@ class RetoServiceTest {
         Assertions.assertEquals(3, reto.getNumero());
         Assertions.assertEquals("Descripción DTO", reto.getDescripcion());
         Assertions.assertEquals(etapa, reto.getEtapa());
+    }
+
+    @Test
+    void testFindByIdThrowsException() {
+        Mockito.when(retoRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.findById(1L);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Reto no encontrado"));
+    }
+
+    @Test
+    void testSaveThrowsException() {
+        RetoDTO dto = new RetoDTO(1, "Etapa 1", "Descripción con error");
+
+        // Hacer que etapaRepository falle dentro de cambiarRetoDTO
+        Mockito.when(etapaRepository.findByNombre("Etapa 1")).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.save(dto);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se pudo guardar el reto"));
+    }
+
+    @Test
+    void testUpdateThrowsException() {
+        Reto reto = new Reto(2L, 2, "Error Update", new Etapa());
+
+        Mockito.doThrow(new RuntimeException("DB error")).when(retoRepository).save(reto);
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.update(reto);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se pudo actualizar el reto"));
+    }
+
+    @Test
+    void testFindAllThrowsException() {
+        Mockito.when(retoRepository.findAll()).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.findAll();
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se encontraron los datos"));
+    }
+
+    @Test
+    void testFindAllRetosEtapaThrowsException() {
+        Etapa etapa = new Etapa();
+
+        Mockito.when(retoRepository.findAllRetosByEtapa(etapa)).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.findAllRetosEtapa(etapa);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se encontraron los retos por etapa"));
+    }
+
+    @Test
+    void testCambiarRetoDTOThrowsException() {
+        RetoDTO dto = new RetoDTO(5, "EtapaError", "Descripción");
+
+        Mockito.when(etapaRepository.findByNombre("EtapaError")).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.cambiarRetoDTO(dto);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se puedo convertir el dto"));
     }
 }

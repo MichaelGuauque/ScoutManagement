@@ -4,6 +4,7 @@ import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Obtencion;
 import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.repository.ObtencionRepository;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -91,5 +92,70 @@ class ObtencionServiceTest {
         List<Obtencion> result = obtencionService.findAll();
 
         Assertions.assertEquals(2, result.size());
+    }
+
+    @Test
+    void testFindByIdThrowsException() {
+        Mockito.when(obtencionRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            obtencionService.findById(1L);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Obtención no encontrada"));
+    }
+
+    @Test
+    void testSaveThrowsException() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        Obtencion obtencion = new Obtencion(null, true, LocalDate.now(), persona, etapa);
+
+        Mockito.doThrow(new RuntimeException("DB error")).when(obtencionRepository).save(obtencion);
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            obtencionService.save(obtencion);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se pudo guardar"));
+    }
+
+    @Test
+    void testUpdateThrowsException() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        Obtencion obtencion = new Obtencion(2L, false, LocalDate.now(), persona, etapa);
+
+        Mockito.doThrow(new RuntimeException("DB error")).when(obtencionRepository).save(obtencion);
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            obtencionService.update(obtencion);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se pudo actualizar"));
+    }
+
+    @Test
+    void testFindAllByPersonaThrowsException() {
+        Persona persona = new Persona();
+
+        Mockito.when(obtencionRepository.findAllByPersona(persona)).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            obtencionService.findAllByPersona(persona);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se encontraron los datos de la persona"));
+    }
+
+    @Test
+    void testFindAllThrowsException() {
+        Mockito.when(obtencionRepository.findAll()).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            obtencionService.findAll();
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se encontraron los datos"));
     }
 }
