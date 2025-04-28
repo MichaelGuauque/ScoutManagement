@@ -6,6 +6,7 @@ import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.service.interfaces.IRetoService;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,37 +23,60 @@ public class RetoService implements IRetoService {
 
     @Override
     public Optional<Reto> findById(long id) {
-        return retoRepository.findById(id);
+        try {
+            return retoRepository.findById(id);
+        } catch (Exception e) {
+            throw new ServiceException("Reto no encontrado: " + e.getMessage());
+        }
     }
 
     @Override
     public void save(RetoDTO retoDTO) {
-        retoRepository.save(cambiarRetoDTO(retoDTO));
+        try {
+            retoRepository.save(cambiarRetoDTO(retoDTO));
+        } catch (Exception e) {
+            throw new ServiceException("No se pudo guardar el reto: " + e.getMessage());
+        }
     }
 
     @Override
     public void update(Reto reto) {
-        retoRepository.save(reto);
+        try {
+            retoRepository.save(reto);
+        } catch (Exception e) {
+            throw new ServiceException("No se pudo actualizar el reto: " + e.getMessage());
+        }
+
     }
 
     @Override
     public List<Reto> findAll() {
-        return
-                (List<Reto>) retoRepository.findAll();
+        try {
+            return (List<Reto>) retoRepository.findAll();
+        } catch (Exception e) {
+            throw new ServiceException("No se encontraron los datos: " + e.getMessage());
+        }
     }
 
     @Override
     public List<Reto> findAllRetosEtapa(Etapa etapa) {
-
-        return (List<Reto>) retoRepository.findAllRetosByEtapa(etapa);
+        try {
+            return (List<Reto>) retoRepository.findAllRetosByEtapa(etapa);
+        } catch (Exception e) {
+            throw new ServiceException("No se encontraron los retos por etapa: " + e.getMessage());
+        }
     }
 
     @Override
     public Reto cambiarRetoDTO(RetoDTO retoDTO) {
-        Etapa etapa = etapaRepository.findByNombre(retoDTO.etapa());
-        return new Reto(null,
-                retoDTO.numero(),
-                retoDTO.descripcion(),
-                etapa);
+        try {
+            return new Reto(null,
+                    retoDTO.numero(),
+                    retoDTO.descripcion(),
+                    etapaRepository.findByNombre(retoDTO.etapa()));
+        } catch (Exception e) {
+            throw new ServiceException("No se puedo convertir el dto: " + e.getMessage());
+        }
+
     }
 }
