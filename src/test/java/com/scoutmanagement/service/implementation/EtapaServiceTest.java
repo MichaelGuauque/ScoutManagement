@@ -4,6 +4,7 @@ import com.scoutmanagement.dto.EtapaDTO;
 import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
+import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -99,5 +100,63 @@ class EtapaServiceTest {
         Assertions.assertEquals("Nombre", result.getNombre());
         Assertions.assertEquals(5, result.getOrden());
         Assertions.assertEquals(Rama.MANADA, result.getRama());
+    }
+
+    @Test
+    void testFindByIdThrowsException() {
+        Mockito.when(etapaRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            etapaService.findById(1L);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Etapa no encontrada"));
+    }
+
+    @Test
+    void testSaveFromDTOThrowsException() {
+        EtapaDTO etapaDTO = new EtapaDTO("Etapa Falla", 3, Rama.CLAN);
+        Mockito.when(etapaRepository.save(Mockito.any(Etapa.class))).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            etapaService.save(etapaDTO);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se pudo guardar"));
+    }
+
+    @Test
+    void testUpdateThrowsException() {
+        Etapa etapa = new Etapa(3L, "Etapa Update", 4, Rama.COMUNIDAD);
+        Mockito.when(etapaRepository.save(etapa)).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            etapaService.update(etapa);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se pudo actualizar"));
+    }
+
+    @Test
+    void testFindAllThrowsException() {
+        Mockito.when(etapaRepository.findAll()).thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            etapaService.findAll();
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se encontraron los datos"));
+    }
+
+    @Test
+    void testFindAllByRamaThrowsException() {
+        Mockito.when(etapaRepository.findAllByRamaOrderByOrdenAsc(Rama.TROPA))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            etapaService.findAllByRama(Rama.TROPA);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("No se encontraron los datos de la rama"));
     }
 }

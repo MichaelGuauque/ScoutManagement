@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Joven</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/homeAdmin.css}">
+
+</head>
+<body>
+<!-- Botón hamburguesa para móviles -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</button>
+
+<!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="sidebar" id="sidebar">
+    <div class="logo-contenedor">
+        <img th:src="@{/img/logoApli.svg}" alt="Scout Management" class="logo">
+    </div>
+
+    <div class="perfil-contenedor">
+        <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
+        <div class="perfil-info">
+            <p class="nombre-perfil">Miguel Andres M...</p>
+            <p class="cargo-perfil">Joven - Lobato</p>
+        </div>
+        <div class="perfil-flecha">
+            <img class="flecha-perfil" th:src="@{/img/flechita.svg}" alt="Desplegar">
+        </div>
+
+        <!-- Menú desplegable del perfil -->
+        <div class="perfil-menu" id="perfilMenu">
+            <ul>
+                <li class="nav-link">
+                    <img th:src="@{/img/sesion.svg}" alt="Ver Perfil" class="perfil-menu-icon">
+                    <span>Ver Perfil</span>
+                </li>
+                <li class="nav-link">
+                    <img th:src="@{/img/cierreSesion.svg}" alt="Cerrar Sesión" class="perfil-menu-icon">
+                    <a class="cerrar-sesion" th:href="@{/cerrar}">Cerrar Sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="linea-divisoria"></div>
+
+    <div class="contenido-central">
+        <nav class="menu">
+            <ul>
+                <li class="menu-item">
+                    <a th:href="@{/home-admin}" class="main-button nav-link" style="text-decoration: none;">
+                        <img th:src="@{/img/Casa.svg}" alt="Inicio">
+                        <span>Inicio</span>
+                    </a>
+                </li>
+
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img th:src="@{/img/Calendario.svg}" alt="Actividades">
+                        <span>Actividades</span>
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link">
+                            <a th:href="@{/actividades}">
+                                <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar
+                                Actividades
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a th:href="@{/actividades/crear}">
+                                <img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear
+                                Actividad
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img th:src="@{/img/grafico.svg}" alt="Progresiones">
+                        <span>Progresiones</span>
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link"><img th:src="@{/img/retos.svg}" alt="Consultar" class="submenu-icon">Gestionar
+                            Retos
+                        </li>
+                        <li class="nav-link"><img th:src="@{/img/retos(miembros).svg}" alt="Agregar"
+                                                  class="submenu-icon">Progresion Miembros
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img th:src="@{/img/usuarios.svg}" alt="Miembros">
+                        <span>Miembros</span>
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link">
+                            <a th:href="@{/miembros}">
+                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
+                                     class="submenu-icon">Consultar Miembros
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a th:href="@{/miembros/jefes}">
+                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
+                                     class="submenu-icon">Consultar Jefes
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="linea-divisoria"></div>
+
+    <div class="configuracion nav-link">
+        <img th:src="@{/img/tuerca.svg}" alt="Configuración">
+        <span>Configuración de Cuenta</span>
+    </div>
+</div>
+
+<!-- Contenido principal -->
+<main>
+    <!-- Aquí va el contenido de la página -->
+
+    <!-- Aquí va el contenido de la página -->
+    <div class="container">
+        <!-- Header Image -->
+        <div class="header-image">
+            <img th:src="@{/img/FotoScout.png}" class="foto-scout" alt="Foto Scout">
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <!-- Feature Box 1 -->
+            <div class="feature-box">
+                <h3 class="feature-title">Gestiona la Progresión</h3>
+                <p class="feature-description">Revisa y modifica los últimos avances de los miembros en sus rutas.</p>
+
+                <div class="feature-icon">
+                    <div class="icon-circle">
+                        <img class="brujula" th:src="@{/img/brujula.svg}" alt="icono brujula">
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button class="view-button">Ver Progresos →</button>
+                </div>
+            </div>
+
+            <!-- Feature Box 2 -->
+            <div class="feature-box">
+                <h3 class="feature-title">Gestiona los Retos</h3>
+                <p class="feature-description">Crea, consulta y edita los retos que guían el progreso del grupo.</p>
+
+                <div class="feature-icon">
+                    <div class="icon-circle">
+                        <img class="lista" th:src="@{/img/libreta.svg}" alt="icono lista">
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button class="view-button">Ver Retos →</button>
+                </div>
+            </div>
+
+            <!-- Feature Box 3 -->
+            <div class="feature-box">
+                <h3 class="feature-title">Gestiona los Miembros</h3>
+                <p class="feature-description">Consulta y registra los integrantes del grupo.</p>
+
+                <div class="feature-icon">
+                    <div class="icon-circle">
+                        <img class="personas" th:src="@{/img/personas.svg}" alt="icono personas">
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button class="view-button">Ver Miembros →</button>
+                </div>
+            </div>
+
+            <!-- Feature Box 4 -->
+            <div class="feature-box">
+                <h3 class="feature-title">Gestiona los Jefes</h3>
+                <p class="feature-description">Consulta los jefes y líderes del grupo</p>
+
+                <div class="feature-icon">
+                    <div class="icon-circle">
+                        <img class="personas" th:src="@{/img/personasstar.svg}" alt="icono personas">
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button class="view-button">Ver Jefes →</button>
+                </div>
+            </div>
+
+            <!-- Activities Section -->
+            <div class="activities-section">
+                <div class="activities-header">
+                    <h3>Actividades Programadas</h3>
+                    <span>Más ›</span>
+                </div>
+
+                <div class="activities-list">
+                    <!-- Activity 1 -->
+                    <div class="activity-item">
+                        <div class="date-container">
+                            <div>
+                                <div class="date-number">12</div>
+                                <div class="date-month">Abril</div>
+                            </div>
+                            <div class="activity-details">
+                                <!-- Detalles de la actividad -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity 2 -->
+                    <div class="activity-item">
+                        <div class="date-container">
+                            <div>
+                                <div class="date-number">18</div>
+                                <div class="date-month">Abril</div>
+                            </div>
+                            <div class="activity-details">
+                                <!-- Detalles de la actividad -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity 3 -->
+                    <div class="activity-item">
+                        <div class="date-container">
+                            <div>
+                                <div class="date-number">26</div>
+                                <div class="date-month">Abril</div>
+                            </div>
+                            <div class="activity-details">
+                                <!-- Detalles de la actividad -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity 4 -->
+                    <div class="activity-item">
+                        <div class="date-container">
+                            <div>
+                                <div class="date-number">12</div>
+                                <div class="date-month">Mayo</div>
+                            </div>
+                            <div class="activity-details">
+                                <!-- Detalles de la actividad -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <img th:src="@{/img/logo605.png}" alt="Scouts Jaguares 605" class="logo-img">
+                </div>
+
+                <div class="footer-info">
+                    <div class="footer-title">
+                        <div class="dot"></div>
+                        <h2>Scouts Jaguares 605</h2>
+                    </div>
+                    <p class="footer-slogan">Listos para servir, listos para rugir.</p>
+
+                    <div class="footer-address">
+                        <img th:src="@{/img/ubicacion.svg}" alt="Ubicación" class="ubicacion-icon">
+                        <p class="footer-ubi">Palmira, Valle del Cauca – Barrio Las Delicias<br>
+                            Sede: Casa de la Juventud, Calle 30 #29-15</p>
+                    </div>
+                </div>
+
+                <div class="footer-social">
+                    <a href="#" class="social-icon">
+                        <img th:src="@{/img/facebook.svg}" alt="Facebook">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img th:src="@{/img/instagram.svg}" alt="Instagram">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img th:src="@{/img/tiktok.svg}" alt="TikTok">
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <nav class="footer-nav">
+                    <a href="#" class="footer-link">Inicio</a>
+                    <a href="#" class="footer-link">Política de Tratamiento de Datos</a>
+                    <a href="#" class="footer-link">Configuración</a>
+                </nav>
+                <p class="footer-copyright">© 2025 Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+
+</main>
+
+<!-- Footer -->
+
+<!-- JavaScript para la funcionalidad -->
+<script>
+    const tabs = document.querySelectorAll(".tab");
+
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            // Remover clase activa de todas
+            tabs.forEach(t => t.classList.remove("active"));
+            // Activar la que se clickeó
+            tab.classList.add("active");
+
+            // Aquí puedes controlar qué contenido mostrar según la pestaña
+            const selectedTab = tab.dataset.tab;
+            console.log("Seleccionaste:", selectedTab);
+
+            // Por ejemplo:
+            // document.querySelector('#contenido-proximas').style.display = selectedTab === 'proximas' ? 'block' : 'none';
+            // document.querySelector('#contenido-finalizadas').style.display = selectedTab === 'finalizadas' ? 'block' : 'none';
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const realDateInput = document.getElementById('real-date');
+        const displayDateInput = document.getElementById('display-date');
+        const calendarTrigger = document.getElementById('calendar-trigger');
+
+        // Función para formatear la fecha (dd/mm/yyyy)
+        function formatDate(date) {
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Cuando el campo real de fecha cambia
+        realDateInput.addEventListener('change', function () {
+            if (this.value) {
+                const selectedDate = new Date(this.value);
+                displayDateInput.value = formatDate(selectedDate);
+            } else {
+                displayDateInput.value = '';
+            }
+        });
+
+        // Cuando se hace clic en el campo de texto o el icono
+        function openDatePicker() {
+            realDateInput.showPicker ? realDateInput.showPicker() : realDateInput.click();
+        }
+
+        displayDateInput.addEventListener('click', openDatePicker);
+        calendarTrigger.addEventListener('click', openDatePicker);
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Manejar clic en los botones de expansión
+        document.querySelectorAll('.expand-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.stopPropagation();
+
+                // Cerrar otros dropdowns abiertos
+                document.querySelectorAll('.expand-btn').forEach(btn => {
+                    if (btn !== this) {
+                        btn.classList.remove('active');
+                        const menu = btn.nextElementSibling;
+                        if (menu && menu.classList.contains('dropdown-menu')) {
+                            menu.classList.remove('active');
+                        }
+                        // Remover clase menu-active del contenedor
+                        const container = btn.closest('.dropdown-container');
+                        if (container) {
+                            container.classList.remove('menu-active');
+                        }
+                    }
+                });
+
+                // Toggle el dropdown actual
+                this.classList.toggle('active');
+                const dropdownMenu = this.nextElementSibling;
+                if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                    dropdownMenu.classList.toggle('active');
+
+                    // Añadir o remover clase menu-active al contenedor
+                    const container = this.closest('.dropdown-container');
+                    if (container) {
+                        if (dropdownMenu.classList.contains('active')) {
+                            container.classList.add('menu-active');
+                        } else {
+                            container.classList.remove('menu-active');
+                        }
+                    }
+                }
+            });
+        });
+
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function () {
+            document.querySelectorAll('.expand-btn.active').forEach(btn => {
+                btn.classList.remove('active');
+                const menu = btn.nextElementSibling;
+                if (menu && menu.classList.contains('dropdown-menu')) {
+                    menu.classList.remove('active');
+                }
+                // Remover clase menu-active del contenedor
+                const container = btn.closest('.dropdown-container');
+                if (container) {
+                    container.classList.remove('menu-active');
+                }
+            });
+        });
+
+        // Manejar clic en las opciones del dropdown
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.stopPropagation();
+
+                // Marcar la opción seleccionada
+                const parentMenu = this.closest('.dropdown-menu');
+                parentMenu.querySelectorAll('.dropdown-item').forEach(menuItem => {
+                    menuItem.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // Aquí puedes añadir la lógica para cada opción
+                const action = this.querySelector('span').textContent;
+                console.log(`Acción seleccionada: ${action}`);
+
+                // Cerrar el dropdown después de seleccionar
+                const expandButton = parentMenu.previousElementSibling;
+                if (expandButton && expandButton.classList.contains('expand-btn')) {
+                    expandButton.classList.remove('active');
+                    parentMenu.classList.remove('active');
+
+                    // Remover clase menu-active del contenedor
+                    const container = expandButton.closest('.dropdown-container');
+                    if (container) {
+                        container.classList.remove('menu-active');
+                    }
+                }
+            });
+        });
+    });
+
+    // Script para el menú de perfil
+    document.querySelector('.perfil-flecha').addEventListener('click', function () {
+        const perfilMenu = document.getElementById('perfilMenu');
+        perfilMenu.classList.toggle('show-menu');
+    });
+
+    // Cerrar el menú al hacer clic fuera de él
+    document.addEventListener('click', function (event) {
+        const perfilMenu = document.getElementById('perfilMenu');
+        const perfilFlecha = document.querySelector('.perfil-flecha');
+
+        // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+        if (!perfilMenu.contains(event.target) && !perfilFlecha.contains(event.target)) {
+            perfilMenu.classList.remove('show-menu');
+        }
+    });
+
+    // Script para los menús desplegables de navegación
+    document.querySelectorAll('.main-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+            event.stopPropagation();
+
+            const parent = button.parentElement;
+            const wasActive = parent.classList.contains('active');
+
+            // Cerrar todos los menús activos
+            document.querySelectorAll('.menu-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Si no estaba activo, activarlo
+            if (!wasActive) {
+                parent.classList.add('active');
+            }
+        });
+    });
+
+    // Script para toggle del sidebar en móviles
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    sidebarToggle.addEventListener('click', function () {
+        sidebar.classList.toggle('open');
+        hamburger.classList.toggle('open');
+        overlay.classList.toggle('active');
+
+        // Mover el botón también cuando el sidebar está abierto
+        sidebarToggle.classList.toggle('moved');
+    });
+
+    // Cerrar sidebar al hacer clic en el overlay
+    overlay.addEventListener('click', function () {
+        sidebar.classList.remove('open');
+        hamburger.classList.remove('open');
+        overlay.classList.remove('active');
+        sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+    });
+
+    // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+    document.querySelectorAll('.nav-link').forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                hamburger.classList.remove('open');
+                overlay.classList.remove('active');
+                sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+            }
+        });
+    });
+
+    // Ajustar al cambiar el tamaño de la ventana
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('open');
+            hamburger.classList.remove('open');
+            overlay.classList.remove('active');
+            sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+        }
+    });
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabs = document.querySelectorAll('.tab');
+        const actividadesProximas = document.querySelector('.actividades-proximas');
+        const actividadesPasadas = document.querySelector('.actividades-pasadas');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                const tabSeleccionada = tab.getAttribute('data-tab');
+
+                // Mostrar u ocultar actividades según la pestaña seleccionada
+                if (tabSeleccionada === 'proximas') {
+                    actividadesProximas.style.display = 'block';
+                    actividadesPasadas.style.display = 'none';
+                } else if (tabSeleccionada === 'pasadas') {
+                    actividadesProximas.style.display = 'none';
+                    actividadesPasadas.style.display = 'block';
+                }
+
+                // Marcar la pestaña activa
+                tabs.forEach(button => button.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    });
+</script>
+
+<script>
+    // Espera a que el documento cargue
+    document.addEventListener("DOMContentLoaded", function () {
+        // Captura todos los enlaces de paginación
+        const paginationLinks = document.querySelectorAll(".pagination a");
+
+        // Añadir un listener para cada enlace de paginación
+        paginationLinks.forEach(function (link) {
+            link.addEventListener("click", function (e) {
+                // Realiza el scroll hacia la sección de actividades
+                document.getElementById("actividadesSection").scrollIntoView({
+                    behavior: "smooth", // Desplazamiento suave
+                    block: "start"      // Inicia el scroll desde la parte superior de la sección
+                });
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

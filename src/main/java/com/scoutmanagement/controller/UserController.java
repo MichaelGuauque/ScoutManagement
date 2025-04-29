@@ -55,9 +55,11 @@ public class UserController {
                         session.setAttribute("idUsuario", usuarioBuscado.getId());
                         session.setAttribute("rol", rol);
                         return "redirect:/home-admin";
-                    } else {
-                        // ACÁ IRIA LA LOGICA PARA REDIRIGIR AL HOME DE JOVEN
-                        return VISTA_LOGIN;
+
+                    } else if (rol.equals("JOVEN")) {
+                        session.setAttribute("idUsuario", usuarioBuscado.getId());
+                        session.setAttribute("rol", rol);
+                        return "redirect:/home-user";
                     }
                 }else {
                     throw new ServiceException("Contraseña incorrecta");
@@ -142,6 +144,18 @@ public class UserController {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             return "admin/home";
+        }
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+        return VISTA_ERROR;
+    }
+
+    @GetMapping("/home-user")
+    public String showUserHomePage(HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.JOVEN.name()) {
+            return "user/home";
         }
         if (rol == null) {
             return VISTA_LOGIN;
