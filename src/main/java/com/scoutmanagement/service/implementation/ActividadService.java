@@ -78,6 +78,7 @@ public class ActividadService implements IActividadService {
         return actividadRepository.findByRama(rama);
     }
 
+    @Override
     public List<Actividad> filtrarYOrdenarActividadesPorTab(List<Actividad> actividades, Rama rama, String tab, LocalDate hoy) {
         return actividades.stream()
                 .filter(actividad -> rama == null || actividad.getRama().equals(rama))
@@ -90,6 +91,7 @@ public class ActividadService implements IActividadService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Actividad> paginarActividades(List<Actividad> actividades, int page, int size) {
         return actividades.stream()
                 .skip((long) page * size)
@@ -97,6 +99,7 @@ public class ActividadService implements IActividadService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Map<Long, Boolean> encontrarActividadMasProxima(List<Actividad> actividades,int page, String tab) {
         Map<Long, Boolean> actividadEsMasProxima = new HashMap<>();
         if ("proximas".equals(tab) && page == 0) {
