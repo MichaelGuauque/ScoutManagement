@@ -7,7 +7,6 @@ import static com.scoutmanagement.util.constants.AppConstants.*;
 
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
-import com.scoutmanagement.service.interfaces.IPersonaService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/actividades")
@@ -30,19 +32,14 @@ public class ActividadController {
     @Autowired
     private IAsistenciaService asistenciaService;
 
-    @Autowired
-    private IPersonaService personaService;
 
-    private final String ID_USUARIO = "idUsuario";
-
-    @GetMapping
+    @GetMapping()
     public String actividades(Model model, HttpSession session,
                               @RequestParam(required = false, defaultValue = "proximas") String tab,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "4") int size,
                               @RequestParam(value = "asistenciaActividadId", required = false) Long asistenciaActividadId,
-                              @RequestParam(required = false) Boolean cancelado,
-                              @RequestParam(required = false, defaultValue = "") Rama ramaSeleccionada) {
+                              @RequestParam(required = false) Boolean cancelado) {
 
         if (Boolean.TRUE.equals(cancelado)) {
             model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
@@ -50,20 +47,39 @@ public class ActividadController {
         }
 
         Object rol = session.getAttribute("rol");
-        if (Rol.ADULTO.name().equals(rol)) {
-
-            Persona jefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", jefe);
-
-            List<Actividad> actividades = actividadService.findAllActividadesOrdenadas();
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            List<Actividad> listaActividades = actividadService.findAllActividadesOrdenadas();
             LocalDate hoy = LocalDate.now();
+            List<Actividad> actividadesFiltradas;
 
-            List<Actividad> actividadesFiltradas = actividadService.filtrarYOrdenarActividadesPorTab(actividades, ramaSeleccionada, tab, hoy);
+            if (tab.equals("pasadas")) {
+                actividadesFiltradas = listaActividades.stream()
+                        .filter(actividad -> actividad.getFecha().isBefore(hoy))
+                        .collect(Collectors.toList());
+            } else {
+                actividadesFiltradas = listaActividades.stream()
+                        .filter(actividad -> !actividad.getFecha().isBefore(hoy)) // hoy o después
+                        .collect(Collectors.toList());
+            }
+
             int totalActividades = actividadesFiltradas.size();
-            int totalPaginas = Math.max((int) Math.ceil((double) totalActividades / size), 1);
+            int totalPaginas = (int) Math.ceil((double) totalActividades / size);
+            if (totalPaginas == 0) {
+                totalPaginas = 1;
+            }
 
-            List<Actividad> paginaActividades = actividadService.paginarActividades(actividadesFiltradas, page, size);
-            Map<Long, Boolean> actividadEsMasProxima = actividadService.encontrarActividadMasProxima(paginaActividades, page, tab);
+            int paginaActual = page;
+            List<Actividad> paginaActividades = actividadesFiltradas.stream()
+                    .skip((long) page * size)
+                    .limit(size)
+                    .collect(Collectors.toList());
+
+            Map<Long, Boolean> actividadEsMasProxima = new HashMap<>();
+            if (tab.equals("proximas")) {
+                paginaActividades.stream()
+                        .min(Comparator.comparing(actividad -> actividad.getFecha()))
+                        .ifPresent(actividad -> actividadEsMasProxima.put(actividad.getId(), true));
+            }
 
             if (asistenciaActividadId != null) {
                 List<Asistencia> asistencias = asistenciaService.findByActividadOrdenado(asistenciaActividadId);
@@ -73,11 +89,9 @@ public class ActividadController {
 
             model.addAttribute("actividades", paginaActividades);
             model.addAttribute("actividadEsMasProxima", actividadEsMasProxima);
-            model.addAttribute("paginaActual", page);
+            model.addAttribute("paginaActual", paginaActual);
             model.addAttribute("totalPaginas", totalPaginas);
             model.addAttribute("tabSeleccionada", tab);
-            model.addAttribute("ramaSeleccionada", ramaSeleccionada);
-            model.addAttribute("ramas", Rama.values());
 
             return "actividades/vistaActividadesAdmin";
         }
@@ -85,15 +99,13 @@ public class ActividadController {
             return VISTA_LOGIN;
         }
         return VISTA_ERROR;
-    }
 
+    }
 
     @GetMapping("/crear")
     public String crearActividadFormulario(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", sesionDelJefe);
             model.addAttribute("ramas", Rama.values());
             return "actividades/vistaCrearActividad";
         }

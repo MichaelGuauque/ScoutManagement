@@ -33,6 +33,7 @@ public class AsistenciaService implements IAsistenciaService {
     private PersonaRepository personaRepository;
 
 
+
     @Override
     public List<Asistencia> findByActividadOrdenado(Long actividadId) {
         try {
@@ -139,6 +140,9 @@ public class AsistenciaService implements IAsistenciaService {
             throw new ServiceException("Error al registrar asistencias: " + e.getMessage(), e);
         }
     }
+
+
+
 
 
     @Override

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -30,15 +29,19 @@ public class RetoController {
     @Autowired
     private IPersonaService personaService;
 
-    private static final String ID_USUARIO = "idUsuario";
+    private final Logger logger = LoggerFactory.getLogger(RetoController.class);
+
+    private final String ID_USUARIO = "idUsuario";
 
     @GetMapping("/registrar")
     public String showRegistrarReto(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
 
+            //el metodo para buscar persona con el idUser de la sesion
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             model.addAttribute("persona", sesionDelJefe);
+            logger.info("Persona: " + sesionDelJefe.getPrimerNombre() + " " + sesionDelJefe.getPrimerApellido());
 
             Rama rama = sesionDelJefe.getRama();
 
@@ -54,23 +57,15 @@ public class RetoController {
     }
 
     @PostMapping("/registrar")
-    public String registrarReto(@ModelAttribute @Valid RetoDTO retoDTO, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String registrarReto(@ModelAttribute @Valid RetoDTO retoDTO, HttpSession session) {
+        logger.info("Registrar reto {}", retoDTO);
         Object rol = session.getAttribute("rol");
-
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            retoService.save(retoDTO);
+            return VISTA_PROGRESIONES;
+        }
         if (rol == null) {
             return null;
-        }
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            try {
-                retoService.save(retoDTO);
-                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Reto creado con éxito.");
-                redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
-                return VISTA_PROGRESIONES;
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
-                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                return VISTA_PROGRESIONES;
-            }
         }
         return VISTA_ERROR;
     }
