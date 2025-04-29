@@ -10,6 +10,5 @@ import java.util.List;
 @Repository
 public interface EtapaRepository extends CrudRepository<Etapa, Long> {
     List<Etapa> findAllByRamaOrderByOrdenAsc(Rama rama);
-
     Etapa findByNombre(String nombre);
 }
