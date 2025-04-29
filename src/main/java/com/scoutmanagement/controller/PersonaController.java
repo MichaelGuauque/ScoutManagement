@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -45,7 +46,11 @@ private IPersonaService personaService;
                     model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
                     model.addAttribute("type", EXCEPTION_INFO);
                 }
-                model.addAttribute("jefes", personaService.findJefes());
+                model.addAttribute("jefes",
+                        personaService.findJefes().stream()
+                                .sorted(Comparator.comparing(Persona::getRama))
+                                .toList()
+                );
                 return "miembros/consultarJefes";
             } else {
                 session.setAttribute("miembro", "miembro");
