@@ -45,8 +45,7 @@ private IPersonaService personaService;
                     model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
                     model.addAttribute("type", EXCEPTION_INFO);
                 }
-                List<Persona> jefes = personaService.findJefes();
-                model.addAttribute("jefes", jefes);
+                model.addAttribute("jefes", personaService.findJefes());
                 return "miembros/consultarJefes";
             } else {
                 session.setAttribute("miembro", "miembro");
