@@ -44,13 +44,18 @@ public class EtapaController {
     private final String ID_USUARIO = "idUsuario";
 
     @GetMapping()
-    public String progresiones(@RequestParam(name = "etapaSeleccionada", required = false) String etapaSeleccionada, Model model, HttpSession session) {
+    public String progresiones(@RequestParam(name = "etapaSeleccionada", required = false) String etapaSeleccionada,
+                               Model model, HttpSession session, @RequestParam(required = false) boolean cancelado) {
+
+        if (Boolean.TRUE.equals(cancelado)) {
+            model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
+            model.addAttribute("type", EXCEPTION_INFO);
+        }
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
 
             Persona sesionDelJefe = adultoSession(ID_USUARIO, session);
             model.addAttribute("persona", sesionDelJefe);
-            logger.info("Persona: " + sesionDelJefe.getPrimerNombre() + " " + sesionDelJefe.getPrimerApellido());
 
             Rama rama = sesionDelJefe.getRama();
             List<Etapa> etapas = etapaService.findAllByRama(rama);
