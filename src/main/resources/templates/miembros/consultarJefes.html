@@ -188,7 +188,7 @@
                         <input type="text" class="filter-search" placeholder="Ingrese el nombre...">
                         <button class="search-btn">
                             <div class="icon-placeholder search-icon">
-                                <img th:src="@{/img/lupa.svg}" alt="Search" width="16" height="16">
+                                <img th:src="@{/img/cancelFiltro.svg}" alt="Search" width="16" height="16">
                             </div>
                         </button>
                     </div>
@@ -720,7 +720,15 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const inputBusqueda = document.querySelector(".filter-search");
+        const botonLimpiar = document.querySelector(".search-btn");
+
+
         inputBusqueda.addEventListener("input", filtrarJefes);
+        botonLimpiar.addEventListener("click", (e) => {
+            e.preventDefault(); // Evita recarga si está dentro de un <form>
+            inputBusqueda.value = ""; // Limpia el campo
+            filtrarJefes(); // Muestra todos
+        });
     });
 
     function filtrarJefes() {
