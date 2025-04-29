@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 
+import java.util.List;
+
 public interface IPersonaService {
     void save(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity);
 
@@ -14,5 +16,7 @@ public interface IPersonaService {
     boolean existsByNumeroDeDocumento(Long numeroDeDocumento);
     Optional<Persona> findByUsuarioId(Long usuario_id);
     Persona personaModelSession(String nombreSession, HttpSession session);
+    List<Persona> findJefes();
+
 
 }

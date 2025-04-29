@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -59,6 +61,10 @@ public class PersonaService implements IPersonaService {
         Optional<Persona> optionalPersona = findByUsuarioId(usuario.getId());
         Persona persona = optionalPersona.orElseThrow(() -> new RuntimeException("Persona no encontrada"));
         return persona;
+    }
+
+    public List<Persona> findJefes() {
+        return personaRepository.findJefes();
     }
 
 
