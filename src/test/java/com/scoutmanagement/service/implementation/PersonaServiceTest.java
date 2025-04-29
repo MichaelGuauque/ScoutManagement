@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,5 +97,28 @@ public class PersonaServiceTest {
 
         assertFalse(exists);
         verify(personaRepository).existsByNumeroDeDocumento(numeroDeDocumento);
+    }
+    @Test
+    void testFindJefes() {
+        // Arrange: Datos de prueba
+        Persona jefe1 = new Persona();
+        jefe1.setCargo(Cargo.JEFE_MANADA);
+
+        Persona jefe2 = new Persona();
+        jefe2.setCargo(Cargo.JEFE_COMUNIDAD);
+
+        List<Persona> jefesMock = Arrays.asList(jefe1, jefe2);
+
+        when(personaRepository.findJefes()).thenReturn(jefesMock);
+
+        List<Persona> resultado = personaService.findJefes();
+
+
+        assertNotNull(resultado);
+        assertEquals(2, resultado.size());
+        assertEquals(Cargo.JEFE_MANADA, resultado.get(0).getCargo());
+        assertEquals(Cargo.JEFE_COMUNIDAD, resultado.get(1).getCargo());
+
+        verify(personaRepository, times(1)).findJefes();
     }
 }
