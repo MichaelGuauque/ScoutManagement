@@ -33,7 +33,13 @@ public class RetoService implements IRetoService {
     @Override
     public void save(RetoDTO retoDTO) {
         try {
-            retoRepository.save(cambiarRetoDTO(retoDTO));
+            Optional<Reto> retoOptional = retoRepository.findRetoByNumero(retoDTO.numero());
+            if (retoOptional.isPresent()) {
+                throw new ServiceException("El reto con numero " + retoDTO.numero() + " ya existe");
+            }else {
+                retoRepository.save(cambiarRetoDTO(retoDTO));
+            }
+
         } catch (Exception e) {
             throw new ServiceException("No se pudo guardar el reto: " + e.getMessage());
         }
