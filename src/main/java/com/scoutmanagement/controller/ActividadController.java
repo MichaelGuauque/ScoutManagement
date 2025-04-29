@@ -88,7 +88,6 @@ public class ActividadController {
     }
 
 
-
     @GetMapping("/crear")
     public String crearActividadFormulario(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");

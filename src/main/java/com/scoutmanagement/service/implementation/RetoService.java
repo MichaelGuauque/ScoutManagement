@@ -36,7 +36,7 @@ public class RetoService implements IRetoService {
             Optional<Reto> retoOptional = retoRepository.findRetoByNumero(retoDTO.numero());
             if (retoOptional.isPresent()) {
                 throw new ServiceException("El reto con numero " + retoDTO.numero() + " ya existe");
-            }else {
+            } else {
                 retoRepository.save(cambiarRetoDTO(retoDTO));
             }
 

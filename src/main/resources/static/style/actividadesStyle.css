@@ -414,7 +414,7 @@ main {
     border-radius: 4px;
 }
 
-.perfil-menu li a{
+.perfil-menu li a {
     text-decoration: none;
     color: inherit;
 }
@@ -2042,7 +2042,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 
-
 .participants-table tbody tr {
     border-bottom: 1.9px solid #cccbcb;
 }
@@ -2257,7 +2256,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 }
 
-a{
+a {
     text-decoration: none;
     color: inherit;
 }
