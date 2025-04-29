@@ -7,6 +7,8 @@ import com.scoutmanagement.service.interfaces.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PersonaService implements IPersonaService {
 
@@ -39,6 +41,10 @@ public class PersonaService implements IPersonaService {
     @Override
     public boolean existsByNumeroDeDocumento(Long numeroDeDocumento) {
        return personaRepository.existsByNumeroDeDocumento(numeroDeDocumento);
+    }
+
+    public List<Persona> findJefes() {
+        return personaRepository.findJefes();
     }
 
 
