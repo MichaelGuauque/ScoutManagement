@@ -151,8 +151,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="botones btn-secondary cancel-button">Cancelar</button>
                     <button type="submit" class="botones btn-primary save-button">Guardar</button>
+                    <button type="button" class="botones btn-secondary cancel-button" onclick="cancelarRegistro()">Cancelar</button>
                 </div>
             </div>
             <div class="modal-overlay"></div>
@@ -551,6 +551,19 @@
                 sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
             }
         });
+    });
+
+    function cancelarRegistro() {
+        window.location.href = "/progresiones?cancelado=true";
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar si hay un parámetro "cancelado" en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('cancelado')) {
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
     });
 
 </script>
