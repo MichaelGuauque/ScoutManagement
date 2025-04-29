@@ -12,25 +12,15 @@ import java.util.Map;
 public interface IAsistenciaService {
 
 
-
     Asistencia registrarAsistencia(AsistenciaDTO asistenciaDTO);
-
 
     void registrarAsistenciasMasivas(Long actividadId, Map<Long, Boolean> asistenciasPorMiembro);
 
-
-
-
     List<Asistencia> prepararRegistroAsistencias(Actividad actividad, List<Persona> miembros);
-
 
     Asistencia convertirAsistenciaDTO(AsistenciaDTO asistenciaDTO);
 
-
-
     List<Persona> findPersonasByRama(Rama rama);
-
-
 
     List<Asistencia> findByActividadOrdenado(Long actividadId);
 }

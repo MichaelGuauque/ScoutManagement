@@ -3,6 +3,8 @@ package com.scoutmanagement.service.implementation;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
+import com.scoutmanagement.persistence.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +23,12 @@ public class PersonaServiceTest {
 
     @Mock
     private PersonaRepository personaRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private HttpSession httpSession;
 
     @InjectMocks
     private PersonaService personaService;
@@ -97,6 +106,86 @@ public class PersonaServiceTest {
 
         assertFalse(exists);
         verify(personaRepository).existsByNumeroDeDocumento(numeroDeDocumento);
+    }
+
+    @Test
+    void testFindByUsuarioId_WhenFound() {
+        Long usuarioId = 10L;
+        Persona persona = new Persona();
+        when(personaRepository.findByUserEntity_Id(usuarioId)).thenReturn(Optional.of(persona));
+
+        Optional<Persona> result = personaService.findByUsuarioId(usuarioId);
+
+        assertTrue(result.isPresent());
+        assertEquals(persona, result.get());
+        verify(personaRepository).findByUserEntity_Id(usuarioId);
+    }
+
+    @Test
+    void testFindByUsuarioId_WhenNotFound() {
+        Long usuarioId = 20L;
+        when(personaRepository.findByUserEntity_Id(usuarioId)).thenReturn(Optional.empty());
+
+        Optional<Persona> result = personaService.findByUsuarioId(usuarioId);
+
+        assertFalse(result.isPresent());
+        verify(personaRepository).findByUserEntity_Id(usuarioId);
+    }
+
+    @Test
+    void testPersonaModelSession_WhenUsuarioYPersonaExisten() {
+        String sessionKey = "usuarioId";
+        Long userId = 30L;
+
+        UserEntity user = UserEntity.builder().id(userId).build();
+        Persona persona = new Persona();
+        persona.setUserEntity(user);
+
+        when(httpSession.getAttribute(sessionKey)).thenReturn(userId.toString());
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(personaRepository.findByUserEntity_Id(userId)).thenReturn(Optional.of(persona));
+
+        Persona result = personaService.personaModelSession(sessionKey, httpSession);
+
+        assertEquals(persona, result);
+        verify(userRepository).findById(userId);
+        verify(personaRepository).findByUserEntity_Id(userId);
+    }
+
+    @Test
+    void testPersonaModelSession_WhenUsuarioNoExiste() {
+        String sessionKey = "usuarioId";
+        Long userId = 40L;
+
+        when(httpSession.getAttribute(sessionKey)).thenReturn(userId.toString());
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                personaService.personaModelSession(sessionKey, httpSession)
+        );
+
+        assertEquals("Usuario no encontrado", exception.getMessage());
+        verify(userRepository).findById(userId);
+    }
+
+    @Test
+    void testPersonaModelSession_WhenPersonaNoExiste() {
+        String sessionKey = "usuarioId";
+        Long userId = 50L;
+
+        UserEntity user = UserEntity.builder().id(userId).build();
+
+        when(httpSession.getAttribute(sessionKey)).thenReturn(userId.toString());
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(personaRepository.findByUserEntity_Id(userId)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                personaService.personaModelSession(sessionKey, httpSession)
+        );
+
+        assertEquals("Persona no encontrada", exception.getMessage());
+        verify(userRepository).findById(userId);
+        verify(personaRepository).findByUserEntity_Id(userId);
     }
     @Test
     void testFindJefes() {

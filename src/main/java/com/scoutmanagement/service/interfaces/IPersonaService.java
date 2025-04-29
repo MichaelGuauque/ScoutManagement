@@ -3,6 +3,9 @@ package com.scoutmanagement.service.interfaces;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.UserEntity;
+import jakarta.servlet.http.HttpSession;
+
+import java.util.Optional;
 
 import java.util.List;
 
@@ -11,6 +14,8 @@ public interface IPersonaService {
 
     Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity);
     boolean existsByNumeroDeDocumento(Long numeroDeDocumento);
+    Optional<Persona> findByUsuarioId(Long usuario_id);
+    Persona personaModelSession(String nombreSession, HttpSession session);
     List<Persona> findJefes();
 
 
