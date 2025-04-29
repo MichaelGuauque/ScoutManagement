@@ -186,4 +186,20 @@ class RetoServiceTest {
 
         Assertions.assertTrue(exception.getMessage().contains("No se puedo convertir el dto"));
     }
+
+    @Test
+    void testSave_whenRetoExists_throwsServiceException() {
+        Etapa etapa = new Etapa();
+        RetoDTO dto = new RetoDTO(1, "Etapa 1", "Descripción duplicada");
+        Reto existingReto = new Reto(1L, 1, "Existente", etapa);
+
+        Mockito.when(retoRepository.findRetoByNumero(1)).thenReturn(Optional.of(existingReto));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.save(dto);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("El retro con numero 1 ya existe"));
+        Mockito.verify(retoRepository, Mockito.never()).save(Mockito.any());
+    }
 }
