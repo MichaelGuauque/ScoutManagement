@@ -21,7 +21,8 @@ jobs:
       PASSWORD_DB: ${{ secrets.PASSWORD_DB }}
       EMAIL_SCOUT: ${{ secrets.EMAIL_SCOUT }}
       PASSWORD_APP_EMAIL: ${{ secrets.PASSWORD_APP_EMAIL }}
-      
+      EC2_HOST: ${{ secrets.EC2_HOST }}
+
     services:
       mysql:
         image: mysql:8
