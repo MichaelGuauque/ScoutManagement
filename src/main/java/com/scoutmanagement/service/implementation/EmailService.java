@@ -3,6 +3,7 @@ package com.scoutmanagement.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Async("mailTaskExecutor")
     public void enviarCorreo(String destinatario, String asunto, String cuerpo) {
         SimpleMailMessage mensaje = new SimpleMailMessage();
         mensaje.setTo(destinatario);
