@@ -1,4 +1,4 @@
-package com.scoutmanagement.persistence.model;
+package com.scoutmanagement.util.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
