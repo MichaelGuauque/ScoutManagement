@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -33,7 +34,8 @@ private static final String ID_USUARIO = "idUsuario";
     @GetMapping({ "", "/jefes" })
     public String miembrosYJefes(Model model, HttpSession session,
                                  @RequestParam(required = false) Boolean cancelado,
-                                 HttpServletRequest request) {
+                                 HttpServletRequest request,
+                                 @RequestParam(defaultValue = "activos") String tab) {
         Object rol = session.getAttribute("rol");
         String path = request.getRequestURI(); //
 
@@ -50,11 +52,18 @@ private static final String ID_USUARIO = "idUsuario";
                     model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
                     model.addAttribute("type", EXCEPTION_INFO);
                 }
-                model.addAttribute("jefes",
-                        personaService.findJefes().stream()
-                                .sorted(Comparator.comparing(Persona::getRama))
-                                .toList()
-                );
+                List<Persona> jefes = personaService.findJefes();
+
+                List<Persona> jefesFiltrados = jefes.stream()
+                        .filter(p -> {
+                            boolean estado = p.getUserEntity().isActivo(); // Supongo que 'estado' es booleano
+                            return "inactivos".equals(tab) ? !estado : estado; // Filtra por estado (activo o inactivo)
+                        })
+                        .collect(Collectors.toList());
+
+                model.addAttribute("tab", tab);
+                model.addAttribute("jefes", jefesFiltrados);
+
                 return "miembros/consultarJefes";
             } else {
                 session.setAttribute("miembro", "miembro");
