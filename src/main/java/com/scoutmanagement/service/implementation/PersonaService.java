@@ -29,7 +29,7 @@ public class PersonaService implements IPersonaService {
 
     @Override
     public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO,UserEntity userEntity) {
-
+        Responsable responsable = new Responsable();
         return Persona.builder()
                 .primerNombre(personaRegistroDTO.getPrimerNombre())
                 .segundoNombre(personaRegistroDTO.getSegundoNombre())
@@ -39,6 +39,7 @@ public class PersonaService implements IPersonaService {
                 .tipoDeDocumento(personaRegistroDTO.getTipoDeDocumento())
                 .rama(personaRegistroDTO.getRama())
                 .cargo(personaRegistroDTO.getCargo())
+                .responsable(responsable)
                 .userEntity(userEntity)
                 .build();
 
@@ -65,6 +66,10 @@ public class PersonaService implements IPersonaService {
 
     public List<Persona> findJefes() {
         return personaRepository.findJefes();
+    }
+
+    public List<Persona> findMiembros() {
+        return personaRepository.findMiembros();
     }
 
 

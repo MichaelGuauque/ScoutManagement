@@ -210,4 +210,27 @@ public class PersonaServiceTest {
 
         verify(personaRepository, times(1)).findJefes();
     }
+    @Test
+    void testFindMiembros() {
+        // Arrange: Datos de prueba
+        Persona member1 = new Persona();
+        member1.setCargo(Cargo.LOBATO);
+
+        Persona member2 = new Persona();
+        member2.setCargo(Cargo.CAMINANTE);
+
+        List<Persona> membersMock = Arrays.asList(member1, member2);
+
+        when(personaRepository.findMiembros()).thenReturn(membersMock);
+
+        List<Persona> resultado = personaService.findMiembros();
+
+
+        assertNotNull(resultado);
+        assertEquals(2, resultado.size());
+        assertEquals(Cargo.LOBATO, resultado.get(0).getCargo());
+        assertEquals(Cargo.CAMINANTE, resultado.get(1).getCargo());
+
+        verify(personaRepository, times(1)).findMiembros();
+    }
 }

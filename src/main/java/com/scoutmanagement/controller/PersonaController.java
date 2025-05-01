@@ -44,9 +44,10 @@ private static final String ID_USUARIO = "idUsuario";
         }
 
         if (rol.equals(Rol.ADULTO.name())) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
             if (path.endsWith("/jefes")) {
-                Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-                model.addAttribute("persona", sesionDelJefe);
+
                 session.setAttribute("miembro", "jefe");
                 if (Boolean.TRUE.equals(cancelado)) {
                     model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
@@ -70,9 +71,22 @@ private static final String ID_USUARIO = "idUsuario";
                 if (Boolean.TRUE.equals(cancelado)) {
                     model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
                     model.addAttribute("type", EXCEPTION_INFO);
+
                 }
+                List<Persona> miembros = personaService.findMiembros();
+
+                List<Persona> miembrosFiltrados = miembros.stream()
+                        .filter(p -> {
+                            boolean estado = p.getUserEntity().isActivo();
+                            return "inactivos".equals(tab) ? !estado : estado;
+                        })
+                        .collect(Collectors.toList());
+
+                model.addAttribute("tab", tab);
+                model.addAttribute("miembros", miembrosFiltrados);
                 return "miembros/consultarMiembros";
             }
+
         }
 
         return VISTA_ERROR;
