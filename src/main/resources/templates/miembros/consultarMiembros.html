@@ -100,8 +100,13 @@
                     <td>
                         <span th:class="'rama-badge ' + ${miembro.rama}" th:text="${miembro.rama}">Rama</span>
                     </td>
-                    <td style="text-align: center" th:text="${miembro.getResponsable().getNombres() + ' ' + miembro.getResponsable().getApellidos()}">Nombre Contacto</td>
-                    <td style="text-align: center" th:text="${miembro.getResponsable().getTelefono() == 0} ? 'No registrado' : miembro.getResponsable().getTelefono()">Teléfono Contacto</td>
+                    <td style="text-align: center">
+                        <span th:text="${(miembro.responsable.nombres != null and miembro.responsable.apellidos != null) ? miembro.responsable.nombres + ' ' + miembro.responsable.apellidos : 'No registrado'}">Nombre Contacto</span>
+                    </td>
+                    <td style="text-align: center">
+                    <span th:text="(${miembro.getResponsable().getTelefono()} == 0) ? 'No registrado' : ${miembro.getResponsable().getTelefono()}">
+                        Teléfono Contacto</span>
+                    </td>
 
 
 
