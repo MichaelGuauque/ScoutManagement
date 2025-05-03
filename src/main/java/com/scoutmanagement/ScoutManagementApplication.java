@@ -55,6 +55,7 @@ public class ScoutManagementApplication {
                     .accountNoLocked(true)
                     .credentialNoExpired(true)
                     .roles(Set.of(adminRole))
+                    .activo(true)
                     .build();
 
             UserEntity userMaigu = UserEntity.builder()
@@ -65,6 +66,7 @@ public class ScoutManagementApplication {
                     .accountNoLocked(true)
                     .credentialNoExpired(true)
                     .roles(Set.of(userRole))
+                    .activo(true)
                     .build();
 
             userRepository.saveAll(List.of(userAdmin, userMaigu));

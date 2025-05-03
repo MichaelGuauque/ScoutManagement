@@ -66,6 +66,7 @@ class UserDetailServiceImplTest {
                 .accountNoLocked(true)
                 .credentialNoExpired(true)
                 .isEnabled(true)
+                .activo(true)
                 .build();
     }
 
@@ -121,6 +122,7 @@ class UserDetailServiceImplTest {
         assertTrue(result.isAccountNoLocked());
         assertTrue(result.isCredentialNoExpired());
         assertTrue(result.isEnabled());
+        assertTrue(result.isActivo());
 
 
         verify(roleRepository, times(1)).findByRole(Rol.JOVEN);
@@ -288,4 +290,52 @@ class UserDetailServiceImplTest {
 
         assertTrue(exception.getMessage().contains("Contraseñas no coinciden"));
     }
+
+    @Test
+    void testCambioUserDTO_SetActivoTrue() {
+        // Arrange
+        UserRegistroDTO userDTO = new UserRegistroDTO();
+        userDTO.setUsername("usuario@example.com");
+        userDTO.setRol(Rol.JOVEN);
+
+        RoleEntity role = new RoleEntity();
+        role.setRole(Rol.JOVEN);
+
+        when(roleRepository.findByRole(Rol.JOVEN)).thenReturn(role);
+        when(passwordEncoder.encode(anyString())).thenReturn("passwordCodificada");
+
+
+        UserEntity result = userDetailService.cambioUserDTO(userDTO);
+
+
+        assertNotNull(result);
+        assertEquals("usuario@example.com", result.getUsername());
+        assertEquals("passwordCodificada", result.getPassword());
+        assertTrue(result.getRoles().contains(role));
+        assertTrue(result.isEnabled());
+        assertTrue(result.isAccountNoExpired());
+        assertTrue(result.isAccountNoLocked());
+        assertTrue(result.isCredentialNoExpired());
+
+        assertTrue(result.isActivo(), "El campo 'activo' debería estar en true por defecto");
+    }
+
+    @Test
+    void testSetActivoFalse_CambiaEstadoDelUsuario() {
+
+        UserEntity user = UserEntity.builder()
+                .username("usuario@example.com")
+                .password("claveSegura")
+                .roles(Set.of(new RoleEntity()))
+                .accountNoExpired(true)
+                .accountNoLocked(true)
+                .credentialNoExpired(true)
+                .isEnabled(true)
+                .activo(true)
+                .build();
+
+        user.setActivo(false);
+        assertFalse(user.isActivo(), "El usuario debería estar inactivo después del cambio");
+    }
+
 }

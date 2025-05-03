@@ -17,6 +17,7 @@ public interface IPersonaService {
     Optional<Persona> findByUsuarioId(Long usuario_id);
     Persona personaModelSession(String nombreSession, HttpSession session);
     List<Persona> findJefes();
+    List<Persona> findMiembros();
 
 
 }

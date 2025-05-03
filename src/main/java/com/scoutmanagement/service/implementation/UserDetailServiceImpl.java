@@ -80,6 +80,7 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
                    .accountNoLocked(true)
                    .credentialNoExpired(true)
                    .isEnabled(true)
+                   .activo(true)
                    .build();
 
            String asunto = "Tu cuenta ha sido creada";

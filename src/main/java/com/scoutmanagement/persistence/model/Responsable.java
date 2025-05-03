@@ -2,6 +2,7 @@ package com.scoutmanagement.persistence.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -10,16 +11,20 @@ import lombok.*;
 @Builder
 @Entity
 public class Responsable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(50)")
     private String nombres;
-    @Column(nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(50)")
     private String apellidos;
-    @Column(nullable = false, unique = true, length = 10)
-    private long numeroDocumento;
-    @Column(nullable = false, length = 10)
+    @Column(nullable = true, unique = true, length = 10)
+    private Long numeroDocumento;
+    @Column(nullable = true, length = 10)
     private long telefono;
+    @OneToMany(mappedBy = "responsable")
+    private List<Persona> personas;
+
 }
