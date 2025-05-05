@@ -1,5 +1,6 @@
 package com.scoutmanagement.persistence.repository;
 
+import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Rama;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,7 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 
     @Query("SELECT p FROM Persona p WHERE str(p.cargo) NOT LIKE 'JEFE_%'")
     List<Persona> findMiembros();
+
+
 
 }

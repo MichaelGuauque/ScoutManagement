@@ -1,8 +1,10 @@
 package com.scoutmanagement.controller;
 
 
+import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import static com.scoutmanagement.util.constants.AppConstants.*;
@@ -10,10 +12,8 @@ import static com.scoutmanagement.util.constants.AppConstants.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Comparator;
 import java.util.List;
@@ -50,7 +50,7 @@ private static final String ID_USUARIO = "idUsuario";
 
                 session.setAttribute("miembro", "jefe");
                 if (Boolean.TRUE.equals(cancelado)) {
-                    model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
+                    model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
                     model.addAttribute("type", EXCEPTION_INFO);
                 }
                 List<Persona> jefes = personaService.findJefes();
@@ -60,6 +60,7 @@ private static final String ID_USUARIO = "idUsuario";
                             boolean estado = p.getUserEntity().isActivo(); // Supongo que 'estado' es booleano
                             return "inactivos".equals(tab) ? !estado : estado; // Filtra por estado (activo o inactivo)
                         })
+                        .sorted(Comparator.comparing(Persona::getRama))
                         .collect(Collectors.toList());
 
                 model.addAttribute("tab", tab);
@@ -69,7 +70,7 @@ private static final String ID_USUARIO = "idUsuario";
             } else {
                 session.setAttribute("miembro", "miembro");
                 if (Boolean.TRUE.equals(cancelado)) {
-                    model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
+                    model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
                     model.addAttribute("type", EXCEPTION_INFO);
 
                 }
@@ -80,6 +81,7 @@ private static final String ID_USUARIO = "idUsuario";
                             boolean estado = p.getUserEntity().isActivo();
                             return "inactivos".equals(tab) ? !estado : estado;
                         })
+                        .sorted(Comparator.comparing(Persona::getRama))
                         .collect(Collectors.toList());
 
                 model.addAttribute("tab", tab);
@@ -90,6 +92,44 @@ private static final String ID_USUARIO = "idUsuario";
         }
 
         return VISTA_ERROR;
+    }
+
+    @GetMapping("/modificarMiembro/{id}")
+    public String mostrarFormularioDeEdicion(@PathVariable Long id, Model model,HttpSession session) {
+        Persona persona = personaService.findByUsuarioId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Persona no encontrada"));
+        // Obtiene el nombre del único rol del usuario
+        String nombreRol = persona.getUserEntity()
+                .getRoles()
+                .stream()
+                .findFirst()
+                .map(roleEntity -> roleEntity.getRole().name())
+                .orElse(null); // Maneja null si no tiene roles
+
+        Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+        model.addAttribute("persona", sesionDelJefe);
+        model.addAttribute("rolSeleccionado", nombreRol);
+        model.addAttribute("ramas", Rama.values());
+        model.addAttribute("roles", Rol.values());
+        model.addAttribute("cargos", Cargo.values());
+        model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+        model.addAttribute("personaModificada", persona);
+        return "user/modificarMiembro";
+    }
+
+    @PostMapping("/actualizarMiembro/{id}")
+    public String actualizarPersona(@PathVariable Long id,
+                                    @ModelAttribute PersonaActualizacionDTO personaActualizacionDTO,
+                                    RedirectAttributes redirectAttributes, Model model) {
+        try {
+            personaService.actualizarPersona(id, personaActualizacionDTO);
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro actualizado con éxito");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+            return "redirect:/miembros";
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("error", "Persona no encontrada");
+            return "miembros/consultarMiembros";
+        }
     }
 
 

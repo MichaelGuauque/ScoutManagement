@@ -34,6 +34,8 @@ public class UserController {
     @Autowired
     private IPersonaService personaService;
 
+    private static final String ID_USUARIO = "idUsuario";
+
     @GetMapping()
     public String login() {
         return "user/login";
@@ -82,6 +84,8 @@ public class UserController {
 
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
             model.addAttribute("ramas", Rama.values());
             model.addAttribute("roles", Rol.values());
             model.addAttribute("cargos", Cargo.values());
@@ -109,7 +113,7 @@ public class UserController {
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 redirectAttributes.addFlashAttribute("errorPersona", true);
                 redirectAttributes.addFlashAttribute("usuario", user);
-                redirectAttributes.addFlashAttribute("persona", dto);
+                redirectAttributes.addFlashAttribute("personaAgregada", dto);
                 return VISTA_REGISTRAR;
             }
             boolean correoExiste = userService.existsByUsername(user.getUsername());
@@ -118,7 +122,7 @@ public class UserController {
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 redirectAttributes.addFlashAttribute("errorCorreo", true);
                 redirectAttributes.addFlashAttribute("usuario", user);
-                redirectAttributes.addFlashAttribute("persona", dto);
+                redirectAttributes.addFlashAttribute("personaAgregada", dto);
                 return VISTA_REGISTRAR;
 
             }

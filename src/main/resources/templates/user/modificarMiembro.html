@@ -34,11 +34,15 @@
 
     <div class="container">
         <div class="header">
-            <h1 class="encabezado">Agregar un Miembro al Grupo</h1>
-            <p class="description">Ingresa los datos principales del nuevo integrante para incluirlo en el sistema.</p>
+            <h1 class="encabezado">Modificar Datos de Miembros</h1>
+            <p class="description">
+
+                Desde aquí puedes actualizar la información personal de un miembro del grupo scout.
+            </p>
         </div>
 
-        <form id="formularioMiembro" th:action="@{/guardar}" method="post">
+        <form id="formularioMiembro" th:action="@{/miembros/actualizarMiembro/{id}(id=${personaModificada.userEntity.id})}"
+              method="post">
             <div class="section">
                 <h2 class="section-title">Información Básica</h2>
                 <p class="section-subtitle">Datos básicos sobre el miembro.</p>
@@ -49,8 +53,7 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarPrimerNombre(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.primerNombre :
-                               ((errorPersona != null && errorPersona) ? personaAgregada?.primerNombre : '')}"
+                               th:value="${personaModificada.primerNombre}"
                                placeholder="Ingresa el primer nombre...">
                     </div>
 
@@ -60,8 +63,7 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+"
                                oninvalid="validarSegundoNombre(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.segundoNombre :
-                               ((errorPersona != null && errorPersona) ? personaAgregada?.segundoNombre : '')}"
+                               th:value="${personaModificada.segundoNombre}"
                                placeholder="Ingresa el segundo nombre...">
                     </div>
 
@@ -71,8 +73,7 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarPrimerApellido(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.primerApellido :
-                               ((errorPersona != null && errorPersona) ? personaAgregada?.primerApellido : '')}"
+                               th:value="${personaModificada.primerApellido}"
                                placeholder="Ingresa el primer apellido...">
                     </div>
 
@@ -82,8 +83,7 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarSegundoApellido(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.segundoApellido :
-                               ((errorPersona != null && errorPersona) ? personaAgregada?.segundoApellido : '')}"
+                               th:value="${personaModificada.segundoApellido}"
                                placeholder="Ingresa el segundo apellido...">
                     </div>
                 </div>
@@ -98,8 +98,7 @@
                             <option value="" disabled selected>Seleccione...</option>
                             <th:block th:each="tipoDeDocumento : ${tiposDeDocumento}">
                                 <option th:value="${tipoDeDocumento}" th:text="${tipoDeDocumento}"
-                                        th:selected="${(errorCorreo != null || errorPersona != null)
-                                        and personaAgregada?.tipoDeDocumento == tipoDeDocumento}">
+                                        th:selected="${personaModificada.tipoDeDocumento == tipoDeDocumento}" >
                                 </option>
                             </th:block>
                         </select>
@@ -111,20 +110,21 @@
                                max="99999999999" required placeholder="Ingresa aquí el documento..."
                                oninvalid="this.setCustomValidity('Por favor ingresa un número de documento válido')"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null || errorPersona != null) ? personaAgregada?.numeroDeDocumento : ''}">
+                               th:value="${personaModificada.numeroDeDocumento}">
                     </div>
 
                     <div class="form-group">
                         <label>Correo Electrónico</label>
-                        <input type="email" name="usuario.username" id="usuario.username" maxlength="50" required
-                               th:value="${(errorCorreo != null || errorPersona != null) and usuario != null} ? ${usuario.username} : ''"
+                        <input type="email" name="usuario.username" id="usuario.username" maxlength="50" required  disabled
+
                                oninvalid="this.setCustomValidity('Por favor ingresa un correo válido')"
                                oninput="this.setCustomValidity('')"
+                               th:value="${personaModificada.getUserEntity().getUsername()}"
                                placeholder="Ingresa aquí el correo...">
                     </div>
-                   </div>
-               </div>
-               <!-- Título para la sección de función -->
+                </div>
+            </div>
+            <!-- Título para la sección de función -->
             <div class="section">
                 <h2 class="section-title">Función dentro del Grupo</h2>
                 <p class="section-subtitle">Selecciona el rol, el cargo y la rama a la que pertenece el miembro.</p>
@@ -134,7 +134,7 @@
                 <div class="form-row">
                     <div class="form-group" style="max-width: 185px;">
                         <label for="rol">Rol</label>
-                        <select class="form-select" name="usuario.rol" id="rol" onchange="actualizarCargos()" required>
+                        <select class="form-select" name="rol" id="rol" onchange="actualizarCargos()" required>
                             <option value="" disabled selected>Seleccione...</option>
                             <th:block th:each="rol : ${roles}">
                                 <option th:value="${rol}" th:text="${rol}"></option>
@@ -144,7 +144,7 @@
 
                     <div class="form-group">
                         <label for="cargo">Cargo</label>
-                        <select class="form-select" name="cargo" id="cargo" disabled required>
+                        <select class="form-select" name="cargo" id="cargo" required disabled>
                             <option value="" disabled selected>Selecciona el Cargo...</option>
                         </select>
                     </div>
@@ -153,8 +153,8 @@
                     <div class="form-group">
                         <label for="rama">Rama</label>
                         <select class="form-select" name="rama" id="rama"
-                                style="pointer-events: none;background-color: #f3f3f3;">
-                            <option value="" selected="">Seleccione...</option>
+                                style="pointer-events: none; background-color: #f3f3f3;">
+                            <option value="" selected>Seleccione...</option>
                             <th:block th:each="rama : ${ramas}">
                                 <option th:value="${rama}" th:text="${rama}"></option>
                             </th:block>
@@ -483,14 +483,17 @@
         ROVER: 'CLAN'
     };
 
-    function actualizarCargos() {
+
+
+
+    function actualizarCargos(preselectedCargo = null) {
         const rolSelect = document.getElementById('rol');
         const cargoSelect = document.getElementById('cargo');
         const ramaSelect = document.getElementById('rama');
         const rolSeleccionado = rolSelect.value;
 
-        cargoSelect.innerHTML = '<option value="" disabled selected >Selecciona el Cargo...</option>';
-
+        // Limpiar opciones
+        cargoSelect.innerHTML = '<option value="" disabled selected>Selecciona el Cargo...</option>';
         cargoSelect.disabled = true;
 
         if (rolSeleccionado && cargosPorRol[rolSeleccionado]) {
@@ -498,14 +501,32 @@
                 const option = document.createElement('option');
                 option.value = cargo.value;
                 option.text = cargo.text;
+
+                if (preselectedCargo && preselectedCargo === cargo.value) {
+                    option.selected = true;
+                }
+
                 cargoSelect.appendChild(option);
             });
             cargoSelect.disabled = false;
         }
 
-        // Limpiar rama si se cambia el rol
-        ramaSelect.value = '';
+        // Limpiar rama
+        if (ramaSelect) {
+            ramaSelect.value = '';
+        }
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const rolActual = /*[[${rolSeleccionado}]]*/ 'null';
+        const cargoActual = /*[[${personaModificada.cargo?.name()}]]*/ 'null';
+
+        if (rolActual !== 'null') {
+            document.getElementById('rol').value = rolActual;
+            actualizarCargos(cargoActual); // Aquí sí pasamos el cargo actual
+        }
+    });
+
 
     function actualizarRama() {
         const cargoSelect = document.getElementById('cargo');
