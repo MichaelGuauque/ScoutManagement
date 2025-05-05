@@ -39,6 +39,8 @@ public class UserController {
         return "user/login";
     }
 
+    private static final String ID_USUARIO = "idUsuario";
+
     @PostMapping("/acceder")
     public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -141,9 +143,12 @@ public class UserController {
     }
 
     @GetMapping("/home-admin")
-    public String showAdminHomePage(HttpSession session) {
+    public String showAdminHomePage(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
             return "admin/home";
         }
         if (rol == null) {

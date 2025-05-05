@@ -57,9 +57,10 @@ private static final String ID_USUARIO = "idUsuario";
 
                 List<Persona> jefesFiltrados = jefes.stream()
                         .filter(p -> {
-                            boolean estado = p.getUserEntity().isActivo(); // Supongo que 'estado' es booleano
-                            return "inactivos".equals(tab) ? !estado : estado; // Filtra por estado (activo o inactivo)
+                            boolean estado = p.getUserEntity().isActivo();
+                            return "inactivos".equals(tab) ? !estado : estado;
                         })
+                        .sorted(Comparator.comparing(Persona::getRama))
                         .collect(Collectors.toList());
 
                 model.addAttribute("tab", tab);
@@ -80,6 +81,7 @@ private static final String ID_USUARIO = "idUsuario";
                             boolean estado = p.getUserEntity().isActivo();
                             return "inactivos".equals(tab) ? !estado : estado;
                         })
+                        .sorted(Comparator.comparing(Persona::getRama))
                         .collect(Collectors.toList());
 
                 model.addAttribute("tab", tab);
