@@ -33,6 +33,7 @@ public class UserController {
 
     @Autowired
     private IPersonaService personaService;
+    private static final String ID_USUARIO = "idUsuario";
 
     @GetMapping()
     public String login() {
@@ -82,11 +83,13 @@ public class UserController {
 
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona persona = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", persona);
             model.addAttribute("ramas", Rama.values());
             model.addAttribute("roles", Rol.values());
             model.addAttribute("cargos", Cargo.values());
             model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
-            return "/user/crearMiembro";
+            return "user/crearMiembro";
         }
         if (rol == null) {
             return VISTA_LOGIN;
