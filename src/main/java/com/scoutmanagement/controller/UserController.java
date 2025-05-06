@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -37,6 +38,8 @@ public class UserController {
     public String login() {
         return "user/login";
     }
+
+    private static final String ID_USUARIO = "idUsuario";
 
     @PostMapping("/acceder")
     public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
@@ -81,6 +84,8 @@ public class UserController {
 
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
             model.addAttribute("ramas", Rama.values());
             model.addAttribute("roles", Rol.values());
             model.addAttribute("cargos", Cargo.values());
@@ -108,7 +113,7 @@ public class UserController {
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 redirectAttributes.addFlashAttribute("errorPersona", true);
                 redirectAttributes.addFlashAttribute("usuario", user);
-                redirectAttributes.addFlashAttribute("persona", dto);
+                redirectAttributes.addFlashAttribute("personaAgregada", dto);
                 return VISTA_REGISTRAR;
             }
             boolean correoExiste = userService.existsByUsername(user.getUsername());
@@ -117,7 +122,7 @@ public class UserController {
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 redirectAttributes.addFlashAttribute("errorCorreo", true);
                 redirectAttributes.addFlashAttribute("usuario", user);
-                redirectAttributes.addFlashAttribute("persona", dto);
+                redirectAttributes.addFlashAttribute("personaAgregada", dto);
                 return VISTA_REGISTRAR;
 
             }
@@ -140,9 +145,12 @@ public class UserController {
     }
 
     @GetMapping("/home-admin")
-    public String showAdminHomePage(HttpSession session) {
+    public String showAdminHomePage(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
             return "admin/home";
         }
         if (rol == null) {
@@ -169,5 +177,6 @@ public class UserController {
         session.removeAttribute("rol");
         return VISTA_LOGIN;
     }
+
 
 }

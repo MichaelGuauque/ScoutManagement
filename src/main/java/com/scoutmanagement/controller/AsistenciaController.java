@@ -4,7 +4,9 @@ import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Asistencia;
 import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Rol;
+
 import static com.scoutmanagement.util.constants.AppConstants.*;
+
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import com.scoutmanagement.util.exception.ServiceException;

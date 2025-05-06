@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ActividadService implements IActividadService {
@@ -76,4 +77,37 @@ public class ActividadService implements IActividadService {
     public List<Actividad> findAllByRama(Rama rama) {
         return actividadRepository.findByRama(rama);
     }
+
+    @Override
+    public List<Actividad> filtrarYOrdenarActividadesPorTab(List<Actividad> actividades, Rama rama, String tab, LocalDate hoy) {
+        return actividades.stream()
+                .filter(actividad -> rama == null || actividad.getRama().equals(rama))
+                .filter(actividad -> tab.equals("pasadas")
+                        ? actividad.getFecha().isBefore(hoy)
+                        : !actividad.getFecha().isBefore(hoy))
+                .sorted(tab.equals("pasadas")
+                        ? Comparator.comparing(Actividad::getFecha).reversed()
+                        : Comparator.comparing(Actividad::getFecha))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Actividad> paginarActividades(List<Actividad> actividades, int page, int size) {
+        return actividades.stream()
+                .skip((long) page * size)
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<Long, Boolean> encontrarActividadMasProxima(List<Actividad> actividades,int page, String tab) {
+        Map<Long, Boolean> actividadEsMasProxima = new HashMap<>();
+        if ("proximas".equals(tab) && page == 0) {
+            actividades.stream()
+                    .min(Comparator.comparing(Actividad::getFecha))
+                    .ifPresent(actividad -> actividadEsMasProxima.put(actividad.getId(), true));
+        }
+        return actividadEsMasProxima;
+    }
+
 }

@@ -53,7 +53,7 @@ public class Persona {
     private Rama rama;
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
-    @ManyToOne(targetEntity = Responsable.class)
+    @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = Responsable.class)
     private Responsable responsable;
     @OneToOne()
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)

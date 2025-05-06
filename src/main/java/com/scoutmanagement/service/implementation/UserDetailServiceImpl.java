@@ -73,13 +73,14 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
            RoleEntity userRole = roleRepository.findByRole(userDTO.getRol());
 
            UserEntity user = UserEntity.builder()
-                   .username(userDTO.getUsername())
+                   .username(userDTO.getUsername().toLowerCase())
                    .password(bCryptPasswordEncoder.encode(passwordGenerada))
                    .roles(Set.of(userRole))
                    .accountNoExpired(true)
                    .accountNoLocked(true)
                    .credentialNoExpired(true)
                    .isEnabled(true)
+                   .activo(true)
                    .build();
 
            String asunto = "Tu cuenta ha sido creada";
