@@ -25,123 +25,7 @@
 <!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<div class="sidebar" id="sidebar">
-    <div class="logo-contenedor">
-        <img th:src="@{/img/logoApli.svg}" alt="Scout Management" class="logo">
-    </div>
-
-    <div class="perfil-contenedor">
-        <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
-        <div class="perfil-info">
-            <p class="nombre-perfil">Miguel Andres M...</p>
-            <p class="cargo-perfil">Adulto - Jefe Manada</p>
-        </div>
-        <div class="perfil-flecha">
-            <img class="flecha-perfil" th:src="@{/img/flechita.svg}" alt="Desplegar">
-        </div>
-
-        <!-- Menú desplegable del perfil -->
-        <div class="perfil-menu" id="perfilMenu">
-            <ul>
-                <li class="nav-link">
-                    <img th:src="@{/img/sesion.svg}" alt="Ver Perfil" class="perfil-menu-icon">
-                    <span>Ver Perfil</span>
-                </li>
-                <li class="nav-link">
-                    <img th:src="@{/img/cierreSesion.svg}" alt="Cerrar Sesión" class="perfil-menu-icon">
-                    <a class="cerrar-sesion" th:href="@{/cerrar}">Cerrar Sesión</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="linea-divisoria"></div>
-
-    <div class="contenido-central">
-        <nav class="menu">
-            <ul>
-                <li class="menu-item">
-                    <a th:href="@{/home-admin}" class="main-button nav-link" style="text-decoration: none;">
-                        <img th:src="@{/img/Casa.svg}" alt="Inicio">
-                        <span>Inicio</span>
-                    </a>
-                </li>
-
-
-                <li class="menu-item">
-                    <div class="main-button">
-                        <img th:src="@{/img/Calendario.svg}" alt="Actividades">
-                        <span>Actividades</span>
-                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
-                             style="width: 15px; height: 15px;">
-                    </div>
-                    <ul class="submenu">
-                        <li class="nav-link">
-                            <a th:href="@{/actividades}">
-                                <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar
-                                Actividades
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a th:href="@{/actividades/crear}">
-                                <img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear
-                                Actividad
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="menu-item">
-                    <div class="main-button">
-                        <img th:src="@{/img/grafico.svg}" alt="Progresiones">
-                        <span>Progresiones</span>
-                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
-                             style="width: 15px; height: 15px;">
-                    </div>
-                    <ul class="submenu">
-                        <li class="nav-link"><img th:src="@{/img/retos.svg}" alt="Consultar" class="submenu-icon">Gestionar
-                            Retos
-                        </li>
-                        <li class="nav-link"><img th:src="@{/img/retos(miembros).svg}" alt="Agregar"
-                                                  class="submenu-icon">Progresion Miembros
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="menu-item">
-                    <div class="main-button">
-                        <img th:src="@{/img/usuarios.svg}" alt="Miembros">
-                        <span>Miembros</span>
-                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
-                             style="width: 15px; height: 15px;">
-                    </div>
-                    <ul class="submenu">
-                        <li class="nav-link">
-                            <a th:href="@{/miembros}">
-                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
-                                     class="submenu-icon">Consultar Miembros
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a th:href="@{/miembros/jefes}">
-                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
-                                     class="submenu-icon">Consultar Jefes
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-    <div class="linea-divisoria"></div>
-
-    <div class="configuracion nav-link">
-        <img th:src="@{/img/tuerca.svg}" alt="Configuración">
-        <span>Configuración de Cuenta</span>
-    </div>
-</div>
-
+<div th:include="admin/template_admin.html::header"></div>
 
 <!-- Contenido principal -->
 <main>
@@ -164,8 +48,8 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarPrimerNombre(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.primerNombre :
-                               ((errorPersona != null && errorPersona) ? persona?.primerNombre : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.primerNombre :
+                               ((errorPersona != null && errorPersona) ? personaAgregada?.primerNombre : '')}"
                                placeholder="Ingresa el primer nombre...">
                     </div>
 
@@ -175,8 +59,8 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+"
                                oninvalid="validarSegundoNombre(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.segundoNombre :
-                               ((errorPersona != null && errorPersona) ? persona?.segundoNombre : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.segundoNombre :
+                               ((errorPersona != null && errorPersona) ? personaAgregada?.segundoNombre : '')}"
                                placeholder="Ingresa el segundo nombre...">
                     </div>
 
@@ -186,8 +70,8 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarPrimerApellido(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.primerApellido :
-                               ((errorPersona != null && errorPersona) ? persona?.primerApellido : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.primerApellido :
+                               ((errorPersona != null && errorPersona) ? personaAgregada?.primerApellido : '')}"
                                placeholder="Ingresa el primer apellido...">
                     </div>
 
@@ -197,8 +81,8 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarSegundoApellido(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.segundoApellido :
-                               ((errorPersona != null && errorPersona) ? persona?.segundoApellido : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.segundoApellido :
+                               ((errorPersona != null && errorPersona) ? personaAgregada?.segundoApellido : '')}"
                                placeholder="Ingresa el segundo apellido...">
                     </div>
                 </div>
@@ -214,7 +98,7 @@
                             <th:block th:each="tipoDeDocumento : ${tiposDeDocumento}">
                                 <option th:value="${tipoDeDocumento}" th:text="${tipoDeDocumento}"
                                         th:selected="${(errorCorreo != null || errorPersona != null)
-                                        and persona?.tipoDeDocumento == tipoDeDocumento}">
+                                        and personaAgregada?.tipoDeDocumento == tipoDeDocumento}">
                                 </option>
                             </th:block>
                         </select>
@@ -226,14 +110,13 @@
                                max="99999999999" required placeholder="Ingresa aquí el documento..."
                                oninvalid="this.setCustomValidity('Por favor ingresa un número de documento válido')"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null || errorPersona != null) ? persona?.numeroDeDocumento : ''}">
+                               th:value="${(errorCorreo != null || errorPersona != null) ? personaAgregada?.numeroDeDocumento : ''}">
                     </div>
 
                     <div class="form-group">
                         <label>Correo Electrónico</label>
                         <input type="email" name="usuario.username" id="usuario.username" maxlength="50" required
-                               th:value="${(errorCorreo != null && errorCorreo) ? usuario?.username :
-                                persona?.usuario?.username}"
+                               th:value="${errorCorreo != null and errorCorreo} ? ${usuario.username} : ''"
                                oninvalid="this.setCustomValidity('Por favor ingresa un correo válido')"
                                oninput="this.setCustomValidity('')"
                                placeholder="Ingresa aquí el correo...">
@@ -273,7 +156,7 @@
                             <option value="" selected="">Seleccione...</option>
                             <th:block th:each="rama : ${ramas}">
                                 <option th:value="${rama}" th:text="${rama}" th:selected="${(errorCorreo != null || errorPersona != null)
-                                        and persona?.rama == rama}"></option>
+                                        and personaAgregada?.rama == rama}"></option>
                             </th:block>
                         </select>
                     </div>
@@ -282,58 +165,13 @@
 
             <div class="buttons">
                 <button type="submit" class="btn-primary">Guardar</button>
-                <button type="button" class="btn-secondary" onclick="cancelarRegistro()" >Cancelar</button>
+                <button type="button" class="btn-secondary" onclick="cancelarRegistro()">Cancelar</button>
 
             </div>
         </form>
     </div>
 
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-top">
-                <div class="footer-logo">
-                    <img src="img/logo605.png" alt="Scouts Jaguares 605" class="logo-img">
-                </div>
-
-                <div class="footer-info">
-                    <div class="footer-title">
-                        <div class="dot"></div>
-                        <h2>Scouts Jaguares 605</h2>
-                    </div>
-                    <p class="footer-slogan">Listos para servir, listos para rugir.</p>
-
-                    <div class="footer-address">
-                        <img src="img/ubicacion.svg" alt="Ubicación" class="ubicacion-icon">
-                        <p class="footer-ubi">Palmira, Valle del Cauca – Barrio Las Delicias<br>
-                            Sede: Casa de la Juventud, Calle 30 #29-15</p>
-                    </div>
-                </div>
-
-                <div class="footer-social">
-                    <a href="#" class="social-icon">
-                        <img src="img/facebook.svg" alt="Facebook">
-                    </a>
-                    <a href="#" class="social-icon">
-                        <img src="img/instagram.svg" alt="Instagram">
-                    </a>
-                    <a href="#" class="social-icon">
-                        <img src="img/tiktok.svg" alt="TikTok">
-                    </a>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <nav class="footer-nav">
-                    <a href="#" class="footer-link">Inicio</a>
-                    <a href="#" class="footer-link">Política de Tratamiento de Datos</a>
-                    <a href="#" class="footer-link">Configuración</a>
-                </nav>
-                <p class="footer-copyright">© 2025 Todos los derechos reservados</p>
-            </div>
-        </div>
-    </footer>
-
+    <div th:include="admin/template_admin.html::footer"></div>
 
 </main>
 
@@ -685,18 +523,18 @@
     });
 </script>
 
-    <script th:if="${message != null}">
-        window.onload = function (){
+<script th:if="${message != null}">
+    window.onload = function () {
         showSimpleNotification("[[${message}]]", "[[${type}]]");
     }
 
-    </script>
+</script>
 
 <script>
     function validarPrimerNombre(input) {
         if (input.validity.valueMissing) {
             input.setCustomValidity('Por favor, ingresa el primer nombre');
-        }else if (input.value.includes(' ')) {
+        } else if (input.value.includes(' ')) {
             input.setCustomValidity('Por favor, ingresa únicamente el primer nombre');
         } else if (input.validity.patternMismatch) {
             input.setCustomValidity('Por favor, ingresa un primer nombre válido');
@@ -704,14 +542,16 @@
             input.setCustomValidity('');
         }
     }
+
     function validarSegundoNombre(input) {
 
-         if (input.validity.patternMismatch) {
+        if (input.validity.patternMismatch) {
             input.setCustomValidity('Por favor, ingresa un segundo nombre válido');
         } else {
             input.setCustomValidity('');
         }
     }
+
     function validarPrimerApellido(input) {
         if (input.validity.valueMissing) {
             input.setCustomValidity('Por favor, ingresa el primer apellido');
@@ -723,6 +563,7 @@
             input.setCustomValidity('');
         }
     }
+
     function validarSegundoApellido(input) {
         if (input.value.includes(' ')) {
             input.setCustomValidity('Por favor, ingresa únicamente el segundo apellido');
