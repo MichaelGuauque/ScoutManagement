@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class MiembroController {
     private final Logger log = LoggerFactory.getLogger(MiembroController.class);
 
     @GetMapping()
-    public String showMiembros(Model model, HttpSession session) {
+    public String showMiembros(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.JOVEN.name()) {
 
@@ -41,7 +42,9 @@ public class MiembroController {
                 model.addAttribute("miembros", miembrosRama);
                 return "miembros/miembrosRama";
             }catch(Exception e){
-
+                log.error("Error al mostrar los miembros de la rama del miembro: {}", e.getMessage());
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
             }
         }
         if (rol == null) {
