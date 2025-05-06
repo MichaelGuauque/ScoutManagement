@@ -1,0 +1,83 @@
+<div th:fragment="header">
+    <div class="sidebar" id="sidebar">
+        <div class="logo-contenedor">
+            <img src="img/logoApli.svg" alt="Scout Management" class="logo">
+        </div>
+
+        <div class="perfil-contenedor">
+            <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
+            <div class="perfil-info">
+                <p class="nombre-perfil" th:text="${persona.getNombreCompleto()}"></p>
+                <p class="cargo-perfil" th:text="${persona.getUserEntity().getRoles().iterator().next().getRole().name() + ' - ' + persona.getCargo().getLabel()}"></p>
+            </div>
+            <div class="perfil-flecha">
+                <img class="flecha-perfil" th:src="@{/img/flechita.svg}" alt="Desplegar">
+            </div>
+
+            <!-- Menú desplegable del perfil -->
+            <div class="perfil-menu" id="perfilMenu">
+                <ul>
+                    <li class="nav-link">
+                        <img th:src="@{/img/sesion.svg}" alt="Ver Perfil" class="perfil-menu-icon">
+                        <span>Ver Perfil</span>
+                    </li>
+                    <li class="nav-link">
+                        <img th:src="@{/img/cierreSesion.svg}" alt="Cerrar Sesión" class="perfil-menu-icon">
+                        <a class="cerrar-sesion" th:href="@{/cerrar}">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="linea-divisoria"></div>
+
+        <div class="contenido-central">
+            <nav class="menu">
+                <ul>
+                    <li class="menu-item">
+                        <div class="main-button nav-link">
+                            <img th:src="@{/img/Casa.svg}" alt="Inicio">
+                            <span>Inicio</span>
+                        </div>
+                    </li>
+
+                    <li class="menu-item">
+                        <div class="main-button">
+                            <img th:src="@{/img/grafico.svg}" alt="Progresiones">
+                            <span>Progresiones</span>
+                            <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img">
+                        </div>
+                        <ul class="submenu">
+                            <li class="nav-link">
+                                <img th:src="@{/img/retos.svg}" alt="Consultar" class="submenu-icon">Gestionar Retos
+                                Consultar Avances
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-item">
+                        <div class="main-button">
+                            <img th:src="@{/img/usuarios.svg}" alt="Miembros">
+                            <span>Miembros</span>
+                            <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img">
+                        </div>
+                        <ul class="submenu">
+                            <li class="nav-link">
+                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
+                                     class="submenu-icon">
+                                Compañeros de Rama
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="linea-divisoria"></div>
+
+        <div class="configuracion nav-link">
+            <img src="img/tuerca.svg" alt="Configuración">
+            <span>Configuración de Cuenta</span>
+        </div>
+    </div>
+</div>
