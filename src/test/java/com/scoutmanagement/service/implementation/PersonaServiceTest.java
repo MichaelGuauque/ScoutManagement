@@ -233,4 +233,20 @@ public class PersonaServiceTest {
 
         verify(personaRepository, times(1)).findMiembros();
     }
+
+    @Test
+    public void testGetNombreCompleto() {
+        // Arrange
+        Persona persona = new Persona();
+        persona.setPrimerNombre("Juan");
+        persona.setSegundoNombre("Carlos");
+        persona.setPrimerApellido("Pérez");
+        persona.setSegundoApellido("Gómez");
+
+        // Act
+        String nombreCompleto = persona.getNombreCompleto();
+
+        // Assert
+        assertEquals("Juan Carlos Pérez Gómez", nombreCompleto);
+    }
 }
