@@ -41,6 +41,8 @@ public class UserController {
 
     private static final String ID_USUARIO = "idUsuario";
 
+    private static final String ATRIBUTO_PERSONA = "persona";
+
     @PostMapping("/acceder")
     public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -85,7 +87,7 @@ public class UserController {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", sesionDelJefe);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
             model.addAttribute("ramas", Rama.values());
             model.addAttribute("roles", Rol.values());
             model.addAttribute("cargos", Cargo.values());
@@ -150,7 +152,7 @@ public class UserController {
 
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", sesionDelJefe);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
             return "admin/home";
         }
         if (rol == null) {
@@ -165,7 +167,7 @@ public class UserController {
 
         if (session.getAttribute("rol") == Rol.JOVEN.name()) {
             Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", sesionDelMiembro);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelMiembro);
             return "user/home";
         }
         if (rol == null) {
