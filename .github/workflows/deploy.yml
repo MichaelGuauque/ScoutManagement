@@ -48,4 +48,4 @@ jobs:
             docker load < scout-management.tar
             docker stop scout-management || true
             docker rm scout-management || true
-            docker run --name scout-management -p 8080:8080 scout-management
+            docker run --name scout-management -e EC2_HOST=${{ secrets.EC2_HOST }} -p 8080:8080 scout-management
