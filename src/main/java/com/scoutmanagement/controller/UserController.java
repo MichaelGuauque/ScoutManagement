@@ -160,9 +160,12 @@ public class UserController {
     }
 
     @GetMapping("/home-user")
-    public String showUserHomePage(HttpSession session) {
+    public String showUserHomePage(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+
         if (session.getAttribute("rol") == Rol.JOVEN.name()) {
+            Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelMiembro);
             return "user/home";
         }
         if (rol == null) {
