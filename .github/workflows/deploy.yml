@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: mvn clean install
 
       - name: Build Docker image
         run: docker build -t scout-management .
@@ -48,4 +48,4 @@ jobs:
             docker load < scout-management.tar
             docker stop scout-management || true
             docker rm scout-management || true
-            docker run -d --name scout-management -p 8080:8080 scout-management
+            docker run --name scout-management -p 8080:8080 scout-management
