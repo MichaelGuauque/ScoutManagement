@@ -2,8 +2,11 @@ package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.dto.RetoDTO;
 import com.scoutmanagement.persistence.model.Etapa;
+import com.scoutmanagement.persistence.model.Persona;
+import com.scoutmanagement.persistence.model.Progreso;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
+import com.scoutmanagement.persistence.repository.ProgresoRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.service.interfaces.IRetoService;
 import com.scoutmanagement.util.exception.ServiceException;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RetoService implements IRetoService {
@@ -20,6 +24,8 @@ public class RetoService implements IRetoService {
     private RetoRepository retoRepository;
     @Autowired
     private EtapaRepository etapaRepository;
+    @Autowired
+    private ProgresoRepository progresoRepository;
 
     @Override
     public Optional<Reto> findById(long id) {
@@ -85,4 +91,17 @@ public class RetoService implements IRetoService {
         }
 
     }
+
+
+
+    @Override
+    public List<Reto> findCompletadosByPersonaAndEtapa(Persona persona, Etapa etapa) {
+        List<Progreso> progresos = progresoRepository.findByPersonaAndEstadoTrue(persona);
+
+        return progresos.stream()
+                .map(Progreso::getReto)
+                .filter(reto -> reto.getEtapa().equals(etapa))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Progresiones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/verProgresionesStyle.css}">
+</head>
+<body>
+<!-- Botón hamburguesa para móviles -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</button>
+
+<!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar" id="sidebar">
+    <div class="logo-contenedor">
+        <img th:src="@{/img/logoApli.svg}" alt="Scout Management" class="logo">
+    </div>
+
+    <div class="perfil-contenedor">
+        <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
+        <div class="perfil-info">
+            <p class="nombre-perfil">Miguel Andres M...</p>
+            <p class="cargo-perfil">Joven - Lobato</p>
+        </div>
+        <div class="perfil-flecha">
+            <img class="flecha-perfil" th:src="@{/img/flechita.svg}" alt="Desplegar">
+        </div>
+
+        <!-- Menú desplegable del perfil -->
+        <div class="perfil-menu" id="perfilMenu">
+            <ul>
+                <li class="nav-link">
+                    <img th:src="@{/img/sesion.svg}" alt="Ver Perfil" class="perfil-menu-icon">
+                    <span>Ver Perfil</span>
+                </li>
+                <li class="nav-link">
+                    <img th:src="@{/img/cierreSesion.svg}" alt="Cerrar Sesión" class="perfil-menu-icon">
+                    <a class="cerrar-sesion" th:href="@{/cerrar}">Cerrar Sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="linea-divisoria"></div>
+
+    <div class="contenido-central">
+        <nav class="menu">
+            <ul>
+                <li class="menu-item">
+                    <a th:href="@{/home-admin}" class="main-button nav-link" style="text-decoration: none;">
+                        <img th:src="@{/img/Casa.svg}" alt="Inicio">
+                        <span>Inicio</span>
+                    </a>
+                </li>
+
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img th:src="@{/img/Calendario.svg}" alt="Actividades">
+                        <span>Actividades</span>
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link">
+                            <a th:href="@{/actividades}">
+                                <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar
+                                Actividades
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a th:href="@{/actividades/crear}">
+                                <img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear
+                                Actividad
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img th:src="@{/img/grafico.svg}" alt="Progresiones">
+                        <span>Progresiones</span>
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link"><img th:src="@{/img/retos.svg}" alt="Consultar" class="submenu-icon">Gestionar
+                            Retos
+                        </li>
+                        <li class="nav-link">
+                            <a th:href="@{/progresiones/miProgreso}">
+                                <img th:src="@{/img/retos(miembros).svg}" alt="Agregar"
+                                     class="submenu-icon">Progresion Miembros
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img th:src="@{/img/usuarios.svg}" alt="Miembros">
+                        <span>Miembros</span>
+                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
+                             style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link">
+                            <a th:href="@{/miembros}">
+                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
+                                     class="submenu-icon">Consultar Miembros
+                            </a>
+                        </li>
+                        <li class="nav-link">
+                            <a th:href="@{/miembros/jefes}">
+                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
+                                     class="submenu-icon">Consultar Jefes
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="linea-divisoria"></div>
+
+    <div class="configuracion nav-link">
+        <img th:src="@{/img/tuerca.svg}" alt="Configuración">
+        <span>Configuración de Cuenta</span>
+    </div>
+</div>
+
+<!-- Contenido principal -->
+<!-- Aquí va el contenido de la página -->
+
+<!--<main>-->
+<!--    <div class="container">-->
+<!--        <div class="header">-->
+<!--            <h1 class="encabezado">Mi Camino Scout</h1>-->
+<!--            <p class="description">Aquí puedes ver todo lo que has logrado y lo que te falta por descubrir. Revisa los retos de cada etapa y sigue avanzando en tu aventura scout. ¡Tú eres el protagonista de tu progreso!</p>-->
+<!--        </div>-->
+
+<!--        <div class="divider-line"></div>-->
+
+<!--        <div class="progress-container">-->
+<!--            &lt;!&ndash; Se muestra dinámicamente la etapa con mayor progreso o la primera etapa &ndash;&gt;-->
+<!--            <h2 class="progress-title" th:text="'Tasa de Completado de ' + ${etapaDestacada}"></h2>-->
+
+<!--            <div class="progress-bar-wrapper">-->
+<!--                <div class="progress-text" id="progress-text" th:text="${#numbers.formatDecimal(progresoDestacado, 0, 0) + '% Completado'}">80% Completado</div>-->
+<!--                <div class="progress-bar-container">-->
+<!--                    <div class="progress-bar" id="progress-bar" th:style="'width: ' + ${progresoDestacado} + '%'"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+
+
+<!--        <div class="controls">-->
+<!--            <div class="tabs">-->
+<!--                &lt;!&ndash; Iterar sobre cada etapa para crear las pestañas &ndash;&gt;-->
+<!--                <th:block th:each="etapa, iterStat : ${etapas}">-->
+<!--                    &lt;!&ndash; La primera etapa está activa por defecto, o activar la etapa destacada &ndash;&gt;-->
+<!--                    <button class="tab-button"-->
+<!--                            th:classappend="${etapa.nombre == etapaDestacada ? 'active' : ''}"-->
+<!--                            th:data-tab="${etapa.nombre}"-->
+<!--                            th:text="${etapa.nombre}">Etapa</button>-->
+<!--                </th:block>-->
+<!--            </div>-->
+
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Contenido de cada etapa &ndash;&gt;-->
+<!--        <th:block th:each="etapa : ${etapas}">-->
+<!--            <div th:id="${etapa.nombre}" class="content-area"-->
+<!--                 th:classappend="${etapa.nombre == etapaDestacada ? 'active' : ''}">-->
+<!--                <table>-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th class="number-colm">#</th>-->
+<!--                        <th>Descripción</th>-->
+<!--                        <th class="action-col">Estado</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    &lt;!&ndash; Iterar sobre los retos de la etapa actual &ndash;&gt;-->
+<!--                    <tr th:each="reto, iterStat : ${retosPorEtapa.get(etapa.nombre)}">-->
+<!--                        <td class="number-colm" th:text="${iterStat.count < 10 ? '0' + iterStat.count : iterStat.count}">01</td>-->
+<!--                        <td th:text="${reto.descripcion}">Descripción del reto</td>-->
+<!--                        <td class="action-cell">-->
+<!--                            &lt;!&ndash; Si el reto está completado, mostrar "Hecho", sino mostrar "Pendiente" o checkbox &ndash;&gt;-->
+<!--                            <div th:if="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)}" class="reto-completado">-->
+<!--                                Hecho-->
+<!--                            </div>-->
+<!--                            <div th:unless="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)}" class="reto-Pendiente">-->
+<!--                                Pendiente-->
+<!--                            </div>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--        </th:block>-->
+
+<!--        <div class="medallas-container">-->
+<!--            <div class="cabezera">-->
+<!--                <h2>Insignias Obtenidas</h2>-->
+<!--            </div>-->
+<!--            <div class="insignia-container">-->
+<!--                &lt;!&ndash; Mostrar insignias solo si se ha completado al menos el 80% de la etapa &ndash;&gt;-->
+<!--                <th:block th:each="etapa : ${etapas}">-->
+<!--                    <div class="insignia" th:if="${progresoPorEtapa.get(etapa.nombre) >= 80}">-->
+<!--                        <img src="img/medalla.svg" alt="Insignia" class="insignia-icon">-->
+<!--                        <span class="insignia-name" th:text="${etapa.nombre}">Nombre Etapa</span>-->
+<!--                    </div>-->
+<!--                </th:block>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Progresiones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/verProgresionesStyle.css}">
+</head>
+<body>
+    <!-- Botón hamburguesa para móviles -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </button>
+
+    <!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="logo-contenedor">
+            <img src="img/logoApli.svg" alt="Scout Management" class="logo">
+        </div>
+
+        <div class="perfil-contenedor">
+            <img src="img/perfil.svg" alt="Perfil" class="perfil">
+            <div class="perfil-info">
+                <p class="nombre-perfil">Miguel Andres M...</p>
+                <p class="cargo-perfil">Joven - LOBATO</p>
+            </div>
+            <div class="perfil-flecha">
+                <img src="img/flechita.svg" alt="Desplegar">
+            </div>
+
+            <!-- Menú desplegable del perfil -->
+            <div class="perfil-menu" id="perfilMenu">
+                <ul>
+                    <li class="nav-link">
+                        <img src="img/sesion.svg" alt="Ver Perfil" class="perfil-menu-icon">
+                        <span>Ver Perfil</span>
+                    </li>
+                    <li class="nav-link">
+                        <img src="img/cierreSesion.svg" alt="Cerrar Sesión" class="perfil-menu-icon">
+                        <span>Cerrar Sesión</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="linea-divisoria"></div>
+
+        <div class="contenido-central">
+            <nav class="menu">
+                <ul>
+                    <li class="menu-item">
+                        <div class="main-button nav-link">
+                            <img src="img/Casa.svg" alt="Inicio">
+                            <span>Inicio</span>
+                        </div>
+                    </li>
+
+                    <li class="menu-item">
+                        <div class="main-button">
+                            <img src="img/grafico.svg" alt="Progresiones">
+                            <span>Progresiones</span>
+                            <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        </div>
+                        <ul class="submenu">
+                            <li class="nav-link"><img src="img/retos.svg" alt="Consultar" class="submenu-icon">Consultar Avances</li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-item">
+                        <div class="main-button">
+                            <img src="img/usuarios.svg" alt="Miembros">
+                            <span>Miembros</span>
+                            <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                        </div>
+                        <ul class="submenu">
+                            <li class="nav-link"><img src="img/usuario(buscar).svg" alt="Consultar" class="submenu-icon">Compañeros de Rama</li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="linea-divisoria"></div>
+
+        <div class="configuracion nav-link">
+            <img src="img/tuerca.svg" alt="Configuración">
+            <span>Configuración de Cuenta</span>
+        </div>
+    </div>
+
+
+    <!-- Contenido principal -->
+    <main>
+        <!-- Aquí va el contenido de la página -->
+
+        <div class="container">
+            <div class="header">
+                <h1 class="encabezado">Mi Camino Scout</h1>
+                <p class="description">Aquí puedes ver todo lo que has logrado y lo que te falta por descubrir. Revisa los retos de cada etapa y sigue avanzando en tu aventura scout. ¡Tú eres el protagonista de tu progreso!</p>
+            </div>
+
+
+
+
+            <div class="divider-line"></div>
+
+            <div class="progress-container">
+                <h2 class="progress-title">Taza de Completado de Pata Tierna</h2>
+
+                <div class="progress-bar-wrapper">
+                    <div class="progress-text" id="progress-text">80% Completado</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar" style="width: 50%;"></div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="controls">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="pata-tierna">Pata Tierna</button>
+                    <button class="tab-button" data-tab="saltador">Saltador</button>
+                    <button class="tab-button" data-tab="rastreador">Rastreador</button>
+                    <button class="tab-button" data-tab="cazador">Cazador</button>
+                </div>
+
+            </div>
+
+            <div id="pata-tierna" class="content-area active">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="number-colm">#</th>
+                            <th>Descripción</th>
+                            <th class="action-col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="number-colm">01</td>
+                            <td>m en una buena Estado diaria durante una semana y compártela con tu jefe/a.</td>
+                            <td class="action-cell">
+                            <div class="reto-completado">
+                                Hecho
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">02</td>
+                            <td>Confecciona tu pañuelo scout y conoce su significado.</td>
+                            <td class="action-cell">
+                                <div class="reto-completado">
+                                    Hecho
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">03</td>
+                            <td>Aprende y muestra cómo se dobla correctamente la bandera.</td>
+                            <td class="action-cell">
+                                <div class="reto-completado">
+                                    Hecho
+                                </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">04</td>
+                            <td>Investiga sobre la vida de Baden Powell y comparte 3 cosas con tu patrulla.</td>
+                            <td class="action-cell">
+                            <div class="reto-completado">
+                                Hecho
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">05</td>
+                            <td>Realiza una caminata corta con tu grupo y observa 5 tipos de plantas diferentes.</td>
+                            <td class="action-cell">
+                            <div class="reto-Pendiente">
+                                Pendiente
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">06</td>
+                            <td>Practica y presenta un canto scout en una reunión.</td>
+                            <td class="action-cell">
+                                <div class="reto-Pendiente">
+                                    Pendiente
+                                </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">07</td>
+                            <td>Crea una tarjeta para alguien del grupo y exprésale tu aprecio.</td>
+                            <td class="action-cell">
+                                <div class="reto-Pendiente">
+                                    Pendiente
+                                </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">08</td>
+                            <td>Aprende a usar una brújula y encuentra un punto marcado en un mapa simple.</td>
+                            <td class="action-cell">
+                                <div class="reto-Pendiente">
+                                    Pendiente
+                                </div>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="saltador" class="content-area">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="number-colm">#</th>
+                            <th>Descripción</th>
+                            <th class="action-col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="number-colm">01</td>
+                            <td>Planifica y lidera una pequeña actividad durante una reunión de patrulla.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-1" class="attendance-checkbox">
+                            <label for="saltador-1" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">02</td>
+                            <td>Aprende los nudos básicos (llano, rizo, ballestrinque) y enséñalos a otro scout.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-2" class="attendance-checkbox">
+                            <label for="saltador-2" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">03</td>
+                            <td>Participa activamente en un campamento de fin de semana.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-3" class="attendance-checkbox">
+                            <label for="saltador-3" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">04</td>
+                            <td>Crea una bitácora personal de tus progresos en la tropa.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-4" class="attendance-checkbox">
+                            <label for="saltador-4" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">05</td>
+                            <td>Conoce las señales de socorro y simula una situación de rescate.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-5" class="attendance-checkbox">
+                            <label for="saltador-5" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">06</td>
+                            <td>Escribe y comparte una reflexión sobre el significado de la fraternidad scout.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-6" class="attendance-checkbox">
+                            <label for="saltador-6" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">07</td>
+                            <td>Cocina una comida sencilla en fogata para tu patrulla.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-7" class="attendance-checkbox">
+                            <label for="saltador-7" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">08</td>
+                            <td>Aprende a leer un mapa topográfico básico y úsalo en una salida.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-8" class="attendance-checkbox">
+                            <label for="saltador-8" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="rastreador" class="content-area">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="number-colm">#</th>
+                            <th>Descripción</th>
+                            <th class="action-col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="number-colm">01</td>
+                            <td>Coordina junto a tu comunidad una actividad de servicio en tu barrio.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-1" class="attendance-checkbox">
+                            <label for="rastreador-1" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">02</td>
+                            <td>Investiga y expón sobre un problema ambiental de tu zona.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-2" class="attendance-checkbox">
+                            <label for="rastreador-2" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">03</td>
+                            <td>Diseña un reto de progresión para los scouts más pequeños.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-3" class="attendance-checkbox">
+                            <label for="rastreador-3" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">04</td>
+                            <td>Aprende a construir un refugio improvisado en campo.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-4" class="attendance-checkbox">
+                            <label for="rastreador-4" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">05</td>
+                            <td>Lidera una caminata de orientación con mapa y brújula.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-5" class="attendance-checkbox">
+                            <label for="rastreador-5" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">06</td>
+                            <td>Organiza una dinámica que promueva la comunicación en el grupo.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-6" class="attendance-checkbox">
+                            <label for="rastreador-6" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">07</td>
+                            <td>Participa en un foro juvenil o actividad intergrupal.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-7" class="attendance-checkbox">
+                            <label for="rastreador-7" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">08</td>
+                            <td>Prepara una charla breve sobre primeros auxilios básicos.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-8" class="attendance-checkbox">
+                            <label for="rastreador-8" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="cazador" class="content-area">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="number-colm">#</th>
+                            <th>Descripción</th>
+                            <th class="action-col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="number-colm">01</td>
+                            <td>Diseña y lidera un proyecto de servicio comunitario de varios días.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-1" class="attendance-checkbox">
+                            <label for="cazador-1" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">02</td>
+                            <td>Aprende técnicas avanzadas de supervivencia en la naturaleza.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-2" class="attendance-checkbox">
+                            <label for="cazador-2" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">03</td>
+                            <td>Organiza una actividad de reflexión sobre los valores scout para tu grupo.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-3" class="attendance-checkbox">
+                            <label for="cazador-3" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">04</td>
+                            <td>Planifica y ejecuta una expedición de dos días con tu patrulla.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-4" class="attendance-checkbox">
+                            <label for="cazador-4" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">05</td>
+                            <td>Domina la técnica de señalización con banderas y enseña a otros scouts.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-5" class="attendance-checkbox">
+                            <label for="cazador-5" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="number-colm">06</td>
+                            <td>Investiga sobre problemas ambientales y lidera una Estado ecológica.</td>
+                            <td class="action-cell">
+                            <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-6" class="attendance-checkbox">
+                            <label for="cazador-6" title="Marcar como completado"></label>
+                            </div>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="medallas-container">
+                <div class="cabezera">
+                    <h2>Insignias Obtenidas</h2>
+                </div>
+                <div class="insignia-container">
+                    <div class="insignia">
+                        <img th:src="@{img/medalla.svg}" alt="Insignia" class="insignia-icon">
+                        <span class="insignia-name">Pata Tierna</span>
+                    </div>
+                    <div class="insignia">
+                        <img th:src="@{img/medalla.svg}" alt="Insignia" class="insignia-icon">
+                        <span class="insignia-name">Saltador</span>
+                    </div>
+                    <div class="insignia">
+                        <img th:src="@{img/medalla.svg}" alt="Insignia" class="insignia-icon">
+                        <span class="insignia-name">Rastreador</span>
+                    </div>
+                    <div class="insignia">
+                        <img th:src="@{img/medalla.svg}" alt="Insignia" class="insignia-icon">
+                        <span class="insignia-name">Cazador</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+    <div th:fragment="footer">
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-top">
+                    <div class="footer-logo">
+                        <img th:src="@{/img/logo605.png}" alt="Scouts Jaguares 605" class="logo-img">
+                    </div>
+
+                    <div class="footer-info">
+                        <div class="footer-title">
+                            <div class="dot"></div>
+                            <h2>Scouts Jaguares 605</h2>
+                        </div>
+                        <p class="footer-slogan">Listos para servir, listos para rugir.</p>
+
+                        <div class="footer-address">
+                            <img th:src="@{/img/ubicacion.svg}" alt="Ubicación" class="ubicacion-icon">
+                            <p class="footer-ubi">Palmira, Valle del Cauca – Barrio Las Delicias<br>
+                                Sede: Casa de la Juventud, Calle 30 #29-15</p>
+                        </div>
+                    </div>
+
+                    <div class="footer-social">
+                        <a href="#" class="social-icon">
+                            <img th:src="@{/img/facebook.svg}" alt="Facebook">
+                        </a>
+                        <a href="#" class="social-icon">
+                            <img th:src="@{/img/instagram.svg}" alt="Instagram">
+                        </a>
+                        <a href="#" class="social-icon">
+                            <img th:src="@{/img/tiktok.svg}" alt="TikTok">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <nav class="footer-nav">
+                        <a href="#" class="footer-link">Inicio</a>
+                        <a href="#" class="footer-link">Política de Tratamiento de Datos</a>
+                        <a href="#" class="footer-link">Configuración</a>
+                    </nav>
+                    <p class="footer-copyright">© 2025 Todos los derechos reservados</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</main>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    
+    <!-- JavaScript para la funcionalidad -->
+    <!-- Añade esto antes de los scripts -->
+    <script id="progresosData" type="application/json" th:text="${#strings.escapeJava(#objects.toJson(progresoPorEtapa))}"></script>
+    <script>
+
+            // Function to update the progress bar
+        function updateProgress() {
+            const progressInput = document.getElementById('progress-input');
+            let progressValue = parseInt(progressInput.value);
+            
+            // Validate input
+            if (isNaN(progressValue)) {
+                progressValue = 0;
+            }
+            
+            // Ensure value is between 0 and 100
+            progressValue = Math.max(0, Math.min(100, progressValue));
+            
+            // Update input value
+            progressInput.value = progressValue;
+            
+            // Update progress bar width
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = progressValue + '%';
+            
+            // Update progress text
+            const progressText = document.getElementById('progress-text');
+            progressText.textContent = progressValue + '% Completado';
+        }
+        
+        // Function to decrease progress by 10%
+        function decreaseProgress() {
+            const progressInput = document.getElementById('progress-input');
+            let currentValue = parseInt(progressInput.value);
+            
+            if (isNaN(currentValue)) {
+                currentValue = 0;
+            }
+            
+            progressInput.value = Math.max(0, currentValue - 10);
+            updateProgress();
+        }
+        
+        // Function to increase progress by 10%
+        function increaseProgress() {
+            const progressInput = document.getElementById('progress-input');
+            let currentValue = parseInt(progressInput.value);
+            
+            if (isNaN(currentValue)) {
+                currentValue = 0;
+            }
+            
+            progressInput.value = Math.min(100, currentValue + 10);
+            updateProgress();
+        }
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+                    const tabButtons = document.querySelectorAll('.tab-button');
+                    const contentAreas = document.querySelectorAll('.content-area');
+                    
+                    tabButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            // Remove active class from all buttons and content areas
+                            tabButtons.forEach(btn => btn.classList.remove('active'));
+                            contentAreas.forEach(content => content.classList.remove('active'));
+                            
+                            // Add active class to clicked button
+                            this.classList.add('active');
+                            
+                            // Show corresponding content area
+                            const tabId = this.getAttribute('data-tab');
+                            document.getElementById(tabId).classList.add('active');
+                        });
+                    });
+                });
+
+
+         
+
+        
+        // Script para el menú de perfil
+        document.querySelector('.perfil-flecha').addEventListener('click', function() {
+            const perfilMenu = document.getElementById('perfilMenu');
+            perfilMenu.classList.toggle('show-menu');
+        });
+    
+        // Cerrar el menú al hacer clic fuera de él
+        document.addEventListener('click', function(event) {
+            const perfilMenu = document.getElementById('perfilMenu');
+            const perfilFlecha = document.querySelector('.perfil-flecha');
+            
+            // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+            if (!perfilMenu.contains(event.target) && !perfilFlecha.contains(event.target)) {
+                perfilMenu.classList.remove('show-menu');
+            }
+        });
+    
+        // Script para los menús desplegables de navegación
+        document.querySelectorAll('.main-button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+                event.stopPropagation();
+                
+                const parent = button.parentElement;
+                const wasActive = parent.classList.contains('active');
+                
+                // Cerrar todos los menús activos
+                document.querySelectorAll('.menu-item.active').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Si no estaba activo, activarlo
+                if (!wasActive) {
+                    parent.classList.add('active');
+                }
+            });
+        });
+
+        // Script para toggle del sidebar en móviles
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const hamburger = document.getElementById('hamburger');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+            hamburger.classList.toggle('open');
+            overlay.classList.toggle('active');
+            
+            // Mover el botón también cuando el sidebar está abierto
+            sidebarToggle.classList.toggle('moved');
+        });
+        
+        // Cerrar sidebar al hacer clic en el overlay
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            hamburger.classList.remove('open');
+            overlay.classList.remove('active');
+            sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+        });
+        
+        // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+        document.querySelectorAll('.nav-link').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                    hamburger.classList.remove('open');
+                    overlay.classList.remove('active');
+                    sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+                }
+            });
+        });
+        
+        // Ajustar al cambiar el tamaño de la ventana
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('open');
+                hamburger.classList.remove('open');
+                overlay.classList.remove('active');
+                sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+            }
+        });
+
+    </script>
+    // Añade este script al final de tu archivo verProgresiones.html o en un archivo JS separado
+    document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const contentAreas = document.querySelectorAll('.content-area');
+
+    // Obtener los datos de progreso del modelo Thymeleaf
+    const progresosPorEtapa = JSON.parse(document.getElementById('progresosData').textContent);
+
+    tabButtons.forEach(button => {
+    button.addEventListener('click', function() {
+    // Eliminar la clase active de todos los botones y áreas de contenido
+    tabButtons.forEach(btn => btn.classList.remove('active'));
+    contentAreas.forEach(area => area.classList.remove('active'));
+
+    // Añadir la clase active al botón actual
+    this.classList.add('active');
+
+    // Obtener el id del área de contenido a mostrar
+    const contentId = this.getAttribute('data-tab');
+
+    // Añadir la clase active al área de contenido correspondiente
+    document.getElementById(contentId).classList.add('active');
+
+    // Actualizar la barra de progreso con el porcentaje de la etapa seleccionada
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const progressTitle = document.querySelector('.progress-title');
+
+    // Obtener el progreso de la etapa seleccionada
+    const progreso = progresosPorEtapa[contentId];
+
+    // Actualizar la barra de progreso y el texto
+    progressBar.style.width = progreso + '%';
+    progressText.textContent = Math.round(progreso) + '% Completado';
+    progressTitle.textContent = 'Tasa de Completado de ' + contentId;
+    });
+    });
+
+    // Inicializar la barra para la primera pestaña o la destacada
+    const activeTab = document.querySelector('.tab-button.active');
+    if (activeTab) {
+    const contentId = activeTab.getAttribute('data-tab');
+    const progreso = progresosPorEtapa[contentId];
+
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    progressBar.style.width = progreso + '%';
+    progressText.textContent = Math.round(progreso) + '% Completado';
+    }
+    });
+</body>
+</html>

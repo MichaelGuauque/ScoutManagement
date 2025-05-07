@@ -109,5 +109,71 @@ public class EtapaController {
         return VISTA_ERROR;
     }
 
+    @GetMapping("/miProgreso")
+    public String verMiProgreso(Model model, HttpSession session) {
+
+        Object rol = session.getAttribute("rol");
+        if (rol == null) {
+            return "redirect:/";
+        }
+
+        if (rol.equals(Rol.ADULTO.name())) {
+            return "redirect:/progresiones"; // Redireccionar a la vista de adultos
+        }
+
+        Long idUsuario = Long.parseLong(session.getAttribute(ID_USUARIO).toString());
+        UserEntity usuario = userService.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Persona persona = personaService.findByUsuarioId(usuario.getId())
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+
+        Rama rama = persona.getRama();
+        List<Etapa> etapas = etapaService.findAllByRama(rama);
+
+        Map<Long, Float> progresoPorEtapa = new HashMap<>();
+        Map<String, List<Reto>> retosPorEtapa = new HashMap<>();
+        Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = new HashMap<>();
+
+        Etapa etapaDestacada = null;
+        float progresoMaximo = -1;
+
+        for (Etapa etapa : etapas) {
+            List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
+            List<Reto> retosCompletados = retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
+
+            float progreso = retosEtapa.isEmpty() ? 0f :
+                    (float) retosCompletados.size() / retosEtapa.size() * 100;
+
+            progresoPorEtapa.put(etapa.getId(), progreso);
+            retosPorEtapa.put(etapa.getNombre(), retosEtapa);
+
+            Map<Long, Boolean> estados = new HashMap<>();
+            for (Reto reto : retosEtapa) {
+                estados.put(reto.getId(), retosCompletados.contains(reto));
+            }
+            estadoRetosPorEtapa.put(etapa.getNombre(), estados);
+
+            if (progreso > progresoMaximo) {
+                progresoMaximo = progreso;
+                etapaDestacada = etapa;
+            }
+        }
+
+        if (etapaDestacada == null && !etapas.isEmpty()) {
+            etapaDestacada = etapas.get(0); // Por defecto la primera
+            progresoMaximo = progresoPorEtapa.getOrDefault(etapaDestacada.getId(), 0f);
+        }
+
+        model.addAttribute("persona", persona);
+        model.addAttribute("etapas", etapas);
+        model.addAttribute("progresoPorEtapa", progresoPorEtapa);
+        model.addAttribute("retosPorEtapa", retosPorEtapa);
+        model.addAttribute("estadoRetosPorEtapa", estadoRetosPorEtapa);
+        model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : ""); // Para mostrar en título
+        model.addAttribute("progresoDestacado", progresoMaximo);
+
+        return "/progresiones/verProgresiones";
+        }
+
 
 }

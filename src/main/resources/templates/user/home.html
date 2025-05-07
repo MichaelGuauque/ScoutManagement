@@ -101,8 +101,11 @@
                         <li class="nav-link"><img th:src="@{/img/retos.svg}" alt="Consultar" class="submenu-icon">Gestionar
                             Retos
                         </li>
-                        <li class="nav-link"><img th:src="@{/img/retos(miembros).svg}" alt="Agregar"
+                        <li class="nav-link">
+                            <a th:href="@{/progresiones/miProgreso}">
+                                <img th:src="@{/img/retos(miembros).svg}" alt="Agregar"
                                                   class="submenu-icon">Progresion Miembros
+                            </a>
                         </li>
                     </ul>
                 </li>
