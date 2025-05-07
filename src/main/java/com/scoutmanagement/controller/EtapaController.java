@@ -2,10 +2,7 @@ package com.scoutmanagement.controller;
 
 import com.scoutmanagement.dto.EtapaDTO;
 import com.scoutmanagement.persistence.model.*;
-import com.scoutmanagement.service.interfaces.IEtapaService;
-import com.scoutmanagement.service.interfaces.IPersonaService;
-import com.scoutmanagement.service.interfaces.IRetoService;
-import com.scoutmanagement.service.interfaces.IUserEntity;
+import com.scoutmanagement.service.interfaces.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -31,6 +28,8 @@ public class EtapaController {
     private IUserEntity userService;
     @Autowired
     private IPersonaService personaService;
+    @Autowired
+    private IProgresoService progresoService;
     private final Logger logger = LoggerFactory.getLogger(EtapaController.class);
 
     private Persona adultoSession(String nombreSession, HttpSession session) {
@@ -118,51 +117,21 @@ public class EtapaController {
         }
 
         if (rol.equals(Rol.ADULTO.name())) {
-            return "redirect:/progresiones"; // Redireccionar a la vista de adultos
+            return "redirect:/progresiones";
         }
 
-        Long idUsuario = Long.parseLong(session.getAttribute(ID_USUARIO).toString());
-        UserEntity usuario = userService.findById(idUsuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Persona persona = personaService.findByUsuarioId(usuario.getId())
-                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
+        Persona persona = adultoSession(ID_USUARIO, session);
 
         Rama rama = persona.getRama();
         List<Etapa> etapas = etapaService.findAllByRama(rama);
 
-        Map<Long, Float> progresoPorEtapa = new HashMap<>();
-        Map<String, List<Reto>> retosPorEtapa = new HashMap<>();
-        Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = new HashMap<>();
+        Map<Long, Float> progresoPorEtapa = progresoService.calcularProgresosPorEtapa(etapas, persona);
+        Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas);
+        Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = progresoService.calcularEstadoRetos(etapas, persona);
 
-        Etapa etapaDestacada = null;
-        float progresoMaximo = -1;
-
-        for (Etapa etapa : etapas) {
-            List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
-            List<Reto> retosCompletados = retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
-
-            float progreso = retosEtapa.isEmpty() ? 0f :
-                    (float) retosCompletados.size() / retosEtapa.size() * 100;
-
-            progresoPorEtapa.put(etapa.getId(), progreso);
-            retosPorEtapa.put(etapa.getNombre(), retosEtapa);
-
-            Map<Long, Boolean> estados = new HashMap<>();
-            for (Reto reto : retosEtapa) {
-                estados.put(reto.getId(), retosCompletados.contains(reto));
-            }
-            estadoRetosPorEtapa.put(etapa.getNombre(), estados);
-
-            if (progreso > progresoMaximo) {
-                progresoMaximo = progreso;
-                etapaDestacada = etapa;
-            }
-        }
-
-        if (etapaDestacada == null && !etapas.isEmpty()) {
-            etapaDestacada = etapas.get(0); // Por defecto la primera
-            progresoMaximo = progresoPorEtapa.getOrDefault(etapaDestacada.getId(), 0f);
-        }
+        Etapa etapaDestacada = progresoService.encontrarEtapaDestacada(etapas, progresoPorEtapa);
+        float progresoMaximo = etapaDestacada != null ?
+                progresoPorEtapa.getOrDefault(etapaDestacada.getId(), 0f) : 0f;
 
         model.addAttribute("persona", persona);
         model.addAttribute("etapas", etapas);
