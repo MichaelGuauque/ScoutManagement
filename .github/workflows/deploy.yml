@@ -55,4 +55,4 @@ jobs:
             docker load < scout-management.tar
             docker stop scout-management || true
             docker rm scout-management || true
-            docker run --name scout-management -e DB_HOST=${{ secrets.DB_HOST }} -e EC2_HOST=${{ secrets.EC2_HOST }} -e USER_DB=${{ secrets.USER_DB }} -e PASSWORD_DB=${{ secrets.PASSWORD_DB }} -e DB_NAME_SCOUT=${{ secrets.DB_NAME_SCOUT }} -e EMAIL_SCOUT=${{ secrets.EMAIL_SCOUT }} -e PASSWORD_APP_EMAIL="fjko feme rrcu ixdd" -p 8080:8080 scout-management:latest
+            docker run --name scout-management -e DB_HOST=${{ secrets.DB_HOST }} -e EC2_HOST=18.118.30.87 -e USER_DB=${{ secrets.USER_DB }} -e PASSWORD_DB=${{ secrets.PASSWORD_DB }} -e DB_NAME_SCOUT=${{ secrets.DB_NAME_SCOUT }} -e EMAIL_SCOUT=${{ secrets.EMAIL_SCOUT }} -e PASSWORD_APP_EMAIL="fjko feme rrcu ixdd" -p 8080:8080 scout-management:latest
