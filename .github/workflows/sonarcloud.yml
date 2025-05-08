@@ -21,7 +21,7 @@ jobs:
       PASSWORD_DB: ${{ secrets.PASSWORD_DB }}
       EMAIL_SCOUT: ${{ secrets.EMAIL_SCOUT }}
       PASSWORD_APP_EMAIL: ${{ secrets.PASSWORD_APP_EMAIL }}
-      EC2_HOST: 3.128.205.0
+      EC2_HOST: 3.145.41.55
 
     services:
       mysql:
