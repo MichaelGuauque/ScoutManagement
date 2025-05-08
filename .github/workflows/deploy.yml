@@ -30,7 +30,7 @@ jobs:
       - name: Copy Docker image to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: 3.128.205.0
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
@@ -40,7 +40,7 @@ jobs:
       - name: Deploy on EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: 3.128.205.0
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
@@ -55,4 +55,4 @@ jobs:
             docker load < scout-management.tar
             docker stop scout-management || true
             docker rm scout-management || true
-            docker run --name scout-management -e DB_HOST=${{ secrets.DB_HOST }} -e EC2_HOST=18.118.30.87 -e USER_DB=${{ secrets.USER_DB }} -e PASSWORD_DB=${{ secrets.PASSWORD_DB }} -e DB_NAME_SCOUT=${{ secrets.DB_NAME_SCOUT }} -e EMAIL_SCOUT=${{ secrets.EMAIL_SCOUT }} -e PASSWORD_APP_EMAIL="fjko feme rrcu ixdd" -p 8080:8080 scout-management:latest
+            docker run --name scout-management -e DB_HOST=${{ secrets.DB_HOST }} -e EC2_HOST=3.128.205.0  -e USER_DB=${{ secrets.USER_DB }} -e PASSWORD_DB=${{ secrets.PASSWORD_DB }} -e DB_NAME_SCOUT=${{ secrets.DB_NAME_SCOUT }} -e EMAIL_SCOUT=${{ secrets.EMAIL_SCOUT }} -e PASSWORD_APP_EMAIL="fjko feme rrcu ixdd" -p 8080:8080 scout-management:latest
