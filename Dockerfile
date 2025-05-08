@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk
+FROM openjdk:21-jdk-slim
 COPY target/ScoutManagement-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
