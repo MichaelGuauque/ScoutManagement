@@ -45,6 +45,13 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            echo "==== Running containers ===="
+            docker ps -a
+            echo "==== Images ===="
+            docker images
+            echo "==== Running docker processes ===="
+            ps aux | grep docker
+            echo "==== Attempting normal deployment ===="
             docker load < scout-management.tar
             docker stop scout-management || true
             docker rm scout-management || true
