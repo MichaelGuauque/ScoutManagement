@@ -38,7 +38,7 @@ private static final String ID_USUARIO = "idUsuario";
                                  HttpServletRequest request,
                                  @RequestParam(defaultValue = "activos") String tab) {
         Object rol = session.getAttribute("rol");
-        String path = request.getRequestURI();
+        String path = request.getRequestURI(); //
 
         if (rol == null) {
             return VISTA_LOGIN;
@@ -51,7 +51,7 @@ private static final String ID_USUARIO = "idUsuario";
 
                 session.setAttribute("miembro", "jefe");
                 if (Boolean.TRUE.equals(cancelado)) {
-                    model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
+                    model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
                     model.addAttribute("type", EXCEPTION_INFO);
                 }
                 List<Persona> jefes = personaService.findJefes();
@@ -63,7 +63,7 @@ private static final String ID_USUARIO = "idUsuario";
             } else {
                 session.setAttribute("miembro", "miembro");
                 if (Boolean.TRUE.equals(cancelado)) {
-                    model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
+                    model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
                     model.addAttribute("type", EXCEPTION_INFO);
 
                 }

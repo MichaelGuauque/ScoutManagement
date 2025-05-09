@@ -89,7 +89,7 @@ class RetoServiceTest {
                 new Reto(1L, 1, "Reto Etapa", etapa)
         );
 
-        Mockito.when(retoRepository.findAllRetosByEtapa(etapa)).thenReturn(lista);
+        Mockito.when(retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa)).thenReturn(lista);
 
         List<Reto> result = retoService.findAllRetosEtapa(etapa);
 
@@ -165,7 +165,7 @@ class RetoServiceTest {
     void testFindAllRetosEtapaThrowsException() {
         Etapa etapa = new Etapa();
 
-        Mockito.when(retoRepository.findAllRetosByEtapa(etapa)).thenThrow(new RuntimeException("DB error"));
+        Mockito.when(retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa)).thenThrow(new RuntimeException("DB error"));
 
         ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
             retoService.findAllRetosEtapa(etapa);

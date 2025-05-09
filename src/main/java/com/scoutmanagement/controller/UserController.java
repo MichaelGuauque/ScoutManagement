@@ -34,12 +34,14 @@ public class UserController {
     @Autowired
     private IPersonaService personaService;
 
-    private static final String ID_USUARIO = "idUsuario";
-
     @GetMapping()
     public String login() {
         return "user/login";
     }
+
+    private static final String ID_USUARIO = "idUsuario";
+
+    private static final String ATRIBUTO_PERSONA = "persona";
 
     @PostMapping("/acceder")
     public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
@@ -83,15 +85,14 @@ public class UserController {
     public String registrarUsuario(Model model, HttpSession session) {
 
         Object rol = session.getAttribute("rol");
-        if (rol == null) {
-            return VISTA_LOGIN;
-        }
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             prepararModeloDeRegistro(model, sesionDelJefe);
             return "/user/crearMiembro";
         }
-
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
         return VISTA_ERROR;
     }
 
@@ -127,6 +128,7 @@ public class UserController {
                         dto
                 );
                 return VISTA_REGISTRAR;
+
             }
             userService.save(user);
             personaService.save(dto,user);
@@ -147,9 +149,12 @@ public class UserController {
     }
 
     @GetMapping("/home-admin")
-    public String showAdminHomePage(HttpSession session) {
+    public String showAdminHomePage(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
             return "admin/home";
         }
         if (rol == null) {
@@ -159,9 +164,12 @@ public class UserController {
     }
 
     @GetMapping("/home-user")
-    public String showUserHomePage(HttpSession session) {
+    public String showUserHomePage(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+
         if (session.getAttribute("rol") == Rol.JOVEN.name()) {
+            Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelMiembro);
             return "user/home";
         }
         if (rol == null) {
