@@ -195,7 +195,7 @@ public class UserController {
 
 
     private void prepararModeloDeRegistro(Model model, Persona sesionDelJefe) {
-        model.addAttribute("persona", sesionDelJefe);
+        model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
         model.addAttribute("ramas", Rama.values());
         model.addAttribute("roles", Rol.values());
         model.addAttribute("cargos", Cargo.values());

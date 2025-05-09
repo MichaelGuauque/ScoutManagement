@@ -105,28 +105,23 @@ public class PersonaService implements IPersonaService {
         persona.setTipoDeDocumento(dto.getTipoDeDocumento());
         persona.setRama(dto.getRama());
         persona.setCargo(dto.getCargo());
-        System.out.println("Aqui termino"+dto.getRol());
-        // ACTUALIZACIÓN DE ROL
+
+
         if (dto.getRol() != null) {
-            System.out.println("Se ha recibido un nuevo rol para actualizar: " + dto.getRol());
+
 
             UserEntity user = persona.getUserEntity();
-            System.out.println("Usuario encontrado: " + user.getId() + " con roles actuales: " + user.getRoles());
+
 
             RoleEntity nuevoRol = roleRepository.findByRole(dto.getRol());
             if (nuevoRol == null) {
-                System.out.println("ERROR: Rol no encontrado para el valor: " + dto.getRol());
+
                 throw new EntityNotFoundException("Rol no encontrado");
             }
 
-            System.out.println("Nuevo rol encontrado: " + nuevoRol.getRole());
-
-            // Limpia los roles anteriores y asigna el nuevo
             user.getRoles().clear();
-            System.out.println("Roles anteriores limpiados.");
-
             user.getRoles().add(nuevoRol);
-            System.out.println("Nuevo rol asignado: " + nuevoRol.getRole());
+
         }
     }
 
