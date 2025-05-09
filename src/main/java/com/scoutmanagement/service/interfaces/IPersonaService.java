@@ -20,5 +20,6 @@ public interface IPersonaService {
     List<Persona> findJefes();
     List<Persona> findMiembros();
     void actualizarPersona(Long id, PersonaActualizacionDTO dto);
+    Optional<Persona> findByNumeroDeDocumento(Long numeroDeDocumento);
 
 }

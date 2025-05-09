@@ -110,7 +110,7 @@
                                max="99999999999" required placeholder="Ingresa aquí el documento..."
                                oninvalid="this.setCustomValidity('Por favor ingresa un número de documento válido')"
                                oninput="this.setCustomValidity('')"
-                               th:value="${personaModificada.numeroDeDocumento}">
+                               th:value="${(errorDocumento != null) ? documentoIngresado : personaModificada?.numeroDeDocumento}">
                     </div>
 
                     <div class="form-group">

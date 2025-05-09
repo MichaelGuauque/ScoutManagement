@@ -24,6 +24,8 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
     @Query("SELECT p FROM Persona p WHERE str(p.cargo) NOT LIKE 'JEFE_%'")
     List<Persona> findMiembros();
 
+    Optional<Persona> findByNumeroDeDocumento(Long numeroDeDocumento);
+
 
 
 }

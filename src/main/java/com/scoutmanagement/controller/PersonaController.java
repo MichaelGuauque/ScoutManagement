@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import static com.scoutmanagement.util.constants.AppConstants.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -129,6 +130,13 @@ private static final String ID_USUARIO = "idUsuario";
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", "Persona no encontrada");
             return "miembros/consultarMiembros";
+        }catch (DataIntegrityViolationException e) {
+            // Agregar los atributos para manejar el error de documento duplicado
+            redirectAttributes.addFlashAttribute("errorDocumento", true);
+            redirectAttributes.addFlashAttribute("documentoIngresado", personaActualizacionDTO.getNumeroDeDocumento());
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+            return "redirect:/miembros/modificarMiembro/" + id;
         }
     }
 

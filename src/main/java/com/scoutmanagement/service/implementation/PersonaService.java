@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,8 +89,10 @@ public class PersonaService implements IPersonaService {
         Persona persona = personaRepository.findByUserEntity_Id(id)
                 .orElseThrow(() -> new EntityNotFoundException("Persona no encontrada : " ));
 
-        if (persona == null) {
-            throw new EntityNotFoundException("Persona no encontrada");
+        Optional<Persona> personaConMismoDocumento = personaRepository.findByNumeroDeDocumento(dto.getNumeroDeDocumento());
+
+        if (personaConMismoDocumento.isPresent() && !personaConMismoDocumento.get().getId().equals(id)) {
+            throw new DataIntegrityViolationException("El número de documento ya está registrado");
         }
 
         persona.setPrimerNombre(dto.getPrimerNombre());
@@ -125,6 +128,10 @@ public class PersonaService implements IPersonaService {
         }
     }
 
+    @Override
+    public Optional<Persona> findByNumeroDeDocumento(Long numeroDeDocumento) {
+        return personaRepository.findByNumeroDeDocumento(numeroDeDocumento);
+    }
 
 
 }
