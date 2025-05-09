@@ -38,7 +38,7 @@ private static final String ID_USUARIO = "idUsuario";
                                  HttpServletRequest request,
                                  @RequestParam(defaultValue = "activos") String tab) {
         Object rol = session.getAttribute("rol");
-        String path = request.getRequestURI(); //
+        String path = request.getRequestURI();
 
         if (rol == null) {
             return VISTA_LOGIN;
@@ -55,15 +55,7 @@ private static final String ID_USUARIO = "idUsuario";
                     model.addAttribute("type", EXCEPTION_INFO);
                 }
                 List<Persona> jefes = personaService.findJefes();
-
-                List<Persona> jefesFiltrados = jefes.stream()
-                        .filter(p -> {
-                            boolean estado = p.getUserEntity().isActivo(); // Supongo que 'estado' es booleano
-                            return "inactivos".equals(tab) ? !estado : estado; // Filtra por estado (activo o inactivo)
-                        })
-                        .sorted(Comparator.comparing(Persona::getRama))
-                        .collect(Collectors.toList());
-
+                List<Persona> jefesFiltrados = personaService.filtrarYOrdenarPorEstado(jefes, tab);
                 model.addAttribute("tab", tab);
                 model.addAttribute("jefes", jefesFiltrados);
 
@@ -77,13 +69,7 @@ private static final String ID_USUARIO = "idUsuario";
                 }
                 List<Persona> miembros = personaService.findMiembros();
 
-                List<Persona> miembrosFiltrados = miembros.stream()
-                        .filter(p -> {
-                            boolean estado = p.getUserEntity().isActivo();
-                            return "inactivos".equals(tab) ? !estado : estado;
-                        })
-                        .sorted(Comparator.comparing(Persona::getRama))
-                        .collect(Collectors.toList());
+                List<Persona> miembrosFiltrados = personaService.filtrarYOrdenarPorEstado(miembros, tab);
 
                 model.addAttribute("tab", tab);
                 model.addAttribute("miembros", miembrosFiltrados);
@@ -96,42 +82,47 @@ private static final String ID_USUARIO = "idUsuario";
     }
 
     @GetMapping("/modificarMiembro/{id}")
-    public String mostrarFormularioDeEdicion(@PathVariable Long id, Model model,HttpSession session) {
-        Persona persona = personaService.findByUsuarioId(id)
-                .orElseThrow(() -> new EntityNotFoundException("Persona no encontrada"));
-        // Obtiene el nombre del único rol del usuario
-        String nombreRol = persona.getUserEntity()
-                .getRoles()
-                .stream()
-                .findFirst()
-                .map(roleEntity -> roleEntity.getRole().name())
-                .orElse(null); // Maneja null si no tiene roles
+    public String mostrarFormularioDeEdicion(@PathVariable Long id, Model model,
+                                             HttpSession session, RedirectAttributes redirectAttributes) {
+        try {
+            Persona persona = personaService.findByUsuarioId(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Persona no encontrada"));
 
-        Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-        model.addAttribute("persona", sesionDelJefe);
-        model.addAttribute("rolSeleccionado", nombreRol);
-        model.addAttribute("ramas", Rama.values());
-        model.addAttribute("roles", Rol.values());
-        model.addAttribute("cargos", Cargo.values());
-        model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
-        model.addAttribute("personaModificada", persona);
-        return "user/modificarMiembro";
+            String nombreRol = persona.getUserEntity()
+                    .getRoles()
+                    .stream()
+                    .findFirst()
+                    .map(roleEntity -> roleEntity.getRole().name())
+                    .orElseThrow(() -> new IllegalStateException("El usuario no tiene roles asignados"));
+
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            prepararModeloDeModificacion(model, sesionDelJefe, persona, nombreRol);
+            return "user/modificarMiembro";
+
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute("EXCEPTION_MESSAGE", e.getMessage());
+            redirectAttributes.addFlashAttribute("type", "error");
+            return VISTA_MIEMBROS;
+        } catch (IllegalStateException e) {
+            model.addAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            return VISTA_ERROR;
+        }
     }
 
     @PostMapping("/actualizarMiembro/{id}")
     public String actualizarPersona(@PathVariable Long id,
                                     @ModelAttribute PersonaActualizacionDTO personaActualizacionDTO,
-                                    RedirectAttributes redirectAttributes, Model model) {
+                                    RedirectAttributes redirectAttributes) {
         try {
             personaService.actualizarPersona(id, personaActualizacionDTO);
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro actualizado con éxito");
             redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
-            return "redirect:/miembros";
+            return VISTA_MIEMBROS;
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", "Persona no encontrada");
             return "miembros/consultarMiembros";
         }catch (DataIntegrityViolationException e) {
-            // Agregar los atributos para manejar el error de documento duplicado
+
             redirectAttributes.addFlashAttribute("errorDocumento", true);
             redirectAttributes.addFlashAttribute("documentoIngresado", personaActualizacionDTO.getNumeroDeDocumento());
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
@@ -141,4 +132,13 @@ private static final String ID_USUARIO = "idUsuario";
     }
 
 
+    private void prepararModeloDeModificacion(Model model, Persona sesionDelJefe, Persona personaModificada, String nombreRol) {
+        model.addAttribute("persona", sesionDelJefe);
+        model.addAttribute("rolSeleccionado", nombreRol);
+        model.addAttribute("ramas", Rama.values());
+        model.addAttribute("roles", Rol.values());
+        model.addAttribute("cargos", Cargo.values());
+        model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+        model.addAttribute("personaModificada", personaModificada);
+    }
 }

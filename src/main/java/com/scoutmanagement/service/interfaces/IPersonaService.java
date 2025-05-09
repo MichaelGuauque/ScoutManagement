@@ -21,5 +21,6 @@ public interface IPersonaService {
     List<Persona> findMiembros();
     void actualizarPersona(Long id, PersonaActualizacionDTO dto);
     Optional<Persona> findByNumeroDeDocumento(Long numeroDeDocumento);
+    public List<Persona> filtrarYOrdenarPorEstado(List<Persona> personas, String tab);
 
 }

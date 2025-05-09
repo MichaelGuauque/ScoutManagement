@@ -15,9 +15,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,6 +133,17 @@ public class PersonaService implements IPersonaService {
     @Override
     public Optional<Persona> findByNumeroDeDocumento(Long numeroDeDocumento) {
         return personaRepository.findByNumeroDeDocumento(numeroDeDocumento);
+    }
+
+    @Override
+    public List<Persona> filtrarYOrdenarPorEstado(List<Persona> personas, String tab) {
+        return personas.stream()
+                .filter(p -> {
+                    boolean estado = p.getUserEntity().isActivo();
+                    return "inactivos".equals(tab) ? !estado : estado;
+                })
+                .sorted(Comparator.comparing(Persona::getRama))
+                .collect(Collectors.toList());
     }
 
 
