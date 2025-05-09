@@ -26,6 +26,4 @@ public interface IProgresoService {
     Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas);
 
     Map<String, Map<Long, Boolean>> calcularEstadoRetos(List<Etapa> etapas, Persona persona);
-
-    Etapa encontrarEtapaDestacada(List<Etapa> etapas, Map<Long, Float> progresoPorEtapa);
 }

@@ -1,5 +1,7 @@
 package com.scoutmanagement.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scoutmanagement.dto.EtapaDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.*;
@@ -30,7 +32,17 @@ public class EtapaController {
     private IPersonaService personaService;
     @Autowired
     private IProgresoService progresoService;
+    @Autowired
+    private IObtencionService obtencionService;
     private final Logger logger = LoggerFactory.getLogger(EtapaController.class);
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final Map<String, Integer> GRUPOS_RAMAS = Map.of(
+            "MANADA", 30,
+            "TROPA", 31,
+            "COMUNIDAD", 32,
+            "CLAN", 33
+    );
 
     private Persona adultoSession(String nombreSession, HttpSession session) {
         Optional<UserEntity> optionalUserEntity = userService.findById(Long.parseLong(session.getAttribute(nombreSession).toString()));
@@ -126,10 +138,17 @@ public class EtapaController {
         List<Etapa> etapas = etapaService.findAllByRama(rama);
 
         Map<Long, Float> progresoPorEtapa = progresoService.calcularProgresosPorEtapa(etapas, persona);
+        try {
+            String progresoJson = objectMapper.writeValueAsString(progresoPorEtapa);
+            model.addAttribute("progresoJson", progresoJson);
+        } catch (Exception e) {
+            model.addAttribute("progresoJson", "{}");
+        }
         Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas);
         Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = progresoService.calcularEstadoRetos(etapas, persona);
+        Set<Long> etapasObtenidas = obtencionService.findIdEtapasObtenidasByPersona(persona);
 
-        Etapa etapaDestacada = progresoService.encontrarEtapaDestacada(etapas, progresoPorEtapa);
+        Etapa etapaDestacada =  etapas.isEmpty() ? null : etapas.get(0);
         float progresoMaximo = etapaDestacada != null ?
                 progresoPorEtapa.getOrDefault(etapaDestacada.getId(), 0f) : 0f;
 
@@ -140,8 +159,11 @@ public class EtapaController {
         model.addAttribute("estadoRetosPorEtapa", estadoRetosPorEtapa);
         model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : ""); // Para mostrar en título
         model.addAttribute("progresoDestacado", progresoMaximo);
+        model.addAttribute("etapasObtenidas", etapasObtenidas);
+        model.addAttribute("gruposRamas", GRUPOS_RAMAS);
 
-        return "/progresiones/verProgresiones";
+
+        return "progresiones/verProgresiones";
         }
 
 

@@ -117,30 +117,4 @@ public class ProgresoService implements IProgresoService {
 
         return estadoRetosPorEtapa;
     }
-
-    @Override
-    public Etapa encontrarEtapaDestacada(List<Etapa> etapas, Map<Long, Float> progresoPorEtapa) {
-        if (etapas == null || etapas.isEmpty()) {
-            return null;
-        }
-
-        Etapa etapaDestacada = null;
-        float progresoMaximo = -1;
-
-        for (Etapa etapa : etapas) {
-            float progreso = progresoPorEtapa.getOrDefault(etapa.getId(), 0f);
-
-            if (progreso > progresoMaximo) {
-                progresoMaximo = progreso;
-                etapaDestacada = etapa;
-            }
-        }
-
-        // Si todas las etapas tienen 0% de progreso, selecciona la primera
-        if (etapaDestacada == null) {
-            etapaDestacada = etapas.get(0);
-        }
-
-        return etapaDestacada;
-    }
 }
