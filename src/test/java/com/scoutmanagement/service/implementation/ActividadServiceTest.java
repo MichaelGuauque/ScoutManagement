@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -224,5 +225,60 @@ class ActividadServiceTest {
         assertEquals(2, resultado.size());
         assertTrue(resultado.get(0).getFecha().isAfter(resultado.get(1).getFecha()));
     }
+
+    @Test
+    void testEncontrarActividadMasProxima_ListaVacia() {
+        List<Actividad> actividades = new ArrayList<>();
+
+        Map<Long, Boolean> resultado = actividadService.encontrarActividadMasProxima(actividades, 0, "proximas");
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void testEncontrarActividadMasProxima_NoEsPaginaCero() {
+        LocalDate hoy = LocalDate.now();
+        List<Actividad> actividades = List.of(
+                crearActividad(1L, hoy.plusDays(1)),
+                crearActividad(2L, hoy.plusDays(2))
+        );
+
+        Map<Long, Boolean> resultado = actividadService.encontrarActividadMasProxima(actividades, 1, "proximas");
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void testFiltrarYOrdenarActividadesPorTab_ConFechaFiltro() {
+        LocalDate hoy = LocalDate.now();
+        LocalDate fechaFiltro = hoy.plusDays(2);
+        List<Actividad> actividades = List.of(
+                crearActividad(1L, hoy.plusDays(1)),
+                crearActividad(2L, fechaFiltro),
+                crearActividad(3L, hoy.plusDays(3))
+        );
+
+        List<Actividad> resultado = actividadService.filtrarYOrdenarActividadesPorTab(actividades, null, "proximas", hoy, fechaFiltro);
+
+        assertEquals(1, resultado.size());
+        assertEquals(fechaFiltro, resultado.get(0).getFecha());
+    }
+
+    @Test
+    void testFiltrarYOrdenarActividadesPorTab_ProximasConRama() {
+        LocalDate hoy = LocalDate.now();
+        List<Actividad> actividades = List.of(
+                crearActividad(1L, hoy.plusDays(2), Rama.MANADA),
+                crearActividad(2L, hoy.plusDays(3), Rama.TROPA),
+                crearActividad(3L, hoy.plusDays(4), Rama.MANADA)
+        );
+
+        List<Actividad> resultado = actividadService.filtrarYOrdenarActividadesPorTab(actividades, Rama.MANADA, "proximas", hoy, null);
+
+
+        assertEquals(2, resultado.size());
+        assertTrue(resultado.stream().allMatch(a -> a.getRama() == Rama.MANADA));
+    }
+
 
 }
