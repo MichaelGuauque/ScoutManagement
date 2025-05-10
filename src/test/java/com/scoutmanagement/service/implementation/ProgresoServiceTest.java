@@ -1,13 +1,16 @@
 package com.scoutmanagement.service.implementation;
 
+import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Progreso;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.ProgresoRepository;
 import com.scoutmanagement.util.exception.ServiceException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -21,6 +24,9 @@ class ProgresoServiceTest {
 
     @Mock
     private ProgresoRepository progresoRepository;
+
+    @Mock
+    private RetoService retoService;
 
     @InjectMocks
     private ProgresoService progresoService;
@@ -139,4 +145,55 @@ class ProgresoServiceTest {
 
         assertTrue(exception.getMessage().contains("No se encontraron los datos de la persona"));
     }
+
+    @Test
+    void testCalcularProgresosPorEtapaThrowsException() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setId(1L);
+        List<Etapa> etapas = List.of(etapa);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            progresoService.calcularProgresosPorEtapa(etapas, persona);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Error al calcular los progresos"));
+    }
+
+    @Test
+    void testPrepararRetosPorEtapaThrowsException() {
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa 1");
+        List<Etapa> etapas = List.of(etapa);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            progresoService.prepararRetosPorEtapa(etapas);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Error al preparar los retos por etapa"));
+    }
+
+    @Test
+    void testCalcularEstadoRetosThrowsException() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa 1");
+        List<Etapa> etapas = List.of(etapa);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            progresoService.calcularEstadoRetos(etapas, persona);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Error al calcular los estados de los retos"));
+    }
+
 }

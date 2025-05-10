@@ -2,8 +2,10 @@ package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.dto.RetoDTO;
 import com.scoutmanagement.persistence.model.Etapa;
+import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
+import com.scoutmanagement.persistence.repository.ProgresoRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +27,9 @@ class RetoServiceTest {
 
     @Mock
     private EtapaRepository etapaRepository;
+
+    @Mock
+    private ProgresoRepository progresoRepository;
 
     @InjectMocks
     private RetoService retoService;
@@ -186,4 +191,21 @@ class RetoServiceTest {
 
         Assertions.assertTrue(exception.getMessage().contains("No se puedo convertir el dto"));
     }
+
+    @Test
+    void testFindCompletadosByPersonaAndEtapaThrowsException() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa 1");
+
+        Mockito.when(progresoRepository.findByPersonaAndEstadoTrue(persona))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Error al obtener los retos completados"));
+    }
+
 }

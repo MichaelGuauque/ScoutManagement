@@ -72,49 +72,61 @@ public class ProgresoService implements IProgresoService {
 
     @Override
     public Map<Long, Float> calcularProgresosPorEtapa(List<Etapa> etapas, Persona persona) {
-        Map<Long, Float> progresoPorEtapa = new HashMap<>();
+        try {
+            Map<Long, Float> progresoPorEtapa = new HashMap<>();
 
-        for (Etapa etapa : etapas) {
-            List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
-            List<Reto> retosCompletados = retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
+            for (Etapa etapa : etapas) {
+                List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
+                List<Reto> retosCompletados = retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
 
-            float progreso = retosEtapa.isEmpty() ? 0f :
-                    (float) retosCompletados.size() / retosEtapa.size() * 100;
+                float progreso = retosEtapa.isEmpty() ? 0f :
+                        (float) retosCompletados.size() / retosEtapa.size() * 100;
 
-            progresoPorEtapa.put(etapa.getId(), progreso);
+                progresoPorEtapa.put(etapa.getId(), progreso);
+            }
+
+            return progresoPorEtapa;
+        } catch (Exception e) {
+            throw new ServiceException("Error al calcular los progresos: " + e.getMessage());
         }
-
-        return progresoPorEtapa;
     }
 
     @Override
     public Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas) {
-        Map<String, List<Reto>> retosPorEtapa = new HashMap<>();
+        try {
+            Map<String, List<Reto>> retosPorEtapa = new HashMap<>();
 
-        for (Etapa etapa : etapas) {
-            List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
-            retosPorEtapa.put(etapa.getNombre(), retosEtapa);
+            for (Etapa etapa : etapas) {
+                List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
+                retosPorEtapa.put(etapa.getNombre(), retosEtapa);
+            }
+
+            return retosPorEtapa;
+        } catch (Exception e) {
+            throw new ServiceException("Error al preparar los retos por etapa: " + e.getMessage());
         }
-
-        return retosPorEtapa;
     }
 
     @Override
     public Map<String, Map<Long, Boolean>> calcularEstadoRetos(List<Etapa> etapas, Persona persona) {
-        Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = new HashMap<>();
+        try {
+            Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = new HashMap<>();
 
-        for (Etapa etapa : etapas) {
-            List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
-            List<Reto> retosCompletados = retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
+            for (Etapa etapa : etapas) {
+                List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
+                List<Reto> retosCompletados = retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
 
-            Map<Long, Boolean> estados = new HashMap<>();
-            for (Reto reto : retosEtapa) {
-                estados.put(reto.getId(), retosCompletados.contains(reto));
+                Map<Long, Boolean> estados = new HashMap<>();
+                for (Reto reto : retosEtapa) {
+                    estados.put(reto.getId(), retosCompletados.contains(reto));
+                }
+
+                estadoRetosPorEtapa.put(etapa.getNombre(), estados);
             }
 
-            estadoRetosPorEtapa.put(etapa.getNombre(), estados);
+            return estadoRetosPorEtapa;
+        } catch (Exception e) {
+            throw new ServiceException("Error al calcular los estados de los retos: " + e.getMessage());
         }
-
-        return estadoRetosPorEtapa;
     }
 }

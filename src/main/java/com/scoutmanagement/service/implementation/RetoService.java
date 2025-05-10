@@ -96,12 +96,16 @@ public class RetoService implements IRetoService {
 
     @Override
     public List<Reto> findCompletadosByPersonaAndEtapa(Persona persona, Etapa etapa) {
-        List<Progreso> progresos = progresoRepository.findByPersonaAndEstadoTrue(persona);
+        try {
+            List<Progreso> progresos = progresoRepository.findByPersonaAndEstadoTrue(persona);
 
-        return progresos.stream()
-                .map(Progreso::getReto)
-                .filter(reto -> reto.getEtapa().equals(etapa))
-                .collect(Collectors.toList());
+            return progresos.stream()
+                    .map(Progreso::getReto)
+                    .filter(reto -> reto.getEtapa().equals(etapa))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener los retos completados: " + e.getMessage());
+        }
     }
 
 }
