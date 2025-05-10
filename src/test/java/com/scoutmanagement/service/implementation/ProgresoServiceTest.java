@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -194,6 +195,230 @@ class ProgresoServiceTest {
         });
 
         Assertions.assertTrue(exception.getMessage().contains("Error al calcular los estados de los retos"));
+    }
+
+    @Test
+    void testCalcularProgresosConEtapaSinRetos() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setId(1L);
+        List<Etapa> etapas = List.of(etapa);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(List.of());
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa)).thenReturn(List.of());
+
+        Map<Long, Float> resultado = progresoService.calcularProgresosPorEtapa(etapas, persona);
+
+        Assertions.assertEquals(1, resultado.size());
+        Assertions.assertEquals(0f, resultado.get(1L));
+    }
+
+    @Test
+    void testCalcularProgresosConTodosRetosCompletados() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setId(2L);
+        List<Etapa> etapas = List.of(etapa);
+
+        Reto reto1 = new Reto();
+        Reto reto2 = new Reto();
+        List<Reto> retos = List.of(reto1, reto2);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(retos);
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa)).thenReturn(retos);
+
+        Map<Long, Float> resultado = progresoService.calcularProgresosPorEtapa(etapas, persona);
+
+        Assertions.assertEquals(100f, resultado.get(2L));
+    }
+
+    @Test
+    void testCalcularProgresosConProgresoParcial() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setId(3L);
+        List<Etapa> etapas = List.of(etapa);
+
+        Reto reto1 = new Reto();
+        Reto reto2 = new Reto();
+        Reto reto3 = new Reto();
+        List<Reto> todos = List.of(reto1, reto2, reto3);
+        List<Reto> completados = List.of(reto1);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(todos);
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa)).thenReturn(completados);
+
+        Map<Long, Float> resultado = progresoService.calcularProgresosPorEtapa(etapas, persona);
+
+        Assertions.assertEquals(3L, etapa.getId());
+        Assertions.assertEquals(33.3333f, resultado.get(3L), 0.0001f);
+    }
+
+    @Test
+    void testCalcularProgresosVariasEtapas() {
+        Persona persona = new Persona();
+
+        Etapa etapa1 = new Etapa(); etapa1.setId(10L);
+        Etapa etapa2 = new Etapa(); etapa2.setId(20L);
+        List<Etapa> etapas = List.of(etapa1, etapa2);
+
+        Reto reto1 = new Reto(); Reto reto2 = new Reto();
+        Reto reto3 = new Reto();
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa1)).thenReturn(List.of(reto1, reto2));
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa1)).thenReturn(List.of(reto1));
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa2)).thenReturn(List.of(reto3));
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa2)).thenReturn(List.of(reto3));
+
+        Map<Long, Float> resultado = progresoService.calcularProgresosPorEtapa(etapas, persona);
+
+        Assertions.assertEquals(2, resultado.size());
+        Assertions.assertEquals(50f, resultado.get(10L));
+        Assertions.assertEquals(100f, resultado.get(20L));
+    }
+
+    @Test
+    void testPrepararRetosPorEtapaSinRetos() {
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa Vacía");
+        List<Etapa> etapas = List.of(etapa);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(List.of());
+
+        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(etapas);
+
+        Assertions.assertEquals(1, resultado.size());
+        Assertions.assertTrue(resultado.containsKey("Etapa Vacía"));
+        Assertions.assertTrue(resultado.get("Etapa Vacía").isEmpty());
+    }
+
+    @Test
+    void testPrepararRetosPorEtapaConRetos() {
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa 1");
+        List<Etapa> etapas = List.of(etapa);
+
+        Reto reto1 = new Reto();
+        Reto reto2 = new Reto();
+        List<Reto> retos = List.of(reto1, reto2);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(retos);
+
+        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(etapas);
+
+        Assertions.assertEquals(1, resultado.size());
+        Assertions.assertEquals(retos, resultado.get("Etapa 1"));
+    }
+
+    @Test
+    void testPrepararRetosPorEtapaMultiplesEtapas() {
+        Etapa etapa1 = new Etapa();
+        etapa1.setNombre("Etapa A");
+        Etapa etapa2 = new Etapa();
+        etapa2.setNombre("Etapa B");
+        List<Etapa> etapas = List.of(etapa1, etapa2);
+
+        Reto retoA1 = new Reto();
+        Reto retoB1 = new Reto();
+        Reto retoB2 = new Reto();
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa1)).thenReturn(List.of(retoA1));
+        Mockito.when(retoService.findAllRetosEtapa(etapa2)).thenReturn(List.of(retoB1, retoB2));
+
+        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(etapas);
+
+        Assertions.assertEquals(2, resultado.size());
+        Assertions.assertEquals(1, resultado.get("Etapa A").size());
+        Assertions.assertEquals(2, resultado.get("Etapa B").size());
+    }
+
+    @Test
+    void testCalcularEstadoRetosEtapaSinRetos() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa Vacía");
+        List<Etapa> etapas = List.of(etapa);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(List.of());
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa)).thenReturn(List.of());
+
+        Map<String, Map<Long, Boolean>> resultado = progresoService.calcularEstadoRetos(etapas, persona);
+
+        Assertions.assertTrue(resultado.containsKey("Etapa Vacía"));
+        Assertions.assertTrue(resultado.get("Etapa Vacía").isEmpty());
+    }
+
+    @Test
+    void testCalcularEstadoRetosConUnRetoCompletado() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa 1");
+        List<Etapa> etapas = List.of(etapa);
+
+        Reto reto = new Reto();
+        reto.setId(101L);
+        List<Reto> todos = List.of(reto);
+        List<Reto> completados = List.of(reto);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(todos);
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa)).thenReturn(completados);
+
+        Map<String, Map<Long, Boolean>> resultado = progresoService.calcularEstadoRetos(etapas, persona);
+
+        Assertions.assertTrue(resultado.containsKey("Etapa 1"));
+        Assertions.assertEquals(Boolean.TRUE, resultado.get("Etapa 1").get(101L));
+    }
+
+    @Test
+    void testCalcularEstadoRetosConUnRetoNoCompletado() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa 2");
+        List<Etapa> etapas = List.of(etapa);
+
+        Reto reto = new Reto();
+        reto.setId(102L);
+        List<Reto> todos = List.of(reto);
+        List<Reto> completados = List.of(); // vacío
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(todos);
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa)).thenReturn(completados);
+
+        Map<String, Map<Long, Boolean>> resultado = progresoService.calcularEstadoRetos(etapas, persona);
+
+        Assertions.assertTrue(resultado.containsKey("Etapa 2"));
+        Assertions.assertEquals(Boolean.FALSE, resultado.get("Etapa 2").get(102L));
+    }
+
+    @Test
+    void testCalcularEstadoRetosMultiplesEtapas() {
+        Persona persona = new Persona();
+
+        Etapa etapa1 = new Etapa();
+        etapa1.setNombre("Etapa A");
+
+        Etapa etapa2 = new Etapa();
+        etapa2.setNombre("Etapa B");
+
+        Reto retoA = new Reto();
+        retoA.setId(201L);
+
+        Reto retoB = new Reto();
+        retoB.setId(202L);
+
+        List<Etapa> etapas = List.of(etapa1, etapa2);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa1)).thenReturn(List.of(retoA));
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa1)).thenReturn(List.of());
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa2)).thenReturn(List.of(retoB));
+        Mockito.when(retoService.findCompletadosByPersonaAndEtapa(persona, etapa2)).thenReturn(List.of(retoB));
+
+        Map<String, Map<Long, Boolean>> resultado = progresoService.calcularEstadoRetos(etapas, persona);
+
+        Assertions.assertEquals(Boolean.FALSE, resultado.get("Etapa A").get(201L));
+        Assertions.assertEquals(Boolean.TRUE, resultado.get("Etapa B").get(202L));
     }
 
 }
