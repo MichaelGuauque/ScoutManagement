@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/styles.css}">
-    <link rel="stylesheet" th:href="@{/style/homeAdmin.css}">
+    <link rel="stylesheet" th:href="@{/style/homeUser.css}">
 
 </head>
 <body>
@@ -24,125 +24,7 @@
 <!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<div class="sidebar" id="sidebar">
-    <div class="logo-contenedor">
-        <img th:src="@{/img/logoApli.svg}" alt="Scout Management" class="logo">
-    </div>
-
-    <div class="perfil-contenedor">
-        <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
-        <div class="perfil-info">
-            <p class="nombre-perfil">Miguel Andres M...</p>
-            <p class="cargo-perfil">Joven - Lobato</p>
-        </div>
-        <div class="perfil-flecha">
-            <img class="flecha-perfil" th:src="@{/img/flechita.svg}" alt="Desplegar">
-        </div>
-
-        <!-- Menú desplegable del perfil -->
-        <div class="perfil-menu" id="perfilMenu">
-            <ul>
-                <li class="nav-link">
-                    <img th:src="@{/img/sesion.svg}" alt="Ver Perfil" class="perfil-menu-icon">
-                    <span>Ver Perfil</span>
-                </li>
-                <li class="nav-link">
-                    <img th:src="@{/img/cierreSesion.svg}" alt="Cerrar Sesión" class="perfil-menu-icon">
-                    <a class="cerrar-sesion" th:href="@{/cerrar}">Cerrar Sesión</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="linea-divisoria"></div>
-
-    <div class="contenido-central">
-        <nav class="menu">
-            <ul>
-                <li class="menu-item">
-                    <a th:href="@{/home-admin}" class="main-button nav-link" style="text-decoration: none;">
-                        <img th:src="@{/img/Casa.svg}" alt="Inicio">
-                        <span>Inicio</span>
-                    </a>
-                </li>
-
-
-                <li class="menu-item">
-                    <div class="main-button">
-                        <img th:src="@{/img/Calendario.svg}" alt="Actividades">
-                        <span>Actividades</span>
-                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
-                             style="width: 15px; height: 15px;">
-                    </div>
-                    <ul class="submenu">
-                        <li class="nav-link">
-                            <a th:href="@{/actividades}">
-                                <img th:src="@{/img/calendario(consulta).svg}" alt="Consultar" class="submenu-icon">Consultar
-                                Actividades
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a th:href="@{/actividades/crear}">
-                                <img th:src="@{/img/calendario(agregar).svg}" alt="Agregar" class="submenu-icon">Crear
-                                Actividad
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="menu-item">
-                    <div class="main-button">
-                        <img th:src="@{/img/grafico.svg}" alt="Progresiones">
-                        <span>Progresiones</span>
-                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
-                             style="width: 15px; height: 15px;">
-                    </div>
-                    <ul class="submenu">
-                        <li class="nav-link"><img th:src="@{/img/retos.svg}" alt="Consultar" class="submenu-icon">Gestionar
-                            Retos
-                        </li>
-                        <li class="nav-link">
-                            <a th:href="@{/progresiones/miProgreso}">
-                                <img th:src="@{/img/retos(miembros).svg}" alt="Agregar"
-                                                  class="submenu-icon">Progresion Miembros
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="menu-item">
-                    <div class="main-button">
-                        <img th:src="@{/img/usuarios.svg}" alt="Miembros">
-                        <span>Miembros</span>
-                        <img th:src="@{/img/flechita.svg}" alt="Flecha" class="arrow-img"
-                             style="width: 15px; height: 15px;">
-                    </div>
-                    <ul class="submenu">
-                        <li class="nav-link">
-                            <a th:href="@{/miembros}">
-                                <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
-                                     class="submenu-icon">Consultar Miembros
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a th:href="@{/miembros/jefes}">
-                                <img th:src="@{/img/usuario(consulJefe).svg}" alt="Agregar"
-                                     class="submenu-icon">Consultar Jefes
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-    <div class="linea-divisoria"></div>
-
-    <div class="configuracion nav-link">
-        <img th:src="@{/img/tuerca.svg}" alt="Configuración">
-        <span>Configuración de Cuenta</span>
-    </div>
-</div>
+<div th:include="user/template_user.html::header"></div>
 
 <!-- Contenido principal -->
 <main>
@@ -159,8 +41,8 @@
         <div class="features-grid">
             <!-- Feature Box 1 -->
             <div class="feature-box">
-                <h3 class="feature-title">Gestiona la Progresión</h3>
-                <p class="feature-description">Revisa y modifica los últimos avances de los miembros en sus rutas.</p>
+                <h3 class="feature-title">Revisa tu Progreso</h3>
+                <p class="feature-description">Revisa tus últimos avances en las distintas etapas de tu rama.</p>
 
                 <div class="feature-icon">
                     <div class="icon-circle">
@@ -173,26 +55,10 @@
                 </div>
             </div>
 
-            <!-- Feature Box 2 -->
-            <div class="feature-box">
-                <h3 class="feature-title">Gestiona los Retos</h3>
-                <p class="feature-description">Crea, consulta y edita los retos que guían el progreso del grupo.</p>
-
-                <div class="feature-icon">
-                    <div class="icon-circle">
-                        <img class="lista" th:src="@{/img/libreta.svg}" alt="icono lista">
-                    </div>
-                </div>
-
-                <div class="button-container">
-                    <button class="view-button">Ver Retos →</button>
-                </div>
-            </div>
-
             <!-- Feature Box 3 -->
             <div class="feature-box">
-                <h3 class="feature-title">Gestiona los Miembros</h3>
-                <p class="feature-description">Consulta y registra los integrantes del grupo.</p>
+                <h3 class="feature-title">Compañeros de Rama</h3>
+                <p class="feature-description">Revisa tus últimos avances en las distintas etapas de tu rama.</p>
 
                 <div class="feature-icon">
                     <div class="icon-circle">
@@ -205,83 +71,6 @@
                 </div>
             </div>
 
-            <!-- Feature Box 4 -->
-            <div class="feature-box">
-                <h3 class="feature-title">Gestiona los Jefes</h3>
-                <p class="feature-description">Consulta los jefes y líderes del grupo</p>
-
-                <div class="feature-icon">
-                    <div class="icon-circle">
-                        <img class="personas" th:src="@{/img/personasstar.svg}" alt="icono personas">
-                    </div>
-                </div>
-
-                <div class="button-container">
-                    <button class="view-button">Ver Jefes →</button>
-                </div>
-            </div>
-
-            <!-- Activities Section -->
-            <div class="activities-section">
-                <div class="activities-header">
-                    <h3>Actividades Programadas</h3>
-                    <span>Más ›</span>
-                </div>
-
-                <div class="activities-list">
-                    <!-- Activity 1 -->
-                    <div class="activity-item">
-                        <div class="date-container">
-                            <div>
-                                <div class="date-number">12</div>
-                                <div class="date-month">Abril</div>
-                            </div>
-                            <div class="activity-details">
-                                <!-- Detalles de la actividad -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Activity 2 -->
-                    <div class="activity-item">
-                        <div class="date-container">
-                            <div>
-                                <div class="date-number">18</div>
-                                <div class="date-month">Abril</div>
-                            </div>
-                            <div class="activity-details">
-                                <!-- Detalles de la actividad -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Activity 3 -->
-                    <div class="activity-item">
-                        <div class="date-container">
-                            <div>
-                                <div class="date-number">26</div>
-                                <div class="date-month">Abril</div>
-                            </div>
-                            <div class="activity-details">
-                                <!-- Detalles de la actividad -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Activity 4 -->
-                    <div class="activity-item">
-                        <div class="date-container">
-                            <div>
-                                <div class="date-number">12</div>
-                                <div class="date-month">Mayo</div>
-                            </div>
-                            <div class="activity-details">
-                                <!-- Detalles de la actividad -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

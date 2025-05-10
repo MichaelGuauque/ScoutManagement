@@ -1,6 +1,9 @@
 package com.scoutmanagement.dto;
 
-import com.scoutmanagement.persistence.model.*;
+import com.scoutmanagement.persistence.model.Cargo;
+import com.scoutmanagement.persistence.model.Rama;
+import com.scoutmanagement.persistence.model.Rol;
+import com.scoutmanagement.persistence.model.TipoDeDocumento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -13,10 +16,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@ToString
-public class PersonaRegistroDTO extends PersonaBaseDTO {
+public class PersonaActualizacionDTO  extends PersonaBaseDTO {
 
-    @NotNull(message = "El usuario es obligatorio")
-    private UserRegistroDTO usuario;
-
+    private Rol rol;
 }
+

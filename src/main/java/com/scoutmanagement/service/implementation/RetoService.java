@@ -39,7 +39,7 @@ public class RetoService implements IRetoService {
     @Override
     public void save(RetoDTO retoDTO) {
         try {
-            Optional<Reto> retoOptional = retoRepository.findRetoByNumero(retoDTO.numero());
+            Optional<Reto> retoOptional = retoRepository.findRetoByNumeroAndEtapa(retoDTO.numero(),etapaRepository.findByNombre(retoDTO.etapa()));
             if (retoOptional.isPresent()) {
                 throw new ServiceException("El reto con numero " + retoDTO.numero() + " ya existe");
             }else {
@@ -73,7 +73,7 @@ public class RetoService implements IRetoService {
     @Override
     public List<Reto> findAllRetosEtapa(Etapa etapa) {
         try {
-            return (List<Reto>) retoRepository.findAllRetosByEtapa(etapa);
+            return (List<Reto>) retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa);
         } catch (Exception e) {
             throw new ServiceException("No se encontraron los retos por etapa: " + e.getMessage());
         }

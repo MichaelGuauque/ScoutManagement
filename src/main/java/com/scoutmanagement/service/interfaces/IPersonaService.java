@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.interfaces;
 
+import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.UserEntity;
@@ -18,6 +19,8 @@ public interface IPersonaService {
     Persona personaModelSession(String nombreSession, HttpSession session);
     List<Persona> findJefes();
     List<Persona> findMiembros();
-
+    void actualizarPersona(Long id, PersonaActualizacionDTO dto);
+    Optional<Persona> findByNumeroDeDocumento(Long numeroDeDocumento);
+    public List<Persona> filtrarYOrdenarPorEstado(List<Persona> personas, String tab);
 
 }
