@@ -204,7 +204,7 @@ class ActividadServiceTest {
                 crearActividad(3L, hoy.minusDays(1))
         );
 
-        List<Actividad> resultado = actividadService.filtrarYOrdenarActividadesPorTab(actividades, null, "proximas", hoy);
+        List<Actividad> resultado = actividadService.filtrarYOrdenarActividadesPorTab(actividades, null, "proximas", hoy,null);
 
         assertEquals(2, resultado.size());
         assertTrue(resultado.get(0).getFecha().isAfter(hoy));
@@ -219,7 +219,7 @@ class ActividadServiceTest {
                 crearActividad(3L, hoy.minusDays(1), Rama.MANADA)
         );
 
-        List<Actividad> resultado = actividadService.filtrarYOrdenarActividadesPorTab(actividades, Rama.MANADA, "pasadas", hoy);
+        List<Actividad> resultado = actividadService.filtrarYOrdenarActividadesPorTab(actividades, Rama.MANADA, "pasadas", hoy, null);
 
         assertEquals(2, resultado.size());
         assertTrue(resultado.get(0).getFecha().isAfter(resultado.get(1).getFecha()));
