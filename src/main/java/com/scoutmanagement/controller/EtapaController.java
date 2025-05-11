@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scoutmanagement.dto.EtapaDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -162,9 +163,40 @@ public class EtapaController {
         model.addAttribute("etapasObtenidas", etapasObtenidas);
         model.addAttribute("gruposRamas", GRUPOS_RAMAS);
 
-
         return "progresiones/verProgresiones";
     }
 
+    @GetMapping("/miembros")
+    public String progresionMiembros(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
 
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
+            Rama rama = sesionDelJefe.getRama();
+            Map<Long, Etapa> progresionesPorPersona = new HashMap<>();
+            List<Persona> miembros = personaService.findMiembrosByRama(rama);
+
+            for (Persona persona : miembros) {
+                Optional<Obtencion> obtencion = obtencionService.findByPersona(persona);
+
+                if (obtencion.isEmpty()) {
+                    progresionesPorPersona.put(persona.getId(), null);
+                } else {
+                    progresionesPorPersona.put(persona.getId(), obtencion.get().getEtapa());
+                }
+            }
+
+            model.addAttribute("miembros", miembros);
+            model.addAttribute("progresionesPorPersona", progresionesPorPersona);
+            return "progresiones/progresoMiembros";
+
+        }
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+        return VISTA_ERROR;
+
+    }
 }

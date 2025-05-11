@@ -19,7 +19,7 @@ public class Obtencion {
     private Long id;
     private boolean estado;
     private LocalDate fecha;
-    @ManyToOne(targetEntity = Persona.class)
+    @OneToOne(targetEntity = Persona.class)
     private Persona persona;
     @ManyToOne(targetEntity = Etapa.class)
     private Etapa etapa;

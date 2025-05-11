@@ -19,4 +19,7 @@ public interface IObtencionService {
     List<Obtencion> findAll();
 
     Set<Long> findIdEtapasObtenidasByPersona(Persona persona);
+
+    Optional<Obtencion> findByPersona(Persona persona);
+
 }

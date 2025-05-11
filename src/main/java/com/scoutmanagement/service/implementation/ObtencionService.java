@@ -77,4 +77,9 @@ public class ObtencionService implements IObtencionService {
         }
     }
 
+    @Override
+    public Optional<Obtencion> findByPersona(Persona persona) {
+        return obtencionRepository.findByPersona(persona);
+    }
+
 }

@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Progresiones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/progresionesStyle.css}">
+</head>
+<body>
+<!-- Botón hamburguesa para móviles -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</button>
+
+<!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="sidebar" id="sidebar">
+    <div class="logo-contenedor">
+        <img src="img/logoApli.svg" alt="Scout Management" class="logo">
+    </div>
+
+    <div class="perfil-contenedor">
+        <img src="img/perfil.svg" alt="Perfil" class="perfil">
+        <div class="perfil-info">
+            <p class="nombre-perfil">Miguel Andres M...</p>
+            <p class="cargo-perfil">Adulto - Jefe Manada</p>
+        </div>
+        <div class="perfil-flecha">
+            <img src="img/flechita.svg" alt="Desplegar">
+        </div>
+
+        <!-- Menú desplegable del perfil -->
+        <div class="perfil-menu" id="perfilMenu">
+            <ul>
+                <li class="nav-link">
+                    <img src="img/sesion.svg" alt="Ver Perfil" class="perfil-menu-icon">
+                    <span>Ver Perfil</span>
+                </li>
+                <li class="nav-link">
+                    <img src="img/cierreSesion.svg" alt="Cerrar Sesión" class="perfil-menu-icon">
+                    <span>Cerrar Sesión</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="linea-divisoria"></div>
+
+    <div class="contenido-central">
+        <nav class="menu">
+            <ul>
+                <li class="menu-item">
+                    <div class="main-button nav-link">
+                        <img src="img/Casa.svg" alt="Inicio">
+                        <span>Inicio</span>
+                    </div>
+                </li>
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img src="img/Calendario.svg" alt="Actividades">
+                        <span>Actividades</span>
+                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link"><img src="img/calendario(consulta).svg" alt="Consultar"
+                                                  class="submenu-icon">Consultar Actividades
+                        </li>
+                        <li class="nav-link"><img src="img/calendario(agregar).svg" alt="Agregar" class="submenu-icon">Crear
+                            Actividad
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img src="img/grafico.svg" alt="Progresiones">
+                        <span>Progresiones</span>
+                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link"><img src="img/retos.svg" alt="Consultar" class="submenu-icon">Gestionar
+                            Retos
+                        </li>
+                        <li class="nav-link"><img src="img/retos(miembros).svg" alt="Agregar" class="submenu-icon">Progresion
+                            Miembros
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="menu-item">
+                    <div class="main-button">
+                        <img src="img/usuarios.svg" alt="Miembros">
+                        <span>Miembros</span>
+                        <img src="img/flechita.svg" alt="Flecha" class="arrow-img" style="width: 15px; height: 15px;">
+                    </div>
+                    <ul class="submenu">
+                        <li class="nav-link"><img src="img/usuario(buscar).svg" alt="Consultar" class="submenu-icon">Consultar
+                            Miembros
+                        </li>
+                        <li class="nav-link"><img src="img/usuario(consulJefe).svg" alt="Agregar" class="submenu-icon">Consultar
+                            Jefes
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="linea-divisoria"></div>
+
+    <div class="configuracion nav-link">
+        <img src="img/tuerca.svg" alt="Configuración">
+        <span>Configuración de Cuenta</span>
+    </div>
+</div>
+
+
+<!-- Contenido principal -->
+<main>
+    <!-- Aquí va el contenido de la página -->
+
+    <div class="container">
+        <div class="header">
+            <h1 class="encabezado">Seguimiento de Retos</h1>
+            <p class="description">Revisa y marca los retos completados por el miembro en cada una de las etapas de su
+                progresión. Usa las pestañas para navegar entre las etapas y llevar un control actualizado de su
+                avance.</p>
+        </div>
+
+
+        <div class="divider-line"></div>
+
+
+        <div class="controls">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="pata-tierna">Pata Tierna</button>
+                <button class="tab-button" data-tab="saltador">Saltador</button>
+                <button class="tab-button" data-tab="rastreador">Rastreador</button>
+                <button class="tab-button" data-tab="cazador">Cazador</button>
+            </div>
+
+        </div>
+
+        <div id="pata-tierna" class="content-area active">
+            <table>
+                <thead>
+                <tr>
+                    <th class="number-colm">#</th>
+                    <th>Descripción</th>
+                    <th class="action-col">Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="number-colm">01</td>
+                    <td>m en una buena acción diaria durante una semana y compártela con tu jefe/a.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="pata-tierna-1" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="pata-tierna-1"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">02</td>
+                    <td>Confecciona tu pañuelo scout y conoce su significado.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="pata-tierna-2" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="pata-tierna-2"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">03</td>
+                    <td>Aprende y muestra cómo se dobla correctamente la bandera.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="pata-tierna-3" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="pata-tierna-3"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">04</td>
+                    <td>Investiga sobre la vida de Baden Powell y comparte 3 cosas con tu patrulla.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="pata-tierna-4" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="pata-tierna-4"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">05</td>
+                    <td>Realiza una caminata corta con tu grupo y observa 5 tipos de plantas diferentes.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="pata-tierna-5" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="pata-tierna-5"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">06</td>
+                    <td>Practica y presenta un canto scout en una reunión.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="pata-tierna-6" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="pata-tierna-6"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">07</td>
+                    <td>Crea una tarjeta para alguien del grupo y exprésale tu aprecio.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="pata-tierna-7" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="pata-tierna-7"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">08</td>
+                    <td>Aprende a usar una brújula y encuentra un punto marcado en un mapa simple.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="pata-tierna-8" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="pata-tierna-8"></label>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="saltador" class="content-area">
+            <table>
+                <thead>
+                <tr>
+                    <th class="number-colm">#</th>
+                    <th>Descripción</th>
+                    <th class="action-col">Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="number-colm">01</td>
+                    <td>Planifica y lidera una pequeña actividad durante una reunión de patrulla.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-1" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="saltador-1"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">02</td>
+                    <td>Aprende los nudos básicos (llano, rizo, ballestrinque) y enséñalos a otro scout.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-2" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="saltador-2"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">03</td>
+                    <td>Participa activamente en un campamento de fin de semana.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-3" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="saltador-3"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">04</td>
+                    <td>Crea una bitácora personal de tus progresos en la tropa.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-4" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="saltador-4"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">05</td>
+                    <td>Conoce las señales de socorro y simula una situación de rescate.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-5" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="saltador-5"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">06</td>
+                    <td>Escribe y comparte una reflexión sobre el significado de la fraternidad scout.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-6" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="saltador-6"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">07</td>
+                    <td>Cocina una comida sencilla en fogata para tu patrulla.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-7" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="saltador-7"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">08</td>
+                    <td>Aprende a leer un mapa topográfico básico y úsalo en una salida.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="saltador-8" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="saltador-8"></label>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="rastreador" class="content-area">
+            <table>
+                <thead>
+                <tr>
+                    <th class="number-colm">#</th>
+                    <th>Descripción</th>
+                    <th class="action-col">Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="number-colm">01</td>
+                    <td>Coordina junto a tu comunidad una actividad de servicio en tu barrio.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-1" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="rastreador-1"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">02</td>
+                    <td>Investiga y expón sobre un problema ambiental de tu zona.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-2" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="rastreador-2"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">03</td>
+                    <td>Diseña un reto de progresión para los scouts más pequeños.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-3" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="rastreador-3"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">04</td>
+                    <td>Aprende a construir un refugio improvisado en campo.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-4" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="rastreador-4"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">05</td>
+                    <td>Lidera una caminata de orientación con mapa y brújula.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-5" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="rastreador-5"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">06</td>
+                    <td>Organiza una dinámica que promueva la comunicación en el grupo.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-6" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="rastreador-6"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">07</td>
+                    <td>Participa en un foro juvenil o actividad intergrupal.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-7" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="rastreador-7"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">08</td>
+                    <td>Prepara una charla breve sobre primeros auxilios básicos.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="rastreador-8" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="rastreador-8"></label>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="cazador" class="content-area">
+            <table>
+                <thead>
+                <tr>
+                    <th class="number-colm">#</th>
+                    <th>Descripción</th>
+                    <th class="action-col">Acción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="number-colm">01</td>
+                    <td>Diseña y lidera un proyecto de servicio comunitario de varios días.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-1" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="cazador-1"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">02</td>
+                    <td>Aprende técnicas avanzadas de supervivencia en la naturaleza.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-2" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="cazador-2"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">03</td>
+                    <td>Organiza una actividad de reflexión sobre los valores scout para tu grupo.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-3" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="cazador-3"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">04</td>
+                    <td>Planifica y ejecuta una expedición de dos días con tu patrulla.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-4" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="cazador-4"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">05</td>
+                    <td>Domina la técnica de señalización con banderas y enseña a otros scouts.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-5" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="cazador-5"></label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="number-colm">06</td>
+                    <td>Investiga sobre problemas ambientales y lidera una acción ecológica.</td>
+                    <td class="action-cell">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="cazador-6" class="attendance-checkbox"
+                                   onchange="saveProgress(this)">
+                            <label for="cazador-6"></label>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn-primary botones">Guardar</button>
+            <button type="button" class="btn-secondary botones">Cancelar</button>
+        </div>
+
+    </div>
+
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <img src="img/logo605.png" alt="Scouts Jaguares 605" class="logo-img">
+                </div>
+
+                <div class="footer-info">
+                    <div class="footer-title">
+                        <div class="dot"></div>
+                        <h2>Scouts Jaguares 605</h2>
+                    </div>
+                    <p class="footer-slogan">Listos para servir, listos para rugir.</p>
+
+                    <div class="footer-address">
+                        <img src="img/ubicacion.svg" alt="Ubicación" class="ubicacion-icon">
+                        <p class="footer-ubi">Palmira, Valle del Cauca – Barrio Las Delicias<br>
+                            Sede: Casa de la Juventud, Calle 30 #29-15</p>
+                    </div>
+                </div>
+
+                <div class="footer-social">
+                    <a href="#" class="social-icon">
+                        <img src="img/facebook.svg" alt="Facebook">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="img/instagram.svg" alt="Instagram">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="img/tiktok.svg" alt="TikTok">
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <nav class="footer-nav">
+                    <a href="#" class="footer-link">Inicio</a>
+                    <a href="#" class="footer-link">Política de Tratamiento de Datos</a>
+                    <a href="#" class="footer-link">Configuración</a>
+                </nav>
+                <p class="footer-copyright">© 2025 Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+
+</main>
+
+<!-- Footer -->
+
+<!-- JavaScript para la funcionalidad -->
+<script>
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const contentAreas = document.querySelectorAll('.content-area');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Remove active class from all buttons and content areas
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                contentAreas.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                // Show corresponding content area
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    });
+
+
+    // Funciones para los modales
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- FUNCIONES COMPARTIDAS ---
+
+        // Función genérica para mostrar un modal
+        function showModalById(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Evita el scroll del body
+        }
+
+        // Función genérica para ocultar un modal
+        function hideModalById(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restaura el scroll del body
+        }
+
+        // --- MODAL CREAR RETO ---
+
+        // Botón "Nuevo Reto" - Abre el modal de crear reto
+        const createRetoBtn = document.querySelector('.create-reto-btn');
+        if (createRetoBtn) {
+            createRetoBtn.addEventListener('click', function () {
+                showModalById('modal-crearReto');
+            });
+        }
+
+        // Configuración para cerrar el modal crear reto
+        const crearRetoModal = document.getElementById('modal-crearReto');
+        if (crearRetoModal) {
+            // Botón cancelar del modal crear reto
+            const cancelButtonCrear = crearRetoModal.querySelector('.cancel-button');
+            if (cancelButtonCrear) {
+                cancelButtonCrear.addEventListener('click', function () {
+                    hideModalById('modal-crearReto');
+                });
+            }
+
+            // Botón guardar del modal crear reto
+            const saveButtonCrear = crearRetoModal.querySelector('.save-button');
+            if (saveButtonCrear) {
+                saveButtonCrear.addEventListener('click', function () {
+                    hideModalById('modal-crearReto');
+                    // Aquí puedes agregar la lógica para guardar los datos del reto
+                });
+            }
+
+            // Cerrar al hacer click en el overlay
+            const overlayCrear = crearRetoModal.querySelector('.modal-overlay');
+            if (overlayCrear) {
+                overlayCrear.addEventListener('click', function () {
+                    hideModalById('modal-crearReto');
+                });
+            }
+
+            // Evitar cierre al hacer click en el contenido
+            const contentCrear = crearRetoModal.querySelector('.modal-content');
+            if (contentCrear) {
+                contentCrear.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+            }
+        }
+
+        // --- MODAL MODIFICAR RETO ---
+
+        // Configuración para abrir el modal modificar reto desde opciones de "Asistencia"
+        const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+        dropdownMenus.forEach(menu => {
+            const asistenciaItem = menu.querySelector('.dropdown-item:nth-child(1)');
+            if (asistenciaItem) {
+                asistenciaItem.addEventListener('click', function (e) {
+                    e.stopPropagation(); // Evita que el click se propague
+                    showModalById('modal-modificarReto');
+
+                    // Cerrar el dropdown al abrir el modal
+                    const activeDropdowns = document.querySelectorAll('.dropdown-menu.active');
+                    activeDropdowns.forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+
+                    const activeButtons = document.querySelectorAll('.expand-btn.active');
+                    activeButtons.forEach(button => {
+                        button.classList.remove('active');
+                    });
+                });
+            }
+        });
+
+        // Configuración para cerrar el modal modificar reto
+        const modificarRetoModal = document.getElementById('modal-modificarReto');
+        if (modificarRetoModal) {
+            // Botón cancelar del modal modificar reto
+            const cancelButtonModificar = modificarRetoModal.querySelector('.cancel-button');
+            if (cancelButtonModificar) {
+                cancelButtonModificar.addEventListener('click', function () {
+                    hideModalById('modal-modificarReto');
+                });
+            }
+
+            // Botón guardar del modal modificar reto
+            const saveButtonModificar = modificarRetoModal.querySelector('.save-button');
+            if (saveButtonModificar) {
+                saveButtonModificar.addEventListener('click', function () {
+                    hideModalById('modal-modificarReto');
+                    // Aquí puedes agregar la lógica para guardar los datos modificados
+                });
+            }
+
+            // Cerrar al hacer click en el overlay
+            const overlayModificar = modificarRetoModal.querySelector('.modal-overlay');
+            if (overlayModificar) {
+                overlayModificar.addEventListener('click', function () {
+                    hideModalById('modal-modificarReto');
+                });
+            }
+
+            // Evitar cierre al hacer click en el contenido
+            const contentModificar = modificarRetoModal.querySelector('.modal-content');
+            if (contentModificar) {
+                contentModificar.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+            }
+        }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Manejar clic en los botones de expansión
+        document.querySelectorAll('.expand-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.stopPropagation();
+
+                // Cerrar otros dropdowns abiertos
+                document.querySelectorAll('.expand-btn').forEach(btn => {
+                    if (btn !== this) {
+                        btn.classList.remove('active');
+                        const menu = btn.nextElementSibling;
+                        if (menu && menu.classList.contains('dropdown-menu')) {
+                            menu.classList.remove('active');
+                        }
+                        // Remover clase menu-active del contenedor
+                        const container = btn.closest('.dropdown-container');
+                        if (container) {
+                            container.classList.remove('menu-active');
+                        }
+                    }
+                });
+
+                // Toggle el dropdown actual
+                this.classList.toggle('active');
+                const dropdownMenu = this.nextElementSibling;
+                if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                    dropdownMenu.classList.toggle('active');
+
+                    // Añadir o remover clase menu-active al contenedor
+                    const container = this.closest('.dropdown-container');
+                    if (container) {
+                        if (dropdownMenu.classList.contains('active')) {
+                            container.classList.add('menu-active');
+                        } else {
+                            container.classList.remove('menu-active');
+                        }
+                    }
+                }
+            });
+        });
+
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function () {
+            document.querySelectorAll('.expand-btn.active').forEach(btn => {
+                btn.classList.remove('active');
+                const menu = btn.nextElementSibling;
+                if (menu && menu.classList.contains('dropdown-menu')) {
+                    menu.classList.remove('active');
+                }
+                // Remover clase menu-active del contenedor
+                const container = btn.closest('.dropdown-container');
+                if (container) {
+                    container.classList.remove('menu-active');
+                }
+            });
+        });
+
+        // Manejar clic en las opciones del dropdown
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.stopPropagation();
+
+                // Marcar la opción seleccionada
+                const parentMenu = this.closest('.dropdown-menu');
+                parentMenu.querySelectorAll('.dropdown-item').forEach(menuItem => {
+                    menuItem.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // Aquí puedes añadir la lógica para cada opción
+                const action = this.querySelector('span').textContent;
+                console.log(`Acción seleccionada: ${action}`);
+
+                // Cerrar el dropdown después de seleccionar
+                const expandButton = parentMenu.previousElementSibling;
+                if (expandButton && expandButton.classList.contains('expand-btn')) {
+                    expandButton.classList.remove('active');
+                    parentMenu.classList.remove('active');
+
+                    // Remover clase menu-active del contenedor
+                    const container = expandButton.closest('.dropdown-container');
+                    if (container) {
+                        container.classList.remove('menu-active');
+                    }
+                }
+            });
+        });
+    });
+
+    // Script para el menú de perfil
+    document.querySelector('.perfil-flecha').addEventListener('click', function () {
+        const perfilMenu = document.getElementById('perfilMenu');
+        perfilMenu.classList.toggle('show-menu');
+    });
+
+    // Cerrar el menú al hacer clic fuera de él
+    document.addEventListener('click', function (event) {
+        const perfilMenu = document.getElementById('perfilMenu');
+        const perfilFlecha = document.querySelector('.perfil-flecha');
+
+        // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+        if (!perfilMenu.contains(event.target) && !perfilFlecha.contains(event.target)) {
+            perfilMenu.classList.remove('show-menu');
+        }
+    });
+
+    // Script para los menús desplegables de navegación
+    document.querySelectorAll('.main-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+            event.stopPropagation();
+
+            const parent = button.parentElement;
+            const wasActive = parent.classList.contains('active');
+
+            // Cerrar todos los menús activos
+            document.querySelectorAll('.menu-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Si no estaba activo, activarlo
+            if (!wasActive) {
+                parent.classList.add('active');
+            }
+        });
+    });
+
+    // Script para toggle del sidebar en móviles
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    sidebarToggle.addEventListener('click', function () {
+        sidebar.classList.toggle('open');
+        hamburger.classList.toggle('open');
+        overlay.classList.toggle('active');
+
+        // Mover el botón también cuando el sidebar está abierto
+        sidebarToggle.classList.toggle('moved');
+    });
+
+    // Cerrar sidebar al hacer clic en el overlay
+    overlay.addEventListener('click', function () {
+        sidebar.classList.remove('open');
+        hamburger.classList.remove('open');
+        overlay.classList.remove('active');
+        sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+    });
+
+    // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+    document.querySelectorAll('.nav-link').forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                hamburger.classList.remove('open');
+                overlay.classList.remove('active');
+                sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+            }
+        });
+    });
+
+    // Ajustar al cambiar el tamaño de la ventana
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('open');
+            hamburger.classList.remove('open');
+            overlay.classList.remove('active');
+            sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+        }
+    });
+
+</script>
+</body>
+</html>
