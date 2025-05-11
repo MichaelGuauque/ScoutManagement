@@ -144,11 +144,11 @@ public class EtapaController {
         } catch (Exception e) {
             model.addAttribute("progresoJson", "{}");
         }
-        Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas);
         Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = progresoService.calcularEstadoRetos(etapas, persona);
+        Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas, estadoRetosPorEtapa);
         Set<Long> etapasObtenidas = obtencionService.findIdEtapasObtenidasByPersona(persona);
 
-        Etapa etapaDestacada =  etapas.isEmpty() ? null : etapas.get(0);
+        Etapa etapaDestacada = etapas.isEmpty() ? null : etapas.get(0);
         float progresoMaximo = etapaDestacada != null ?
                 progresoPorEtapa.getOrDefault(etapaDestacada.getId(), 0f) : 0f;
 
@@ -164,7 +164,7 @@ public class EtapaController {
 
 
         return "progresiones/verProgresiones";
-        }
+    }
 
 
 }
