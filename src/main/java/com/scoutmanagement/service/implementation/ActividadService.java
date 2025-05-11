@@ -79,12 +79,13 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
-    public List<Actividad> filtrarYOrdenarActividadesPorTab(List<Actividad> actividades, Rama rama, String tab, LocalDate hoy) {
+    public List<Actividad> filtrarYOrdenarActividadesPorTab(List<Actividad> actividades, Rama rama, String tab, LocalDate hoy, LocalDate fechaFiltro) {
         return actividades.stream()
                 .filter(actividad -> rama == null || actividad.getRama().equals(rama))
                 .filter(actividad -> tab.equals("pasadas")
                         ? actividad.getFecha().isBefore(hoy)
                         : !actividad.getFecha().isBefore(hoy))
+                .filter(a -> fechaFiltro == null || a.getFecha().equals(fechaFiltro))
                 .sorted(tab.equals("pasadas")
                         ? Comparator.comparing(Actividad::getFecha).reversed()
                         : Comparator.comparing(Actividad::getFecha))

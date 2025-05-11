@@ -965,7 +965,6 @@ perfil-menu li:hover span {
     font-size: 14px;
     color: #777;
     background-color: #fff;
-    width: 250px;
     outline: none;
 }
 
@@ -1432,7 +1431,6 @@ perfil-menu li:hover span {
     }
 
     .search-container {
-        width: 100%;
         flex-wrap: wrap;
         gap: 10px;
     }
@@ -1487,9 +1485,6 @@ perfil-menu li:hover span {
         justify-content: flex-start;
     }
 
-    .filter-select, .filter-date {
-        width: calc(50% - 30px);
-    }
 }
 
 /* Para tablets pequeñas y móviles grandes */
@@ -1782,6 +1777,10 @@ perfil-menu li:hover span {
     position: relative;
 }
 
+.select-container {
+    position: relative;
+}
+
 .filter-date {
     padding: 8px 30px 8px 10px;
     font-family: Figtree;
@@ -1789,12 +1788,11 @@ perfil-menu li:hover span {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    min-width: 290px;
+    min-width: 150px;
     height: 40px;
     border-radius: 7px;
     border: 1.99px solid #B2B2B2;
     background: #F9F9F9;
-    margin-left: 16px;
 }
 
 /* Ocultar el icono nativo del selector de fecha */
@@ -1834,7 +1832,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .filter-select {
     padding: 8px 30px 8px 10px;
     font-size: 14px;
-    min-width: 200px;
+    min-width: 150px;
     height: 36px;
     border-radius: 7px;
     border: 1.99px solid #B2B2B2;
