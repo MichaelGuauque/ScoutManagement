@@ -171,11 +171,6 @@ main {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 0.8s ease;
-}
-
-.flecha-perfil.active {
-    transform: rotate(180deg);
 }
 
 .perfil-flecha:hover {
@@ -292,11 +287,6 @@ main {
     font-size: 14px;
     cursor: pointer;
     padding-left: 12px;
-}
-
-.submenu li a {
-    text-decoration: none;
-    color: inherit;
 }
 
 .submenu li:before {
@@ -663,6 +653,11 @@ perfil-menu li:hover span {
         text-align: center;
     }
 
+    .modal-content {
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
     .footer-logo {
         margin-right: 0;
         margin-bottom: 20px;
@@ -732,6 +727,7 @@ perfil-menu li:hover span {
     }
 }
 
+
 @media screen and (max-width: 768px) {
     .footer {
         padding: 30px 20px 15px 20px;
@@ -783,15 +779,19 @@ perfil-menu li:hover span {
 }
 
 .header {
-    background: linear-gradient(to bottom, rgba(221, 204, 255, 0.8) 0%, rgba(255, 255, 255, 1) 100%);
-    padding: 40px;
+    background: linear-gradient(to bottom, rgba(236, 203, 201, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    padding-top: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 25px;
+
     border-radius: 10px;
     margin: -35px;
 }
 
-
 .container {
     max-width: 100vw;
+    min-height: 110vh;
     margin: 0;
     background-color: #ffffff;
     border-radius: 16px;
@@ -799,7 +799,6 @@ perfil-menu li:hover span {
     margin-bottom: 20px;
     position: relative;
     z-index: 0;
-    min-height: 800px;
 }
 
 .encabezado {
@@ -826,14 +825,13 @@ perfil-menu li:hover span {
 
 /* ==== TABS ==== */
 .tab-container {
-    gap: 5px;
     display: flex;
+    width: fit-content;
+    position: relative;
+    gap: 5px;
     border-radius: 8px;
     background-color: #d9d7d7;
     padding: 4px;
-    width: fit-content;
-    position: relative;
-    width: 300px;
 }
 
 .tab {
@@ -883,67 +881,6 @@ perfil-menu li:hover span {
 }
 
 
-.filter-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 25px;
-    gap: 10px;
-}
-
-.filter-select, .filter-date {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 30px;
-    font-size: 14px;
-    color: #777;
-    background-color: #fff;
-    width: 250px;
-    outline: none;
-}
-
-.search-btn {
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.search-icon {
-    width: 20px;
-    height: 20px;
-}
-
-/* Asegurarnos de que la actividad card no corte el menú */
-.activity-card {
-    display: flex;
-    border: 2px solid #dcdcdc;
-    background-color: #fff;
-    border-radius: 14px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    min-width: 0;
-    position: relative; /* Establecemos posición relativa para el dropdown */
-    z-index: auto;
-}
-
-
-.activity-card {
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.activity-card:hover {
-    box-shadow: 0 12px 30px rgba(41, 18, 85, 0.15); /* Sombra con el color morado que usas */
-    transform: translateY(-1px); /* Sutil elevación */
-}
-
-
-/* Media queries para hacer el diseño responsive */
-
 /* Para tablets medianas */
 @media screen and (max-width: 1300px) {
     .header-row {
@@ -991,8 +928,6 @@ perfil-menu li:hover span {
     .dropdown-container {
         position: absolute;
         top: auto;
-        bottom: 15px;
-        right: 15px;
         transform: none;
     }
 
@@ -1024,11 +959,6 @@ perfil-menu li:hover span {
 
 /* Para tablets pequeñas y móviles grandes */
 @media screen and (max-width: 768px) {
-    .header-row {
-        flex-direction: column;
-        gap: 20px;
-        align-items: stretch;
-    }
 
     .tab-container {
         width: 100%;
@@ -1042,30 +972,12 @@ perfil-menu li:hover span {
         font-size: 18px;
     }
 
-    .search-container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .filter-date, .filter-select {
-        width: 100%;
-        min-width: unset;
-    }
-
     .select-container {
         flex: 2;
     }
 
     .date-container {
         flex: 2;
-    }
-
-    .search-btn {
-        flex-shrink: 0;
-        width: 42px;
-        height: 42px;
-        margin-top: -8px;
     }
 
     .container {
@@ -1075,25 +987,6 @@ perfil-menu li:hover span {
     .date-column {
         padding: 15px;
         width: 100px;
-    }
-
-    .day {
-        font-size: 48px;
-    }
-
-    .activity-left {
-        padding-right: 60px; /* Espacio para el botón */
-        position: relative;
-    }
-
-    .dropdown-container {
-        top: 15px;
-        right: 15px;
-        bottom: auto;
-    }
-
-    .activity-content {
-        padding: 15px 15px 15px 15px;
     }
 
     h1 {
@@ -1179,8 +1072,7 @@ perfil-menu li:hover span {
 
     .dropdown-container {
         position: absolute;
-        top: 70px; /* Ajustar según sea necesario */
-        right: 15px;
+
         transform: none;
     }
 
@@ -1241,49 +1133,15 @@ perfil-menu li:hover span {
     }
 }
 
-/* Ajustes especiales para el reordenamiento de elementos en el activity-right */
-@media screen and (max-width: 767px) {
-    .activity-left {
-        position: relative;
-        padding-right: 50px; /* Espacio para el botón */
-    }
-
-    .activity-right {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .activity-description {
-        order: 1; /* La descripción será lo primero que se ve */
-    }
-
-    .tag {
-        order: 2; /* La etiqueta de rama va después */
-        margin-top: 10px;
-        align-self: flex-start;
-    }
-
-    /* Al desplegar el menú, asegurarse que esté sobre todo */
-    .dropdown-menu.active {
-        z-index: 1001;
-    }
-}
-
-
-.activities-container {
-
-    font-family: Arial, sans-serif;
-}
-
-.header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
 
 .tab-container {
     display: flex;
+    width: fit-content;
+    position: relative;
+    gap: 5px;
+    border-radius: 8px;
+    background-color: #d9d7d7;
+    padding: 4px;
 }
 
 .tab {
@@ -1301,163 +1159,275 @@ perfil-menu li:hover span {
     border-bottom: none;
 }
 
-.search-container {
-    display: flex;
-    gap: 10px;
+.divider-line {
+    border-top: 2px solid #dcdcdc;
+    margin: 15px 0;
 }
 
-.select-container, .date-container {
+
+.table-container {
+    padding: 0;
+    max-height: 450px;
+    overflow-y: auto;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.action-cell {
+    padding: 15px 40px;
+    text-align: center;
+}
+
+/* Estilos para pantallas más pequeñas */
+@media screen and (max-width: 768px) {
+    .modal-content {
+        width: 80%;
+        max-height: 80vh;
+    }
+
+    .modal-header {
+        padding: 20px 20px 15px 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 20px;
+    }
+
+    .modal-header p {
+        font-size: 14px;
+    }
+
+    .participants-table th,
+    .participant-cell,
+    .action-cell {
+        padding: 12px 15px;
+    }
+
+    .participant-name {
+        font-size: 14px;
+    }
+
+    .participant-badge {
+        font-size: 12px;
+    }
+
+    .modal-footer {
+        padding: 15px 20px;
+    }
+
+    .modal-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+    }
+
+    .participant-avatar {
+        width: 36px;
+        height: 36px;
+        margin-right: 10px;
+    }
+
+    .participant-name {
+        font-size: 13px;
+    }
+
+    .participant-badge {
+        font-size: 11px;
+    }
+
+    .modal-button {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+}
+
+.tabs {
+    display: flex;
+    position: relative;
+    margin-bottom: -1px; /* Crucial para conectar las pestañas con la tabla */
+    z-index: 10;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    background-color: rgba(66, 66, 66, 1);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-right: 5px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.tab-button:hover {
+    opacity: 0.9;
+}
+
+.tab-button.active {
+    transform: translateY(2px); /* Mueve el botón activo 5px hacia abajo */
+
+    background-color: #f0e6d2;
+    border: 2px solid #e0d3b9;
+    border-bottom: none;
+
+    color: #C59D60;
+    font-family: Figtree;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.add-button {
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.add-button:hover {
+    background-color: #444;
+}
+
+.content-area {
+    display: none;
+    border: 2px solid #e0d3b9;
+    border-radius: 0 10px 10px 10px;
+    background-color: #fff;
+}
+
+.content-area.active {
+    display: block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: visible;
     position: relative;
 }
 
-.filter-date {
-    padding: 8px 30px 8px 10px;
-    color: #afafaf;
+tbody, tr, td {
+    overflow: visible;
+    position: relative;
+}
+
+th {
+    background-color: #f0e6d2;
+    color: #b4975a;
+    padding: 15px 15px;
+    text-align: left;
+    font-weight: normal;
+
+    color: #DCB074;
     font-family: Figtree;
-    font-size: 14px;
+    font-size: 15px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
     line-height: normal;
-    min-width: 290px;
-    height: 36px;
-    border-radius: 7px;
-    border: 1.99px solid #B2B2B2;
-    background: #F9F9F9;
 }
 
-/* Ocultar el icono nativo del selector de fecha */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
+td {
+    padding: 20px 15px;
+    border-top: 1px solid #e6e4e4;
+    border-radius: 8px;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-    opacity: 0;
-    position: absolute;
-    right: 10px;
+/* Asegura que el contenedor tenga overflow hidden para cortar los contenidos en las esquinas */
+.content-area {
+    overflow: visible;
+    border-radius: 0 10px 10px 10px;
+    border: 2px solid #e0d6c2;
 }
 
-#real-date {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    pointer-events: none;
-    z-index: -1;
-    visibility: hidden; /* ⬅️ CLAVE */
+/* Aplica border-radius a la primera fila de la tabla en las esquinas superiores */
+thead tr:first-child th:first-child {
+    border-top-left-radius: 4px;
+}
+
+thead tr:first-child th:last-child {
+    border-top-right-radius: 4px;
 }
 
 
-/* Hacer que el icono sea clickeable para abrir el datepicker */
-.icon-placeholder.calendar-icon {
+.number-col {
+    width: 70px;
+    color: #DCB074;
+    text-align: center;
+    font-weight: 800;
+}
+
+.number-colm {
+    width: 70px;
+    color: #dfc49d;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Mantener el peso normal para el primer encabezado (#) */
+.number-col:first-child {
+    font-weight: normal; /* o 400 */
+}
+
+.action-col {
+    width: 100px;
+    justify-items: center;
+    text-align: center;
+}
+
+.action-button {
+    background-color: #eee;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
     cursor: pointer;
-    z-index: 1;
 }
 
-/* Hacer que al hacer clic en el icono se abra el datepicker */
-.icon-placeholder.calendar-icon img {
-    pointer-events: none; /* Permite que los clicks pasen al div padre */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: visible;
+
 }
 
-.filter-select {
-    padding: 8px 30px 8px 10px;
-    font-size: 14px;
-    min-width: 200px;
-    height: 36px;
-    border-radius: 7px;
-    border: 1.99px solid #B2B2B2;
-    background: #F9F9F9;
+.plus-icon {
+    margin-right: 5px;
 }
 
-.filter-select:focus, .filter-date:focus {
-    outline: none;
-    border-color: #8e83a3;
-    box-shadow: 0 0 3px rgba(213, 205, 227, 0.5);
-    background-color: rgba(211, 201, 232, 0.5);
+.action-col {
+    position: relative; /* clave para permitir posicionamiento absoluto interno */
+
 }
 
-/* Ocultar la flecha nativa del select en diferentes navegadores */
-.filter-select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: none; /* Por si acaso algún estilo está añadiendo una imagen de fondo */
-}
-
-/* Para IE10+ */
-.filter-select::-ms-expand {
-    display: none;
-}
-
-.icon-placeholder {
+.dropdown-menu {
+    z-index: 9999 !important;
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none; /* Para que no interfiera con los clics en el select */
+    top: calc(100% + 8px);
+    right: 0;
+    overflow: visible;
+    transform: translateY(0); /* Por si tenía transform heredado */
+    pointer-events: all;
 }
 
-.icon-placeholder img {
-    width: 16px;
-    height: 16px;
-    display: block; /* Esto asegura que la imagen se muestre correctamente */
-}
-
-.arrow-icon img {
-    width: 20px; /* Ligeramente más grande */
-    height: 20px;
-}
-
-.search-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 4px;
-    cursor: pointer;
-
-    border-radius: 7px;
-    border: 2px solid #B2B2B2;
-    background: #e2e1e1;
-}
-
-.search-btn:hover {
-    background-color: #e4e3e3;
-    border-color: #bfbec0;
-}
-
-.search-btn:active {
-    outline: none;
-    border-color: #a29daa;
-    box-shadow: 0 0 3px rgba(213, 205, 227, 0.5);
-    background-color: rgba(211, 201, 232, 0.5);
-}
-
-.search-btn .icon-placeholder {
-    position: static;
-    transform: none;
-}
-
-.divider-line {
-    width: 100%;
-    height: 2px;
-    background-color: #e0e0e0;
-    margin: 20px 0;
-    border-radius: 1px;
-}
-
-/* Para mantener consistencia con los estilos del sitio, puedes ajustar así: */
-.divider-line {
-    border-top: 2px solid #dcdcdc;
-    margin: 20px 0;
-}
 
 .section {
     margin-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+
 }
 
 .section-title {
@@ -1491,7 +1461,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .form-group {
     flex: 1;
-    min-width: 250px;
+    min-width: 0;
 }
 
 /* Clase específica para el grupo de rama con ancho limitado */
@@ -1561,19 +1531,22 @@ input:focus, select:focus, textarea:focus {
     transform: translateY(-50%);
     width: 18px;
     height: 18px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/svg%3E");
     background-repeat: no-repeat;
     pointer-events: none;
 }
 
 .buttons {
     display: flex;
+    align-items: flex-end;
+    justify-content: flex-end; /* Añadido para alinear a la derecha */
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 20px;
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
 }
 
-button {
-    width: 138px;
+.botones {
+    width: 180px;
     height: 38px;
     border-radius: 8px;
     color: #FFF;
@@ -1599,38 +1572,372 @@ button {
 }
 
 .btn-primary:hover {
-    background-color: #7851a9;
+    background-color: #715297;
     font-weight: 700;
 }
 
 .btn-secondary {
     background-color: white;
     color: #666;
-    border: 1px solid #ddd;
+    border: 1px solid #adadad;
 }
 
 .btn-secondary:hover {
-    background-color: #f5f5f5;
+    background-color: #e4e4e4;
     font-weight: 700;
 }
 
-/* Estilos personalizados para Flatpickr */
-.flatpickr-calendar {
-    border-radius: 4px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+
+@media screen and (max-width: 650px) {
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .create-reto-btn {
+        order: -1; /* Esto lo mueve arriba sin alterar el HTML */
+        margin-bottom: 10px;
+        align-self: stretch;
+    }
+
+    .tabs {
+        margin-bottom: -0px; /* Crucial para conectar las pestañas con la tabla */
+    }
 }
 
-.flatpickr-day.selected {
-    background: #8a60c4;
-    border-color: #8a60c4;
-}
-
-.flatpickr-day.selected:hover {
-    background: #7851a9;
-    border-color: #7851a9;
-}
-
-a{
+a {
     text-decoration: none;
     color: inherit;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.pagination-btn {
+    padding: 6px 14px;
+    background-color: #e0e0e0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.pagination-btn:hover {
+    background-color: #c7c7c7;
+}
+
+.pagination-info {
+    color: #585858;
+}
+
+
+.progress-container {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 2px solid #d0cfcf;
+}
+
+.progress-title {
+    color: #969696;
+    font-family: Figtree;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 12px;
+}
+
+.progress-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.progress-bar-container {
+    flex-grow: 1;
+    height: 27px;
+    background-color: #e1e1e1;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        #f8c471,
+        #f8c471 10px,
+        #f5b041 10px,
+        #f5b041 20px
+    );
+    border-radius: 6px;
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-text {
+    height: 28px;
+    border: 2px solid #D9D9D9;
+    border-radius: 6px;
+    padding: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9E9E9E;
+    font-family: Figtree;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+.cabezera {
+    padding: 15px 20px;
+    border: 2px solid #d0cfcf;
+    border-radius: 12px;
+    margin-right: 20px;
+    width: 338px;
+    height: 82px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.cabezera h2 {
+    margin: 0;
+
+    color: #969696;
+    text-align: center;
+    font-family: Figtree;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-align: center;
+}
+
+.insignia-container {
+    height: 75px;
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    gap: 2%;
+    
+    padding-left: 6%;
+    padding-right: 6%;
+}
+
+.insignia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+    text-align: center;
+}
+
+.insignia-icon {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 6px;
+    background-color: #f5f5f5;
+}
+
+.insignia-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: #9e9e9e;
+}
+
+.insignia-name {
+    color: #919191;
+    font-family: Figtree;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.medallas-container {
+    margin-top: 20px;
+    width: 100%;
+    border: 2px solid #d0cfcf;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 1200px) {
+    .medallas-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cabezera {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: px;
+        height: 50px;
+    }
+
+    .insignia-container {
+        width: 100%;
+        height: auto;
+        padding: 20px 6%;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .insignia {
+        width: calc(25% - 20px);
+        min-width: 100px;
+        margin: 0 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .insignia-container {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .insignia {
+        width: calc(50% - 20px);
+    }
+
+    .cabezera h2 {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .insignia-container {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .insignia {
+        width: calc(50% - 10px);
+        min-width: 80px;
+    }
+
+    .cabezera {
+        height: 60px;
+    }
+
+    .cabezera h2 {
+        font-size: 16px;
+    }
+
+    .insignia-name {
+        font-size: 11px;
+    }
+}
+
+.reto-completado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 126px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1.5px solid #87B67B;
+    background: #D5ECCF;
+
+    color: #759A6D;
+    font-family: Figtree;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+
+.reto-Pendiente {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 125px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1.5px solid #7E82A7;
+    background: #E2E4FF;
+
+    color: #6E72A1;
+    text-align: center;
+    font-family: Figtree;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+/* Estilos para la paginación */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.pagination-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 15px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.pagination-info {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Estilo para cuando hay pocas filas y queremos un espacio consistente */
+.content-area table {
+    margin-bottom: 10px;
+    min-height: 200px; /* Altura mínima para mantener consistencia visual */
 }

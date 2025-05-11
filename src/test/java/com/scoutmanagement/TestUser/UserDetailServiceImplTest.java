@@ -8,6 +8,7 @@ import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.implementation.EmailService;
+import com.scoutmanagement.service.implementation.PersonaService;
 import com.scoutmanagement.service.implementation.UserDetailServiceImpl;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.BeforeEach;
@@ -337,5 +338,26 @@ class UserDetailServiceImplTest {
         user.setActivo(false);
         assertFalse(user.isActivo(), "El usuario debería estar inactivo después del cambio");
     }
+    @Test
+    void testExistsByUsername() {
 
+        String emailExistente = "usuario@dominio.com";
+        String emailNoExistente = "noexiste@dominio.com";
+
+
+        UserEntity usuario = new UserEntity();
+        usuario.setUsername(emailExistente);
+
+
+        when(userRepository.existsByUsername(emailExistente)).thenReturn(true);
+        when(userRepository.existsByUsername(emailNoExistente)).thenReturn(false);
+
+
+        boolean existe = userDetailService.existsByUsername(emailExistente);
+        assertTrue(existe);
+
+
+        boolean noExiste = userDetailService.existsByUsername(emailNoExistente);
+        assertFalse(noExiste);
+    }
 }

@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @SpringBootTest
 class ObtencionServiceTest {
@@ -158,4 +159,45 @@ class ObtencionServiceTest {
 
         Assertions.assertTrue(exception.getMessage().contains("No se encontraron los datos"));
     }
+
+    @Test
+    void testFindIdEtapasObtenidasByPersona() {
+        Persona persona = new Persona();
+
+        Etapa etapa1 = new Etapa();
+        etapa1.setId(1L);
+        Etapa etapa2 = new Etapa();
+        etapa2.setId(2L);
+
+        Obtencion obt1 = new Obtencion();
+        obt1.setEtapa(etapa1);
+        Obtencion obt2 = new Obtencion();
+        obt2.setEtapa(etapa2);
+
+        List<Obtencion> obtenciones = Arrays.asList(obt1, obt2);
+
+        Mockito.when(obtencionRepository.findAllByPersona(persona)).thenReturn(obtenciones);
+
+        Set<Long> resultado = obtencionService.findIdEtapasObtenidasByPersona(persona);
+
+        Assertions.assertEquals(2, resultado.size());
+        Assertions.assertTrue(resultado.contains(1L));
+        Assertions.assertTrue(resultado.contains(2L));
+    }
+
+    @Test
+    void testFindIdEtapasObtenidasByPersonaThrowsException() {
+        Persona persona = new Persona();
+
+        Mockito.when(obtencionRepository.findAllByPersona(persona))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            obtencionService.findIdEtapasObtenidasByPersona(persona);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Error al obtener las etapas obtenidas"));
+    }
+
+
 }

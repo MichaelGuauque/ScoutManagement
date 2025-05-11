@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ObtencionService implements IObtencionService {
@@ -62,4 +64,17 @@ public class ObtencionService implements IObtencionService {
             throw new ServiceException("No se encontraron los datos: " + e.getMessage());
         }
     }
+
+    @Override
+    public Set<Long> findIdEtapasObtenidasByPersona(Persona persona) {
+        try {
+            List<Obtencion> obtenciones = obtencionRepository.findAllByPersona(persona);
+            return obtenciones.stream()
+                    .map(o -> o.getEtapa().getId())
+                    .collect(Collectors.toSet());
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener las etapas obtenidas: " + e.getMessage());
+        }
+    }
+
 }

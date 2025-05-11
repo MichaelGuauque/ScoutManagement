@@ -1,19 +1,19 @@
 package com.scoutmanagement.service.implementation;
 
+import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
+import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -26,6 +26,9 @@ public class PersonaServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private RoleRepository roleRepository;
 
     @Mock
     private HttpSession httpSession;
@@ -189,7 +192,7 @@ public class PersonaServiceTest {
     }
     @Test
     void testFindJefes() {
-        // Arrange: Datos de prueba
+
         Persona jefe1 = new Persona();
         jefe1.setCargo(Cargo.JEFE_MANADA);
 
@@ -232,6 +235,177 @@ public class PersonaServiceTest {
         assertEquals(Cargo.CAMINANTE, resultado.get(1).getCargo());
 
         verify(personaRepository, times(1)).findMiembros();
+    }
+    @Test
+    void testActualizarPersona() {
+
+        Long userId = 1L;
+
+
+        UserEntity user = new UserEntity();
+        user.setId(userId);
+        user.setRoles(new HashSet<>());
+
+        Persona persona = new Persona();
+        persona.setId(10L);
+        persona.setUserEntity(user);
+        persona.setPrimerNombre("Pedro");
+        persona.setSegundoNombre("Luis");
+        persona.setPrimerApellido("González");
+        persona.setSegundoApellido("Martínez");
+        persona.setNumeroDeDocumento(12345678L);
+
+
+        PersonaActualizacionDTO dto = new PersonaActualizacionDTO();
+        dto.setPrimerNombre("Juan");
+        dto.setSegundoNombre("Carlos");
+        dto.setPrimerApellido("Pérez");
+        dto.setSegundoApellido("Gómez");
+        dto.setNumeroDeDocumento(12345678L);
+
+
+        dto.setTipoDeDocumento(TipoDeDocumento.CC);
+        dto.setRama(Rama.COMUNIDAD);
+        dto.setCargo(Cargo.JEFE_COMUNIDAD);
+        dto.setRol(Rol.ADULTO);
+
+
+        when(personaRepository.findByUserEntity_Id(userId)).thenReturn(Optional.of(persona));
+        when(personaRepository.findByNumeroDeDocumento(12345678L)).thenReturn(Optional.empty());
+
+
+        RoleEntity rolEntity = new RoleEntity();
+        rolEntity.setRole(Rol.ADULTO);
+        when(roleRepository.findByRole(Rol.ADULTO)).thenReturn(rolEntity);
+
+
+        personaService.actualizarPersona(userId, dto);
+
+
+        assertEquals("Juan", persona.getPrimerNombre());
+        assertEquals("Carlos", persona.getSegundoNombre());
+        assertEquals("Pérez", persona.getPrimerApellido());
+        assertEquals("Gómez", persona.getSegundoApellido());
+        assertEquals(12345678L, persona.getNumeroDeDocumento());
+        assertEquals(TipoDeDocumento.CC, persona.getTipoDeDocumento());
+        assertEquals(Rama.COMUNIDAD, persona.getRama());
+        assertEquals(Cargo.JEFE_COMUNIDAD, persona.getCargo());
+
+
+        assertTrue(user.getRoles().contains(rolEntity));
+    }
+    @Test
+    void testActualizarPersona_numeroDeDocumentoDuplicado_lanzaExcepcion() {
+        Long userId = 1L;
+
+        UserEntity user = new UserEntity();
+        user.setId(userId);
+        user.setRoles(new HashSet<>());
+
+        Persona persona = new Persona();
+        persona.setId(10L);
+        persona.setUserEntity(user);
+
+        PersonaActualizacionDTO dto = new PersonaActualizacionDTO();
+        dto.setPrimerNombre("Juan");
+        dto.setSegundoNombre("Carlos");
+        dto.setPrimerApellido("Pérez");
+        dto.setSegundoApellido("Gómez");
+        dto.setNumeroDeDocumento(12345678L);
+
+
+        Persona personaExistente = new Persona();
+        personaExistente.setId(11L);
+        personaExistente.setNumeroDeDocumento(12345678L);
+
+
+        when(personaRepository.findByUserEntity_Id(userId)).thenReturn(Optional.of(persona));
+        when(personaRepository.findByNumeroDeDocumento(12345678L)).thenReturn(Optional.of(personaExistente));  // Devuelve personaExistente
+
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            personaService.actualizarPersona(userId, dto);
+        });
+    }
+    @Test
+    void testFiltrarYOrdenarPorEstado() {
+        // Arrange
+        Persona persona1 = new Persona();
+        persona1.setRama(Rama.TROPA);
+        UserEntity user1 = new UserEntity();
+        user1.setActivo(true);
+        persona1.setUserEntity(user1);
+
+        Persona persona2 = new Persona();
+        persona2.setRama(Rama.COMUNIDAD);
+        UserEntity user2 = new UserEntity();
+        user2.setActivo(false);
+        persona2.setUserEntity(user2);
+
+        Persona persona3 = new Persona();
+        persona3.setRama(Rama.MANADA);
+        UserEntity user3 = new UserEntity();
+        user3.setActivo(true);
+        persona3.setUserEntity(user3);
+
+        Persona persona4 = new Persona();
+        persona4.setRama(Rama.CLAN);
+        UserEntity user4 = new UserEntity();
+        user4.setActivo(true);
+        persona4.setUserEntity(user4);
+
+        List<Persona> personas = Arrays.asList(persona1, persona2, persona3, persona4);
+
+
+        List<Persona> resultadoActivos = personaService.filtrarYOrdenarPorEstado(personas, "activos");
+
+        assertEquals(3, resultadoActivos.size());
+        assertTrue(resultadoActivos.contains(persona1));
+        assertTrue(resultadoActivos.contains(persona3));
+        assertTrue(resultadoActivos.contains(persona4));
+
+        assertTrue(resultadoActivos.get(0).getRama().compareTo(resultadoActivos.get(1).getRama()) < 0);
+        assertTrue(resultadoActivos.get(1).getRama().compareTo(resultadoActivos.get(2).getRama()) < 0);
+
+
+        List<Persona> resultadoInactivos = personaService.filtrarYOrdenarPorEstado(personas, "inactivos");
+
+
+        assertEquals(1, resultadoInactivos.size());
+        assertTrue(resultadoInactivos.contains(persona2));
+    }
+    @Test
+    void testFiltrarYOrdenarPorEstado_listaVacia() {
+
+        List<Persona> personas = new ArrayList<>();
+
+
+        List<Persona> resultado = personaService.filtrarYOrdenarPorEstado(personas, "activos");
+
+
+        assertTrue(resultado.isEmpty());
+    }
+    @Test
+    void testFindByNumeroDeDocumento() {
+        // Arrange
+        Long numeroDeDocumentoExistente = 12345678L;
+        Long numeroDeDocumentoNoExistente = 87654321L;
+
+        Persona personaExistente = new Persona();
+        personaExistente.setNumeroDeDocumento(numeroDeDocumentoExistente);
+
+
+        when(personaRepository.findByNumeroDeDocumento(numeroDeDocumentoExistente)).thenReturn(Optional.of(personaExistente));
+        when(personaRepository.findByNumeroDeDocumento(numeroDeDocumentoNoExistente)).thenReturn(Optional.empty());
+
+
+        Optional<Persona> personaOptional = personaService.findByNumeroDeDocumento(numeroDeDocumentoExistente);
+        assertTrue(personaOptional.isPresent());
+        assertEquals(numeroDeDocumentoExistente, personaOptional.get().getNumeroDeDocumento());
+
+
+        Optional<Persona> personaOptionalNoExistente = personaService.findByNumeroDeDocumento(numeroDeDocumentoNoExistente);
+        assertFalse(personaOptionalNoExistente.isPresent());
     }
 
     @Test

@@ -39,6 +39,10 @@ public class UserController {
         return "user/login";
     }
 
+    private static final String ID_USUARIO = "idUsuario";
+
+    private static final String ATRIBUTO_PERSONA = "persona";
+
     @PostMapping("/acceder")
     public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -82,10 +86,8 @@ public class UserController {
 
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            model.addAttribute("ramas", Rama.values());
-            model.addAttribute("roles", Rol.values());
-            model.addAttribute("cargos", Cargo.values());
-            model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            prepararModeloDeRegistro(model, sesionDelJefe);
             return "/user/crearMiembro";
         }
         if (rol == null) {
@@ -105,20 +107,26 @@ public class UserController {
             boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
             UserEntity user = userService.cambioUserDTO(dto.getUsuario());
             if (documentoExiste) {
-                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "El número de documento ya está registrado.");
-                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                redirectAttributes.addFlashAttribute("errorPersona", true);
-                redirectAttributes.addFlashAttribute("usuario", user);
-                redirectAttributes.addFlashAttribute("persona", dto);
+                prepararVistaConErrores(
+                        redirectAttributes,
+                        "El número de documento ya está registrado.",
+                        EXCEPTION_ERROR,
+                        false,
+                        user,
+                        dto
+                );
                 return VISTA_REGISTRAR;
             }
             boolean correoExiste = userService.existsByUsername(user.getUsername());
-            if(correoExiste){
-                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "El correo electrónico ya está registrado.");
-                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                redirectAttributes.addFlashAttribute("errorCorreo", true);
-                redirectAttributes.addFlashAttribute("usuario", user);
-                redirectAttributes.addFlashAttribute("persona", dto);
+            if (correoExiste) {
+                prepararVistaConErrores(
+                        redirectAttributes,
+                        "El correo electrónico ya está registrado.",
+                        EXCEPTION_ERROR,
+                        true,
+                        user,
+                        dto
+                );
                 return VISTA_REGISTRAR;
 
             }
@@ -141,9 +149,12 @@ public class UserController {
     }
 
     @GetMapping("/home-admin")
-    public String showAdminHomePage(HttpSession session) {
+    public String showAdminHomePage(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
             return "admin/home";
         }
         if (rol == null) {
@@ -153,9 +164,12 @@ public class UserController {
     }
 
     @GetMapping("/home-user")
-    public String showUserHomePage(HttpSession session) {
+    public String showUserHomePage(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
+
         if (session.getAttribute("rol") == Rol.JOVEN.name()) {
+            Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelMiembro);
             return "user/home";
         }
         if (rol == null) {
@@ -171,5 +185,20 @@ public class UserController {
         return VISTA_LOGIN;
     }
 
+    private void prepararVistaConErrores(RedirectAttributes redirectAttributes, String mensaje, String tipoError, boolean errorCampo, UserEntity user, PersonaRegistroDTO dto) {
+        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, mensaje);
+        redirectAttributes.addFlashAttribute("type", tipoError);
+        redirectAttributes.addFlashAttribute(errorCampo ? "errorCorreo" : "errorPersona", true);
+        redirectAttributes.addFlashAttribute("usuario", user);
+        redirectAttributes.addFlashAttribute("personaAgregada", dto);
+    }
 
+
+    private void prepararModeloDeRegistro(Model model, Persona sesionDelJefe) {
+        model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
+        model.addAttribute("ramas", Rama.values());
+        model.addAttribute("roles", Rol.values());
+        model.addAttribute("cargos", Cargo.values());
+        model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+    }
 }

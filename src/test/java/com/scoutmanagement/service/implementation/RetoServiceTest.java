@@ -2,8 +2,11 @@ package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.dto.RetoDTO;
 import com.scoutmanagement.persistence.model.Etapa;
+import com.scoutmanagement.persistence.model.Persona;
+import com.scoutmanagement.persistence.model.Progreso;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
+import com.scoutmanagement.persistence.repository.ProgresoRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +28,9 @@ class RetoServiceTest {
 
     @Mock
     private EtapaRepository etapaRepository;
+
+    @Mock
+    private ProgresoRepository progresoRepository;
 
     @InjectMocks
     private RetoService retoService;
@@ -89,7 +95,7 @@ class RetoServiceTest {
                 new Reto(1L, 1, "Reto Etapa", etapa)
         );
 
-        Mockito.when(retoRepository.findAllRetosByEtapa(etapa)).thenReturn(lista);
+        Mockito.when(retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa)).thenReturn(lista);
 
         List<Reto> result = retoService.findAllRetosEtapa(etapa);
 
@@ -165,7 +171,7 @@ class RetoServiceTest {
     void testFindAllRetosEtapaThrowsException() {
         Etapa etapa = new Etapa();
 
-        Mockito.when(retoRepository.findAllRetosByEtapa(etapa)).thenThrow(new RuntimeException("DB error"));
+        Mockito.when(retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa)).thenThrow(new RuntimeException("DB error"));
 
         ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
             retoService.findAllRetosEtapa(etapa);
@@ -186,4 +192,89 @@ class RetoServiceTest {
 
         Assertions.assertTrue(exception.getMessage().contains("No se puedo convertir el dto"));
     }
+
+    @Test
+    void testFindCompletadosByPersonaAndEtapaThrowsException() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa 1");
+
+        Mockito.when(progresoRepository.findByPersonaAndEstadoTrue(persona))
+                .thenThrow(new RuntimeException("DB error"));
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Error al obtener los retos completados"));
+    }
+
+    @Test
+    void testFindCompletadosByPersonaAndEtapaSinProgresos() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+
+        Mockito.when(progresoRepository.findByPersonaAndEstadoTrue(persona))
+                .thenReturn(List.of());
+
+        List<Reto> resultado = retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
+
+        Assertions.assertNotNull(resultado);
+        Assertions.assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void testFindCompletadosByPersonaAndEtapaConCoincidencia() {
+        Persona persona = new Persona();
+        Etapa etapa = new Etapa();
+        etapa.setNombre("Etapa X");
+
+        Reto reto = new Reto();
+        reto.setEtapa(etapa);
+
+        Progreso progreso = new Progreso();
+        progreso.setReto(reto);
+
+        Mockito.when(progresoRepository.findByPersonaAndEstadoTrue(persona))
+                .thenReturn(List.of(progreso));
+
+        List<Reto> resultado = retoService.findCompletadosByPersonaAndEtapa(persona, etapa);
+
+        Assertions.assertEquals(1, resultado.size());
+        Assertions.assertEquals(reto, resultado.get(0));
+    }
+
+    @Test
+    void testFindCompletadosByPersonaAndEtapaFiltraEtapas() {
+        Persona persona = new Persona();
+        Etapa etapaBuscada = new Etapa();
+        etapaBuscada.setNombre("Etapa Correcta");
+
+        Etapa otraEtapa = new Etapa();
+        otraEtapa.setNombre("Otra Etapa");
+
+        Reto retoCorrecto = new Reto();
+        retoCorrecto.setEtapa(etapaBuscada);
+
+        Reto retoIncorrecto = new Reto();
+        retoIncorrecto.setEtapa(otraEtapa);
+
+        Progreso progreso1 = new Progreso();
+        progreso1.setReto(retoCorrecto);
+
+        Progreso progreso2 = new Progreso();
+        progreso2.setReto(retoIncorrecto);
+
+        Mockito.when(progresoRepository.findByPersonaAndEstadoTrue(persona))
+                .thenReturn(List.of(progreso1, progreso2));
+
+        List<Reto> resultado = retoService.findCompletadosByPersonaAndEtapa(persona, etapaBuscada);
+
+        Assertions.assertEquals(1, resultado.size());
+        Assertions.assertEquals(retoCorrecto, resultado.get(0));
+    }
+
+
+
+
 }

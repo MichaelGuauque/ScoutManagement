@@ -2,8 +2,11 @@ package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.dto.RetoDTO;
 import com.scoutmanagement.persistence.model.Etapa;
+import com.scoutmanagement.persistence.model.Persona;
+import com.scoutmanagement.persistence.model.Progreso;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.EtapaRepository;
+import com.scoutmanagement.persistence.repository.ProgresoRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.service.interfaces.IRetoService;
 import com.scoutmanagement.util.exception.ServiceException;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RetoService implements IRetoService {
@@ -20,6 +24,8 @@ public class RetoService implements IRetoService {
     private RetoRepository retoRepository;
     @Autowired
     private EtapaRepository etapaRepository;
+    @Autowired
+    private ProgresoRepository progresoRepository;
 
     @Override
     public Optional<Reto> findById(long id) {
@@ -33,7 +39,7 @@ public class RetoService implements IRetoService {
     @Override
     public void save(RetoDTO retoDTO) {
         try {
-            Optional<Reto> retoOptional = retoRepository.findRetoByNumero(retoDTO.numero());
+            Optional<Reto> retoOptional = retoRepository.findRetoByNumeroAndEtapa(retoDTO.numero(),etapaRepository.findByNombre(retoDTO.etapa()));
             if (retoOptional.isPresent()) {
                 throw new ServiceException("El reto con numero " + retoDTO.numero() + " ya existe");
             }else {
@@ -67,7 +73,7 @@ public class RetoService implements IRetoService {
     @Override
     public List<Reto> findAllRetosEtapa(Etapa etapa) {
         try {
-            return (List<Reto>) retoRepository.findAllRetosByEtapa(etapa);
+            return (List<Reto>) retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa);
         } catch (Exception e) {
             throw new ServiceException("No se encontraron los retos por etapa: " + e.getMessage());
         }
@@ -85,4 +91,21 @@ public class RetoService implements IRetoService {
         }
 
     }
+
+
+
+    @Override
+    public List<Reto> findCompletadosByPersonaAndEtapa(Persona persona, Etapa etapa) {
+        try {
+            List<Progreso> progresos = progresoRepository.findByPersonaAndEstadoTrue(persona);
+
+            return progresos.stream()
+                    .map(Progreso::getReto)
+                    .filter(reto -> reto.getEtapa().equals(etapa))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener los retos completados: " + e.getMessage());
+        }
+    }
+
 }

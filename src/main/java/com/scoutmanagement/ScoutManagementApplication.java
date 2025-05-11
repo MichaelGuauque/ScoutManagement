@@ -19,6 +19,7 @@ public class ScoutManagementApplication {
     public static void main(String[] args) {
         SpringApplication.run(ScoutManagementApplication.class, args);
     }
+
     @Bean
     CommandLineRunner init(UserRepository userRepository) {
         return args -> {
@@ -48,7 +49,7 @@ public class ScoutManagementApplication {
 
             //Crear usuarios
             UserEntity userAdmin = UserEntity.builder()
-                        .username("admin@gmail.com")
+                    .username("admin@gmail.com")
                     .password("$2a$10$eeTu3yyhB9G8J1ZzFTEF8ORHLLh4XV9iKq0nhOHSPP5gt2zOi42dy")
                     .isEnabled(true)
                     .accountNoExpired(true)
