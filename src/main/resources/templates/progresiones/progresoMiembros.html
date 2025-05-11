@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/progresoMiembrosStyle.css}">
-    <!--    <link rel="stylesheet" th:href="@{/style/jefesStyle.css}">-->
 
 </head>
 <body>
@@ -91,8 +90,11 @@
                     </td>
 
                     <td>
-                        <button class="verProgreso">
+                        <a class="verProgreso" th:href="@{'/progresiones/progreso/' + ${miembro.id}}">
                             <img th:src="@{/img/verProgreso.svg}" alt="icon placeholder" class="icon-progress">
+                        </a>
+
+                        <button >
                         </button>
                     </td>
                 </tr>

@@ -5,15 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scoutmanagement.dto.EtapaDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static com.scoutmanagement.util.constants.AppConstants.*;
 
@@ -122,7 +125,7 @@ public class EtapaController {
     }
 
     @GetMapping("/miProgreso")
-    public String verMiProgreso(Model model, HttpSession session) {
+    public String verProgreso(Model model, HttpSession session) {
 
         Object rol = session.getAttribute("rol");
         if (rol == null) {
@@ -158,7 +161,7 @@ public class EtapaController {
         model.addAttribute("progresoPorEtapa", progresoPorEtapa);
         model.addAttribute("retosPorEtapa", retosPorEtapa);
         model.addAttribute("estadoRetosPorEtapa", estadoRetosPorEtapa);
-        model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : ""); // Para mostrar en título
+        model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : "");
         model.addAttribute("progresoDestacado", progresoMaximo);
         model.addAttribute("etapasObtenidas", etapasObtenidas);
         model.addAttribute("gruposRamas", GRUPOS_RAMAS);
@@ -197,6 +200,57 @@ public class EtapaController {
             return VISTA_LOGIN;
         }
         return VISTA_ERROR;
+
+    }
+
+    @GetMapping("/progreso/{id}")
+    public String ProgresoMiembro(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
+        Object rol = session.getAttribute("rol");
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+
+        if (rol.equals(Rol.JOVEN.name())) {
+            return VISTA_ERROR;
+        }
+        Persona persona = adultoSession(ID_USUARIO, session);
+
+        try {
+            Persona miembro = personaService.findByUsuarioId(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Miembro no encontrado"));
+
+            Rama rama = persona.getRama();
+            List<Etapa> etapas = etapaService.findAllByRama(rama);
+
+            Map<Long, Float> progresoPorEtapa = progresoService.calcularProgresosPorEtapa(etapas, miembro);
+            try {
+                String progresoJson = objectMapper.writeValueAsString(progresoPorEtapa);
+                model.addAttribute("progresoJson", progresoJson);
+            } catch (Exception e) {
+                model.addAttribute("progresoJson", "{}");
+            }
+            Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = progresoService.calcularEstadoRetos(etapas, miembro);
+            Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas, estadoRetosPorEtapa);
+            Set<Long> etapasObtenidas = obtencionService.findIdEtapasObtenidasByPersona(miembro);
+            Etapa etapaDestacada = etapas.isEmpty() ? null : etapas.getFirst();
+
+            model.addAttribute("persona", persona);
+            model.addAttribute("miembro", miembro);
+            model.addAttribute("etapas", etapas);
+            model.addAttribute("progresoPorEtapa", progresoPorEtapa);
+            model.addAttribute("retosPorEtapa", retosPorEtapa);
+            model.addAttribute("estadoRetosPorEtapa", estadoRetosPorEtapa);
+            model.addAttribute("etapasObtenidas", etapasObtenidas);
+            model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : "");
+            model.addAttribute("gruposRamas", GRUPOS_RAMAS);
+
+            return "progresiones/progreso";
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro no encontrado");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+            return "redirect:/progresiones/miembros";
+        }
 
     }
 }
