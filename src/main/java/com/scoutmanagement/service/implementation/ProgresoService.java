@@ -109,7 +109,6 @@ public class ProgresoService implements IProgresoService {
 
                 retosPorEtapa.put(etapa.getNombre(), retosEtapa);
             }
-
             return retosPorEtapa;
         } catch (Exception e) {
             throw new ServiceException("Error al preparar los retos por etapa: " + e.getMessage());

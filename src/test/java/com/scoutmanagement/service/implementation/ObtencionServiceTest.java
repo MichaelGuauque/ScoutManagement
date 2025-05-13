@@ -3,6 +3,7 @@ package com.scoutmanagement.service.implementation;
 import com.scoutmanagement.persistence.model.Etapa;
 import com.scoutmanagement.persistence.model.Obtencion;
 import com.scoutmanagement.persistence.model.Persona;
+import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.ObtencionRepository;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
@@ -197,6 +198,58 @@ class ObtencionServiceTest {
         });
 
         Assertions.assertTrue(exception.getMessage().contains("Error al obtener las etapas obtenidas"));
+    }
+
+    @Test
+    void testFindByPersona_ReturnsObtencion() {
+        // Arrange
+        Persona persona = new Persona();
+        persona.setId(1L);
+        persona.setPrimerNombre("Juan");
+        persona.setPrimerApellido("Pérez");
+        persona.setNumeroDeDocumento(12345678901L);
+        persona.setRama(Rama.COMUNIDAD);
+        // puedes añadir más campos si tu entidad los necesita para no lanzar excepciones
+
+        Etapa etapa = new Etapa();
+        etapa.setId(1L);
+        etapa.setNombre("Peregrino");
+
+        Obtencion obtencion = new Obtencion();
+        obtencion.setId(1L);
+        obtencion.setEstado(true);
+        obtencion.setFecha(LocalDate.now());
+        obtencion.setPersona(persona);
+        obtencion.setEtapa(etapa);
+
+        Mockito.when(obtencionRepository.findByPersona(persona)).thenReturn(Optional.of(obtencion));
+
+        // Act
+        Optional<Obtencion> result = obtencionService.findByPersona(persona);
+
+        // Assert
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(obtencion, result.get());
+        Mockito.verify(obtencionRepository).findByPersona(persona);
+    }
+
+    @Test
+    void testFindByPersona_ReturnsEmpty() {
+        // Arrange
+        Persona persona = new Persona();
+        persona.setId(2L);
+        persona.setPrimerNombre("Ana");
+        persona.setPrimerApellido("López");
+        persona.setNumeroDeDocumento(98765432100L);
+
+        Mockito.when(obtencionRepository.findByPersona(persona)).thenReturn(Optional.empty());
+
+        // Act
+        Optional<Obtencion> result = obtencionService.findByPersona(persona);
+
+        // Assert
+        Assertions.assertTrue(result.isEmpty());
+        Mockito.verify(obtencionRepository).findByPersona(persona);
     }
 
 
