@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class PersonaActualizacionDTO  extends PersonaBaseDTO {
+public class PersonaActualizacionDTO extends PersonaBaseDTO {
 
     private Rol rol;
 }

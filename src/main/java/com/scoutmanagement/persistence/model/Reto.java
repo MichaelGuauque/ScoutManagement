@@ -10,11 +10,7 @@ import lombok.*;
 @Builder
 @ToString
 @Entity
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"numero", "etapa"})
-        }
-)
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"numero", "etapa"})})
 public class Reto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

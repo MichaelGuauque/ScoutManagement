@@ -656,7 +656,7 @@ perfil-menu li:hover span {
     .modal-content {
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
-      }
+    }
 
     .footer-logo {
         margin-right: 0;
@@ -787,15 +787,15 @@ perfil-menu li:hover span {
 }
 
 .header {
-    background: linear-gradient(to bottom,rgba(201, 216, 236, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(to bottom, rgba(201, 216, 236, 1) 0%, rgba(255, 255, 255, 1) 100%);
     padding-top: 40px;
     padding-left: 40px;
     padding-right: 40px;
     padding-bottom: 25px;
-    
+
     border-radius: 10px;
     margin: -35px;
-  }
+}
 
 .container {
     max-width: 100vw;
@@ -930,7 +930,7 @@ perfil-menu li:hover span {
     background-color: #fff;
     border-radius: 14px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     min-width: 0;
     position: relative; /* Establecemos posición relativa para el dropdown */
     z-index: auto;
@@ -1164,7 +1164,7 @@ perfil-menu li:hover span {
 }
 
 .dropdown-container {
-    
+
     z-index: 100;
 }
 
@@ -1254,18 +1254,18 @@ perfil-menu li:hover span {
     top: calc(100% + 8px);
     right: 2rem;
     border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 145px;
     display: none;
     z-index: 100;
     overflow: hidden;
-    z-index: 9999 ;
+    z-index: 9999;
 }
 
 .dropdown-menu.active {
     display: block;
     z-index: 1000;
-    
+
 }
 
 .dropdown-item {
@@ -1405,11 +1405,11 @@ perfil-menu li:hover span {
         justify-content: center;
         align-items: center;
     }
-    
+
     .create-miembro-btn span {
         display: none;
     }
-    
+
     .create-miembro-btn img {
         margin: 0;
         width: 20px;
@@ -1424,14 +1424,14 @@ perfil-menu li:hover span {
         align-items: stretch;
         gap: 15px;
     }
-    
+
     /* Sección superior con pestañas y botón */
     .left-section {
         display: flex;
         width: 100%;
         align-items: center;
     }
-    
+
     /* Ajustes para el contenedor de pestañas */
     .tab-container {
         flex-grow: 1;
@@ -1439,20 +1439,20 @@ perfil-menu li:hover span {
         display: flex;
         max-width: calc(100% - 50px); /* Dejamos espacio para el botón */
     }
-    
+
     /* Aseguramos que las pestañas compartan el espacio por igual */
     .tab {
         flex-grow: 1;
         flex-basis: 0;
         text-align: center;
     }
-    
+
     /* Botón de agregar como elemento fijo al final */
     .create-miembro-btn {
         margin-left: 10px;
         flex-shrink: 0;
     }
-    
+
     /* Contenedor de búsqueda en la segunda fila */
     .search-container {
         width: 100%;
@@ -1460,14 +1460,14 @@ perfil-menu li:hover span {
         display: flex;
         justify-content: space-between;
     }
-    
+
     /* Input de búsqueda ocupa espacio disponible */
     .filter-search {
         flex-grow: 1;
         min-width: 0;
         margin-right: 10px;
     }
-    
+
     /* Botón de búsqueda mantiene su tamaño */
     .search-btn {
         flex-shrink: 0;
@@ -1481,27 +1481,27 @@ perfil-menu li:hover span {
         align-items: stretch;
         gap: 10px;
     }
-    
+
     .left-section {
         display: flex;
         width: 100%;
         justify-content: space-between;
         align-items: center;
     }
-    
+
     .tab-container {
         flex-grow: 1;
         display: flex;
         max-width: calc(100% - 50px);
     }
-    
+
     .tab {
         flex: 1;
         text-align: center;
         padding: 10px 15px;
         font-size: 15px;
     }
-    
+
     .create-miembro-btn {
         width: 40px;
         height: 40px;
@@ -1513,15 +1513,15 @@ perfil-menu li:hover span {
         align-items: center;
         flex-shrink: 0;
     }
-    
+
     .create-miembro-btn span {
         display: none;
     }
-    
+
     .create-miembro-btn img {
         margin: 0;
     }
-    
+
     /* Arreglo para el contenedor de búsqueda */
     .search-container {
         width: 100%;
@@ -1530,14 +1530,14 @@ perfil-menu li:hover span {
         align-items: center;
         gap: 10px;
     }
-    
+
     .filter-search {
         flex-grow: 1;
         height: 40px;
         font-size: 14px;
         min-width: 0; /* Permite que el input se reduzca */
     }
-    
+
     .search-btn {
         width: 40px;
         height: 40px;
@@ -1547,42 +1547,42 @@ perfil-menu li:hover span {
         align-items: center;
         justify-content: center;
     }
-    
+
     .container {
         padding: 20px 15px;
     }
-    
+
     /* Otros estilos para móviles */
     .date-column {
         padding: 15px;
         width: 100px;
     }
-    
+
     .day {
         font-size: 48px;
     }
-    
+
     .activity-left {
         padding-right: 60px;
         position: relative;
     }
-    
+
     .dropdown-container {
         bottom: auto;
     }
-    
+
     .activity-content {
         padding: 15px;
     }
-    
+
     h1 {
         font-size: 24px;
     }
-    
+
     .description {
         font-size: 15px;
     }
-    
+
     .tag {
         margin-bottom: 10px;
     }
@@ -1590,17 +1590,17 @@ perfil-menu li:hover span {
 
 /* Para móviles medianos */
 @media screen and (max-width: 576px) {
-    
-    
+
+
     .container {
         padding: 15px 10px;
     }
-    
+
     .activity-card {
         flex-direction: column;
         position: relative;
     }
-    
+
     .date-column {
         flex-direction: row;
         width: 100%;
@@ -1609,11 +1609,11 @@ perfil-menu li:hover span {
         background-color: #f8f7fc;
         border-radius: 14px 14px 0 0;
     }
-    
+
     .date-column::after {
         display: none;
     }
-    
+
     .month {
         margin-bottom: 0;
         margin-right: 5px;
@@ -1621,40 +1621,41 @@ perfil-menu li:hover span {
         display: flex;
         align-items: center;
     }
-    
+
     .day {
         font-size: 32px;
     }
-    
+
     .activity-title {
         font-size: 18px;
         padding-right: 50px; /* Espacio para el botón */
     }
-    
+
     .activity-content {
         padding: 15px;
     }
-    
+
     /* Reorganización específica que solicitaste */
     .activity-right {
         flex-direction: column;
         padding-right: 0;
     }
-    
+
     .dropdown-container {
         position: absolute;
-        
+
         transform: none;
     }
-    
+
     .activity-description {
         order: -1; /* Mover descripción arriba */
         margin-top: 0;
     }
-    
+
     .tag {
         margin-top: 10px;
     }
+
     main {
         margin-left: 0;
     }
@@ -1663,7 +1664,7 @@ perfil-menu li:hover span {
 /* Para móviles pequeños */
 @media screen and (max-width: 450px) {
     /* Aseguramos que el contenedor principal ocupe todo el ancho */
-    .container, 
+    .container,
     div.container,
     main .container {
         width: 100% !important;
@@ -1672,70 +1673,70 @@ perfil-menu li:hover span {
         padding: 15px 10px !important;
         box-sizing: border-box !important;
     }
-    
+
     /* Ajustamos el margen del contenido principal */
     main {
         margin: 0 auto !important;
         width: 100% !important;
         padding: 0 !important;
     }
-    
+
     /* Arreglamos el ancho de la tabla o contenido */
     .table-container,
     .content-area {
         width: 100% !important;
         overflow-x: auto; /* Permite scroll horizontal si es necesario */
     }
-    
+
     /* Ajustamos las pestañas */
     .tab-container {
         width: 100%;
     }
-    
+
     .tab {
         flex: 1;
         text-align: center;
         padding: 8px 10px; /* Reducimos padding horizontal */
         font-size: 13px; /* Reducimos tamaño de fuente */
     }
-    
+
     /* Ajustamos la barra de búsqueda */
     .search-container {
         width: 100%;
     }
-    
+
     .filter-search {
         font-size: 13px;
     }
-    
+
     /* Ajustamos detalles de actividad */
     .activity-details {
         font-size: 14px;
     }
-    
+
     .detail-item {
         font-size: 14px;
     }
-    
+
     .day {
         font-size: 28px;
     }
-    
+
     .month {
         font-size: 16px;
     }
-    
+
     .expand-btn {
         width: 35px;
         height: 35px;
     }
-    
+
     /* Arreglamos cualquier margen lateral */
     body {
         margin: 0;
         padding: 0;
     }
-    
+
     /* Aseguramos que las filas ocupen todo el ancho disponible */
     .header-row,
     .left-section {
@@ -1749,22 +1750,22 @@ perfil-menu li:hover span {
         position: relative;
         padding-right: 50px; /* Espacio para el botón */
     }
-    
+
     .activity-right {
         display: flex;
         flex-direction: column;
     }
-    
+
     .activity-description {
         order: 1; /* La descripción será lo primero que se ve */
     }
-    
+
     .tag {
         order: 2; /* La etiqueta de rama va después */
         margin-top: 10px;
         align-self: flex-start;
     }
-    
+
     /* Al desplegar el menú, asegurarse que esté sobre todo */
     .dropdown-menu.active {
         z-index: 1001;
@@ -1872,7 +1873,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 
-
 /* Ocultar la flecha nativa del select en diferentes navegadores */
 .filter-select {
     appearance: none;
@@ -1957,10 +1957,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: flex;
     font-family: "Figtree", sans-serif;
     background-color: #8f8f8f19;
-  }
-  
+}
 
-  .modal-overlay {
+
+.modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -1968,9 +1968,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: -1;
-  }
-  
-  .modal-content {
+}
+
+.modal-content {
     position: relative;
     padding-top: 20px;
     padding-left: 20px;
@@ -1988,18 +1988,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     z-index: 1102;
     overflow-y: auto;
 
-  }
-  
-  .modal-header {
+}
+
+.modal-header {
     padding-top: 30px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 30px;
     background-color: rgb(255, 255, 255);
     border-bottom: 1px solid #eeeeee;
-  }
-  
-  .modal-header h2 {
+}
+
+.modal-header h2 {
     margin: 0;
     margin-bottom: 10px;
 
@@ -2009,27 +2009,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-  }
-  
-
-  
+}
 
 
-  .table-container, .table-wrapper, .scroll-container {
+.table-container, .table-wrapper, .scroll-container {
     overflow: visible !important;
-  }
-  
+}
 
-  
-  .participants-table thead {
+
+.participants-table thead {
     position: sticky;
     top: 0;
     background-color: #dfdede;
     border-radius: 10px 10px 3px 3px;
     z-index: 10;
-  }
+}
 
-  .participants-table th {
+.participants-table th {
     text-align: left;
     padding: 15px 30px;
     color: #555555;
@@ -2037,54 +2033,53 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: 600;
     border-bottom: 1px solid #eeeeee;
 
-  }
+}
 
-  .participants-table thead th:first-child {
+.participants-table thead th:first-child {
     border-top-left-radius: 8px;
-  }
-  
-  .participants-table thead th:last-child {
+}
+
+.participants-table thead th:last-child {
     border-top-right-radius: 8px;
-  }
+}
 
 
-  
-  .participants-table tbody tr {
+.participants-table tbody tr {
     border-bottom: 1.9px solid #cccbcb;
-  }
-  
-  .participants-table tbody tr:last-child {
+}
+
+.participants-table tbody tr:last-child {
     border-bottom: none;
-  }
-  
-  .participant-cell {
+}
+
+.participant-cell {
     display: flex;
     align-items: center;
     padding: 20px 15px;
-    
-  }
-  
-  .participant-avatar {
+
+}
+
+.participant-avatar {
     width: 48px;
     height: 48px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 15px;
     background-color: #eeeeee;
-  }
-  
-  .participant-avatar img {
+}
+
+.participant-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-  
-  .participant-info {
+}
+
+.participant-info {
     display: flex;
     flex-direction: column;
-  }
-  
-  .participant-name {
+}
+
+.participant-name {
     color: #585858;
     font-family: Figtree;
     font-size: 15px;
@@ -2092,38 +2087,38 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: 500;
     line-height: normal;
     margin-bottom: 4px;
-  }
-  
-  .participant-badge {
+}
+
+.participant-badge {
     color: #7d7c7c;
     font-family: Figtree;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-  }
-  
-  .action-cell {
+}
+
+.action-cell {
     padding: 15px 30px;
     text-align: center;
-  }
-  
-  .checkbox-container {
+}
+
+.checkbox-container {
     display: inline-block;
     position: relative;
     width: 30px;
     height: 30px;
-  }
-  
-  .attendance-checkbox {
+}
+
+.attendance-checkbox {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
     width: 0;
-  }
-  
-  .checkbox-container label {
+}
+
+.checkbox-container label {
     position: absolute;
     top: 0;
     left: 0;
@@ -2133,18 +2128,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border: 2px solid #cccccc;
     border-radius: 4px;
     cursor: pointer;
-  }
-  
-  .checkbox-container label:hover {
+}
+
+.checkbox-container label:hover {
     background-color: #f9f9f9;
-  }
-  
-  .attendance-checkbox:checked + label {
+}
+
+.attendance-checkbox:checked + label {
     background-color: #393939;
     border-color: #393939;
-  }
-  
-  .attendance-checkbox:checked + label:after {
+}
+
+.attendance-checkbox:checked + label:after {
     content: "";
     position: absolute;
     left: 40%;
@@ -2155,9 +2150,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-width: 0 2px 2px 0;
     border-radius: 0 1px 1px 0; /* Añade bordes redondeados */
     transform: rotate(45deg);
-  }
-  
-  .modal-footer {
+}
+
+.modal-footer {
     align-items: center;
     display: flex;
     justify-content: center;
@@ -2166,9 +2161,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-top: 1px solid #eeeeee;
     gap: 15px;
     margin-bottom: 20px;
-  }
-  
-  .modal-button {
+}
+
+.modal-button {
     padding: 12px 30px;
     border-radius: 8px;
     font-size: 16px;
@@ -2176,123 +2171,123 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     transition: all 0.2s ease;
     width: 40%;
-  }
-  
-  .cancel-button {
+}
+
+.cancel-button {
     background-color: white;
     border: 2px solid #cbcbcb;
     color: #555555;
-    
-  }
-  
-  .cancel-button:hover {
+
+}
+
+.cancel-button:hover {
     background-color: #f5f5f5;
-  }
-  
-  .save-button {
+}
+
+.save-button {
     background-color: #9273CC;
     border: none;
     color: white;
-  }
-  
-  .save-button:hover {
+}
+
+.save-button:hover {
     background-color: #8266b9;
-  }
-  
-  @media screen and (max-width: 600px) {
+}
+
+@media screen and (max-width: 600px) {
     .modal-content {
         width: 95%;
         max-height: 80vh;
     }
-    
+
     .info-grid, .info-grid1 {
         grid-template-columns: 1fr; /* Una sola columna en móviles */
     }
-    
+
     .profile-header {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
-    
+
     .profile-info {
         margin-top: 10px;
     }
-    
+
     .name-profile {
         font-size: 18px;
     }
 }
 
-  /* Estilos para pantallas más pequeñas */
-  @media screen and (max-width: 1200px) {
+/* Estilos para pantallas más pequeñas */
+@media screen and (max-width: 1200px) {
     .modal-content {
-      width: 80%;
-      max-height: 80vh;
+        width: 80%;
+        max-height: 80vh;
     }
-    
+
     .modal-header {
-      padding: 20px 20px 15px 20px;
+        padding: 20px 20px 15px 20px;
     }
-    
+
     .modal-header h2 {
-      font-size: 20px;
+        font-size: 20px;
     }
-    
+
     .modal-header p {
-      font-size: 14px;
+        font-size: 14px;
     }
-    
+
     .participants-table th,
     .participant-cell,
     .action-cell {
-      padding: 12px 15px;
+        padding: 12px 15px;
     }
-    
-    .participant-name {
-      font-size: 14px;
-    }
-    
-    .participant-badge {
-      font-size: 12px;
-    }
-    
-    .modal-footer {
-      padding: 15px 20px;
-    }
-    
-    .modal-button {
-      padding: 10px 20px;
-      font-size: 14px;
-    }
-  }
-  
-  @media screen and (max-width: 480px) {
-    .modal-content {
-      width: 95%;
-    }
-    
-    .participant-avatar {
-      width: 36px;
-      height: 36px;
-      margin-right: 10px;
-    }
-    
-    .participant-name {
-      font-size: 13px;
-    }
-    
-    .participant-badge {
-      font-size: 11px;
-    }
-    
-    .modal-button {
-      padding: 8px 15px;
-      font-size: 13px;
-    }
-  }
 
-  .tabs {
+    .participant-name {
+        font-size: 14px;
+    }
+
+    .participant-badge {
+        font-size: 12px;
+    }
+
+    .modal-footer {
+        padding: 15px 20px;
+    }
+
+    .modal-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+    }
+
+    .participant-avatar {
+        width: 36px;
+        height: 36px;
+        margin-right: 10px;
+    }
+
+    .participant-name {
+        font-size: 13px;
+    }
+
+    .participant-badge {
+        font-size: 11px;
+    }
+
+    .modal-button {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+}
+
+.tabs {
     display: flex;
     position: relative;
     margin-bottom: -7px; /* Crucial para conectar las pestañas con la tabla */
@@ -2388,7 +2383,7 @@ tr td {
 /* Asegura que el contenedor tenga overflow hidden para cortar los contenidos en las esquinas */
 .content-area {
     overflow: visible;
-    border-radius: 0 10px 10px 10px;  
+    border-radius: 0 10px 10px 10px;
     border: 2px solid #e0d6c2;
 }
 
@@ -2415,6 +2410,7 @@ thead tr:first-child th:last-child {
     text-align: center;
     font-weight: 700;
 }
+
 /* Mantener el peso normal para el primer encabezado (#) */
 .number-col:first-child {
     font-weight: normal; /* o 400 */
@@ -2440,7 +2436,7 @@ thead tr:first-child th:last-child {
     align-items: center;
     overflow: visible;
     margin-bottom: 15px;
-    
+
 }
 
 .plus-icon {
@@ -2449,7 +2445,7 @@ thead tr:first-child th:last-child {
 
 .action-col {
     position: relative; /* clave para permitir posicionamiento absoluto interno */
-    
+
 }
 
 
@@ -2567,7 +2563,7 @@ input:focus, select:focus, textarea:focus {
     border: none;
     cursor: pointer;
     transition: background-color 0.2s;
-    
+
     /* Replace padding with flexbox for centering */
     padding: 0;
     display: flex;
@@ -2633,7 +2629,7 @@ th, td {
     white-space: nowrap;
     text-align: left;
     border-bottom: 1px solid #eee;
-    
+
     color: #7A7A7A;
     font-family: Figtree;
     font-size: 16px;
@@ -2649,7 +2645,7 @@ th {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    
+
     position: relative;
 }
 
@@ -2686,7 +2682,7 @@ th:not(:last-child)::after {
     text-transform: uppercase;
     text-align: center;
     display: inline-block;
-    
+
 }
 
 .lobato {
@@ -2724,15 +2720,15 @@ th:not(:last-child)::after {
 
 .docu-col, .rama-col, td:nth-child(2), td:nth-child(3) {
     text-align: center;
-  }
-  
+}
+
 .table-responsive {
     width: 100% !important;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch; /* hace el scroll más fluido en iPhone */
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     margin-top: 20px;
 }
 
@@ -2740,7 +2736,7 @@ th:not(:last-child)::after {
     min-width: 1000px;
     width: 100%;
 }
-  
+
 /* Scroll bonito */
 .table-responsive::-webkit-scrollbar {
     height: 6px;
@@ -2877,15 +2873,14 @@ th:not(:last-child)::after {
     height: 2px;
     width: 520px;
     background-color: #dfdfdf;
-    margin:auto;
+    margin: auto;
     margin-top: 1px;
     margin-bottom: 12px;
 }
 
 
-
-  .modal-header {
-    background: linear-gradient(to bottom,rgba(201, 216, 236, 1) 0%, rgba(255, 255, 255, 1) 100%);
+.modal-header {
+    background: linear-gradient(to bottom, rgba(201, 216, 236, 1) 0%, rgba(255, 255, 255, 1) 100%);
     border-radius: 10px 10px 0 0;
     padding-top: 20px;
     padding-bottom: 5px;

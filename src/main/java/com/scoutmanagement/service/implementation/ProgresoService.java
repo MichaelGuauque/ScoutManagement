@@ -92,7 +92,7 @@ public class ProgresoService implements IProgresoService {
     }
 
     @Override
-    public Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas,Map<String, Map<Long, Boolean>> estadoRetosPorEtapa) {
+    public Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas, Map<String, Map<Long, Boolean>> estadoRetosPorEtapa) {
         try {
             Map<String, List<Reto>> retosPorEtapa = new HashMap<>();
 

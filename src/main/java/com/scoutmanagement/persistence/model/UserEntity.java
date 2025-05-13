@@ -28,7 +28,7 @@ public class UserEntity {
     private boolean accountNoLocked;
     @Column(name = "credential_no_expired")
     private boolean credentialNoExpired;
-    @Column(name="Activo", nullable = false)
+    @Column(name = "Activo", nullable = false)
     private boolean activo;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

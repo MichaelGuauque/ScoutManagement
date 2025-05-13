@@ -3,7 +3,9 @@ package com.scoutmanagement.controller;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.persistence.model.*;
+
 import static com.scoutmanagement.util.constants.AppConstants.*;
+
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
@@ -66,13 +68,13 @@ public class UserController {
                         session.setAttribute("rol", rol);
                         return "redirect:/home-user";
                     }
-                }else {
+                } else {
                     throw new ServiceException("Contraseña incorrecta");
                 }
-            }else {
+            } else {
                 throw new ServiceException("El usuario no existe");
             }
-        }catch (ServiceException e) {
+        } catch (ServiceException e) {
             logger.error("Error al acceder al sistema: {}", e.getMessage());
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
             redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
@@ -98,49 +100,49 @@ public class UserController {
 
     @PostMapping("/guardar")
     public String guardar(@Valid PersonaRegistroDTO dto, HttpSession session, RedirectAttributes redirectAttributes) {
-        try{
-        Object rol = session.getAttribute("rol");
-        if (rol == null) {
+        try {
+            Object rol = session.getAttribute("rol");
+            if (rol == null) {
                 return VISTA_LOGIN;
-        }
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
-            UserEntity user = userService.cambioUserDTO(dto.getUsuario());
-            if (documentoExiste) {
-                prepararVistaConErrores(
-                        redirectAttributes,
-                        "El número de documento ya está registrado.",
-                        EXCEPTION_ERROR,
-                        false,
-                        user,
-                        dto
-                );
+            }
+            if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+                boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
+                UserEntity user = userService.cambioUserDTO(dto.getUsuario());
+                if (documentoExiste) {
+                    prepararVistaConErrores(
+                            redirectAttributes,
+                            "El número de documento ya está registrado.",
+                            EXCEPTION_ERROR,
+                            false,
+                            user,
+                            dto
+                    );
+                    return VISTA_REGISTRAR;
+                }
+                boolean correoExiste = userService.existsByUsername(user.getUsername());
+                if (correoExiste) {
+                    prepararVistaConErrores(
+                            redirectAttributes,
+                            "El correo electrónico ya está registrado.",
+                            EXCEPTION_ERROR,
+                            true,
+                            user,
+                            dto
+                    );
+                    return VISTA_REGISTRAR;
+
+                }
+                userService.save(user);
+                personaService.save(dto, user);
+
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro guardado");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
                 return VISTA_REGISTRAR;
             }
-            boolean correoExiste = userService.existsByUsername(user.getUsername());
-            if (correoExiste) {
-                prepararVistaConErrores(
-                        redirectAttributes,
-                        "El correo electrónico ya está registrado.",
-                        EXCEPTION_ERROR,
-                        true,
-                        user,
-                        dto
-                );
-                return VISTA_REGISTRAR;
-
-            }
-            userService.save(user);
-            personaService.save(dto,user);
-
-            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro guardado");
-            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
-            return VISTA_REGISTRAR;
-        }
             return VISTA_ERROR;
 
 
-    } catch (ServiceException e) {
+        } catch (ServiceException e) {
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
             redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
             return VISTA_REGISTRAR;

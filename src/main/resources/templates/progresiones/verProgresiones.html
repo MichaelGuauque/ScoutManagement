@@ -31,7 +31,8 @@
     <div class="container">
         <div class="header">
             <h1 class="encabezado">Mi Camino Scout</h1>
-            <p class="description">Aquí puedes ver todo lo que has logrado y lo que te falta por descubrir. Revisa los retos de cada etapa y sigue avanzando en tu aventura scout. ¡Tú eres el protagonista de tu progreso!</p>
+            <p class="description">Aquí puedes ver todo lo que has logrado y lo que te falta por descubrir. Revisa los
+                retos de cada etapa y sigue avanzando en tu aventura scout. ¡Tú eres el protagonista de tu progreso!</p>
         </div>
 
         <div class="divider-line"></div>
@@ -39,7 +40,9 @@
         <div class="progress-container">
             <h2 class="progress-title" th:text="'Tasa de Completado de ' + ${etapaDestacada}"></h2>
             <div class="progress-bar-wrapper">
-                <div class="progress-text" id="progress-text" th:text="${#numbers.formatDecimal(progresoDestacado, 0, 0) + '% Completado'}">% Completado</div>
+                <div class="progress-text" id="progress-text"
+                     th:text="${#numbers.formatDecimal(progresoDestacado, 0, 0) + '% Completado'}">% Completado
+                </div>
                 <div class="progress-bar-container">
                     <div class="progress-bar" id="progress-bar" th:style="'width: ' + ${progresoDestacado} + '%'"></div>
                 </div>
@@ -55,7 +58,8 @@
                             th:data-tab="'etapa-' + ${etapa.id}"
                             th:data-etapa-nombre="${etapa.nombre}"
                             th:data-progreso="${progresoPorEtapa.get(etapa.id)}"
-                            th:text="${etapa.nombre}">Etapa</button>
+                            th:text="${etapa.nombre}">Etapa
+                    </button>
                 </th:block>
             </div>
 
@@ -76,14 +80,16 @@
                     <tbody>
                     <!-- Iterar sobre los retos de la etapa actual -->
                     <tr th:each="reto, iterStat : ${retosPorEtapa.get(etapa.nombre)}">
-                        <td class="number-colm" th:text="${iterStat.count < 10 ? '0' + reto.numero : reto.numero}">01</td>
+                        <td class="number-colm" th:text="${iterStat.count < 10 ? '0' + reto.numero : reto.numero}">01
+                        </td>
                         <td th:text="${reto.descripcion}">Descripción del reto</td>
                         <td class="action-cell">
                             <!-- Si el reto está completado, mostrar "Hecho", sino mostrar "Pendiente" o checkbox -->
                             <div th:if="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)}" class="reto-completado">
                                 Hecho
                             </div>
-                            <div th:unless="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)}" class="reto-Pendiente">
+                            <div th:unless="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)}"
+                                 class="reto-Pendiente">
                                 Pendiente
                             </div>
                         </td>
@@ -119,18 +125,18 @@
     <div th:include="admin/template_admin.html::footer"></div>
 </main>
 
-    <!-- Footer -->
-    
-    <!-- JavaScript para la funcionalidad -->
-    <!-- Añade esto antes de los scripts -->
+<!-- Footer -->
+
+<!-- JavaScript para la funcionalidad -->
+<!-- Añade esto antes de los scripts -->
 <script id="progresosData" type="application/json" th:text="${progresoJson}"></script>
 <!--<script th:inline="javascript">-->
 <!--    var datosProgreso = /*[[${progresoJson}]]*/ {};-->
 <!--    // Usar directamente sin escapeJava() ni toJson()-->
 <!--</script>-->
-    <script>
-        // Configuración de paginación
-        document.addEventListener('DOMContentLoaded', function() {
+<script>
+    // Configuración de paginación
+    document.addEventListener('DOMContentLoaded', function () {
         // Constantes de configuración
         const itemsPerPage = 5; // Puedes ajustar este número según prefieras
 
@@ -143,7 +149,7 @@
         // Actualizar la paginación cuando se cambia de pestaña
         const tabButtons = document.querySelectorAll('.tab-button');
         tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 // Desactivar todas las pestañas y contenidos
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 etapas.forEach(etapa => etapa.classList.remove('active'));
@@ -259,9 +265,9 @@
             updateTableRows();
         }
     });
-    </script>
+</script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Variables globales
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
@@ -295,7 +301,7 @@
 
         // Gestión de pestañas
         tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 // 1. Obtener datos del botón
                 const tabId = this.getAttribute('data-tab');
                 const etapaNombre = this.getAttribute('data-etapa-nombre');
@@ -348,11 +354,11 @@
         // Código para menú perfil (del script original)
         const perfilFlecha = document.querySelector('.perfil-flecha');
         if (perfilFlecha) {
-            perfilFlecha.addEventListener('click', function() {
+            perfilFlecha.addEventListener('click', function () {
                 document.getElementById('perfilMenu').classList.toggle('show-menu');
             });
 
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 const perfilMenu = document.getElementById('perfilMenu');
                 if (perfilMenu && !perfilMenu.contains(event.target) && !perfilFlecha.contains(event.target)) {
                     perfilMenu.classList.remove('show-menu');
@@ -367,14 +373,14 @@
         const overlay = document.getElementById('sidebarOverlay');
 
         if (sidebarToggle && sidebar && hamburger && overlay) {
-            sidebarToggle.addEventListener('click', function() {
+            sidebarToggle.addEventListener('click', function () {
                 sidebar.classList.toggle('open');
                 hamburger.classList.toggle('open');
                 overlay.classList.toggle('active');
                 sidebarToggle.classList.toggle('moved');
             });
 
-            overlay.addEventListener('click', function() {
+            overlay.addEventListener('click', function () {
                 sidebar.classList.remove('open');
                 hamburger.classList.remove('open');
                 overlay.classList.remove('active');
@@ -393,7 +399,7 @@
                 });
             });
 
-            window.addEventListener('resize', function() {
+            window.addEventListener('resize', function () {
                 if (window.innerWidth > 768) {
                     sidebar.classList.remove('open');
                     hamburger.classList.remove('open');

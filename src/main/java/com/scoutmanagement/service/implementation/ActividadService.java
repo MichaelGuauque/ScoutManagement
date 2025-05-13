@@ -33,7 +33,7 @@ public class ActividadService implements IActividadService {
     @Override
     public void crearActividad(ActividadDTO actividadDTO) {
         try {
-             actividadRepository.save(cambiarActividadDTO(actividadDTO));
+            actividadRepository.save(cambiarActividadDTO(actividadDTO));
         } catch (Exception e) {
             throw new ServiceException("Actividad no creada." + e.getMessage());
         }
@@ -101,7 +101,7 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
-    public Map<Long, Boolean> encontrarActividadMasProxima(List<Actividad> actividades,int page, String tab) {
+    public Map<Long, Boolean> encontrarActividadMasProxima(List<Actividad> actividades, int page, String tab) {
         Map<Long, Boolean> actividadEsMasProxima = new HashMap<>();
         if ("proximas".equals(tab) && page == 0) {
             actividades.stream()

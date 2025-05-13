@@ -7,6 +7,7 @@ import com.scoutmanagement.service.interfaces.IPersonaService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
 import static com.scoutmanagement.util.constants.AppConstants.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/miembros")
 public class PersonaController {
 
-@Autowired
-private IPersonaService personaService;
+    @Autowired
+    private IPersonaService personaService;
 
-private static final String ID_USUARIO = "idUsuario";
+    private static final String ID_USUARIO = "idUsuario";
 
 
-
-    @GetMapping({ "", "/jefes" })
+    @GetMapping({"", "/jefes"})
     public String miembrosYJefes(Model model, HttpSession session,
                                  @RequestParam(required = false) Boolean cancelado,
                                  HttpServletRequest request,
@@ -121,7 +121,7 @@ private static final String ID_USUARIO = "idUsuario";
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", "Persona no encontrada");
             return "miembros/consultarMiembros";
-        }catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
 
             redirectAttributes.addFlashAttribute("errorDocumento", true);
             redirectAttributes.addFlashAttribute("documentoIngresado", personaActualizacionDTO.getNumeroDeDocumento());
