@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
 
-*{
+* {
     padding: 0;
     margin: 0;
     background-color: #ffffff;
     font-family: "Figtree", sans-serif;
 }
 
-body{
+body {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 0.6%;
 }
 
-.contenedor__logo{
+.contenedor__logo {
     display: flex;
     background-color: #3D3D3D;
     border-radius: 0.875rem;
@@ -24,14 +24,14 @@ body{
     justify-content: center;
 }
 
-.logo{
+.logo {
     display: flex;
     width: 27.625rem;
     height: 35.063rem;
     background-color: #3D3D3D;
 }
 
-.contenedor__formulario{
+.contenedor__formulario {
     display: flex;
     flex-direction: column;
     width: 55.25rem;
@@ -43,39 +43,41 @@ body{
 }
 
 
-.contenedor__formulario__head{
+.contenedor__formulario__head {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1.875rem;
 }
-h1{
+
+h1 {
     color: #535353;
     font-size: 2.5rem;
 }
-.text-inicia{
+
+.text-inicia {
     color: #7F7F7F;
     font-size: 0.875rem;
 }
 
-form{
+form {
     display: flex;
     flex-direction: column;
     gap: 18px;
     color: #888888;
 }
 
-.input{
+.input {
     width: 21.438rem;
     height: 2.375rem;
     border-radius: 0.5rem;
     background-color: #F9F9F9;
-    border: 1px solid  #B2B2B2;
+    border: 1px solid #B2B2B2;
     padding-left: 8px;
     font-family: Figtree;
 }
 
-button{
+button {
     background-color: #8051AA;
     color: #FFFFFF;
     border-radius: 1.25rem;
@@ -87,12 +89,12 @@ button{
     cursor: pointer;
 }
 
-button:hover{
+button:hover {
     background-color: #7a49a1;
 
 }
 
-a{
+a {
     color: #A7A7A7;
 }
 
@@ -106,7 +108,7 @@ a{
     text-align: center;
 }
 
-.text-error{
+.text-error {
     background-color: #f8d7da;
     font-family: Figtree;
 }

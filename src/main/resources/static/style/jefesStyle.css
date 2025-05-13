@@ -2903,9 +2903,11 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
 .modal {
     display: none;
 }
+
 .modal.show {
     display: block;
 }

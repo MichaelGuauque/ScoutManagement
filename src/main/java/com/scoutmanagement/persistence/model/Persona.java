@@ -17,34 +17,34 @@ public class Persona {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false, columnDefinition = "VARCHAR(25)")
+    @Column(nullable = false, columnDefinition = "VARCHAR(25)")
     private String primerNombre;
-    @Column (nullable = true, columnDefinition = "VARCHAR(25)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(25)")
     private String segundoNombre;
-    @Column (nullable = false, columnDefinition = "VARCHAR(25)")
+    @Column(nullable = false, columnDefinition = "VARCHAR(25)")
     private String primerApellido;
-    @Column (nullable = true, columnDefinition = "VARCHAR(25)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(25)")
     private String segundoApellido;
-    @Column (nullable = false, unique = true, length = 11)
+    @Column(nullable = false, unique = true, length = 11)
     private Long numeroDeDocumento;
 
     @Enumerated(EnumType.STRING)
     private TipoDeDocumento tipoDeDocumento;
 
-    @Column (nullable = true)
+    @Column(nullable = true)
     private LocalDate fechaNacimiento;
-    @Column (nullable = true, columnDefinition = "VARCHAR(100)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(100)")
     private String direccion;
-    @Column (nullable = true, columnDefinition = "VARCHAR(15)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(15)")
     private String eps;
 
     @Enumerated(EnumType.STRING)
     private TipoDeSangre tipoDeSangre;
-    @Column (nullable = true)
+    @Column(nullable = true)
     private boolean tomaMedicamentos;
-    @Column (nullable = true, columnDefinition = "VARCHAR(400)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(400)")
     private String especificacionMedicamentos;
-    @Column (nullable = true, columnDefinition = "VARCHAR(400)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(400)")
     private String especificacionAlergiasYRestricciones;
 
     @Enumerated(EnumType.STRING)

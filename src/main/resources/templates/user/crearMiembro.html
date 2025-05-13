@@ -91,7 +91,7 @@
 
                 <!-- Segunda fila: 1 select, 1 numérico, 1 texto -->
                 <div class="form-row">
-                    <div class="form-group" >
+                    <div class="form-group">
                         <label for="tipoDeDocumento">Tipo de Documento</label>
                         <select class="form-select" name="tipoDeDocumento" id="tipoDeDocumento" required
                                 oninvalid="this.setCustomValidity('Por favor selecciona un tipo de documento')"
@@ -106,7 +106,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group" >
+                    <div class="form-group">
                         <label for="numeroDeDocumento">Número Documento</label>
                         <input type="number" name="numeroDeDocumento" id="numeroDeDocumento" min="1000000"
                                max="99999999999" required placeholder="Ingresa aquí el documento..."
@@ -169,7 +169,7 @@
 
             <div class="buttons">
                 <button type="submit" class="btn-primary">Guardar</button>
-                <button type="button" class="btn-secondary" onclick="cancelarRegistro()" >Cancelar</button>
+                <button type="button" class="btn-secondary" onclick="cancelarRegistro()">Cancelar</button>
 
             </div>
         </form>
@@ -529,18 +529,18 @@
     });
 </script>
 
-    <script th:if="${message != null}">
-        window.onload = function (){
+<script th:if="${message != null}">
+    window.onload = function () {
         showSimpleNotification("[[${message}]]", "[[${type}]]");
     }
 
-    </script>
+</script>
 
 <script>
     function validarPrimerNombre(input) {
         if (input.validity.valueMissing) {
             input.setCustomValidity('Por favor, ingresa el primer nombre');
-        }else if (input.value.includes(' ')) {
+        } else if (input.value.includes(' ')) {
             input.setCustomValidity('Por favor, ingresa únicamente el primer nombre');
         } else if (input.validity.patternMismatch) {
             input.setCustomValidity('Por favor, ingresa un primer nombre válido');
@@ -548,14 +548,16 @@
             input.setCustomValidity('');
         }
     }
+
     function validarSegundoNombre(input) {
 
-         if (input.validity.patternMismatch) {
+        if (input.validity.patternMismatch) {
             input.setCustomValidity('Por favor, ingresa un segundo nombre válido');
         } else {
             input.setCustomValidity('');
         }
     }
+
     function validarPrimerApellido(input) {
         if (input.validity.valueMissing) {
             input.setCustomValidity('Por favor, ingresa el primer apellido');
@@ -567,6 +569,7 @@
             input.setCustomValidity('');
         }
     }
+
     function validarSegundoApellido(input) {
         if (input.value.includes(' ')) {
             input.setCustomValidity('Por favor, ingresa únicamente el segundo apellido');

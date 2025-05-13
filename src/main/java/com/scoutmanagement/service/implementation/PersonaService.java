@@ -34,13 +34,13 @@ public class PersonaService implements IPersonaService {
     private RoleRepository roleRepository;
 
     @Override
-    public void save(PersonaRegistroDTO personaRegistroDTO,UserEntity userEntity) {
+    public void save(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity) {
         personaRepository.save(cambiarRegistroPersonaRegistroDTO(personaRegistroDTO, userEntity));
     }
 
 
     @Override
-    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO,UserEntity userEntity) {
+    public Persona cambiarRegistroPersonaRegistroDTO(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity) {
         Responsable responsable = new Responsable();
         return Persona.builder()
                 .primerNombre(personaRegistroDTO.getPrimerNombre())
@@ -59,7 +59,7 @@ public class PersonaService implements IPersonaService {
 
     @Override
     public boolean existsByNumeroDeDocumento(Long numeroDeDocumento) {
-       return personaRepository.existsByNumeroDeDocumento(numeroDeDocumento);
+        return personaRepository.existsByNumeroDeDocumento(numeroDeDocumento);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class PersonaService implements IPersonaService {
     @Transactional
     public void actualizarPersona(Long id, PersonaActualizacionDTO dto) {
         Persona persona = personaRepository.findByUserEntity_Id(id)
-                .orElseThrow(() -> new EntityNotFoundException("Persona no encontrada : " ));
+                .orElseThrow(() -> new EntityNotFoundException("Persona no encontrada : "));
 
         Optional<Persona> personaConMismoDocumento = personaRepository.findByNumeroDeDocumento(dto.getNumeroDeDocumento());
 

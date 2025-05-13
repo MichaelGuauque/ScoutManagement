@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 public interface RetoRepository extends CrudRepository<Reto, Long> {
     List<Reto> findAllRetosByEtapaOrderByNumeroAsc(Etapa etapa);
-    Optional<Reto> findRetoByNumeroAndEtapa(int numero,Etapa etapa);
+
+    Optional<Reto> findRetoByNumeroAndEtapa(int numero, Etapa etapa);
 }

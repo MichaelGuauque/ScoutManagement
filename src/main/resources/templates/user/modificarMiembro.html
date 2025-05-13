@@ -41,7 +41,8 @@
             </p>
         </div>
 
-        <form id="formularioMiembro" th:action="@{/miembros/actualizarMiembro/{id}(id=${personaModificada.userEntity.id})}"
+        <form id="formularioMiembro"
+              th:action="@{/miembros/actualizarMiembro/{id}(id=${personaModificada.userEntity.id})}"
               method="post">
             <div class="section">
                 <h2 class="section-title">Información Básica</h2>
@@ -98,7 +99,7 @@
                             <option value="" disabled selected>Seleccione...</option>
                             <th:block th:each="tipoDeDocumento : ${tiposDeDocumento}">
                                 <option th:value="${tipoDeDocumento}" th:text="${tipoDeDocumento}"
-                                        th:selected="${personaModificada.tipoDeDocumento == tipoDeDocumento}" >
+                                        th:selected="${personaModificada.tipoDeDocumento == tipoDeDocumento}">
                                 </option>
                             </th:block>
                         </select>
@@ -115,7 +116,8 @@
 
                     <div class="form-group">
                         <label>Correo Electrónico</label>
-                        <input type="email" name="usuario.username" id="usuario.username" maxlength="50" required  disabled
+                        <input type="email" name="usuario.username" id="usuario.username" maxlength="50" required
+                               disabled
 
                                oninvalid="this.setCustomValidity('Por favor ingresa un correo válido')"
                                oninput="this.setCustomValidity('')"
@@ -165,7 +167,7 @@
 
             <div class="buttons">
                 <button type="submit" class="btn-primary">Guardar</button>
-                <button type="button" class="btn-secondary" onclick="cancelarRegistro()" >Cancelar</button>
+                <button type="button" class="btn-secondary" onclick="cancelarRegistro()">Cancelar</button>
 
             </div>
         </form>
@@ -484,8 +486,6 @@
     };
 
 
-
-
     function actualizarCargos(preselectedCargo = null) {
         const rolSelect = document.getElementById('rol');
         const cargoSelect = document.getElementById('cargo');
@@ -546,18 +546,18 @@
     });
 </script>
 
-    <script th:if="${message != null}">
-        window.onload = function (){
+<script th:if="${message != null}">
+    window.onload = function () {
         showSimpleNotification("[[${message}]]", "[[${type}]]");
     }
 
-    </script>
+</script>
 
 <script>
     function validarPrimerNombre(input) {
         if (input.validity.valueMissing) {
             input.setCustomValidity('Por favor, ingresa el primer nombre');
-        }else if (input.value.includes(' ')) {
+        } else if (input.value.includes(' ')) {
             input.setCustomValidity('Por favor, ingresa únicamente el primer nombre');
         } else if (input.validity.patternMismatch) {
             input.setCustomValidity('Por favor, ingresa un primer nombre válido');
@@ -565,14 +565,16 @@
             input.setCustomValidity('');
         }
     }
+
     function validarSegundoNombre(input) {
 
-         if (input.validity.patternMismatch) {
+        if (input.validity.patternMismatch) {
             input.setCustomValidity('Por favor, ingresa un segundo nombre válido');
         } else {
             input.setCustomValidity('');
         }
     }
+
     function validarPrimerApellido(input) {
         if (input.validity.valueMissing) {
             input.setCustomValidity('Por favor, ingresa el primer apellido');
@@ -584,6 +586,7 @@
             input.setCustomValidity('');
         }
     }
+
     function validarSegundoApellido(input) {
         if (input.value.includes(' ')) {
             input.setCustomValidity('Por favor, ingresa únicamente el segundo apellido');

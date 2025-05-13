@@ -39,10 +39,10 @@ public class RetoService implements IRetoService {
     @Override
     public void save(RetoDTO retoDTO) {
         try {
-            Optional<Reto> retoOptional = retoRepository.findRetoByNumeroAndEtapa(retoDTO.numero(),etapaRepository.findByNombre(retoDTO.etapa()));
+            Optional<Reto> retoOptional = retoRepository.findRetoByNumeroAndEtapa(retoDTO.numero(), etapaRepository.findByNombre(retoDTO.etapa()));
             if (retoOptional.isPresent()) {
                 throw new ServiceException("El reto con numero " + retoDTO.numero() + " ya existe");
-            }else {
+            } else {
                 retoRepository.save(cambiarRetoDTO(retoDTO));
             }
 
@@ -91,7 +91,6 @@ public class RetoService implements IRetoService {
         }
 
     }
-
 
 
     @Override

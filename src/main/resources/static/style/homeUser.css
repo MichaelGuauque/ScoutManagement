@@ -1,6 +1,6 @@
 .submenu li a, .cerrar-sesion {
     text-decoration: none;
-    color:inherit;
+    color: inherit;
 }
 
 .container {
@@ -20,7 +20,7 @@
     align-items: center;
 }
 
-.foto-scout{
+.foto-scout {
     width: 95%;
     height: 504px;;
     display: block;
@@ -67,7 +67,7 @@
     margin-bottom: 10px;
 }
 
-.brujula, .lista, .personas{
+.brujula, .lista, .personas {
     width: 100px;
     height: 100px;
     margin-top: 12%;
