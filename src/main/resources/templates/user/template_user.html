@@ -12,7 +12,7 @@
                     por
                     defecto</p>
                 <p class="cargo-perfil"
-                   th:text="${persona.getUserEntity().getRoles().iterator().next().getRole().name() + ' - ' + persona.getCargo().getLabel()}"
+                   th:text="${#strings.capitalize(persona.userEntity.roles.iterator().next().role.name().toLowerCase()) + ' - ' + persona.cargo.label}"
                 >Nombre por defecto</p>
             </div>
             <div class="perfil-flecha">
@@ -71,7 +71,7 @@
                         </div>
                         <ul class="submenu">
                             <li class="nav-link">
-                                <a th:href="@{/templates/miembros}">
+                                <a href="#">
                                     <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
                                          class="submenu-icon">Compañeros de Rama
                                 </a>

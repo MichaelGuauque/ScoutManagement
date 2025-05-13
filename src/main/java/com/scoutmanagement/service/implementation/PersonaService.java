@@ -84,6 +84,11 @@ public class PersonaService implements IPersonaService {
         return personaRepository.findMiembros();
     }
 
+    @Override
+    public List<Persona> findMiembrosByRama(Rama rama) {
+        return personaRepository.findMiembrosByRama(rama);
+    }
+
 
     @Override
     @Transactional

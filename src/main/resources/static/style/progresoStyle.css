@@ -779,7 +779,7 @@ perfil-menu li:hover span {
 }
 
 .header {
-    background: linear-gradient(to bottom, rgba(236, 203, 201, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(to bottom, rgba(205, 236, 201, 0.8) 0%, rgba(255, 255, 255, 1) 100%);
     padding-top: 40px;
     padding-left: 40px;
     padding-right: 40px;
@@ -1368,12 +1368,11 @@ thead tr:first-child th:last-child {
     text-align: center;
     font-weight: 800;
 }
-
-.number-colm {
+.number-col {
     width: 70px;
-    color: #dfc49d;
+    color: #DCB074;
     text-align: center;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 /* Mantener el peso normal para el primer encabezado (#) */
@@ -1385,6 +1384,13 @@ thead tr:first-child th:last-child {
     width: 100px;
     justify-items: center;
     text-align: center;
+}
+
+.number-colm {
+    width: 70px;
+    color: #dfc49d;
+    text-align: center;
+    font-weight: 700;
 }
 
 .action-button {

@@ -92,15 +92,23 @@ public class ProgresoService implements IProgresoService {
     }
 
     @Override
-    public Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas) {
+    public Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas,Map<String, Map<Long, Boolean>> estadoRetosPorEtapa) {
         try {
             Map<String, List<Reto>> retosPorEtapa = new HashMap<>();
 
             for (Etapa etapa : etapas) {
                 List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
+
+                Map<Long, Boolean> estados = estadoRetosPorEtapa.get(etapa.getNombre());
+
+                retosEtapa.sort((r1, r2) -> {
+                    Boolean estado1 = estados.getOrDefault(r1.getId(), false);
+                    Boolean estado2 = estados.getOrDefault(r2.getId(), false);
+                    return Boolean.compare(estado1, estado2);
+                });
+
                 retosPorEtapa.put(etapa.getNombre(), retosEtapa);
             }
-
             return retosPorEtapa;
         } catch (Exception e) {
             throw new ServiceException("Error al preparar los retos por etapa: " + e.getMessage());

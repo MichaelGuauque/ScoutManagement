@@ -13,9 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -173,12 +171,16 @@ class ProgresoServiceTest {
         Mockito.when(retoService.findAllRetosEtapa(etapa))
                 .thenThrow(new RuntimeException("DB error"));
 
+        Map<String, Map<Long, Boolean>> estadosMock = new HashMap<>();
+        estadosMock.put("Etapa 1", new HashMap<>());
+
         ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
-            progresoService.prepararRetosPorEtapa(etapas);
+            progresoService.prepararRetosPorEtapa(etapas, estadosMock);
         });
 
         Assertions.assertTrue(exception.getMessage().contains("Error al preparar los retos por etapa"));
     }
+
 
     @Test
     void testCalcularEstadoRetosThrowsException() {
@@ -279,61 +281,6 @@ class ProgresoServiceTest {
     }
 
     @Test
-    void testPrepararRetosPorEtapaSinRetos() {
-        Etapa etapa = new Etapa();
-        etapa.setNombre("Etapa Vacía");
-        List<Etapa> etapas = List.of(etapa);
-
-        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(List.of());
-
-        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(etapas);
-
-        Assertions.assertEquals(1, resultado.size());
-        Assertions.assertTrue(resultado.containsKey("Etapa Vacía"));
-        Assertions.assertTrue(resultado.get("Etapa Vacía").isEmpty());
-    }
-
-    @Test
-    void testPrepararRetosPorEtapaConRetos() {
-        Etapa etapa = new Etapa();
-        etapa.setNombre("Etapa 1");
-        List<Etapa> etapas = List.of(etapa);
-
-        Reto reto1 = new Reto();
-        Reto reto2 = new Reto();
-        List<Reto> retos = List.of(reto1, reto2);
-
-        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenReturn(retos);
-
-        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(etapas);
-
-        Assertions.assertEquals(1, resultado.size());
-        Assertions.assertEquals(retos, resultado.get("Etapa 1"));
-    }
-
-    @Test
-    void testPrepararRetosPorEtapaMultiplesEtapas() {
-        Etapa etapa1 = new Etapa();
-        etapa1.setNombre("Etapa A");
-        Etapa etapa2 = new Etapa();
-        etapa2.setNombre("Etapa B");
-        List<Etapa> etapas = List.of(etapa1, etapa2);
-
-        Reto retoA1 = new Reto();
-        Reto retoB1 = new Reto();
-        Reto retoB2 = new Reto();
-
-        Mockito.when(retoService.findAllRetosEtapa(etapa1)).thenReturn(List.of(retoA1));
-        Mockito.when(retoService.findAllRetosEtapa(etapa2)).thenReturn(List.of(retoB1, retoB2));
-
-        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(etapas);
-
-        Assertions.assertEquals(2, resultado.size());
-        Assertions.assertEquals(1, resultado.get("Etapa A").size());
-        Assertions.assertEquals(2, resultado.get("Etapa B").size());
-    }
-
-    @Test
     void testCalcularEstadoRetosEtapaSinRetos() {
         Persona persona = new Persona();
         Etapa etapa = new Etapa();
@@ -419,6 +366,82 @@ class ProgresoServiceTest {
 
         Assertions.assertEquals(Boolean.FALSE, resultado.get("Etapa A").get(201L));
         Assertions.assertEquals(Boolean.TRUE, resultado.get("Etapa B").get(202L));
+    }
+
+    @Test
+    void testPrepararRetosPorEtapa_OrdenaPorEstadoCorrectamente() {
+        // Arrange
+        Etapa etapa1 = new Etapa();
+        etapa1.setId(1L);
+        etapa1.setNombre("Explorador");
+
+        Reto reto1 = new Reto();
+        reto1.setId(10L);
+        reto1.setDescripcion("Reto A");
+        reto1.setEtapa(etapa1);
+
+        Reto reto2 = new Reto();
+        reto2.setId(20L);
+        reto2.setDescripcion("Reto B");
+        reto2.setEtapa(etapa1);
+
+        List<Reto> retosEtapa = new ArrayList<>(List.of(reto1, reto2));
+
+        Map<Long, Boolean> estadosEtapa1 = new HashMap<>();
+        estadosEtapa1.put(10L, true);  // reto1 completado
+        estadosEtapa1.put(20L, false); // reto2 no completado
+
+        Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = new HashMap<>();
+        estadoRetosPorEtapa.put("Explorador", estadosEtapa1);
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa1)).thenReturn(retosEtapa);
+
+        // Act
+        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(new ArrayList<>(List.of(etapa1)), estadoRetosPorEtapa);
+
+        // Assert
+        List<Reto> retosOrdenados = resultado.get("Explorador");
+        Assertions.assertEquals(2, retosOrdenados.size());
+        Assertions.assertEquals(20L, retosOrdenados.get(0).getId()); // no completado primero
+        Assertions.assertEquals(10L, retosOrdenados.get(1).getId()); // completado después
+    }
+
+    @Test
+    void testPrepararRetosPorEtapa_EtapaSinRetos() {
+        // Arrange
+        Etapa etapaVacia = new Etapa();
+        etapaVacia.setNombre("SinRetos");
+
+        Mockito.when(retoService.findAllRetosEtapa(etapaVacia)).thenReturn(Collections.emptyList());
+
+        Map<String, Map<Long, Boolean>> estadoRetos = new HashMap<>();
+        estadoRetos.put("SinRetos", new HashMap<>());
+
+        // Act
+        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(List.of(etapaVacia), estadoRetos);
+
+        // Assert
+        Assertions.assertTrue(resultado.containsKey("SinRetos"));
+        Assertions.assertTrue(resultado.get("SinRetos").isEmpty());
+    }
+
+    @Test
+    void testPrepararRetosPorEtapa_LanzaExcepcion() {
+        // Arrange
+        Etapa etapa = new Etapa();
+        etapa.setNombre("EtapaFalla");
+
+        Mockito.when(retoService.findAllRetosEtapa(etapa)).thenThrow(new RuntimeException("Falla interna"));
+
+        Map<String, Map<Long, Boolean>> estadoRetos = new HashMap<>();
+        estadoRetos.put("EtapaFalla", new HashMap<>());
+
+        // Act & Assert
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            progresoService.prepararRetosPorEtapa(List.of(etapa), estadoRetos);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Error al preparar los retos por etapa"));
     }
 
 }

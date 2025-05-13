@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progresion Miembros</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/progresoMiembrosStyle.css}">
+
+</head>
+<body>
+<!-- Botón hamburguesa para móviles -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</button>
+
+<!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div th:include="admin/template_admin.html::header"></div>
+
+
+<!-- Contenido principal -->
+<main>
+    <!-- Aquí va el contenido de la página -->
+
+    <div class="container">
+
+        <div class="header">
+            <h1 class="encabezado">Progresión Miembros</h1>
+            <p class="description">Desde aquí puedes consultar y gestionar el avance de cada miembro en las distintas
+                etapas de su rama. Marca los retos completados para llevar un seguimiento preciso de su proceso dentro
+                del grupo scout.</p>
+        </div>
+
+
+        <div class="divider-line"></div>
+
+        <div class="activities-container">
+            <div class="header-row">
+                <div class="left-section">
+
+                </div>
+
+                <div class="search-container" style="margin-right: 55px;">
+                    <input type="text" class="filter-search" placeholder="Ingrese el nombre...">
+                    <button class="search-btn">
+                        <div class="icon-placeholder search-icon">
+                            <img th:src="@{/img/cancelFiltro.svg}" alt="Search" width="16" height="16">
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th class="nombre-col">Nombre</th>
+                    <th class="docu-col">Documento</th>
+                    <th class="rama-col">Rama</th>
+                    <th class="nomCont-col">Etapa Actual</th>
+                    <th>Accion</th>
+                </tr>
+                </thead>
+                <tbody id="tablaMiembros">
+                <tr th:each="miembro : ${miembros}">
+                    <td>
+                        <div class="user-container">
+                            <img th:src="@{/img/miembro.svg}" alt="Profile" class="profile-img">
+                            <span th:text="${miembro.primerNombre+ ' '+miembro.segundoNombre+' '+miembro.primerApellido+
+                            ' '+miembro.segundoApellido}">Nombre del miembro</span>
+                        </div>
+                    </td>
+                    <td th:text="${miembro.tipoDeDocumento + '.' + miembro.numeroDeDocumento}">Documento</td>
+                    <td>
+                        <span th:class="'rama-badge ' + ${miembro.rama}" th:text="${miembro.rama}">Rama</span>
+                    </td>
+                    <td style="text-align: center">
+                        <span th:text="${progresionesPorPersona[miembro.id] != null ? progresionesPorPersona[miembro.id].nombre : 'Sin progresión'}">Etapa</span>
+                    </td>
+
+                    <td>
+                        <a class="verProgreso" th:href="@{'/progresiones/progreso/' + ${miembro.id}}">
+                            <img th:src="@{/img/verProgreso.svg}" alt="icon placeholder" class="icon-progress">
+                        </a>
+
+                        <button >
+                        </button>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="pagination-container">
+        <div class="pagination">
+            <a class="pagination-btn" id="prevPage" style="display: none;">Anterior</a>
+            <span class="pagination-info" id="pageInfo"></span>
+            <a class="pagination-btn" id="nextPage" style="display: none;">Siguiente</a>
+        </div>
+    </div>
+
+    <div th:include="admin/template_admin.html::footer"></div>
+
+</main>
+
+<!--paginacion-->
+<script>
+    const itemsPerPage = 5; // Número de elementos por página
+    let currentPage = 1; // Página actual
+    const items = document.querySelectorAll('#tablaMiembros tr'); // Todos los elementos de la tabla
+    const totalItems = items.length; // Total de elementos
+    const totalPages = Math.ceil(totalItems / itemsPerPage); // Total de páginas
+
+    // Función para actualizar la tabla según la página actual
+    function updateTable() {
+        // Mostrar los elementos de la página actual
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        items.forEach((item, index) => {
+            if (index >= start && index < end) {
+                item.style.display = ''; // Mostrar el elemento
+            } else {
+                item.style.display = 'none'; // Ocultar el elemento
+            }
+        });
+
+        // Actualizar la información de la página
+        const pageInfoElement = document.getElementById('pageInfo');
+        if (totalPages <= 1) {
+            // Ocultar el mensaje de paginación cuando solo hay una página
+            pageInfoElement.style.display = 'none';
+        } else {
+            pageInfoElement.style.display = '';
+            pageInfoElement.textContent = `Página ${currentPage} de ${totalPages}`;
+        }
+
+        // Mostrar u ocultar los botones de "Anterior" y "Siguiente"
+        document.getElementById('prevPage').style.display = currentPage > 1 ? '' : 'none';
+        document.getElementById('nextPage').style.display = currentPage < totalPages ? '' : 'none';
+
+        // Opcionalmente, ocultar también los botones de navegación cuando solo hay una página
+        const paginationControls = document.getElementById('paginationControls');
+        if (paginationControls) {
+            paginationControls.style.display = totalPages <= 1 ? 'none' : '';
+        }
+    }
+
+    // Manejar el botón "Anterior"
+    document.getElementById('prevPage').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            updateTable();
+        }
+    });
+
+    // Manejar el botón "Siguiente"
+    document.getElementById('nextPage').addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateTable();
+        }
+    });
+
+    // Inicializar la tabla
+    updateTable();
+</script>
+<!--busqueda-->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputBusqueda = document.querySelector(".filter-search");
+        const botonLimpiar = document.querySelector(".search-btn");
+
+
+        inputBusqueda.addEventListener("input", filtrarMiembros);
+        botonLimpiar.addEventListener("click", (e) => {
+            e.preventDefault(); // Evita recarga si está dentro de un <form>
+            inputBusqueda.value = ""; // Limpia el campo
+            filtrarMiembros(); // Muestra todos
+        });
+    });
+
+    function filtrarMiembros() {
+        const filtro = document.querySelector(".filter-search").value.toLowerCase();
+        const filas = document.querySelectorAll("#tablaMiembros tr");
+
+        filas.forEach(fila => {
+            const spanNombre = fila.querySelector(".user-container span");
+            if (spanNombre) {
+                const nombreCompleto = spanNombre.innerText.toLowerCase();
+                fila.style.display = (nombreCompleto.includes(filtro) || filtro.trim() === "") ? "" : "none";
+            }
+        });
+    }
+</script>
+<!--perfil-menu-->
+<script>
+
+    // Script para el menú de perfil
+    document.querySelector('.perfil-flecha').addEventListener('click', function () {
+        const perfilMenu = document.getElementById('perfilMenu');
+        perfilMenu.classList.toggle('show-menu');
+    });
+
+    // Cerrar el menú al hacer clic fuera de él
+    document.addEventListener('click', function (event) {
+        const perfilMenu = document.getElementById('perfilMenu');
+        const perfilFlecha = document.querySelector('.perfil-flecha');
+
+        // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+        if (!perfilMenu.contains(event.target) && !perfilFlecha.contains(event.target)) {
+            perfilMenu.classList.remove('show-menu');
+        }
+    });
+
+    // Script para los menús desplegables de navegación
+    document.querySelectorAll('.main-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+            event.stopPropagation();
+
+            const parent = button.parentElement;
+            const wasActive = parent.classList.contains('active');
+
+            // Cerrar todos los menús activos
+            document.querySelectorAll('.menu-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Si no estaba activo, activarlo
+            if (!wasActive) {
+                parent.classList.add('active');
+            }
+        });
+    });
+
+    // Script para toggle del sidebar en móviles
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    sidebarToggle.addEventListener('click', function () {
+        sidebar.classList.toggle('open');
+        hamburger.classList.toggle('open');
+        overlay.classList.toggle('active');
+
+        // Mover el botón también cuando el sidebar está abierto
+        sidebarToggle.classList.toggle('moved');
+    });
+
+    // Cerrar sidebar al hacer clic en el overlay
+    overlay.addEventListener('click', function () {
+        sidebar.classList.remove('open');
+        hamburger.classList.remove('open');
+        overlay.classList.remove('active');
+        sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+    });
+
+    // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+    document.querySelectorAll('.nav-link').forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                hamburger.classList.remove('open');
+                overlay.classList.remove('active');
+                sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+            }
+        });
+    });
+
+    // Ajustar al cambiar el tamaño de la ventana
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('open');
+            hamburger.classList.remove('open');
+            overlay.classList.remove('active');
+            sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+        }
+    });
+</script>
+</body>
+</html>

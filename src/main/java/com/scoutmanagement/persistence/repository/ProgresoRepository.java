@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface ProgresoRepository extends CrudRepository<Progreso, Long> {
     List<Progreso> findAllByPersona(Persona persona);
+
     List<Progreso> findByPersonaAndEstadoTrue(Persona persona);
 }

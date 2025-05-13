@@ -1,10 +1,10 @@
 package com.scoutmanagement.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scoutmanagement.dto.EtapaDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.service.interfaces.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static com.scoutmanagement.util.constants.AppConstants.*;
 
@@ -66,11 +67,11 @@ public class EtapaController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
 
             Persona sesionDelJefe = adultoSession(ID_USUARIO, session);
-            model.addAttribute("persona", sesionDelJefe);
+            model.addAttribute(PERSONA, sesionDelJefe);
 
             Rama rama = sesionDelJefe.getRama();
             List<Etapa> etapas = etapaService.findAllByRama(rama);
-            model.addAttribute("etapas", etapas);
+            model.addAttribute(ETAPAS, etapas);
 
             Etapa etapaSeleccionadaObj = etapas.stream()
                     .filter(etapa -> etapa.getNombre().equals(etapaSeleccionada))
@@ -121,7 +122,7 @@ public class EtapaController {
     }
 
     @GetMapping("/miProgreso")
-    public String verMiProgreso(Model model, HttpSession session) {
+    public String verProgreso(Model model, HttpSession session) {
 
         Object rol = session.getAttribute("rol");
         if (rol == null) {
@@ -136,35 +137,120 @@ public class EtapaController {
 
         Rama rama = persona.getRama();
         List<Etapa> etapas = etapaService.findAllByRama(rama);
-
         Map<Long, Float> progresoPorEtapa = progresoService.calcularProgresosPorEtapa(etapas, persona);
-        try {
-            String progresoJson = objectMapper.writeValueAsString(progresoPorEtapa);
-            model.addAttribute("progresoJson", progresoJson);
-        } catch (Exception e) {
-            model.addAttribute("progresoJson", "{}");
-        }
-        Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas);
+
+        String progresoJson = convertirProgresoAJson(progresoPorEtapa);
+        model.addAttribute("progresoJson", progresoJson);
+
         Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = progresoService.calcularEstadoRetos(etapas, persona);
+        Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas, estadoRetosPorEtapa);
         Set<Long> etapasObtenidas = obtencionService.findIdEtapasObtenidasByPersona(persona);
 
-        Etapa etapaDestacada =  etapas.isEmpty() ? null : etapas.get(0);
+        Etapa etapaDestacada = etapas.isEmpty() ? null : etapas.get(0);
         float progresoMaximo = etapaDestacada != null ?
                 progresoPorEtapa.getOrDefault(etapaDestacada.getId(), 0f) : 0f;
 
-        model.addAttribute("persona", persona);
-        model.addAttribute("etapas", etapas);
+        model.addAttribute(PERSONA, persona);
+        model.addAttribute(ETAPAS, etapas);
         model.addAttribute("progresoPorEtapa", progresoPorEtapa);
         model.addAttribute("retosPorEtapa", retosPorEtapa);
         model.addAttribute("estadoRetosPorEtapa", estadoRetosPorEtapa);
-        model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : ""); // Para mostrar en título
+        model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : "");
         model.addAttribute("progresoDestacado", progresoMaximo);
         model.addAttribute("etapasObtenidas", etapasObtenidas);
         model.addAttribute("gruposRamas", GRUPOS_RAMAS);
 
-
         return "progresiones/verProgresiones";
+    }
+
+    @GetMapping("/miembros")
+    public String progresionMiembros(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute(PERSONA, sesionDelJefe);
+            Rama rama = sesionDelJefe.getRama();
+            Map<Long, Etapa> progresionesPorPersona = new HashMap<>();
+            List<Persona> miembros = personaService.findMiembrosByRama(rama);
+
+            for (Persona persona : miembros) {
+                Optional<Obtencion> obtencion = obtencionService.findByPersona(persona);
+
+                if (obtencion.isEmpty()) {
+                    progresionesPorPersona.put(persona.getId(), null);
+                } else {
+                    progresionesPorPersona.put(persona.getId(), obtencion.get().getEtapa());
+                }
+            }
+
+            model.addAttribute("miembros", miembros);
+            model.addAttribute("progresionesPorPersona", progresionesPorPersona);
+            return "progresiones/progresoMiembros";
+
+        }
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+        return VISTA_ERROR;
+
+    }
+
+    @GetMapping("/progreso/{id}")
+    public String progresoMiembro(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+
+        Object rol = session.getAttribute("rol");
+        if (rol == null) {
+            return VISTA_LOGIN;
         }
 
+        if (rol.equals(Rol.JOVEN.name())) {
+            return VISTA_ERROR;
+        }
+        Persona persona = adultoSession(ID_USUARIO, session);
+
+        try {
+            Persona miembro = personaService.findByUsuarioId(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Miembro no encontrado"));
+
+            Rama rama = persona.getRama();
+            List<Etapa> etapas = etapaService.findAllByRama(rama);
+            Map<Long, Float> progresoPorEtapa = progresoService.calcularProgresosPorEtapa(etapas, miembro);
+
+            String progresoJson = convertirProgresoAJson(progresoPorEtapa);
+            model.addAttribute("progresoJson", progresoJson);
+
+            Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = progresoService.calcularEstadoRetos(etapas, miembro);
+            Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas, estadoRetosPorEtapa);
+            Set<Long> etapasObtenidas = obtencionService.findIdEtapasObtenidasByPersona(miembro);
+            Etapa etapaDestacada = etapas.isEmpty() ? null : etapas.getFirst();
+
+            model.addAttribute(PERSONA, persona);
+            model.addAttribute("miembro", miembro);
+            model.addAttribute(ETAPAS, etapas);
+            model.addAttribute("progresoPorEtapa", progresoPorEtapa);
+            model.addAttribute("retosPorEtapa", retosPorEtapa);
+            model.addAttribute("estadoRetosPorEtapa", estadoRetosPorEtapa);
+            model.addAttribute("etapasObtenidas", etapasObtenidas);
+            model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : "");
+            model.addAttribute("gruposRamas", GRUPOS_RAMAS);
+
+            return "progresiones/progreso";
+        } catch (EntityNotFoundException e) {
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro no encontrado");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+            return "redirect:/progresiones/miembros";
+        }
+
+    }
+
+    private String convertirProgresoAJson(Map<Long, Float> progresoPorEtapa) {
+        try {
+            return objectMapper.writeValueAsString(progresoPorEtapa);
+        } catch (Exception e) {
+            return "{}";
+        }
+    }
 
 }

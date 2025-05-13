@@ -21,7 +21,7 @@ public class Reto {
     private Long id;
     @Column(nullable = false)
     private int numero;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String descripcion;
     @ManyToOne(targetEntity = Etapa.class)
     @JoinColumn(name = "etapa", nullable = false)

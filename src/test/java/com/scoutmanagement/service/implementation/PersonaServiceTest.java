@@ -7,6 +7,7 @@ import com.scoutmanagement.persistence.repository.PersonaRepository;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -236,6 +237,66 @@ public class PersonaServiceTest {
 
         verify(personaRepository, times(1)).findMiembros();
     }
+
+    @Test
+    void testFindMiembrosByRama_ReturnsListOfMiembros() {
+        // Arrange
+        Rama rama = Rama.TROPA;
+
+        UserEntity user1 = new UserEntity();
+        user1.setId(1L);
+        user1.setUsername("miembro1");
+        user1.setActivo(true);
+
+        Persona persona1 = new Persona();
+        persona1.setId(1L);
+        persona1.setPrimerNombre("Carlos");
+        persona1.setCargo(Cargo.SCOUT); // No empieza por JEFE_
+        persona1.setRama(rama);
+        persona1.setUserEntity(user1);
+
+        UserEntity user2 = new UserEntity();
+        user2.setId(2L);
+        user2.setUsername("miembro2");
+        user2.setActivo(true);
+
+        Persona persona2 = new Persona();
+        persona2.setId(2L);
+        persona2.setPrimerNombre("Laura");
+        persona2.setCargo(Cargo.SCOUT); // No empieza por JEFE_
+        persona2.setRama(rama);
+        persona2.setUserEntity(user2);
+
+        List<Persona> mockResult = List.of(persona1, persona2);
+
+        Mockito.when(personaRepository.findMiembrosByRama(rama)).thenReturn(mockResult);
+
+        // Act
+        List<Persona> result = personaService.findMiembrosByRama(rama);
+
+        // Assert
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals("Carlos", result.get(0).getPrimerNombre());
+        Assertions.assertEquals("Laura", result.get(1).getPrimerNombre());
+
+        Mockito.verify(personaRepository).findMiembrosByRama(rama);
+    }
+
+    @Test
+    void testFindMiembrosByRama_ReturnsEmptyList() {
+        // Arrange
+        Rama rama = Rama.MANADA;
+
+        Mockito.when(personaRepository.findMiembrosByRama(rama)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Persona> result = personaService.findMiembrosByRama(rama);
+
+        // Assert
+        Assertions.assertTrue(result.isEmpty());
+        Mockito.verify(personaRepository).findMiembrosByRama(rama);
+    }
+
     @Test
     void testActualizarPersona() {
 

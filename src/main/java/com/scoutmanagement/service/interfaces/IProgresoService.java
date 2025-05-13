@@ -23,7 +23,7 @@ public interface IProgresoService {
 
     Map<Long, Float> calcularProgresosPorEtapa(List<Etapa> etapas, Persona persona);
 
-    Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas);
+    Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas,Map<String, Map<Long, Boolean>> estadoRetosPorEtapa);
 
     Map<String, Map<Long, Boolean>> calcularEstadoRetos(List<Etapa> etapas, Persona persona);
 }
