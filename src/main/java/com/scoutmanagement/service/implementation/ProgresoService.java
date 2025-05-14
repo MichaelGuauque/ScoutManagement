@@ -99,13 +99,13 @@ public class ProgresoService implements IProgresoService {
             for (Etapa etapa : etapas) {
                 List<Reto> retosEtapa = retoService.findAllRetosEtapa(etapa);
 
-                Map<Long, Boolean> estados = estadoRetosPorEtapa.get(etapa.getNombre());
+//                Map<Long, Boolean> estados = estadoRetosPorEtapa.get(etapa.getNombre());
 
-                retosEtapa.sort((r1, r2) -> {
-                    Boolean estado1 = estados.getOrDefault(r1.getId(), false);
-                    Boolean estado2 = estados.getOrDefault(r2.getId(), false);
-                    return Boolean.compare(estado1, estado2);
-                });
+//                retosEtapa.sort((r1, r2) -> {
+//                    Boolean estado1 = estados.getOrDefault(r1.getId(), false);
+//                    Boolean estado2 = estados.getOrDefault(r2.getId(), false);
+//                    return Boolean.compare(estado1, estado2);
+//                });
 
                 retosPorEtapa.put(etapa.getNombre(), retosEtapa);
             }
