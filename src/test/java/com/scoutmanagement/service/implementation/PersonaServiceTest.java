@@ -468,4 +468,20 @@ public class PersonaServiceTest {
         Optional<Persona> personaOptionalNoExistente = personaService.findByNumeroDeDocumento(numeroDeDocumentoNoExistente);
         assertFalse(personaOptionalNoExistente.isPresent());
     }
+
+    @Test
+    public void testGetNombreCompleto() {
+        // Arrange
+        Persona persona = new Persona();
+        persona.setPrimerNombre("Juan");
+        persona.setSegundoNombre("Carlos");
+        persona.setPrimerApellido("Pérez");
+        persona.setSegundoApellido("Gómez");
+
+        // Act
+        String nombreCompleto = persona.getNombreCompleto();
+
+        // Assert
+        assertEquals("Juan Carlos Pérez Gómez", nombreCompleto);
+    }
 }
