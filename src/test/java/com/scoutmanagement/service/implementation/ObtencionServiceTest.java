@@ -32,7 +32,7 @@ class ObtencionServiceTest {
     void testFindById() {
         Persona persona = new Persona();
         Etapa etapa = new Etapa();
-        Obtencion obtencion = new Obtencion(1L, true, LocalDate.now(), persona, etapa);
+        Obtencion obtencion = new Obtencion(1L, true, LocalDate.now(), persona, etapa, "imagen");
 
         Mockito.when(obtencionRepository.findById(1L)).thenReturn(Optional.of(obtencion));
 
@@ -46,7 +46,7 @@ class ObtencionServiceTest {
     void testSave() {
         Persona persona = new Persona();
         Etapa etapa = new Etapa();
-        Obtencion obtencion = new Obtencion(null, true, LocalDate.now(), persona, etapa);
+        Obtencion obtencion = new Obtencion(null, true, LocalDate.now(), persona, etapa, "imagen");
 
         obtencionService.save(obtencion);
 
@@ -57,7 +57,7 @@ class ObtencionServiceTest {
     void testUpdate() {
         Persona persona = new Persona();
         Etapa etapa = new Etapa();
-        Obtencion obtencion = new Obtencion(2L, false, LocalDate.of(2023, 5, 20), persona, etapa);
+        Obtencion obtencion = new Obtencion(2L, false, LocalDate.of(2023, 5, 20), persona, etapa,  "imagen");
 
         obtencionService.update(obtencion);
 
@@ -69,8 +69,8 @@ class ObtencionServiceTest {
         Persona persona = new Persona();
         Etapa etapa = new Etapa();
         List<Obtencion> lista = Arrays.asList(
-                new Obtencion(1L, true, LocalDate.now(), persona, etapa),
-                new Obtencion(2L, false, LocalDate.now().minusDays(1), persona, etapa)
+                new Obtencion(1L, true, LocalDate.now(), persona, etapa,  "imagen"),
+                new Obtencion(2L, false, LocalDate.now().minusDays(1), persona, etapa, "imagen")
         );
 
         Mockito.when(obtencionRepository.findAllByPersona(persona)).thenReturn(lista);
@@ -85,8 +85,8 @@ class ObtencionServiceTest {
         Persona persona = new Persona();
         Etapa etapa = new Etapa();
         List<Obtencion> lista = Arrays.asList(
-                new Obtencion(1L, true, LocalDate.now(), persona, etapa),
-                new Obtencion(2L, false, LocalDate.now().minusDays(1), persona, etapa)
+                new Obtencion(1L, true, LocalDate.now(), persona, etapa,  "imagen"),
+                new Obtencion(2L, false, LocalDate.now().minusDays(1), persona, etapa, "imagen")
         );
 
         Mockito.when(obtencionRepository.findAll()).thenReturn(lista);
@@ -111,7 +111,7 @@ class ObtencionServiceTest {
     void testSaveThrowsException() {
         Persona persona = new Persona();
         Etapa etapa = new Etapa();
-        Obtencion obtencion = new Obtencion(null, true, LocalDate.now(), persona, etapa);
+        Obtencion obtencion = new Obtencion(null, true, LocalDate.now(), persona, etapa,  "imagen");
 
         Mockito.doThrow(new RuntimeException("DB error")).when(obtencionRepository).save(obtencion);
 
@@ -126,7 +126,7 @@ class ObtencionServiceTest {
     void testUpdateThrowsException() {
         Persona persona = new Persona();
         Etapa etapa = new Etapa();
-        Obtencion obtencion = new Obtencion(2L, false, LocalDate.now(), persona, etapa);
+        Obtencion obtencion = new Obtencion(2L, false, LocalDate.now(), persona, etapa,  "imagen");
 
         Mockito.doThrow(new RuntimeException("DB error")).when(obtencionRepository).save(obtencion);
 

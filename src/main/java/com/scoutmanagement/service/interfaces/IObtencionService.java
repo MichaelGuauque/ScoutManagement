@@ -22,4 +22,6 @@ public interface IObtencionService {
 
     Optional<Obtencion> findByPersona(Persona persona);
 
+    List<Obtencion> ultimasObtenciones(Persona persona);
+
 }

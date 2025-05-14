@@ -1,8 +1,12 @@
 package com.scoutmanagement.controller;
 
+import com.scoutmanagement.dto.MiembroRamaDTO;
+import com.scoutmanagement.persistence.model.Obtencion;
 import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
+import com.scoutmanagement.service.interfaces.IMiembroService;
+import com.scoutmanagement.service.interfaces.IObtencionService;
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.scoutmanagement.util.constants.AppConstants.*;
@@ -26,7 +31,7 @@ public class MiembroController {
     @Autowired
     private IPersonaService personaService;
     @Autowired
-    private IAsistenciaService asistenciaService;
+    private IMiembroService miembroService;
     private final Logger log = LoggerFactory.getLogger(MiembroController.class);
 
     @GetMapping()
@@ -36,7 +41,8 @@ public class MiembroController {
 
             try{
                 Persona personaSesion = personaService.personaModelSession("idUsuario", session);
-                List<Persona> miembrosRama = asistenciaService.findPersonasByRama(personaSesion.getRama());
+                List<MiembroRamaDTO> miembrosRama = miembroService.mostrarMiembrosRama(personaSesion);
+
                 model.addAttribute("persona", personaSesion);
                 model.addAttribute("miembros", miembrosRama);
                 return "miembros/miembrosRama";

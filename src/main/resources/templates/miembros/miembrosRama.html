@@ -44,22 +44,18 @@
                         <img th:src="@{/img/joven.svg}" alt="Avatar" class="avatar-icon">
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="min-height: 190px">
                     <h2 class="name" th:text="${miembro.getNombreCompleto()}"></h2>
                     <p class="role" th:text="${miembro.getCargo()}"></p>
                     <div class="divider"></div>
-                    <div class="badges">
-                        <div class="badge">
-                            <img th:src="@{img/insigYell.svg}" alt="Insignia">
+                    <div class="badges" th:unless="${#strings.containsIgnoreCase(miembro.cargo, 'jefe')}">
+                        <div class="badge" th:if="${#lists.isEmpty(miembro.insignias)}">
+                            <img th:src="@{/img/insigDes.svg}" alt="Insignia por defecto">
                         </div>
-                        <div class="badge">
-                            <img th:src="@{img/insigGree.svg}" alt="Insignia">
-                        </div>
-                        <div class="badge">
-                            <img th:src="@{img/insigBlu.svg}" alt="Insignia">
-                        </div>
-                        <div class="badge">
-                            <img th:src="@{img/insigRed.svg}" alt="Insignia">
+
+                        <!-- Cuando hay insignias, itera y muestra cada una -->
+                        <div class="badge" th:each="insignia : ${miembro.insignias}" th:unless="${#lists.isEmpty(miembro.insignias)}">
+                            <img th:src="@{/images/{img} (img=${insignia.getImagenInsignia()})}" alt="Insignia">
                         </div>
                     </div>
                 </div>
