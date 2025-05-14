@@ -8,7 +8,7 @@
             <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
             <div class="perfil-info">
                 <p class="nombre-perfil"
-                   th:text="${persona.primerNombre + ' ' + persona.segundoNombre + ' ' + persona.primerApellido}">Nombre
+                   th:text="${persona.getNombreCompleto()}">Nombre
                     por
                     defecto</p>
                 <p class="cargo-perfil"

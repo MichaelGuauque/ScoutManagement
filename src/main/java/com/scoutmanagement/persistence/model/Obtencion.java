@@ -23,4 +23,5 @@ public class Obtencion {
     private Persona persona;
     @ManyToOne(targetEntity = Etapa.class)
     private Etapa etapa;
+    private String imagenInsignia;
 }

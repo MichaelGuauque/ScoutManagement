@@ -30,4 +30,6 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 
     Optional<Persona> findByNumeroDeDocumento(Long numeroDeDocumento);
 
+    List<Persona> findByUserEntityActivoTrueAndRama(Rama rama);
+
 }
