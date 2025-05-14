@@ -3,10 +3,8 @@ package com.scoutmanagement.service.implementation;
 import com.scoutmanagement.dto.MiembroRamaDTO;
 import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
-import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import com.scoutmanagement.service.interfaces.IMiembroService;
 import com.scoutmanagement.service.interfaces.IObtencionService;
-import com.scoutmanagement.service.interfaces.IPersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +14,6 @@ import java.util.List;
 @Service
 public class MiembroService implements IMiembroService {
 
-    @Autowired
-    private IAsistenciaService asistenciaService;
     @Autowired
     private IObtencionService obtencionService;
     @Autowired
