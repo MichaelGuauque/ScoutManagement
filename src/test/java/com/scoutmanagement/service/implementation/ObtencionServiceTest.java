@@ -19,6 +19,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @SpringBootTest
 class ObtencionServiceTest {
 
@@ -34,12 +39,12 @@ class ObtencionServiceTest {
         Etapa etapa = new Etapa();
         Obtencion obtencion = new Obtencion(1L, true, LocalDate.now(), persona, etapa, "imagen");
 
-        Mockito.when(obtencionRepository.findById(1L)).thenReturn(Optional.of(obtencion));
+        when(obtencionRepository.findById(1L)).thenReturn(Optional.of(obtencion));
 
         Optional<Obtencion> result = obtencionService.findById(1L);
 
-        Assertions.assertTrue(result.isPresent());
-        Assertions.assertEquals(true, result.get().isEstado());
+        assertTrue(result.isPresent());
+        assertEquals(true, result.get().isEstado());
     }
 
     @Test
@@ -50,7 +55,7 @@ class ObtencionServiceTest {
 
         obtencionService.save(obtencion);
 
-        Mockito.verify(obtencionRepository).save(obtencion);
+        verify(obtencionRepository).save(obtencion);
     }
 
     @Test
@@ -61,7 +66,7 @@ class ObtencionServiceTest {
 
         obtencionService.update(obtencion);
 
-        Mockito.verify(obtencionRepository).save(obtencion);
+        verify(obtencionRepository).save(obtencion);
     }
 
     @Test
@@ -73,11 +78,11 @@ class ObtencionServiceTest {
                 new Obtencion(2L, false, LocalDate.now().minusDays(1), persona, etapa, "imagen")
         );
 
-        Mockito.when(obtencionRepository.findAllByPersona(persona)).thenReturn(lista);
+        when(obtencionRepository.findAllByPersona(persona)).thenReturn(lista);
 
         List<Obtencion> result = obtencionService.findAllByPersona(persona);
 
-        Assertions.assertEquals(2, result.size());
+        assertEquals(2, result.size());
     }
 
     @Test
@@ -89,22 +94,22 @@ class ObtencionServiceTest {
                 new Obtencion(2L, false, LocalDate.now().minusDays(1), persona, etapa, "imagen")
         );
 
-        Mockito.when(obtencionRepository.findAll()).thenReturn(lista);
+        when(obtencionRepository.findAll()).thenReturn(lista);
 
         List<Obtencion> result = obtencionService.findAll();
 
-        Assertions.assertEquals(2, result.size());
+        assertEquals(2, result.size());
     }
 
     @Test
     void testFindByIdThrowsException() {
-        Mockito.when(obtencionRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
+        when(obtencionRepository.findById(1L)).thenThrow(new RuntimeException("DB error"));
 
         ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
             obtencionService.findById(1L);
         });
 
-        Assertions.assertTrue(exception.getMessage().contains("Obtención no encontrada"));
+        assertTrue(exception.getMessage().contains("Obtención no encontrada"));
     }
 
     @Test
@@ -119,7 +124,7 @@ class ObtencionServiceTest {
             obtencionService.save(obtencion);
         });
 
-        Assertions.assertTrue(exception.getMessage().contains("No se pudo guardar"));
+        assertTrue(exception.getMessage().contains("No se pudo guardar"));
     }
 
     @Test
@@ -134,31 +139,31 @@ class ObtencionServiceTest {
             obtencionService.update(obtencion);
         });
 
-        Assertions.assertTrue(exception.getMessage().contains("No se pudo actualizar"));
+        assertTrue(exception.getMessage().contains("No se pudo actualizar"));
     }
 
     @Test
     void testFindAllByPersonaThrowsException() {
         Persona persona = new Persona();
 
-        Mockito.when(obtencionRepository.findAllByPersona(persona)).thenThrow(new RuntimeException("DB error"));
+        when(obtencionRepository.findAllByPersona(persona)).thenThrow(new RuntimeException("DB error"));
 
         ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
             obtencionService.findAllByPersona(persona);
         });
 
-        Assertions.assertTrue(exception.getMessage().contains("No se encontraron los datos de la persona"));
+        assertTrue(exception.getMessage().contains("No se encontraron los datos de la persona"));
     }
 
     @Test
     void testFindAllThrowsException() {
-        Mockito.when(obtencionRepository.findAll()).thenThrow(new RuntimeException("DB error"));
+        when(obtencionRepository.findAll()).thenThrow(new RuntimeException("DB error"));
 
         ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
             obtencionService.findAll();
         });
 
-        Assertions.assertTrue(exception.getMessage().contains("No se encontraron los datos"));
+        assertTrue(exception.getMessage().contains("No se encontraron los datos"));
     }
 
     @Test
@@ -177,27 +182,27 @@ class ObtencionServiceTest {
 
         List<Obtencion> obtenciones = Arrays.asList(obt1, obt2);
 
-        Mockito.when(obtencionRepository.findAllByPersona(persona)).thenReturn(obtenciones);
+        when(obtencionRepository.findAllByPersona(persona)).thenReturn(obtenciones);
 
         Set<Long> resultado = obtencionService.findIdEtapasObtenidasByPersona(persona);
 
-        Assertions.assertEquals(2, resultado.size());
-        Assertions.assertTrue(resultado.contains(1L));
-        Assertions.assertTrue(resultado.contains(2L));
+        assertEquals(2, resultado.size());
+        assertTrue(resultado.contains(1L));
+        assertTrue(resultado.contains(2L));
     }
 
     @Test
     void testFindIdEtapasObtenidasByPersonaThrowsException() {
         Persona persona = new Persona();
 
-        Mockito.when(obtencionRepository.findAllByPersona(persona))
+        when(obtencionRepository.findAllByPersona(persona))
                 .thenThrow(new RuntimeException("DB error"));
 
         ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
             obtencionService.findIdEtapasObtenidasByPersona(persona);
         });
 
-        Assertions.assertTrue(exception.getMessage().contains("Error al obtener las etapas obtenidas"));
+        assertTrue(exception.getMessage().contains("Error al obtener las etapas obtenidas"));
     }
 
     @Test
@@ -222,15 +227,15 @@ class ObtencionServiceTest {
         obtencion.setPersona(persona);
         obtencion.setEtapa(etapa);
 
-        Mockito.when(obtencionRepository.findByPersona(persona)).thenReturn(Optional.of(obtencion));
+        when(obtencionRepository.findByPersona(persona)).thenReturn(Optional.of(obtencion));
 
         // Act
         Optional<Obtencion> result = obtencionService.findByPersona(persona);
 
         // Assert
-        Assertions.assertTrue(result.isPresent());
-        Assertions.assertEquals(obtencion, result.get());
-        Mockito.verify(obtencionRepository).findByPersona(persona);
+        assertTrue(result.isPresent());
+        assertEquals(obtencion, result.get());
+        verify(obtencionRepository).findByPersona(persona);
     }
 
     @Test
@@ -242,15 +247,41 @@ class ObtencionServiceTest {
         persona.setPrimerApellido("López");
         persona.setNumeroDeDocumento(98765432100L);
 
-        Mockito.when(obtencionRepository.findByPersona(persona)).thenReturn(Optional.empty());
+        when(obtencionRepository.findByPersona(persona)).thenReturn(Optional.empty());
 
         // Act
         Optional<Obtencion> result = obtencionService.findByPersona(persona);
 
         // Assert
-        Assertions.assertTrue(result.isEmpty());
-        Mockito.verify(obtencionRepository).findByPersona(persona);
+        assertTrue(result.isEmpty());
+        verify(obtencionRepository).findByPersona(persona);
     }
 
+    @Test
+    void testUltimasObtenciones_filtraPorRama() {
+
+        Persona persona = new Persona();
+        persona.setRama(Rama.CLAN);
+
+        Etapa etapaConMismaRama = new Etapa();
+        etapaConMismaRama.setRama(Rama.CLAN);
+
+        Obtencion obtencion1 = new Obtencion();
+        obtencion1.setEtapa(etapaConMismaRama);
+
+
+        List<Obtencion> todasLasObtenciones = List.of(obtencion1);
+
+        when(obtencionRepository.findAllByPersona(persona)).thenReturn(todasLasObtenciones);
+
+        // Act
+        List<Obtencion> resultado = obtencionService.ultimasObtenciones(persona);
+
+        // Assert
+        assertEquals(1, resultado.size());
+        assertTrue(resultado.contains(obtencion1));
+
+        verify(obtencionRepository).findAllByPersona(persona);
+    }
 
 }
