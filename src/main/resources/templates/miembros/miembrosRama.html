@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compañeros de Rama</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/miembrosRamaStyle.css}">
+</head>
+<body>
+<!-- Botón hamburguesa para móviles -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</button>
+
+<!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div th:include="user/template_user.html::header"></div>
+
+
+<!-- Contenido principal -->
+<main>
+    <!-- Aquí va el contenido de la página -->
+
+    <div class="container">
+        <div class="header">
+            <h1 class="encabezado">Compañeros de Rama</h1>
+            <p class="description">Desde aquí puedes conocer a los demás miembros de tu rama para reconocerlos más fácilmente y fortalecer el trabajo en equipo dentro del grupo.</p>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <div class="contenedor">
+            <!-- Tarjeta 1 -->
+            <div class="card" th:each="miembro: ${miembros}">
+                <div class="card-header">
+                    <div class="avatar">
+                        <img th:src="@{/img/joven.svg}" alt="Avatar" class="avatar-icon" style="background-color: #818181">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h2 class="name" th:text="${miembro.getNombreCompleto()}"></h2>
+                    <p class="role" th:text="${miembro.getCargo()}"></p>
+                    <div class="divider"></div>
+                    <div class="badges">
+                        <div class="badge">
+                            <img th:src="@{img/insigYell.svg}" alt="Insignia">
+                        </div>
+                        <div class="badge">
+                            <img th:src="@{img/insigGree.svg}" alt="Insignia">
+                        </div>
+                        <div class="badge">
+                            <img th:src="@{img/insigBlu.svg}" alt="Insignia">
+                        </div>
+                        <div class="badge">
+                            <img th:src="@{img/insigRed.svg}" alt="Insignia">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:include="admin/template_admin.html::footer"></div>
+</main>
+
+<!-- Footer -->
+
+<!-- JavaScript para la funcionalidad -->
+<script>
+
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const contentAreas = document.querySelectorAll('.content-area');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons and content areas
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                contentAreas.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                // Show corresponding content area
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    });
+
+
+
+
+    // Funciones para los modales
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- FUNCIONES COMPARTIDAS ---
+
+        // Función genérica para mostrar un modal
+        function showModalById(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Evita el scroll del body
+        }
+
+        // Función genérica para ocultar un modal
+        function hideModalById(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restaura el scroll del body
+        }
+
+        // --- MODAL CREAR RETO ---
+
+        // Botón "Nuevo Reto" - Abre el modal de crear reto
+        const createRetoBtn = document.querySelector('.create-reto-btn');
+        if (createRetoBtn) {
+            createRetoBtn.addEventListener('click', function() {
+                showModalById('modal-crearReto');
+            });
+        }
+
+        // Configuración para cerrar el modal crear reto
+        const crearRetoModal = document.getElementById('modal-crearReto');
+        if (crearRetoModal) {
+            // Botón cancelar del modal crear reto
+            const cancelButtonCrear = crearRetoModal.querySelector('.cancel-button');
+            if (cancelButtonCrear) {
+                cancelButtonCrear.addEventListener('click', function() {
+                    hideModalById('modal-crearReto');
+                });
+            }
+
+            // Botón guardar del modal crear reto
+            const saveButtonCrear = crearRetoModal.querySelector('.save-button');
+            if (saveButtonCrear) {
+                saveButtonCrear.addEventListener('click', function() {
+                    hideModalById('modal-crearReto');
+                    // Aquí puedes agregar la lógica para guardar los datos del reto
+                });
+            }
+
+            // Cerrar al hacer click en el overlay
+            const overlayCrear = crearRetoModal.querySelector('.modal-overlay');
+            if (overlayCrear) {
+                overlayCrear.addEventListener('click', function() {
+                    hideModalById('modal-crearReto');
+                });
+            }
+
+            // Evitar cierre al hacer click en el contenido
+            const contentCrear = crearRetoModal.querySelector('.modal-content');
+            if (contentCrear) {
+                contentCrear.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        }
+
+        // --- MODAL MODIFICAR RETO ---
+
+        // Configuración para abrir el modal modificar reto desde opciones de "Asistencia"
+        const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+        dropdownMenus.forEach(menu => {
+            const asistenciaItem = menu.querySelector('.dropdown-item:nth-child(1)');
+            if (asistenciaItem) {
+                asistenciaItem.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Evita que el click se propague
+                    showModalById('modal-modificarReto');
+
+                    // Cerrar el dropdown al abrir el modal
+                    const activeDropdowns = document.querySelectorAll('.dropdown-menu.active');
+                    activeDropdowns.forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+
+                    const activeButtons = document.querySelectorAll('.expand-btn.active');
+                    activeButtons.forEach(button => {
+                        button.classList.remove('active');
+                    });
+                });
+            }
+        });
+
+        // Configuración para cerrar el modal modificar reto
+        const modificarRetoModal = document.getElementById('modal-modificarReto');
+        if (modificarRetoModal) {
+            // Botón cancelar del modal modificar reto
+            const cancelButtonModificar = modificarRetoModal.querySelector('.cancel-button');
+            if (cancelButtonModificar) {
+                cancelButtonModificar.addEventListener('click', function() {
+                    hideModalById('modal-modificarReto');
+                });
+            }
+
+            // Botón guardar del modal modificar reto
+            const saveButtonModificar = modificarRetoModal.querySelector('.save-button');
+            if (saveButtonModificar) {
+                saveButtonModificar.addEventListener('click', function() {
+                    hideModalById('modal-modificarReto');
+                    // Aquí puedes agregar la lógica para guardar los datos modificados
+                });
+            }
+
+            // Cerrar al hacer click en el overlay
+            const overlayModificar = modificarRetoModal.querySelector('.modal-overlay');
+            if (overlayModificar) {
+                overlayModificar.addEventListener('click', function() {
+                    hideModalById('modal-modificarReto');
+                });
+            }
+
+            // Evitar cierre al hacer click en el contenido
+            const contentModificar = modificarRetoModal.querySelector('.modal-content');
+            if (contentModificar) {
+                contentModificar.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        }
+    });
+
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Manejar clic en los botones de expansión
+        document.querySelectorAll('.expand-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                // Cerrar otros dropdowns abiertos
+                document.querySelectorAll('.expand-btn').forEach(btn => {
+                    if (btn !== this) {
+                        btn.classList.remove('active');
+                        const menu = btn.nextElementSibling;
+                        if (menu && menu.classList.contains('dropdown-menu')) {
+                            menu.classList.remove('active');
+                        }
+                        // Remover clase menu-active del contenedor
+                        const container = btn.closest('.dropdown-container');
+                        if (container) {
+                            container.classList.remove('menu-active');
+                        }
+                    }
+                });
+
+                // Toggle el dropdown actual
+                this.classList.toggle('active');
+                const dropdownMenu = this.nextElementSibling;
+                if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                    dropdownMenu.classList.toggle('active');
+
+                    // Añadir o remover clase menu-active al contenedor
+                    const container = this.closest('.dropdown-container');
+                    if (container) {
+                        if (dropdownMenu.classList.contains('active')) {
+                            container.classList.add('menu-active');
+                        } else {
+                            container.classList.remove('menu-active');
+                        }
+                    }
+                }
+            });
+        });
+
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.expand-btn.active').forEach(btn => {
+                btn.classList.remove('active');
+                const menu = btn.nextElementSibling;
+                if (menu && menu.classList.contains('dropdown-menu')) {
+                    menu.classList.remove('active');
+                }
+                // Remover clase menu-active del contenedor
+                const container = btn.closest('.dropdown-container');
+                if (container) {
+                    container.classList.remove('menu-active');
+                }
+            });
+        });
+
+        // Manejar clic en las opciones del dropdown
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                // Marcar la opción seleccionada
+                const parentMenu = this.closest('.dropdown-menu');
+                parentMenu.querySelectorAll('.dropdown-item').forEach(menuItem => {
+                    menuItem.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // Aquí puedes añadir la lógica para cada opción
+                const action = this.querySelector('span').textContent;
+                console.log(`Acción seleccionada: ${action}`);
+
+                // Cerrar el dropdown después de seleccionar
+                const expandButton = parentMenu.previousElementSibling;
+                if (expandButton && expandButton.classList.contains('expand-btn')) {
+                    expandButton.classList.remove('active');
+                    parentMenu.classList.remove('active');
+
+                    // Remover clase menu-active del contenedor
+                    const container = expandButton.closest('.dropdown-container');
+                    if (container) {
+                        container.classList.remove('menu-active');
+                    }
+                }
+            });
+        });
+    });
+
+    // Script para el menú de perfil
+    document.querySelector('.perfil-flecha').addEventListener('click', function() {
+        const perfilMenu = document.getElementById('perfilMenu');
+        perfilMenu.classList.toggle('show-menu');
+    });
+
+    // Cerrar el menú al hacer clic fuera de él
+    document.addEventListener('click', function(event) {
+        const perfilMenu = document.getElementById('perfilMenu');
+        const perfilFlecha = document.querySelector('.perfil-flecha');
+
+        // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+        if (!perfilMenu.contains(event.target) && !perfilFlecha.contains(event.target)) {
+            perfilMenu.classList.remove('show-menu');
+        }
+    });
+
+    // Script para los menús desplegables de navegación
+    document.querySelectorAll('.main-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+            event.stopPropagation();
+
+            const parent = button.parentElement;
+            const wasActive = parent.classList.contains('active');
+
+            // Cerrar todos los menús activos
+            document.querySelectorAll('.menu-item.active').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Si no estaba activo, activarlo
+            if (!wasActive) {
+                parent.classList.add('active');
+            }
+        });
+    });
+
+    // Script para toggle del sidebar en móviles
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const hamburger = document.getElementById('hamburger');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('open');
+        hamburger.classList.toggle('open');
+        overlay.classList.toggle('active');
+
+        // Mover el botón también cuando el sidebar está abierto
+        sidebarToggle.classList.toggle('moved');
+    });
+
+    // Cerrar sidebar al hacer clic en el overlay
+    overlay.addEventListener('click', function() {
+        sidebar.classList.remove('open');
+        hamburger.classList.remove('open');
+        overlay.classList.remove('active');
+        sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+    });
+
+    // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+    document.querySelectorAll('.nav-link').forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                hamburger.classList.remove('open');
+                overlay.classList.remove('active');
+                sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+            }
+        });
+    });
+
+    // Ajustar al cambiar el tamaño de la ventana
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('open');
+            hamburger.classList.remove('open');
+            overlay.classList.remove('active');
+            sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+        }
+    });
+
+</script>
+</body>
+</html>

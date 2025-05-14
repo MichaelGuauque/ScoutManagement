@@ -58,4 +58,8 @@ public class Persona {
     @OneToOne()
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
     private UserEntity userEntity;
+
+    public String getNombreCompleto(){
+        return this.primerNombre + " " +  this.segundoNombre + " " + this.primerApellido + " " + this.segundoApellido;
+    }
 }
