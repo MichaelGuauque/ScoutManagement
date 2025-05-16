@@ -38,7 +38,7 @@ public class PersonaController {
                                  HttpServletRequest request,
                                  @RequestParam(defaultValue = "activos") String tab) {
         Object rol = session.getAttribute("rol");
-        String path = request.getRequestURI(); //
+        String path = request.getRequestURI();
 
         if (rol == null) {
             return VISTA_LOGIN;
@@ -51,7 +51,7 @@ public class PersonaController {
 
                 session.setAttribute("miembro", "jefe");
                 if (Boolean.TRUE.equals(cancelado)) {
-                    model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
+                    model.addAttribute(EXCEPTION_MESSAGE, ACCION_CANCELADA);
                     model.addAttribute("type", EXCEPTION_INFO);
                 }
                 List<Persona> jefes = personaService.findJefes();
@@ -63,7 +63,7 @@ public class PersonaController {
             } else {
                 session.setAttribute("miembro", "miembro");
                 if (Boolean.TRUE.equals(cancelado)) {
-                    model.addAttribute(EXCEPTION_MESSAGE, "Acción cancelada.");
+                    model.addAttribute(EXCEPTION_MESSAGE, ACCION_CANCELADA);
                     model.addAttribute("type", EXCEPTION_INFO);
 
                 }
