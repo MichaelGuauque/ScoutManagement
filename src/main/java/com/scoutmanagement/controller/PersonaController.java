@@ -147,6 +147,6 @@ public class PersonaController {
     }
     private String redireccionSegunTipo(HttpSession session) {
         String tipoMiembro = (String) session.getAttribute("miembro");
-        return "jefe".equals(tipoMiembro) ? "redirect:/miembros/jefes" : VISTA_MIEMBROS;
+        return "jefe".equals(tipoMiembro) ? VISTA_JEFES : VISTA_MIEMBROS;
     }
 }

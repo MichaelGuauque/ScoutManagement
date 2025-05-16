@@ -15,6 +15,7 @@ public class AppConstants {
     public static final String PERSONA = "persona";
     public static final String ETAPAS = "etapas";
     public static final String PROGRESOJSON = "progresoJson";
+    public static final String VISTA_JEFES="redirect:/miembros/jefes";
 
     private AppConstants() {
     }
