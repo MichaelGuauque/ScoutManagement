@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.implementation;
 
+import com.scoutmanagement.controller.PersonaController;
 import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
@@ -14,6 +15,7 @@ import org.mockito.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +33,9 @@ public class PersonaServiceTest {
     @Mock
     private RoleRepository roleRepository;
 
+
+    private PersonaController personaController;
+
     @Mock
     private HttpSession httpSession;
 
@@ -43,6 +48,7 @@ public class PersonaServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        personaController = new PersonaController();
     }
 
     @Test
@@ -483,5 +489,40 @@ public class PersonaServiceTest {
 
         // Assert
         assertEquals("Juan Carlos Pérez Gómez", nombreCompleto);
+    }
+    @Test
+    void testRedireccionSegunTipo_devuelveVistaJefes() throws Exception {
+        when(httpSession.getAttribute("miembro")).thenReturn("jefe");
+
+        Method metodo = PersonaController.class.getDeclaredMethod("redireccionSegunTipo", HttpSession.class);
+        metodo.setAccessible(true);
+
+        String resultado = (String) metodo.invoke(personaController, httpSession);
+
+        assertEquals("redirect:/miembros/jefes", resultado);
+    }
+
+    @Test
+    void testRedireccionSegunTipo_devuelveVistaMiembros_siNoEsJefe() throws Exception {
+        when(httpSession.getAttribute("miembro")).thenReturn("miembro");
+
+        Method metodo = PersonaController.class.getDeclaredMethod("redireccionSegunTipo", HttpSession.class);
+        metodo.setAccessible(true);
+
+        String resultado = (String) metodo.invoke(personaController, httpSession);
+
+        assertEquals("redirect:/miembros", resultado);
+    }
+
+    @Test
+    void testRedireccionSegunTipo_devuelveVistaMiembros_siEsNull() throws Exception {
+        when(httpSession.getAttribute("miembro")).thenReturn(null);
+
+        Method metodo = PersonaController.class.getDeclaredMethod("redireccionSegunTipo", HttpSession.class);
+        metodo.setAccessible(true);
+
+        String resultado = (String) metodo.invoke(personaController, httpSession);
+
+        assertEquals("redirect:/miembros", resultado);
     }
 }

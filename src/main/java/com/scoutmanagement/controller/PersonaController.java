@@ -38,7 +38,7 @@ public class PersonaController {
                                  HttpServletRequest request,
                                  @RequestParam(defaultValue = "activos") String tab) {
         Object rol = session.getAttribute("rol");
-        String path = request.getRequestURI(); //
+        String path = request.getRequestURI();
 
         if (rol == null) {
             return VISTA_LOGIN;
@@ -51,7 +51,7 @@ public class PersonaController {
 
                 session.setAttribute("miembro", "jefe");
                 if (Boolean.TRUE.equals(cancelado)) {
-                    model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
+                    model.addAttribute(EXCEPTION_MESSAGE, ACCION_CANCELADA);
                     model.addAttribute("type", EXCEPTION_INFO);
                 }
                 List<Persona> jefes = personaService.findJefes();
@@ -63,7 +63,7 @@ public class PersonaController {
             } else {
                 session.setAttribute("miembro", "miembro");
                 if (Boolean.TRUE.equals(cancelado)) {
-                    model.addAttribute(EXCEPTION_MESSAGE, "Registro cancelado.");
+                    model.addAttribute(EXCEPTION_MESSAGE, ACCION_CANCELADA);
                     model.addAttribute("type", EXCEPTION_INFO);
 
                 }
@@ -83,7 +83,8 @@ public class PersonaController {
 
     @GetMapping("/modificarMiembro/{id}")
     public String mostrarFormularioDeEdicion(@PathVariable Long id, Model model,
-                                             HttpSession session, RedirectAttributes redirectAttributes) {
+                                             HttpSession session, RedirectAttributes redirectAttributes,
+                                             @RequestParam(required = false) String origen) {
         try {
             Persona persona = personaService.findByUsuarioId(id)
                     .orElseThrow(() -> new EntityNotFoundException("Persona no encontrada"));
@@ -97,6 +98,9 @@ public class PersonaController {
 
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             prepararModeloDeModificacion(model, sesionDelJefe, persona, nombreRol);
+            if (origen != null) {
+                session.setAttribute("miembro", origen);
+            }
             return "user/modificarMiembro";
 
         } catch (EntityNotFoundException e) {
@@ -112,15 +116,15 @@ public class PersonaController {
     @PostMapping("/actualizarMiembro/{id}")
     public String actualizarPersona(@PathVariable Long id,
                                     @ModelAttribute PersonaActualizacionDTO personaActualizacionDTO,
-                                    RedirectAttributes redirectAttributes) {
+                                    RedirectAttributes redirectAttributes, HttpSession session) {
         try {
             personaService.actualizarPersona(id, personaActualizacionDTO);
-            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro actualizado con éxito");
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Usuario actualizado con éxito");
             redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
-            return VISTA_MIEMBROS;
+            return redireccionSegunTipo(session);
         } catch (EntityNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", "Persona no encontrada");
-            return "miembros/consultarMiembros";
+            return redireccionSegunTipo(session);
         } catch (DataIntegrityViolationException e) {
 
             redirectAttributes.addFlashAttribute("errorDocumento", true);
@@ -140,5 +144,9 @@ public class PersonaController {
         model.addAttribute("cargos", Cargo.values());
         model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
         model.addAttribute("personaModificada", personaModificada);
+    }
+    private String redireccionSegunTipo(HttpSession session) {
+        String tipoMiembro = (String) session.getAttribute("miembro");
+        return "jefe".equals(tipoMiembro) ? VISTA_JEFES : VISTA_MIEMBROS;
     }
 }
