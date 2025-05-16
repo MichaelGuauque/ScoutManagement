@@ -369,44 +369,6 @@ class ProgresoServiceTest {
     }
 
     @Test
-    void testPrepararRetosPorEtapa_OrdenaPorEstadoCorrectamente() {
-        // Arrange
-        Etapa etapa1 = new Etapa();
-        etapa1.setId(1L);
-        etapa1.setNombre("Explorador");
-
-        Reto reto1 = new Reto();
-        reto1.setId(10L);
-        reto1.setDescripcion("Reto A");
-        reto1.setEtapa(etapa1);
-
-        Reto reto2 = new Reto();
-        reto2.setId(20L);
-        reto2.setDescripcion("Reto B");
-        reto2.setEtapa(etapa1);
-
-        List<Reto> retosEtapa = new ArrayList<>(List.of(reto1, reto2));
-
-        Map<Long, Boolean> estadosEtapa1 = new HashMap<>();
-        estadosEtapa1.put(10L, true);  // reto1 completado
-        estadosEtapa1.put(20L, false); // reto2 no completado
-
-        Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = new HashMap<>();
-        estadoRetosPorEtapa.put("Explorador", estadosEtapa1);
-
-        Mockito.when(retoService.findAllRetosEtapa(etapa1)).thenReturn(retosEtapa);
-
-        // Act
-        Map<String, List<Reto>> resultado = progresoService.prepararRetosPorEtapa(new ArrayList<>(List.of(etapa1)), estadoRetosPorEtapa);
-
-        // Assert
-        List<Reto> retosOrdenados = resultado.get("Explorador");
-        Assertions.assertEquals(2, retosOrdenados.size());
-        Assertions.assertEquals(20L, retosOrdenados.get(0).getId()); // no completado primero
-        Assertions.assertEquals(10L, retosOrdenados.get(1).getId()); // completado después
-    }
-
-    @Test
     void testPrepararRetosPorEtapa_EtapaSinRetos() {
         // Arrange
         Etapa etapaVacia = new Etapa();

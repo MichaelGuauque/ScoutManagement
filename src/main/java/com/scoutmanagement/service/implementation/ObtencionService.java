@@ -8,6 +8,7 @@ import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -80,6 +81,18 @@ public class ObtencionService implements IObtencionService {
     @Override
     public Optional<Obtencion> findByPersona(Persona persona) {
         return obtencionRepository.findByPersona(persona);
+    }
+
+    @Override
+    public List<Obtencion> ultimasObtenciones(Persona persona) {
+        List<Obtencion> obtencionesByRama = new ArrayList<>();
+        List<Obtencion> obtenciones = obtencionRepository.findAllByPersona(persona);
+        for (Obtencion obtencion : obtenciones) {
+            if (obtencion.getEtapa().getRama().equals(persona.getRama())) {
+                obtencionesByRama.add(obtencion);
+            }
+        }
+        return obtencionesByRama;
     }
 
 }

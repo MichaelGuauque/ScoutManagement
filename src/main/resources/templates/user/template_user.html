@@ -8,7 +8,7 @@
             <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
             <div class="perfil-info">
                 <p class="nombre-perfil"
-                   th:text="${persona.primerNombre + ' ' + persona.segundoNombre + ' ' + persona.primerApellido}">Nombre
+                   th:text="${persona.getNombreCompleto()}">Nombre
                     por
                     defecto</p>
                 <p class="cargo-perfil"
@@ -72,7 +72,7 @@
                         </div>
                         <ul class="submenu">
                             <li class="nav-link">
-                                <a href="#">
+                                <a th:href="@{/miembro}">
                                     <img th:src="@{/img/usuario(buscar).svg}" alt="Consultar"
                                          class="submenu-icon">Compañeros de Rama
                                 </a>
@@ -90,52 +90,4 @@
             <span>Configuración de Cuenta</span>
         </div>
     </div>
-</div>
-
-<!--Footer-->
-<div th:fragment="footer">
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-top">
-                <div class="footer-logo">
-                    <img th:src="@{/img/logo605.png}" alt="Scouts Jaguares 605" class="logo-img">
-                </div>
-
-                <div class="footer-info">
-                    <div class="footer-title">
-                        <div class="dot"></div>
-                        <h2>Scouts Jaguares 605</h2>
-                    </div>
-                    <p class="footer-slogan">Listos para servir, listos para rugir.</p>
-
-                    <div class="footer-address">
-                        <img th:src="@{/img/ubicacion.svg}" alt="Ubicación" class="ubicacion-icon">
-                        <p class="footer-ubi">Palmira, Valle del Cauca – Barrio Las Delicias<br>
-                            Sede: Casa de la Juventud, Calle 30 #29-15</p>
-                    </div>
-                </div>
-
-                <div class="footer-social">
-                    <a href="#" class="social-icon">
-                        <img th:src="@{/img/facebook.svg}" alt="Facebook">
-                    </a>
-                    <a href="#" class="social-icon">
-                        <img th:src="@{/img/instagram.svg}" alt="Instagram">
-                    </a>
-                    <a href="#" class="social-icon">
-                        <img th:src="@{/img/tiktok.svg}" alt="TikTok">
-                    </a>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <nav class="footer-nav">
-                    <a href="#" class="footer-link">Inicio</a>
-                    <a href="#" class="footer-link">Política de Tratamiento de Datos</a>
-                    <a href="#" class="footer-link">Configuración</a>
-                </nav>
-                <p class="footer-copyright">© 2025 Todos los derechos reservados</p>
-            </div>
-        </div>
-    </footer>
 </div>

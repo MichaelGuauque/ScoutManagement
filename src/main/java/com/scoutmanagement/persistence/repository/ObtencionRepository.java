@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ObtencionRepository extends CrudRepository<Obtencion, Long> {
     List<Obtencion> findAllByPersona(Persona persona);
-
     Optional<Obtencion> findByPersona(Persona persona);
+    List<Obtencion> findAllByPersonaOrderByFechaDesc(Persona persona);
 }
