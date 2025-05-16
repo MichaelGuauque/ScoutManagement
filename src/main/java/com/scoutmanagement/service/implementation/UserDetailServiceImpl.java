@@ -145,4 +145,12 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
             throw new ServiceException("Contraseñas no coinciden " + e.getMessage());
         }
     }
+    public void desactivarUsuarioPorId(Long idUsuario) {
+        UserEntity usuario = findById(idUsuario)
+                .orElseThrow(() -> new ServiceException("Usuario no encontrado con ID: " + idUsuario));
+
+        usuario.setActivo(false);
+        save(usuario);
+    }
+
 }

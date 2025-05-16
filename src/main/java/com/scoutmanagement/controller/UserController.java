@@ -186,6 +186,22 @@ public class UserController {
         session.removeAttribute("rol");
         return VISTA_LOGIN;
     }
+    @PostMapping("/usuarios/desactivar")
+    public String desactivarUsuario(@RequestParam Long idUsuario,
+                                    @RequestParam(required = false) String origen,
+                                    RedirectAttributes redirectAttributes) {
+
+        userService.desactivarUsuarioPorId(idUsuario);
+        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Usuario deshabilitado.");
+        redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+
+        if ("jefes".equals(origen)) {
+            return VISTA_JEFES;
+        } else {
+
+            return VISTA_MIEMBROS;
+        }
+    }
 
     private void prepararVistaConErrores(RedirectAttributes redirectAttributes, String mensaje, String tipoError, boolean errorCampo, UserEntity user, PersonaRegistroDTO dto) {
         redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, mensaje);

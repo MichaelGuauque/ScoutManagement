@@ -360,4 +360,39 @@ class UserDetailServiceImplTest {
         boolean noExiste = userDetailService.existsByUsername(emailNoExistente);
         assertFalse(noExiste);
     }
+    @Test
+    void desactivarUsuarioPorId_CuandoUsuarioExiste_DeberiaPonerActivoFalse() {
+        // Arrange
+        Long id = 1L;
+        UserEntity usuario = new UserEntity();
+        usuario.setId(id);
+        usuario.setActivo(true);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(usuario));
+        when(userRepository.save(any(UserEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        userDetailService.desactivarUsuarioPorId(id);
+
+        // Assert
+        assertFalse(usuario.isActivo());
+        verify(userRepository).save(usuario);
+    }
+
+    @Test
+    void desactivarUsuarioPorId_CuandoUsuarioNoExiste_DeberiaLanzarExcepcion() {
+        // Arrange
+        Long id = 1L;
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            userDetailService.desactivarUsuarioPorId(id);
+        });
+
+        assertTrue(exception.getMessage().contains("Usuario no encontrado con ID"));
+        verify(userRepository, never()).save(any());
+    }
 }
+
+
