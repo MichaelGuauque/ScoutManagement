@@ -156,11 +156,21 @@
                                             </clipPath>
                                         </defs>
                                     </svg>
-                                    <form th:action="@{/usuarios/desactivar}" method="post" style="display:inline;">
+                                    <!-- Si el usuario está activo, muestra formulario para desactivar -->
+                                    <form th:if="${miembro.userEntity.activo}" th:action="@{/usuarios/desactivar}" method="post" style="display:inline;">
                                         <input type="hidden" name="idUsuario" th:value="${miembro.userEntity.id}" />
-                                        <input type="hidden" name="origen" value="miembros" />
+                                        <input type="hidden" name="origen" th:value="${origen}" />
                                         <button type="submit" style="all:unset; cursor:pointer; color:inherit; font:inherit;">
                                             <span>Deshabilitar</span>
+                                        </button>
+                                    </form>
+
+                                    <!-- Si el usuario está inactivo, muestra formulario para habilitar -->
+                                    <form th:unless="${miembro.userEntity.activo}" th:action="@{/usuarios/habilitar}" method="post" style="display:inline;">
+                                        <input type="hidden" name="idUsuario" th:value="${miembro.userEntity.id}" />
+                                        <input type="hidden" name="origen" th:value="${origen}" />
+                                        <button type="submit" style="all:unset; cursor:pointer; color:inherit; font:inherit;">
+                                            <span>Habilitar</span>
                                         </button>
                                     </form>
                                 </div>

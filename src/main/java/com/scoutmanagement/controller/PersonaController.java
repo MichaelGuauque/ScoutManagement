@@ -58,6 +58,7 @@ public class PersonaController {
                 List<Persona> jefesFiltrados = personaService.filtrarYOrdenarPorEstado(jefes, tab);
                 model.addAttribute("tab", tab);
                 model.addAttribute("jefes", jefesFiltrados);
+                model.addAttribute("origen", "jefes");
 
                 return "miembros/consultarJefes";
             } else {
@@ -73,6 +74,7 @@ public class PersonaController {
 
                 model.addAttribute("tab", tab);
                 model.addAttribute("miembros", miembrosFiltrados);
+                model.addAttribute("origen", "miembros");
                 return "miembros/consultarMiembros";
             }
 
@@ -104,7 +106,7 @@ public class PersonaController {
             return "user/modificarMiembro";
 
         } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute("EXCEPTION_MESSAGE", e.getMessage());
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
             redirectAttributes.addFlashAttribute("type", "error");
             return VISTA_MIEMBROS;
         } catch (IllegalStateException e) {

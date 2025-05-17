@@ -201,6 +201,24 @@ public class UserController {
 
             return VISTA_MIEMBROS;
         }
+
+    }
+
+    @PostMapping("/usuarios/habilitar")
+    public String habilitarUsuario(@RequestParam Long idUsuario,
+                                   @RequestParam(required = false) String origen,
+                                   RedirectAttributes redirectAttributes) {
+        userService.activarUsuarioPorId(idUsuario);
+        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Usuario habilitado.");
+        redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+
+        if ("jefes".equals(origen)) {
+            return VISTA_JEFES;
+        } else {
+
+            return VISTA_MIEMBROS;
+        }
+
     }
 
     private void prepararVistaConErrores(RedirectAttributes redirectAttributes, String mensaje, String tipoError, boolean errorCampo, UserEntity user, PersonaRegistroDTO dto) {

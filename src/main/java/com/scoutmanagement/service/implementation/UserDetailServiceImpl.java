@@ -153,4 +153,11 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
         save(usuario);
     }
 
+    public void activarUsuarioPorId(Long idUsuario) {
+        UserEntity  usuario= findById(idUsuario)
+                .orElseThrow(() -> new ServiceException("Usuario no encontrado con ID: " + idUsuario));
+        usuario.setActivo(true);
+        save(usuario);
+    }
+
 }

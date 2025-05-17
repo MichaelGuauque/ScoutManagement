@@ -20,4 +20,6 @@ public interface IUserEntity {
     boolean existsByUsername(String email);
 
     void desactivarUsuarioPorId(Long idUsuario);
+
+    void activarUsuarioPorId(Long idUsuario);
 }
