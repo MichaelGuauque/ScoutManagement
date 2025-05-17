@@ -16,10 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 @Controller
@@ -49,7 +47,7 @@ public class PersonaController {
             model.addAttribute("persona", sesionDelJefe);
             if (path.endsWith("/jefes")) {
 
-                session.setAttribute("miembro", "jefe");
+                session.setAttribute(PALABRA_MIEMBRO, "jefe");
                 if (Boolean.TRUE.equals(cancelado)) {
                     model.addAttribute(EXCEPTION_MESSAGE, ACCION_CANCELADA);
                     model.addAttribute("type", EXCEPTION_INFO);
@@ -62,7 +60,7 @@ public class PersonaController {
 
                 return "miembros/consultarJefes";
             } else {
-                session.setAttribute("miembro", "miembro");
+                session.setAttribute(PALABRA_MIEMBRO, PALABRA_MIEMBRO);
                 if (Boolean.TRUE.equals(cancelado)) {
                     model.addAttribute(EXCEPTION_MESSAGE, ACCION_CANCELADA);
                     model.addAttribute("type", EXCEPTION_INFO);
@@ -101,7 +99,7 @@ public class PersonaController {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             prepararModeloDeModificacion(model, sesionDelJefe, persona, nombreRol);
             if (origen != null) {
-                session.setAttribute("miembro", origen);
+                session.setAttribute(PALABRA_MIEMBRO, origen);
             }
             return "user/modificarMiembro";
 
@@ -148,7 +146,7 @@ public class PersonaController {
         model.addAttribute("personaModificada", personaModificada);
     }
     private String redireccionSegunTipo(HttpSession session) {
-        String tipoMiembro = (String) session.getAttribute("miembro");
+        String tipoMiembro = (String) session.getAttribute(PALABRA_MIEMBRO);
         return "jefe".equals(tipoMiembro) ? VISTA_JEFES : VISTA_MIEMBROS;
     }
 }
