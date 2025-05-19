@@ -18,4 +18,8 @@ public interface IUserEntity {
     Optional<UserEntity> findById(long id);
 
     boolean existsByUsername(String email);
+
+    void desactivarUsuarioPorId(Long idUsuario);
+
+    void activarUsuarioPorId(Long idUsuario);
 }
