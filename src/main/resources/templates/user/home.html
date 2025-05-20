@@ -6,6 +6,7 @@
     <title>Home Joven</title>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/style/styles.css}">
     <link rel="stylesheet" th:href="@{/style/homeUser.css}">
 
@@ -28,49 +29,216 @@
 
 <!-- Contenido principal -->
 <main>
-    <!-- Aquí va el contenido de la página -->
 
-    <!-- Aquí va el contenido de la página -->
     <div class="container">
-        <!-- Header Image -->
-        <div class="header-image">
-            <img th:src="@{/img/FotoScout.png}" class="foto-scout" alt="Foto Scout">
+
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+            <img th:src="@{/img/banner.jpg}" alt="Grupo Scout" class="hero-image">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <span class="badge">Bienvenido</span>
+                    <h1 class="hero-title">Tu Portal Scout</h1>
+                    <p class="hero-description">Revisa tu progreso, insignias y conecta con tus compañeros del grupo scout.</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Features Grid -->
-        <div class="features-grid">
-            <!-- Feature Box 1 -->
-            <div class="feature-box">
-                <h3 class="feature-title">Revisa tu Progreso</h3>
-                <p class="feature-description">Revisa tus últimos avances en las distintas etapas de tu rama.</p>
 
-                <div class="feature-icon">
-                    <div class="icon-circle">
-                        <img class="brujula" th:src="@{/img/brujula.svg}" alt="icono brujula">
+
+        <!-- Tarjetas de acción -->
+        <div class="grid grid-cols-2">
+            <!-- Tarjeta Mis Avances -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-wrapper">
+                        <div class="icon-container blue-bg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                        </div>
+                        <h2 class="card-title">Mis Avances</h2>
                     </div>
                 </div>
-
-                <div class="button-container">
-                    <button class="view-button">Ver Progresos →</button>
+                <div class="card-content">
+                    <p class="button-description">
+                        Revisa tu progreso personal y los últimos avances en tus rutas de aprendizaje.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <span class="text-muted">4 actualizaciones recientes</span>
+                    <a href="#" class="action-link blue-text">Ver Avances <svg class="arrow-svg" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="11"/><path d="M9 7l4 4-4 4" stroke="#3D8BFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
                 </div>
             </div>
 
-            <!-- Feature Box 3 -->
-            <div class="feature-box">
-                <h3 class="feature-title">Compañeros de Rama</h3>
-                <p class="feature-description">Revisa tus últimos avances en las distintas etapas de tu rama.</p>
-
-                <div class="feature-icon">
-                    <div class="icon-circle">
-                        <img class="personas" th:src="@{/img/personas.svg}" alt="icono personas">
+            <!-- Tarjeta Mis Compañeros -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon-wrapper">
+                        <div class="icon-container green-bg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <h2 class="card-title">Mis Compañeros</h2>
                     </div>
                 </div>
+                <div class="card-content">
+                    <p class="button-description">
+                        Conoce a los integrantes de tu rama y mantente conectado con tu grupo scout.
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <span class="text-muted">18 compañeros activos</span>
+                    <a href="#" class="action-link green-text">Ver Compañeros <svg class="arrow-svg" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="11"/><path d="M9 7l4 4-4 4" stroke="#34C759" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                </div>
+            </div>
+        </div>
 
-                <div class="button-container">
-                    <button class="view-button">Ver Miembros →</button>
+        <!-- Sección de insignias y progreso -->
+        <div class="grid grid-cols-2">
+            <!-- Tarjeta de Insignias -->
+            <div class="card">
+                <div class="card-header card-header-flex">
+                    <div class="icon-wrapper">
+                        <div class="icon-bg-small amber-bg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="amber-icon"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                        </div>
+                        <h2 class="card-title">Tus Insignias</h2>
+                    </div>
+                </div>
+                <div class="card-content-progress">
+                    <!-- Contenedor con fondo diferente -->
+                    <div class="badges-container">
+                        <!-- Contenedor con scroll horizontal personalizado -->
+                        <div class="badges-scroll-wrapper">
+                            <div class="badges-scroll custom-scrollbar" id="badgesScroll">
+                                <div class="badges-grid">
+                                    <div class="badge-item">
+
+                                        <img src="img/insigBlu.svg" alt="Insignia" class="badge-icon">
+                                        <span class="badge-name">Pata Tierna</span>
+                                    </div>
+                                    <div class="badge-item">
+                                        <img src="img/insigGree.svg" alt="Insignia" class="badge-icon">
+                                        <span class="badge-name">Saltador</span>
+                                    </div>
+                                    <div class="badge-item">
+                                        <img src="img/insigRed.svg" alt="Insignia" class="badge-icon">
+                                        <span class="badge-name">Rastreador</span>
+                                    </div>
+                                    <div class="badge-item">
+                                        <img src="img/insigYell.svg" alt="Insignia" class="badge-icon">
+                                        <span class="badge-name">Cazador</span>
+                                    </div>
+                                    <!-- Insignia adicional para demostrar el scroll -->
+                                    <div class="badge-item">
+                                        <div class="badge-icon">🧭</div>
+                                        <span class="badge-name">Orientación</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="badges-footer">
+                        <span class="text-muted">5 de 12 insignias obtenidas</span>
+                    </div>
                 </div>
             </div>
 
+            <!-- Tarjeta de Progreso en Etapas -->
+            <div class="card">
+                <div class="card-header card-header-flex">
+                    <div class="icon-wrapper">
+                        <div class="icon-bg-small purple-bg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="purple-icon">
+                                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                                <path d="M4 22h16"></path>
+                                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="card-title">Progreso en Etapas</h2>
+                    </div>
+                </div>
+                <div class="card-content-progress">
+                    <div class="progress-grid">
+                        <!-- Pata tierna -->
+                        <div class="progress-item" id="pata-tierna">
+                            <div class="progress-bar" style="width: 100%;"></div>
+                            <div class="progress-content">
+                                <h3 class="progress-title">Pata Tierna</h3>
+                                <div class="progress-bottom">
+                                    <div class="progress-percentage">
+                                        70<span class="progress-percentage-symbol">%</span>
+                                    </div>
+                                    <div class="progress-circle">
+                                        <svg viewBox="0 0 36 36">
+                                            <path class="progress-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                            <path class="progress-circle-value progress-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="10, 100" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Saltador -->
+                        <div class="progress-item" id="saltador">
+                            <div class="progress-bar" style="width: 40%;"></div>
+                            <div class="progress-content">
+                                <h3 class="progress-title">Saltador</h3>
+                                <div class="progress-bottom">
+                                    <div class="progress-percentage">
+                                        40<span class="progress-percentage-symbol">%</span>
+                                    </div>
+                                    <div class="progress-circle">
+                                        <svg viewBox="0 0 36 36">
+                                            <path class="progress-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                            <path class="progress-circle-value progress-medium" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="40, 100" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- rastreador -->
+                        <div class="progress-item" id="rastreador">
+                            <div class="progress-bar" style="width: 90%;"></div>
+                            <div class="progress-content">
+                                <h3 class="progress-title">Rastreador</h3>
+                                <div class="progress-bottom">
+                                    <div class="progress-percentage">
+                                        90<span class="progress-percentage-symbol">%</span>
+                                    </div>
+                                    <div class="progress-circle">
+                                        <svg viewBox="0 0 36 36">
+                                            <path class="progress-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                            <path class="progress-circle-value progress-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="90, 100" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- tigreso -->
+                        <div class="progress-item" id="cazador">
+                            <div class="progress-bar" style="width: 55%;"></div>
+                            <div class="progress-content">
+                                <h3 class="progress-title">Cazador</h3>
+                                <div class="progress-bottom">
+                                    <div class="progress-percentage">
+                                        55<span class="progress-percentage-symbol">%</span>
+                                    </div>
+                                    <div class="progress-circle">
+                                        <svg viewBox="0 0 36 36">
+                                            <path class="progress-circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                            <path class="progress-circle-value progress-medium" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" stroke-dasharray="55, 100" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -84,6 +252,57 @@
 
 <!-- JavaScript para la funcionalidad -->
 <script>
+
+    function setProgress(elementId, value) {
+        // Obtener el elemento principal
+        const progressItem = document.getElementById(elementId);
+        if (!progressItem) return;
+
+        // Limitar el valor entre 0 y 100
+        value = Math.max(0, Math.min(100, value));
+
+        // Determinar la clase de color según el valor
+        let colorClass;
+        if (value < 50) {
+            colorClass = 'progress-low';
+        } else if (value < 70) {
+            colorClass = 'progress-medium';
+        } else {
+            colorClass = 'progress-high';
+        }
+
+        // Actualizar el texto del porcentaje
+        const percentageElement = progressItem.querySelector('.progress-percentage');
+        if (percentageElement) {
+            percentageElement.innerHTML = `${value}<span class="progress-percentage-symbol">%</span>`;
+            percentageElement.classList.remove('progress-low', 'progress-medium', 'progress-high');
+            percentageElement.classList.add(colorClass);
+        }
+
+        // Actualizar la barra de progreso
+        const bar = progressItem.querySelector('.progress-bar');
+        if (bar) {
+            bar.style.width = value + '%';
+            bar.classList.remove('progress-low', 'progress-medium', 'progress-high');
+            bar.classList.add(colorClass);
+        }
+
+        // Actualizar el círculo de progreso
+        const circleValue = progressItem.querySelector('.progress-circle-value');
+        if (circleValue) {
+            circleValue.setAttribute('stroke-dasharray', `${value}, 100`);
+            circleValue.classList.remove('progress-low', 'progress-medium', 'progress-high');
+            circleValue.classList.add(colorClass);
+        }
+    }
+
+    // Ejemplo de uso para cada etapa:
+    setProgress('pata-tierna', 10);
+    setProgress('saltador', 40);
+    setProgress('rastreador', 90);
+    setProgress('cazador', 10);
+
+
     const tabs = document.querySelectorAll(".tab");
 
     tabs.forEach(tab => {
@@ -307,36 +526,7 @@
         }
     });
 
-</script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const tabs = document.querySelectorAll('.tab');
-        const actividadesProximas = document.querySelector('.actividades-proximas');
-        const actividadesPasadas = document.querySelector('.actividades-pasadas');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function () {
-                const tabSeleccionada = tab.getAttribute('data-tab');
-
-                // Mostrar u ocultar actividades según la pestaña seleccionada
-                if (tabSeleccionada === 'proximas') {
-                    actividadesProximas.style.display = 'block';
-                    actividadesPasadas.style.display = 'none';
-                } else if (tabSeleccionada === 'pasadas') {
-                    actividadesProximas.style.display = 'none';
-                    actividadesPasadas.style.display = 'block';
-                }
-
-                // Marcar la pestaña activa
-                tabs.forEach(button => button.classList.remove('active'));
-                tab.classList.add('active');
-            });
-        });
-    });
-</script>
-
-<script>
     // Espera a que el documento cargue
     document.addEventListener("DOMContentLoaded", function () {
         // Captura todos los enlaces de paginación

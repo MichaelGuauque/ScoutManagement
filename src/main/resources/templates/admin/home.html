@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Home Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/style/styles.css}">
     <link rel="stylesheet" th:href="@{/style/homeAdmin.css}">
 
@@ -28,137 +29,192 @@
 
 <!-- Contenido principal -->
 <main>
-    <!-- Aquí va el contenido de la página -->
 
-    <!-- Aquí va el contenido de la página -->
     <div class="container">
-        <!-- Header Image -->
-        <div class="header-image">
-            <img th:src="@{/img/FotoScout.png}" class="foto-scout" alt="Foto Scout">
+
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+            <img th:src="@{/img/banner.jpg}" alt="Grupo Scout" class="hero-image">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <span class="badge">Bienvenido</span>
+                    <h1 class="hero-title">Portal de Gestión Scout</h1>
+                    <p class="hero-description">Administra actividades, progresión y miembros de tu grupo scout.</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Features Grid -->
-        <div class="features-grid">
-            <!-- Feature Box 1 -->
-            <div class="feature-box">
-                <h3 class="feature-title">Gestiona la Progresión</h3>
-                <p class="feature-description">Revisa y modifica los últimos avances de los miembros en sus rutas.</p>
 
-                <div class="feature-icon">
-                    <div class="icon-circle">
-                        <img class="brujula" th:src="@{/img/brujula.svg}" alt="icono brujula">
+        <!-- Dashboard Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div>
+                        <p class="stat-title">Miembros</p>
+                        <p class="stat-value">24</p>
+                        <p class="stat-trend plus">+2 este mes</p>
                     </div>
-                </div>
-
-                <div class="button-container">
-                    <button class="view-button">Ver Progresos →</button>
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
                 </div>
             </div>
 
-            <!-- Feature Box 2 -->
-            <div class="feature-box">
-                <h3 class="feature-title">Gestiona los Retos</h3>
-                <p class="feature-description">Crea, consulta y edita los retos que guían el progreso del grupo.</p>
-
-                <div class="feature-icon">
-                    <div class="icon-circle">
-                        <img class="lista" th:src="@{/img/libreta.svg}" alt="icono lista">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div>
+                        <p class="stat-title">Jefes</p>
+                        <p class="stat-value">48</p>
+                        <p class="stat-trend plus">+5 este mes</p>
                     </div>
-                </div>
-
-                <div class="button-container">
-                    <button class="view-button">Ver Retos →</button>
+                    <div class="stat-icon blue">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
                 </div>
             </div>
 
-            <!-- Feature Box 3 -->
-            <div class="feature-box">
-                <h3 class="feature-title">Gestiona los Miembros</h3>
-                <p class="feature-description">Consulta y registra los integrantes del grupo.</p>
-
-                <div class="feature-icon">
-                    <div class="icon-circle">
-                        <img class="personas" th:src="@{/img/personas.svg}" alt="icono personas">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div>
+                        <p class="stat-title">Actividades</p>
+                        <p class="stat-value">12</p>
+                        <p class="stat-trend">4 Esta semana</p>
                     </div>
-                </div>
-
-                <div class="button-container">
-                    <button class="view-button">Ver Miembros →</button>
+                    <div class="stat-icon green">
+                        <i class="fas fa-calendar"></i>
+                    </div>
                 </div>
             </div>
 
-            <!-- Feature Box 4 -->
-            <div class="feature-box">
-                <h3 class="feature-title">Gestiona los Jefes</h3>
-                <p class="feature-description">Consulta los jefes y líderes del grupo</p>
-
-                <div class="feature-icon">
-                    <div class="icon-circle">
-                        <img class="personas" th:src="@{/img/personasstar.svg}" alt="icono personas">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div>
+                        <p class="stat-title">Progreso</p>
+                        <p class="stat-value">46%</p>
+                        <p class="stat-trend">Estado del Grupo</p>
+                    </div>
+                    <div class="stat-icon amber">
+                        <i class="fas fa-compass"></i>
                     </div>
                 </div>
-
-                <div class="button-container">
-                    <button class="view-button">Ver Jefes →</button>
-                </div>
             </div>
+        </div>
 
-            <!-- Activities Section -->
-            <div class="activities-section">
-                <div class="activities-header">
-                    <h3>Actividades Programadas</h3>
-                    <span>Más ›</span>
-                </div>
-
-                <div class="activities-list">
-                    <!-- Activity 1 -->
-                    <div class="activity-item">
-                        <div class="date-container">
-                            <div>
-                                <div class="date-number">12</div>
-                                <div class="date-month">Abril</div>
+        <div class="content-flex">
+            <div class="left-panel">
+                <div class="button-container">
+                    <button class="management-button purple">
+                        <div class="button-horizontal">
+                            <div class="icon-container purple-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
                             </div>
-                            <div class="activity-details">
-                                <!-- Detalles de la actividad -->
+                            <h3 class="button-title">Gestiona la Progresión</h3>
+                        </div>
+                        <p class="button-description">Revisa y modifica los últimos avances de los miembros en sus rutas.</p>
+                        <div class="button-footer">
+                            <span class="count-text">12 actualizaciones recientes</span>
+                            <a href="#" class="action-link purple-text">Ver Progreso <svg class="arrow-svg" width="20" height="20" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="11"/><path d="M9 7l4 4-4 4" stroke="#A259F7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                        </div>
+                    </button>
+                    <button class="management-button blue">
+                        <div class="button-horizontal">
+                            <div class="icon-container blue-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
                             </div>
+                            <h3 class="button-title">Gestiona los Retos</h3>
+                        </div>
+                        <p class="button-description">Crea, consulta y edita los retos que guían el progreso del grupo.</p>
+                        <div class="button-footer">
+                            <span class="count-text">8 retos activos</span>
+                            <a href="#" class="action-link blue-text">Ver Retos <svg class="arrow-svg" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="11"/><path d="M9 7l4 4-4 4" stroke="#3D8BFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                        </div>
+                    </button>
+                    <button class="management-button green">
+                        <div class="button-horizontal">
+                            <div class="icon-container green-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            </div>
+                            <h3 class="button-title">Gestiona los Miembros</h3>
+                        </div>
+                        <p class="button-description">Consulta y registra los integrantes del grupo.</p>
+                        <div class="button-footer">
+                            <span class="count-text">24 miembros activos</span>
+                            <a href="#" class="action-link green-text">Ver Miembros <svg class="arrow-svg" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="11"/><path d="M9 7l4 4-4 4" stroke="#34C759" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                        </div>
+                    </button>
+                    <button class="management-button amber">
+                        <div class="button-horizontal">
+                            <div class="icon-container amber-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                            </div>
+                            <h3 class="button-title">Gestiona los Jefes</h3>
+                        </div>
+                        <p class="button-description">Consulta los jefes y líderes del grupo.</p>
+                        <div class="button-footer">
+                            <span class="count-text">6 líderes activos</span>
+                            <a href="#" class="action-link amber-text">Ver Jefes <svg class="arrow-svg" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="11"/><path d="M9 7l4 4-4 4" stroke="#FFC700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="right-panel">
+                <div class="containerActivity">
+                    <div class="headerActivity">
+                        <div class="title-section">
+                            <h1>Actividades Programadas</h1>
+                            <p class="current-date" id="currentDate"></p>
+                        </div>
+                        <div class="more-button">
+                            <a href="#">Mas
+                                <img th:src="@{/img/arrowMas.svg}" class="arrowMas">
+                            </a>
                         </div>
                     </div>
-
-                    <!-- Activity 2 -->
-                    <div class="activity-item">
-                        <div class="date-container">
-                            <div>
-                                <div class="date-number">18</div>
-                                <div class="date-month">Abril</div>
+                    <div class="activities">
+                        <div class="activity-wrapper">
+                            <div class="fecha">
+                                <div class="dia">12</div>
+                                <div class="mes">Abril</div>
                             </div>
-                            <div class="activity-details">
-                                <!-- Detalles de la actividad -->
+                            <div class="activity-item">
+                                <div class="striped-background"></div>
+                                <div class="activity-item-content">
+                                    <div class="activity-details">
+                                        <h2>Caminata al Cerro del Águila</h2>
+                                        <p>Punto de encuentro - Parque El Mirador</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Activity 3 -->
-                    <div class="activity-item">
-                        <div class="date-container">
-                            <div>
-                                <div class="date-number">26</div>
-                                <div class="date-month">Abril</div>
-                            </div>
-                            <div class="activity-details">
-                                <!-- Detalles de la actividad -->
+                            <div class="progress-line-container">
+                                <div class="progress-line"></div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Activity 4 -->
-                    <div class="activity-item">
-                        <div class="date-container">
-                            <div>
-                                <div class="date-number">12</div>
-                                <div class="date-month">Mayo</div>
+                        <div class="activity-wrapper">
+                            <div class="fecha">
+                                <div class="dia">18</div>
+                                <div class="mes">Abril</div>
                             </div>
-                            <div class="activity-details">
-                                <!-- Detalles de la actividad -->
+                            <div class="activity-item">
+                                <div class="activity-item-content">
+                                    <div class="activity-details">
+                                        <h2>Primeros Auxilios Básicos</h2>
+                                        <p>Cruz Roja Local, Aula Comunitaria</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="activity-wrapper">
+                            <div class="fecha">
+                                <div class="dia">12</div>
+                                <div class="mes">Mayo</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-item-content">
+                                    <div class="activity-details">
+                                        <h2>Caminata al Cerro del Águila</h2>
+                                        <p>Punto de encuentro - Parque El Mirador</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -427,9 +483,20 @@
             });
         });
     });
-</script>
 
-<script>
+    // Mostrar la fecha actual en formato: Fecha Actual - [Mes] [día], [año]
+    function mostrarFechaActual() {
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const hoy = new Date();
+        const dia = hoy.getDate();
+        const mes = meses[hoy.getMonth()];
+        const anio = hoy.getFullYear();
+        const fechaFormateada = `Fecha Actual - ${mes} ${dia}, ${anio}`;
+        const fechaElemento = document.getElementById('currentDate');
+        if (fechaElemento) fechaElemento.textContent = fechaFormateada;
+    }
+    mostrarFechaActual();
+
     // Espera a que el documento cargue
     document.addEventListener("DOMContentLoaded", function () {
         // Captura todos los enlaces de paginación
