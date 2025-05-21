@@ -4,37 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
     <link rel="stylesheet" th:href="@{/style/login.css}">
     <link rel="stylesheet" th:href="@{/style/notification.css}">
+
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
     <script th:src="@{/js/notification.js}"></script>
 </head>
 <body>
-<div class="contenedor__logo">
-    <img class="logo" th:src="@{/img/Logo605.png}" alt="Logo Jaguares 605">
-</div>
-<div class="contenedor__formulario">
-    <div class="contenedor__formulario__head">
-        <img th:src="@{/img/Frame.png}" alt="icono cuadrados">
-        <h1>¡Bienvenido!</h1>
-        <p class="text-inicia">Inicia sesión con tu cuenta</p>
-    </div>
-    <form th:action="@{/acceder}" method="post">
-        <div th:if="${error}" class="error-message">
-            <p class="text-error" th:text="${error}"></p>
+<div class="container">
+    <div class="login-section">
+        <div class="login-container">
+            <div class="manager-logo">
+                <img th:src="@{/img/logoManager.svg}" alt="Perfil" class="Logo-Scouts">
+            </div>
+            <div class="login-header">
+                <h1>¡Bienvenido!</h1>
+                <p>Inicia sesión en tu cuenta</p>
+            </div>
+            <div class="divider"></div>
+            <form th:action="@{/acceder}" method="post" id="login-form">
+
+                <div class="form-group" style="margin-bottom: 15px">
+                    <label for="email">Correo Electrónico</label>
+                    <div class="input-container">
+                        <img th:src="@{/img/correoIcon.svg}" alt="correo" class="input-icon">
+                        <input type="email" id="email" name="username" placeholder="Ingresa aquí tu correo..." required>
+                    </div>
+                    <!-- Mensaje de error personalizado irá aquí -->
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="input-container">
+                        <img src="img/lockIcon.svg" alt="contraseña" class="input-icon-password">
+                        <input type="password" name="password" id="password" placeholder="Ingresa aquí tu contraseña..." required minlength="4" maxlength="15">
+                        <div class="password-toggle-container">
+                                <span id="togglePassword" style="position: absolute; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                                <i id="eyeIcon" class="hgi hgi-stroke hgi-view"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Mensaje de error personalizado irá aquí -->
+                    <div class="password-recovery">
+                        <span class="forgot-password">¿Olvidaste tu Contraseña?</span>
+                    </div>
+                </div>
+                <button type="submit" class="login-button">Iniciar Sesión</button>
+
+            </form>
         </div>
-        <label>Correo Electrónico</label>
-        <input class="input" type="email" name="username" required>
-        <label>Contraseña</label>
-        <input class="input" type="password" name="password" required minlength="4" maxlength="15">
-        <a>¿Olvidaste tu contraseña?</a>
-        <button class="boton-ingresar" type="submit">Inicia Sesión</button>
-    </form>
+    </div>
+    <div class="logo-section">
+        <div class="logo-section-intern">
+            <div class="logo-container">
+                <img src="img/logo605.svg" alt="logo Scouts 605" class="logo-img">
+            </div>
+        </div>
+    </div>
 </div>
 <div id="notifications"></div>
 <script th:if="${message != null}">
     window.onload = function () {
         showSimpleNotification("[[${message}]]", "[[${type}]]");
     }
+</script>
+<script src="custom-validation.js"></script>
+<script>
+
+    // Mostrar/ocultar contraseña con icono hugeIcons
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const eyeIcon = document.getElementById('eyeIcon');
+    let isPasswordVisible = false;
+    togglePassword.addEventListener('click', function() {
+        isPasswordVisible = !isPasswordVisible;
+        passwordInput.type = isPasswordVisible ? 'text' : 'password';
+        // Cambia la clase del icono para mostrar abierto/cerrado si tienes ambos en hugeIcons
+        if (isPasswordVisible) {
+            eyeIcon.classList.remove('hgi-view');
+            eyeIcon.classList.add('hgi-view-off'); // Usa la clase correspondiente para el ojo cerrado si existe
+        } else {
+            eyeIcon.classList.remove('hgi-view-off');
+            eyeIcon.classList.add('hgi-view');
+        }
+    });
 </script>
 </body>
 </html>
