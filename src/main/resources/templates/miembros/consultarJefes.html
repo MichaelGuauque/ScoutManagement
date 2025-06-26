@@ -112,7 +112,16 @@
                                 </div>
                             </button>
                             <div class="dropdown-menu">
-                                <div class="dropdown-item">
+                                <div class="dropdown-item ver-perfil"
+                                     th:data-nombre="${jefe.nombreCompleto}"
+                                     th:data-correo="${jefe.userEntity.username}"
+                                     th:data-estado="${jefe.userEntity.activo ? 'Activo' : 'Inactivo'}"
+                                     th:data-fecha="${jefe.fechaNacimiento}"
+                                     th:data-tipo-doc="${jefe.tipoDeDocumento}"
+                                     th:data-num-doc="${jefe.numeroDeDocumento}"
+                                     th:data-rama="${jefe.rama}"
+                                     th:data-direccion="${jefe.direccion}"
+                                     data-bs-toggle="modal" data-bs-target="#modal-verPerfil">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" width="16" height="16"
                                          viewBox="0 0 16 16" fill="none">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -189,13 +198,12 @@
     <div id="modal-verPerfil" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-
                 <div class="profile-header">
                     <img th:src="@{/img/miembro.svg}" alt="Eliminar" class="profile-image">
                     <div class="profile-info">
-                        <h1 class="name-profile">Miguel Andres Marin Fernandez</h1>
-                        <p class="email-profile">miguelito@gmail.com</p>
-                        <p class="state-profile">Activo</p>
+                        <h1 id="perfil-nombre" class="name-profile"></h1>
+                        <p id="perfil-correo" class="email-profile"></p>
+                        <p id="perfil-estado" class="state-profile"></p>
                     </div>
                 </div>
             </div>
@@ -203,15 +211,15 @@
                 <div class="info-grid1">
                     <div class="info-item">
                         <p class="info-label">Fecha Nacimiento</p>
-                        <p class="info-value">11-12-2005</p>
+                        <p id="perfil-fecha" class="info-value"></p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Documento</p>
-                        <p class="info-value">CC.1112041392</p>
+                        <p id="perfil-documento" class="info-value"></p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Rama</p>
-                        <p class="info-value">MANADA</p>
+                        <p id="perfil-rama" class="info-value"></p>
                     </div>
                 </div>
             </div>
@@ -223,19 +231,12 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <p class="info-label">Dirección Residencia</p>
-                        <p class="info-value">Carrera 9 #36-12, Barrio San Fernando, Cali</p>
-                    </div>
-
-                    <div class="info-item">
-                        <p class="info-label">Teléfono</p>
-                        <p class="info-value">316-358-7463</p>
+                        <p id="perfil-direccion" class="info-value"></p>
                     </div>
                 </div>
-
             </div>
 
             <div class="divider"></div>
-
 
             <div class="modal-footer">
                 <button class="modal-button cancel-button">Cerrar</button>
@@ -243,6 +244,7 @@
         </div>
         <div class="modal-overlay"></div>
     </div>
+
 
     <div th:include="admin/template_admin.html::footer"></div>
 </main>
@@ -598,5 +600,24 @@
         });
     }
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const botonesVerPerfil = document.querySelectorAll(".ver-perfil");
+
+        botonesVerPerfil.forEach(boton => {
+            boton.addEventListener("click", function () {
+                document.getElementById("perfil-nombre").textContent = this.dataset.nombre || '';
+                document.getElementById("perfil-correo").textContent = this.dataset.correo || '';
+                document.getElementById("perfil-estado").textContent = this.dataset.estado || '';
+                document.getElementById("perfil-fecha").textContent = this.dataset.fecha || '';
+                document.getElementById("perfil-documento").textContent = `${this.dataset.tipoDoc || ''}.${this.dataset.numDoc || ''}`;
+                document.getElementById("perfil-rama").textContent = this.dataset.rama || '';
+                document.getElementById("perfil-direccion").textContent = this.dataset.direccion || '';
+
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
