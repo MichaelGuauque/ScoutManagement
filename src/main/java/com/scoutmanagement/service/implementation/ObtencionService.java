@@ -8,8 +8,11 @@ import com.scoutmanagement.util.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ObtencionService implements IObtencionService {
@@ -62,4 +65,34 @@ public class ObtencionService implements IObtencionService {
             throw new ServiceException("No se encontraron los datos: " + e.getMessage());
         }
     }
+
+    @Override
+    public Set<Long> findIdEtapasObtenidasByPersona(Persona persona) {
+        try {
+            List<Obtencion> obtenciones = obtencionRepository.findAllByPersona(persona);
+            return obtenciones.stream()
+                    .map(o -> o.getEtapa().getId())
+                    .collect(Collectors.toSet());
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener las etapas obtenidas: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Optional<Obtencion> findByPersona(Persona persona) {
+        return obtencionRepository.findByPersona(persona);
+    }
+
+    @Override
+    public List<Obtencion> ultimasObtenciones(Persona persona) {
+        List<Obtencion> obtencionesByRama = new ArrayList<>();
+        List<Obtencion> obtenciones = obtencionRepository.findAllByPersona(persona);
+        for (Obtencion obtencion : obtenciones) {
+            if (obtencion.getEtapa().getRama().equals(persona.getRama())) {
+                obtencionesByRama.add(obtencion);
+            }
+        }
+        return obtencionesByRama;
+    }
+
 }

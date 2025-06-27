@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Miembro</title>
+    <title>Crear Usuario</title>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" th:href="@{/style/crear-miembroStyle.css}">
@@ -27,6 +27,7 @@
 
 <div th:include="admin/template_admin.html::header"></div>
 
+
 <!-- Contenido principal -->
 <main>
     <!-- Aquí va el contenido de la página -->
@@ -42,14 +43,15 @@
                 <h2 class="section-title">Información Básica</h2>
                 <p class="section-subtitle">Datos básicos sobre el miembro.</p>
                 <div class="form-row">
+
                     <div class="form-group">
                         <label for="primerNombre">Primer Nombre</label>
                         <input type="text" name="primerNombre" id="primerNombre" required maxlength="25"
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarPrimerNombre(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.primerNombre :
-                               ((errorPersona != null && errorPersona) ? personaAgregada?.primerNombre : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.primerNombre :
+                               ((errorPersona != null && errorPersona) ? persona?.primerNombre : '')}"
                                placeholder="Ingresa el primer nombre...">
                     </div>
 
@@ -59,8 +61,8 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+"
                                oninvalid="validarSegundoNombre(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.segundoNombre :
-                               ((errorPersona != null && errorPersona) ? personaAgregada?.segundoNombre : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.segundoNombre :
+                               ((errorPersona != null && errorPersona) ? persona?.segundoNombre : '')}"
                                placeholder="Ingresa el segundo nombre...">
                     </div>
 
@@ -70,8 +72,8 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarPrimerApellido(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.primerApellido :
-                               ((errorPersona != null && errorPersona) ? personaAgregada?.primerApellido : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.primerApellido :
+                               ((errorPersona != null && errorPersona) ? persona?.primerApellido : '')}"
                                placeholder="Ingresa el primer apellido...">
                     </div>
 
@@ -81,15 +83,15 @@
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                oninvalid="validarSegundoApellido(this)"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.segundoApellido :
-                               ((errorPersona != null && errorPersona) ? personaAgregada?.segundoApellido : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.segundoApellido :
+                               ((errorPersona != null && errorPersona) ? persona?.segundoApellido : '')}"
                                placeholder="Ingresa el segundo apellido...">
                     </div>
                 </div>
 
                 <!-- Segunda fila: 1 select, 1 numérico, 1 texto -->
                 <div class="form-row">
-                    <div class="form-group" style="max-width: 185px;">
+                    <div class="form-group">
                         <label for="tipoDeDocumento">Tipo de Documento</label>
                         <select class="form-select" name="tipoDeDocumento" id="tipoDeDocumento" required
                                 oninvalid="this.setCustomValidity('Por favor selecciona un tipo de documento')"
@@ -98,19 +100,19 @@
                             <th:block th:each="tipoDeDocumento : ${tiposDeDocumento}">
                                 <option th:value="${tipoDeDocumento}" th:text="${tipoDeDocumento}"
                                         th:selected="${(errorCorreo != null || errorPersona != null)
-                                        and personaAgregada?.tipoDeDocumento == tipoDeDocumento}">
+                                        and persona?.tipoDeDocumento == tipoDeDocumento}">
                                 </option>
                             </th:block>
                         </select>
                     </div>
 
-                    <div class="form-group" style="max-width: 390px;">
+                    <div class="form-group">
                         <label for="numeroDeDocumento">Número Documento</label>
                         <input type="number" name="numeroDeDocumento" id="numeroDeDocumento" min="1000000"
                                max="99999999999" required placeholder="Ingresa aquí el documento..."
                                oninvalid="this.setCustomValidity('Por favor ingresa un número de documento válido')"
                                oninput="this.setCustomValidity('')"
-                               th:value="${(errorCorreo != null || errorPersona != null) ? personaAgregada?.numeroDeDocumento : ''}">
+                               th:value="${(errorCorreo != null || errorPersona != null) ? persona?.numeroDeDocumento : ''}">
                     </div>
 
                     <div class="form-group">
@@ -121,6 +123,7 @@
                                oninput="this.setCustomValidity('')"
                                placeholder="Ingresa aquí el correo...">
                     </div>
+                    <div class="form-group"></div>
                 </div>
             </div>
             <!-- Título para la sección de función -->
@@ -131,7 +134,7 @@
 
                 <!-- Tercera fila: 3 selects -->
                 <div class="form-row">
-                    <div class="form-group" style="max-width: 185px;">
+                    <div class="form-group">
                         <label for="rol">Rol</label>
                         <select class="form-select" name="usuario.rol" id="rol" onchange="actualizarCargos()" required>
                             <option value="" disabled selected>Seleccione...</option>
@@ -160,6 +163,7 @@
                             </th:block>
                         </select>
                     </div>
+                    <div class="form-group"></div>
                 </div>
             </div>
 
@@ -171,7 +175,9 @@
         </form>
     </div>
 
+
     <div th:include="admin/template_admin.html::footer"></div>
+
 
 </main>
 

@@ -11,6 +11,7 @@ import com.scoutmanagement.service.interfaces.IPersonaService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,7 @@ public class ActividadController {
                               @RequestParam(defaultValue = "4") int size,
                               @RequestParam(value = "asistenciaActividadId", required = false) Long asistenciaActividadId,
                               @RequestParam(required = false) Boolean cancelado,
+                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFiltro,
                               @RequestParam(required = false, defaultValue = "") Rama ramaSeleccionada) {
 
         if (Boolean.TRUE.equals(cancelado)) {
@@ -58,7 +60,7 @@ public class ActividadController {
             List<Actividad> actividades = actividadService.findAllActividadesOrdenadas();
             LocalDate hoy = LocalDate.now();
 
-            List<Actividad> actividadesFiltradas = actividadService.filtrarYOrdenarActividadesPorTab(actividades, ramaSeleccionada, tab, hoy);
+            List<Actividad> actividadesFiltradas = actividadService.filtrarYOrdenarActividadesPorTab(actividades, ramaSeleccionada, tab, hoy, fechaFiltro);
             int totalActividades = actividadesFiltradas.size();
             int totalPaginas = Math.max((int) Math.ceil((double) totalActividades / size), 1);
 
@@ -78,6 +80,7 @@ public class ActividadController {
             model.addAttribute("tabSeleccionada", tab);
             model.addAttribute("ramaSeleccionada", ramaSeleccionada);
             model.addAttribute("ramas", Rama.values());
+            model.addAttribute("fechaFiltro", fechaFiltro);
 
             return "actividades/vistaActividadesAdmin";
         }

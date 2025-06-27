@@ -1,5 +1,6 @@
 package com.scoutmanagement.TestUser;
 
+import com.scoutmanagement.controller.UserController;
 import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.dto.UserRegistroDTO;
 import com.scoutmanagement.persistence.model.Rol;
@@ -8,7 +9,9 @@ import com.scoutmanagement.persistence.model.UserEntity;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.implementation.EmailService;
+import com.scoutmanagement.service.implementation.PersonaService;
 import com.scoutmanagement.service.implementation.UserDetailServiceImpl;
+import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +21,12 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 import java.util.Set;
 
+import static com.scoutmanagement.util.constants.AppConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -30,6 +35,12 @@ class UserDetailServiceImplTest {
 
     @InjectMocks
     private UserDetailServiceImpl userDetailService;
+
+    @Mock
+    private IUserEntity userService;
+
+    @InjectMocks
+    private UserController userController;
 
     @Mock
     private UserRepository userRepository;
@@ -43,9 +54,13 @@ class UserDetailServiceImplTest {
     @Mock
     private EmailService emailService;
 
+    @Mock
+    private RedirectAttributes redirectAttributes;
+
     private UserRegistroDTO userDTO;
     private UserEntity userEntity;
     private RoleEntity roleEntity;
+
 
 
     @BeforeEach
@@ -337,5 +352,106 @@ class UserDetailServiceImplTest {
         user.setActivo(false);
         assertFalse(user.isActivo(), "El usuario debería estar inactivo después del cambio");
     }
+    @Test
+    void testExistsByUsername() {
+
+        String emailExistente = "usuario@dominio.com";
+        String emailNoExistente = "noexiste@dominio.com";
+
+
+        UserEntity usuario = new UserEntity();
+        usuario.setUsername(emailExistente);
+
+
+        when(userRepository.existsByUsername(emailExistente)).thenReturn(true);
+        when(userRepository.existsByUsername(emailNoExistente)).thenReturn(false);
+
+
+        boolean existe = userDetailService.existsByUsername(emailExistente);
+        assertTrue(existe);
+
+
+        boolean noExiste = userDetailService.existsByUsername(emailNoExistente);
+        assertFalse(noExiste);
+    }
+    @Test
+    void desactivarUsuarioPorId_CuandoUsuarioExiste_DeberiaPonerActivoFalse() {
+        // Arrange
+        Long id = 1L;
+        UserEntity usuario = new UserEntity();
+        usuario.setId(id);
+        usuario.setActivo(true);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(usuario));
+        when(userRepository.save(any(UserEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        userDetailService.desactivarUsuarioPorId(id);
+
+        // Assert
+        assertFalse(usuario.isActivo());
+        verify(userRepository).save(usuario);
+    }
+
+    @Test
+    void desactivarUsuarioPorId_CuandoUsuarioNoExiste_DeberiaLanzarExcepcion() {
+        // Arrange
+        Long id = 1L;
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            userDetailService.desactivarUsuarioPorId(id);
+        });
+
+        assertTrue(exception.getMessage().contains("Usuario no encontrado con ID"));
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void activarUsuarioPorId_CuandoUsuarioExiste_DeberiaPonerActivoTrue() {
+        Long id = 1L;
+        UserEntity usuario = new UserEntity();
+        usuario.setId(id);
+        usuario.setActivo(false);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(usuario));
+        when(userRepository.save(any(UserEntity.class))).thenAnswer(i -> i.getArgument(0));
+
+        userDetailService.activarUsuarioPorId(id);
+
+        assertTrue(usuario.isActivo());
+        verify(userRepository).save(usuario);
+    }
+    @Test
+    void habilitarUsuario_CuandoOrigenEsJefes_DeberiaRedirigirAJefes() {
+        Long id = 1L;
+
+        when(redirectAttributes.addFlashAttribute(anyString(), any())).thenReturn(redirectAttributes);
+
+        String resultado = userController.habilitarUsuario(id, "jefes", redirectAttributes);
+
+        verify(userService).activarUsuarioPorId(id);
+
+        assertEquals("redirect:/miembros/jefes", resultado);
+    }
+
+    @Test
+    void habilitarUsuario_CuandoOrigenNoEsJefes_DeberiaRedirigirAMiembros() {
+
+        Long id = 1L;
+
+        when(redirectAttributes.addFlashAttribute(anyString(), any()))
+                .thenReturn(redirectAttributes);
+
+
+        String resultado = userController.habilitarUsuario(id, "miembros", redirectAttributes);
+
+        verify(userService).activarUsuarioPorId(id);
+
+        assertEquals("redirect:/miembros", resultado);
+    }
 
 }
+
+

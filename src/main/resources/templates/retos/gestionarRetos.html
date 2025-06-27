@@ -152,7 +152,9 @@
 
                 <div class="modal-footer">
                     <button type="submit" class="botones btn-primary save-button">Guardar</button>
-                    <button type="button" class="botones btn-secondary cancel-button" onclick="cancelarRegistro()">Cancelar</button>
+                    <button type="button" class="botones btn-secondary cancel-button" onclick="cancelarRegistro()">
+                        Cancelar
+                    </button>
                 </div>
             </div>
             <div class="modal-overlay"></div>
@@ -557,7 +559,7 @@
         window.location.href = "/progresiones?cancelado=true";
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Verificar si hay un parámetro "cancelado" en la URL
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('cancelado')) {

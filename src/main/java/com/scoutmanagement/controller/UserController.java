@@ -3,7 +3,9 @@ package com.scoutmanagement.controller;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.persistence.model.*;
+
 import static com.scoutmanagement.util.constants.AppConstants.*;
+
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
@@ -66,13 +68,13 @@ public class UserController {
                         session.setAttribute("rol", rol);
                         return "redirect:/home-user";
                     }
-                }else {
+                } else {
                     throw new ServiceException("Contraseña incorrecta");
                 }
-            }else {
+            } else {
                 throw new ServiceException("El usuario no existe");
             }
-        }catch (ServiceException e) {
+        } catch (ServiceException e) {
             logger.error("Error al acceder al sistema: {}", e.getMessage());
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
             redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
@@ -87,11 +89,7 @@ public class UserController {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
-            model.addAttribute("ramas", Rama.values());
-            model.addAttribute("roles", Rol.values());
-            model.addAttribute("cargos", Cargo.values());
-            model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+            prepararModeloDeRegistro(model, sesionDelJefe);
             return "/user/crearMiembro";
         }
         if (rol == null) {
@@ -102,43 +100,49 @@ public class UserController {
 
     @PostMapping("/guardar")
     public String guardar(@Valid PersonaRegistroDTO dto, HttpSession session, RedirectAttributes redirectAttributes) {
-        try{
-        Object rol = session.getAttribute("rol");
-        if (rol == null) {
+        try {
+            Object rol = session.getAttribute("rol");
+            if (rol == null) {
                 return VISTA_LOGIN;
-        }
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
-            UserEntity user = userService.cambioUserDTO(dto.getUsuario());
-            if (documentoExiste) {
-                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "El número de documento ya está registrado.");
-                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                redirectAttributes.addFlashAttribute("errorPersona", true);
-                redirectAttributes.addFlashAttribute("usuario", user);
-                redirectAttributes.addFlashAttribute("personaAgregada", dto);
+            }
+            if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+                boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
+                UserEntity user = userService.cambioUserDTO(dto.getUsuario());
+                if (documentoExiste) {
+                    prepararVistaConErrores(
+                            redirectAttributes,
+                            "El número de documento ya está registrado.",
+                            EXCEPTION_ERROR,
+                            false,
+                            user,
+                            dto
+                    );
+                    return VISTA_REGISTRAR;
+                }
+                boolean correoExiste = userService.existsByUsername(user.getUsername());
+                if (correoExiste) {
+                    prepararVistaConErrores(
+                            redirectAttributes,
+                            "El correo electrónico ya está registrado.",
+                            EXCEPTION_ERROR,
+                            true,
+                            user,
+                            dto
+                    );
+                    return VISTA_REGISTRAR;
+
+                }
+                userService.save(user);
+                personaService.save(dto, user);
+
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro guardado");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
                 return VISTA_REGISTRAR;
             }
-            boolean correoExiste = userService.existsByUsername(user.getUsername());
-            if(correoExiste){
-                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "El correo electrónico ya está registrado.");
-                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                redirectAttributes.addFlashAttribute("errorCorreo", true);
-                redirectAttributes.addFlashAttribute("usuario", user);
-                redirectAttributes.addFlashAttribute("personaAgregada", dto);
-                return VISTA_REGISTRAR;
-
-            }
-            userService.save(user);
-            personaService.save(dto,user);
-
-            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Miembro guardado");
-            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
-            return VISTA_REGISTRAR;
-        }
             return VISTA_ERROR;
 
 
-    } catch (ServiceException e) {
+        } catch (ServiceException e) {
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
             redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
             return VISTA_REGISTRAR;
@@ -182,6 +186,55 @@ public class UserController {
         session.removeAttribute("rol");
         return VISTA_LOGIN;
     }
+    @PostMapping("/usuarios/desactivar")
+    public String desactivarUsuario(@RequestParam Long idUsuario,
+                                    @RequestParam(required = false) String origen,
+                                    RedirectAttributes redirectAttributes) {
+
+        userService.desactivarUsuarioPorId(idUsuario);
+        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Usuario deshabilitado.");
+        redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+
+        if ("jefes".equals(origen)) {
+            return VISTA_JEFES;
+        } else {
+
+            return VISTA_MIEMBROS;
+        }
+
+    }
+
+    @PostMapping("/usuarios/habilitar")
+    public String habilitarUsuario(@RequestParam Long idUsuario,
+                                   @RequestParam(required = false) String origen,
+                                   RedirectAttributes redirectAttributes) {
+        userService.activarUsuarioPorId(idUsuario);
+        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Usuario habilitado.");
+        redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+
+        if ("jefes".equals(origen)) {
+            return VISTA_JEFES;
+        } else {
+
+            return VISTA_MIEMBROS;
+        }
+
+    }
+
+    private void prepararVistaConErrores(RedirectAttributes redirectAttributes, String mensaje, String tipoError, boolean errorCampo, UserEntity user, PersonaRegistroDTO dto) {
+        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, mensaje);
+        redirectAttributes.addFlashAttribute("type", tipoError);
+        redirectAttributes.addFlashAttribute(errorCampo ? "errorCorreo" : "errorPersona", true);
+        redirectAttributes.addFlashAttribute("usuario", user);
+        redirectAttributes.addFlashAttribute("personaAgregada", dto);
+    }
 
 
+    private void prepararModeloDeRegistro(Model model, Persona sesionDelJefe) {
+        model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
+        model.addAttribute("ramas", Rama.values());
+        model.addAttribute("roles", Rol.values());
+        model.addAttribute("cargos", Cargo.values());
+        model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+    }
 }

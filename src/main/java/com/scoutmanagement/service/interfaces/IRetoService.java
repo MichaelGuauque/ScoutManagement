@@ -2,6 +2,7 @@ package com.scoutmanagement.service.interfaces;
 
 import com.scoutmanagement.dto.RetoDTO;
 import com.scoutmanagement.persistence.model.Etapa;
+import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Reto;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface IRetoService {
     List<Reto> findAllRetosEtapa(Etapa etapa);
 
     Reto cambiarRetoDTO(RetoDTO retoDTO);
+
+    List<Reto> findCompletadosByPersonaAndEtapa(Persona persona, Etapa etapa);
 }

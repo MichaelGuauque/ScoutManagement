@@ -29,7 +29,7 @@ public interface IActividadService {
 
     List<Actividad> findAllActividadesOrdenadas();
 
-    public List<Actividad> filtrarYOrdenarActividadesPorTab(List<Actividad> actividades, Rama rama, String tab, LocalDate hoy);
+    public List<Actividad> filtrarYOrdenarActividadesPorTab(List<Actividad> actividades, Rama rama, String tab, LocalDate hoy, LocalDate fechaFiltro);
 
     public List<Actividad> paginarActividades(List<Actividad> actividades, int page, int size);
 
