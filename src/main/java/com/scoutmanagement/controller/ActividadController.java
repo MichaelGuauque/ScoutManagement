@@ -8,6 +8,8 @@ import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IAsistenciaService;
 import com.scoutmanagement.service.interfaces.IPersonaService;
+import com.scoutmanagement.util.exception.ServiceException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,4 +145,41 @@ public class ActividadController {
         return VISTA_ERROR;
     }
 
+    @GetMapping("/modificar/{id}")
+    public String formularioModificarActividad(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            Actividad actividad = actividadService.findById(id).orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada"));
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute("persona", sesionDelJefe);
+            model.addAttribute("ramas", Rama.values());
+            model.addAttribute("actividad", actividad);
+            return "actividades/vistaModificarActividad";
+        }
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+        return VISTA_ERROR;
+    }
+
+    @PostMapping("/actualizarActividad")
+    public String actualizarActividad(Actividad actividad, HttpSession session, RedirectAttributes redirectAttributes) {
+        Object rol = session.getAttribute("rol");
+        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
+            try {
+                actividadService.modificarActividad(actividad);
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Actividad modificada con éxito.");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+                return "redirect:/actividades";
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+                return "redirect:/actividades";
+            }
+        }
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+        return VISTA_ERROR;
+    }
 }
