@@ -57,7 +57,7 @@ public class ActividadController {
         if (Rol.ADULTO.name().equals(rol)) {
 
             Persona jefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", jefe);
+            model.addAttribute(PERSONA, jefe);
 
             List<Actividad> actividades = actividadService.findAllActividadesOrdenadas();
             LocalDate hoy = LocalDate.now();
@@ -81,7 +81,7 @@ public class ActividadController {
             model.addAttribute("totalPaginas", totalPaginas);
             model.addAttribute("tabSeleccionada", tab);
             model.addAttribute("ramaSeleccionada", ramaSeleccionada);
-            model.addAttribute("ramas", Rama.values());
+            model.addAttribute(RAMAS, Rama.values());
             model.addAttribute("fechaFiltro", fechaFiltro);
 
             return "actividades/vistaActividadesAdmin";
@@ -98,8 +98,8 @@ public class ActividadController {
         Object rol = session.getAttribute("rol");
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", sesionDelJefe);
-            model.addAttribute("ramas", Rama.values());
+            model.addAttribute(PERSONA, sesionDelJefe);
+            model.addAttribute(RAMAS, Rama.values());
             return "actividades/vistaCrearActividad";
         }
         if (rol == null) {
@@ -120,11 +120,11 @@ public class ActividadController {
                 actividadService.crearActividad(actividadDTO);
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Actividad creada con éxito.");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
-                return "redirect:/actividades";
+                return VISTA_ACTIVIDADES;
             } catch (Exception e) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                return "redirect:/actividades";
+                return VISTA_ACTIVIDADES;
 
             }
         }
@@ -151,8 +151,8 @@ public class ActividadController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             Actividad actividad = actividadService.findById(id).orElseThrow(() -> new EntityNotFoundException("Actividad no encontrada"));
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute("persona", sesionDelJefe);
-            model.addAttribute("ramas", Rama.values());
+            model.addAttribute(PERSONA, sesionDelJefe);
+            model.addAttribute(RAMAS, Rama.values());
             model.addAttribute("actividad", actividad);
             return "actividades/vistaModificarActividad";
         }
@@ -170,11 +170,11 @@ public class ActividadController {
                 actividadService.modificarActividad(actividad);
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Actividad modificada con éxito.");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
-                return "redirect:/actividades";
+                return VISTA_ACTIVIDADES;
             } catch (Exception e) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                return "redirect:/actividades";
+                return VISTA_ACTIVIDADES;
             }
         }
         if (rol == null) {
