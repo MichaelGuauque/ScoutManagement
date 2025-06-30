@@ -180,6 +180,25 @@ public class UserController {
         return VISTA_ERROR;
     }
 
+    @GetMapping("/recuperar")
+    public String mostrarFormularioRecuperacion() {
+        return "user/recuperar";
+    }
+
+    @PostMapping("/recuperar-password")
+    public String procesarRecuperacionPassword(@RequestParam String email, RedirectAttributes redirectAttributes) {
+        try {
+            userService.recuperarPassword(email);
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Se ha enviado un correo con tu nueva contraseña");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+            return "redirect:/";
+        } catch (ServiceException e) {
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+            return "redirect:/recuperar";
+        }
+    }
+
     @GetMapping("/cerrar")
     public String cerrarSesion(HttpSession session) {
         session.removeAttribute("idUsuario");
