@@ -61,7 +61,7 @@ public class EmailService {
           color: #333333 !important;
           background-color: #f7f7f7;
         }
-        
+    
         .email-container {
           background-color: #ffffff;
           margin: 0 auto;
@@ -69,50 +69,50 @@ public class EmailService {
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
           max-width: 600px;
         }
-        
+    
         .header {
           background-color: #622599;
           padding: 30px;
           text-align: center;
           border-radius: 8px 8px 0 0;
         }
-        
+    
         .header h1 {
           color: #ffffff !important;
           margin: 0;
           font-size: 24px;
           font-weight: 600;
         }
-        
+    
         .content {
           padding: 30px;
         }
-        
+    
         .content p {
           margin-top: 0;
           font-size: 16px;
           line-height: 1.5;
           color: #333333 !important;
         }
-        
+    
         .temp-password-box {
           background-color: #f5f5f5;
           border-left: 4px solid #622599;
           padding: 15px;
           margin: 25px 0;
         }
-        
+    
         .temp-password-box p {
           margin: 0;
           color: #333333 !important;
         }
-        
+    
         .temp-password-title {
           font-size: 16px;
           font-weight: bold;
           color: #333333 !important;
         }
-        
+    
         .temp-password-value {
           margin: 10px 0 0;
           font-family: 'Courier New', Courier, monospace;
@@ -120,24 +120,24 @@ public class EmailService {
           font-weight: bold;
           color: #622599 !important;
         }
-        
+    
         .instructions {
           font-size: 16px;
           line-height: 1.5;
           margin-bottom: 25px;
           color: #333333 !important;
         }
-        
+    
         .instructions li {
           color: #333333 !important;
           margin-bottom: 5px;
         }
-        
+    
         .button-container {
           margin: 30px 0;
           text-align: center;
         }
-        
+    
         .reset-button {
           background-color: #424243;
           color: #ffffff !important;
@@ -147,12 +147,12 @@ public class EmailService {
           font-weight: bold;
           display: inline-block;
         }
-        
+    
         .reset-button:hover {
           background-color: #333334;
           color: #ffffff !important;
         }
-        
+    
         .footer {
           background-color: #f5f5f5;
           padding: 20px;
@@ -161,21 +161,21 @@ public class EmailService {
           color: #666666 !important;
           border-radius: 0 0 8px 8px;
         }
-        
+    
         .footer p {
           margin: 0;
           color: #666666 !important;
         }
-        
+    
         /* Forzar colores específicos */
         * {
           color: inherit;
         }
-        
+    
         a {
           color: #622599 !important;
         }
-        
+    
         strong {
           color: #333333 !important;
         }
@@ -192,38 +192,38 @@ public class EmailService {
                   <h1>Recuperar Contraseña - Scout Management</h1>
                 </td>
               </tr>
-              
+    
               <!-- Content -->
               <tr>
                 <td class="content">
                   <p style="color: #333333 !important;">Hola %s,</p>
-                  
+    
                   <p style="color: #333333 !important;">Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en Scout Management. Si no solicitaste este cambio, puedes ignorar este correo de forma segura.</p>
-                  
+    
                   <div class="temp-password-box">
                     <p class="temp-password-title">Tu Contraseña Temporal</p>
                     <p class="temp-password-value">%s</p>
                   </div>
-                  
+    
                   <p style="color: #333333 !important;">Para restablecer tu contraseña, sigue estos pasos:</p>
-                  
+    
                   <ol class="instructions">
                     <li style="color: #333333 !important;">Ingresa a nuestro sitio web</li>
                     <li style="color: #333333 !important;">Ingresa tu dirección de correo electrónico</li>
                     <li style="color: #333333 !important;">Ingresa la contraseña temporal proporcionada anteriormente</li>
                     <li style="color: #333333 !important;">Sigue las instrucciones para establecer una contraseña nueva y segura.</li>
                   </ol>
-                  
+    
                   <p style="color: #333333 !important;"><strong style="color: #333333 !important;">Importante:</strong> Por tu seguridad, te recomendamos mucho que cambies tu contraseña después de iniciar sesión por primera vez.</p>
-                  
+    
                   <div class="button-container">
                     <a href="#" class="reset-button">Restablecer Contraseña</a>
                   </div>
-      
+    
                   <p style="color: #333333 !important; margin-bottom: 0;">Atentamente,<br>El Equipo Scout Jaguares 605</p>
                 </td>
               </tr>
-              
+    
               <!-- Footer -->
               <tr>
                 <td class="footer">
