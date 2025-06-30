@@ -39,6 +39,8 @@ public class EmailService {
             mailSender.send(mensaje);
         } catch (MessagingException e) {
             throw new ServiceException("Error al enviar el correo HTML", e);
+        } catch (RuntimeException e) {
+            throw new ServiceException("Error al enviar el correo HTML", e);
         }
     }
 
