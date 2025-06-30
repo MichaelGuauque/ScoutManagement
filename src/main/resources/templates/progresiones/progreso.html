@@ -75,13 +75,15 @@
                         </td>
                         <td th:text="${reto.descripcion}">Descripción del reto</td>
                         <td class="action-cell">
-                            <!-- Si el reto está completado, mostrar "Hecho", sino mostrar "Pendiente" o checkbox -->
-                            <div th:if="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)}" class="reto-completado">
-                                Hecho
-                            </div>
-                            <div th:unless="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)}"
-                                 class="reto-Pendiente">Pendiente
-                            </div>
+                            <form th:action="@{/progresiones/toggle}" method="post">
+                                <input type="hidden" name="usuarioId" th:value="${miembro.userEntity.id}"/>
+                                <input type="hidden" name="etapaNombre" th:value="${etapa.nombre}" />
+                                <input type="hidden" name="retoId" th:value="${reto.id}"/>
+                                <button style="cursor: pointer;" type="submit"
+                                        th:class="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)} ? 'reto-completado' : 'reto-Pendiente'"
+                                        th:text="${estadoRetosPorEtapa.get(etapa.nombre).get(reto.id)} ? 'Hecho' : 'Pendiente'">
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     </tbody>

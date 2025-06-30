@@ -5,6 +5,8 @@ import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Progreso;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.ProgresoRepository;
+import com.scoutmanagement.service.interfaces.IPersonaService;
+import com.scoutmanagement.service.interfaces.IRetoService;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,9 @@ class ProgresoServiceTest {
 
     @Mock
     private RetoService retoService;
+
+    @Mock
+    private PersonaService personaService;
 
     @InjectMocks
     private ProgresoService progresoService;
@@ -404,6 +409,67 @@ class ProgresoServiceTest {
         });
 
         Assertions.assertTrue(exception.getMessage().contains("Error al preparar los retos por etapa"));
+    }
+
+    @Test
+    void testToggleProgresoDesdeUsuario_CreaNuevoProgreso() {
+        Persona persona = new Persona();
+        persona.setId(1L);
+        Reto reto = new Reto();
+        reto.setId(100L);
+
+        when(personaService.findByUsuarioId(1L)).thenReturn(Optional.of(persona));
+        when(retoService.findById(100L)).thenReturn(Optional.of(reto));
+        when(progresoRepository.findByPersonaAndReto(persona, reto)).thenReturn(Optional.empty());
+
+        progresoService.toggleProgresoDesdeUsuario(1L, 100L);
+
+        verify(progresoRepository).save(argThat(p ->
+                p.getPersona().equals(persona) &&
+                        p.getReto().equals(reto) &&
+                        Boolean.TRUE.equals(p.isEstado())
+        ));
+    }
+
+    @Test
+    void testToggleProgresoDesdeUsuario_EliminaProgresoExistente() {
+        Persona persona = new Persona();
+        persona.setId(2L);
+        Reto reto = new Reto();
+        reto.setId(200L);
+        Progreso progreso = Progreso.builder().persona(persona).reto(reto).estado(true).build();
+
+        when(personaService.findByUsuarioId(2L)).thenReturn(Optional.of(persona));
+        when(retoService.findById(200L)).thenReturn(Optional.of(reto));
+        when(progresoRepository.findByPersonaAndReto(persona, reto)).thenReturn(Optional.of(progreso));
+
+        progresoService.toggleProgresoDesdeUsuario(2L, 200L);
+
+        verify(progresoRepository).delete(progreso);
+    }
+
+    @Test
+    void testToggleProgresoDesdeUsuario_PersonaNoExiste() {
+        when(personaService.findByUsuarioId(999L)).thenReturn(Optional.empty());
+
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            progresoService.toggleProgresoDesdeUsuario(999L, 1L);
+        });
+
+        assertEquals("Persona no encontrada para el usuario", exception.getMessage());
+    }
+
+    @Test
+    void testToggleProgresoDesdeUsuario_RetoNoExiste() {
+        Persona persona = new Persona();
+        when(personaService.findByUsuarioId(1L)).thenReturn(Optional.of(persona));
+        when(retoService.findById(999L)).thenReturn(Optional.empty());
+
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            progresoService.toggleProgresoDesdeUsuario(1L, 999L);
+        });
+
+        assertEquals("Reto no encontrado", exception.getMessage());
     }
 
 }
