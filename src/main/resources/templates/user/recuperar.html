@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Constraseña</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/style/recuperarStyle.css}">
+    <link rel="stylesheet" th:href="@{/style/notification.css}">
+
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <script th:src="@{/js/notification.js}"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="login-section">
+            <div class="login-container">
+                <div class="icon-container">
+                    <svg class="refresh-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                </div>
+                <div class="login-header">
+                    <h1>¿Olvidaste tu contraseña?</h1>
+                    <p>Ingresa tu correo electrónico y te enviaremos una nueva contraseña temporal</p>
+                </div>
+                <div class="divider"></div>
+                <form id="login-form" th:action="@{/recuperar-password}" method="post">
+                    <div class="form-group" style="margin-bottom: 15px">
+                        <label for="email">Correo Electrónico</label>
+                        <div class="input-container">
+                            <img th:src="@{/img/correoIcon.svg}" alt="correo" class="input-icon">
+                            <input type="email" id="email" name="email" placeholder="Ingresa aquí tu correo..." required>
+                        </div>
+
+                         <div class="login-link-container">
+                            <p class="login-text">
+                                ¿Recordaste tu contraseña? 
+                                <a th:href="@{/}" class="login-link">Iniciar sesión</a>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="login-button">Enviar correo de recuperacion</button>
+                </form>
+            </div>
+        </div>
+        <div class="logo-section">
+            <div class="logo-section-intern">
+                <div class="logo-container">
+                    <img th:src="@{/img/logo605.svg}" alt="logo Scouts 605" class="logo-img">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="notifications"></div>
+    <script th:if="${message != null}">
+        window.onload = function () {
+            showSimpleNotification("[[${message}]]", "[[${type}]]");
+        }
+    </script>
+    <script th:src="@{/js/custom-validation.js}"></script>
+
+</body>
+</html>

@@ -3,13 +3,14 @@ package com.scoutmanagement.TestUser;
 import com.scoutmanagement.controller.UserController;
 import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.dto.UserRegistroDTO;
+import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Rol;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
+import com.scoutmanagement.persistence.repository.PersonaRepository;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.implementation.EmailService;
-import com.scoutmanagement.service.implementation.PersonaService;
 import com.scoutmanagement.service.implementation.UserDetailServiceImpl;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
@@ -26,7 +27,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.scoutmanagement.util.constants.AppConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -46,6 +46,9 @@ class UserDetailServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
+    private PersonaRepository personaRepository;
+
+    @Mock
     private RoleRepository roleRepository;
 
     @Mock
@@ -57,6 +60,7 @@ class UserDetailServiceImplTest {
     @Mock
     private RedirectAttributes redirectAttributes;
 
+    private Persona mockPersona;
     private UserRegistroDTO userDTO;
     private UserEntity userEntity;
     private RoleEntity roleEntity;
@@ -74,6 +78,7 @@ class UserDetailServiceImplTest {
         roleEntity.setRole(userDTO.getRol());
 
         userEntity = UserEntity.builder()
+                .id(1L)
                 .username("correito@gmail.com")
                 .password("passwordEncoded")
                 .roles(Set.of(roleEntity))
@@ -83,6 +88,10 @@ class UserDetailServiceImplTest {
                 .isEnabled(true)
                 .activo(true)
                 .build();
+
+        mockPersona = new Persona();
+        mockPersona.setPrimerNombre("Juan");
+        mockPersona.setPrimerApellido("Pérez");
     }
 
     @Test
@@ -231,7 +240,6 @@ class UserDetailServiceImplTest {
 
     @Test
     public void testFindByEmail_ExceptionThrown() {
-        // Preparar
         UserDTO userDTO = new UserDTO(
                 "testUser@gmail.com",
                 "password123",
@@ -308,7 +316,6 @@ class UserDetailServiceImplTest {
 
     @Test
     void testCambioUserDTO_SetActivoTrue() {
-        // Arrange
         UserRegistroDTO userDTO = new UserRegistroDTO();
         userDTO.setUsername("usuario@example.com");
         userDTO.setRol(Rol.JOVEN);
@@ -376,7 +383,6 @@ class UserDetailServiceImplTest {
     }
     @Test
     void desactivarUsuarioPorId_CuandoUsuarioExiste_DeberiaPonerActivoFalse() {
-        // Arrange
         Long id = 1L;
         UserEntity usuario = new UserEntity();
         usuario.setId(id);
@@ -385,21 +391,17 @@ class UserDetailServiceImplTest {
         when(userRepository.findById(id)).thenReturn(Optional.of(usuario));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Act
         userDetailService.desactivarUsuarioPorId(id);
 
-        // Assert
         assertFalse(usuario.isActivo());
         verify(userRepository).save(usuario);
     }
 
     @Test
     void desactivarUsuarioPorId_CuandoUsuarioNoExiste_DeberiaLanzarExcepcion() {
-        // Arrange
         Long id = 1L;
         when(userRepository.findById(id)).thenReturn(Optional.empty());
 
-        // Act & Assert
         ServiceException exception = assertThrows(ServiceException.class, () -> {
             userDetailService.desactivarUsuarioPorId(id);
         });
@@ -450,6 +452,105 @@ class UserDetailServiceImplTest {
         verify(userService).activarUsuarioPorId(id);
 
         assertEquals("redirect:/miembros", resultado);
+    }
+
+    @Test
+    void recuperarPassword_UsuarioExiste_DeberiaEnviarCorreoConNuevaPassword() {
+        String email = "correito@gmail.com";
+        String passwordEncriptada = "nuevaPasswordEncriptada";
+        String mensajeHTML = "<html>Template de recuperación</html>";
+
+        when(userRepository.findUserEntityByUsername(email))
+                .thenReturn(Optional.of(userEntity));
+        when(personaRepository.findByUserEntity_Id(userEntity.getId()))
+                .thenReturn(Optional.of(mockPersona));
+        when(passwordEncoder.encode(anyString()))
+                .thenReturn(passwordEncriptada);
+        when(emailService.generarTemplateRecuperacionPassword(anyString(), anyString()))
+                .thenReturn(mensajeHTML);
+
+        userDetailService.recuperarPassword(email);
+
+        verify(userRepository).findUserEntityByUsername(email);
+        verify(passwordEncoder).encode(argThat((String password) ->
+                password != null && password.length() == 10 && !password.contains("-")));
+
+        assertEquals(passwordEncriptada, userEntity.getPassword());
+        verify(userRepository).save(userEntity);
+        verify(personaRepository).findByUserEntity_Id(userEntity.getId());
+        verify(emailService).generarTemplateRecuperacionPassword(
+                argThat(password -> password != null && password.length() == 10),
+                eq("Juan Pérez")
+        );
+        verify(emailService).enviarCorreoHTML(
+                eq(email),
+                eq("Recuperación de Contraseña - Scout Management"),
+                eq(mensajeHTML)
+        );
+    }
+
+    @Test
+    void recuperarPassword_UsuarioNoExiste_DeberiaLanzarServiceException() {
+        String email = "noexiste@gmail.com";
+        when(userRepository.findUserEntityByUsername(email))
+                .thenReturn(Optional.empty());
+
+        ServiceException exception = assertThrows(
+                ServiceException.class,
+                () -> userDetailService.recuperarPassword(email)
+        );
+
+        assertEquals("La dirección de correo electrónico no está registrada.",
+                exception.getMessage());
+
+        verify(userRepository).findUserEntityByUsername(email);
+        verify(userRepository, never()).save(any());
+        verify(personaRepository, never()).findByUserEntity_Id(any());
+        verify(emailService, never()).generarTemplateRecuperacionPassword(any(), any());
+        verify(emailService, never()).enviarCorreoHTML(any(), any(), any());
+    }
+
+    @Test
+    void recuperarPassword_PersonaNoExiste_DeberiaLanzarNullPointerException() {
+        String email = "correito@gmail.com";
+        String passwordEncriptada = "nuevaPasswordEncriptada";
+
+        when(userRepository.findUserEntityByUsername(email))
+                .thenReturn(Optional.of(userEntity));
+        when(personaRepository.findByUserEntity_Id(userEntity.getId()))
+                .thenReturn(Optional.empty());
+        when(passwordEncoder.encode(anyString()))
+                .thenReturn(passwordEncriptada);
+
+        assertThrows(NullPointerException.class, () -> {
+            userDetailService.recuperarPassword(email);
+        });
+
+        verify(userRepository).findUserEntityByUsername(email);
+        verify(userRepository).save(userEntity);
+        verify(personaRepository).findByUserEntity_Id(userEntity.getId());
+    }
+
+    @Test
+    void recuperarPassword_PasswordGenerada_DeberiaSerValidaYSinGuiones() {
+        String email = "correito@gmail.com";
+        when(userRepository.findUserEntityByUsername(email))
+                .thenReturn(Optional.of(userEntity));
+        when(personaRepository.findByUserEntity_Id(userEntity.getId()))
+                .thenReturn(Optional.of(mockPersona));
+        when(passwordEncoder.encode(anyString()))
+                .thenReturn("encriptada");
+        when(emailService.generarTemplateRecuperacionPassword(anyString(), anyString()))
+                .thenReturn("template");
+
+        userDetailService.recuperarPassword(email);
+
+        verify(passwordEncoder).encode(argThat((String password) ->
+                password != null &&
+                        password.length() == 10 &&
+                        !password.contains("-") &&
+                        password.matches("[a-zA-Z0-9]+")
+        ));
     }
 
 }
