@@ -26,4 +26,6 @@ public interface IProgresoService {
     Map<String, List<Reto>> prepararRetosPorEtapa(List<Etapa> etapas, Map<String, Map<Long, Boolean>> estadoRetosPorEtapa);
 
     Map<String, Map<Long, Boolean>> calcularEstadoRetos(List<Etapa> etapas, Persona persona);
+
+    void toggleProgresoDesdeUsuario(Long usuarioId, Long retoId);
 }

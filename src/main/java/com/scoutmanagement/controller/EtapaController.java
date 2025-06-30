@@ -253,4 +253,20 @@ public class EtapaController {
         }
     }
 
+    @PostMapping("/toggle")
+    public String toggleProgreso(@RequestParam Long usuarioId,
+                                 @RequestParam Long retoId,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            progresoService.toggleProgresoDesdeUsuario(usuarioId, retoId);
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Obtención modificada con éxito.");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+            return "redirect:/progresiones/progreso/" + usuarioId;
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("type", "error");
+            redirectAttributes.addFlashAttribute("message", "No se pudo cambiar el estado del reto.");
+            return "redirect:/progresiones/progreso/" + usuarioId;
+        }
+    }
+
 }
