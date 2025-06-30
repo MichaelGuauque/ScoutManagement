@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -33,21 +32,17 @@ class EmailServiceTest {
     @Test
     @DisplayName("Debería enviar correo HTML exitosamente")
     void deberiaEnviarCorreoHTMLExitosamente() throws MessagingException {
-        // Given
         String destinatario = "test@example.com";
         String asunto = "Test Subject";
         String cuerpoHTML = "<h1>Test HTML Content</h1>";
 
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
 
-        // When
         emailService.enviarCorreoHTML(destinatario, asunto, cuerpoHTML);
 
-        // Then
         verify(mailSender).createMimeMessage();
         verify(mailSender).send(mimeMessage);
 
-        // Verificar que se creó el helper con los parámetros correctos
         ArgumentCaptor<MimeMessage> messageCaptor = ArgumentCaptor.forClass(MimeMessage.class);
         verify(mailSender).send(messageCaptor.capture());
         assertThat(messageCaptor.getValue()).isEqualTo(mimeMessage);
@@ -56,7 +51,6 @@ class EmailServiceTest {
     @Test
     @DisplayName("Debería lanzar ServiceException cuando ocurre MessagingException al enviar")
     void deberiaLanzarServiceExceptionCuandoOcurreMessagingExceptionAlEnviar() throws MessagingException {
-        // Given
         String destinatario = "test@example.com";
         String asunto = "Test Subject";
         String cuerpoHTML = "<h1>Test HTML Content</h1>";
@@ -65,7 +59,6 @@ class EmailServiceTest {
         doThrow(new RuntimeException(new MessagingException("Error de conexión SMTP")))
                 .when(mailSender).send(any(MimeMessage.class));
 
-        // When & Then
         assertThatThrownBy(() -> emailService.enviarCorreoHTML(destinatario, asunto, cuerpoHTML))
                 .isInstanceOf(ServiceException.class)
                 .hasMessage("Error al enviar el correo HTML");
@@ -77,14 +70,12 @@ class EmailServiceTest {
     @Test
     @DisplayName("Debería manejar parámetros con caracteres especiales")
     void deberiaManejarParametrosConCaracteresEspeciales() throws MessagingException {
-        // Given
         String destinatario = "usuario@test.com";
         String asunto = "Asunto de prueba con acentos";
         String cuerpoHTML = "<html><body><h1>Contenido HTML</h1></body></html>";
 
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
 
-        // When & Then
         assertThatCode(() -> emailService.enviarCorreoHTML(destinatario, asunto, cuerpoHTML))
                 .doesNotThrowAnyException();
 
@@ -95,14 +86,12 @@ class EmailServiceTest {
     @Test
     @DisplayName("Debería lanzar ServiceException cuando createMimeMessage falla")
     void deberiaLanzarServiceExceptionCuandoCreateMimeMessageFalla() {
-        // Given
         String destinatario = "test@example.com";
         String asunto = "Test";
         String cuerpoHTML = "<p>Test</p>";
 
         when(mailSender.createMimeMessage()).thenThrow(new RuntimeException("Error al crear mensaje"));
 
-        // When & Then
         assertThatThrownBy(() -> emailService.enviarCorreoHTML(destinatario, asunto, cuerpoHTML))
                 .isInstanceOf(ServiceException.class)
                 .hasMessage("Error al enviar el correo HTML");
@@ -114,7 +103,6 @@ class EmailServiceTest {
     @Test
     @DisplayName("Debería lanzar ServiceException cuando ocurre cualquier RuntimeException")
     void deberiaLanzarServiceExceptionCuandoOcurreRuntimeException() {
-        // Given
         String destinatario = "test@example.com";
         String asunto = "Test";
         String cuerpoHTML = "<p>Test</p>";
@@ -123,7 +111,6 @@ class EmailServiceTest {
         doThrow(new RuntimeException("Error genérico"))
                 .when(mailSender).send(any(MimeMessage.class));
 
-        // When & Then
         assertThatThrownBy(() -> emailService.enviarCorreoHTML(destinatario, asunto, cuerpoHTML))
                 .isInstanceOf(ServiceException.class)
                 .hasMessage("Error al enviar el correo HTML");
