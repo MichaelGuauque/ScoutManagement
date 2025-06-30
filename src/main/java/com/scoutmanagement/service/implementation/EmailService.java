@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.implementation;
 
+import com.scoutmanagement.util.exception.ServiceException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ public class EmailService {
         mailSender.send(mensaje);
     }
 
-    // Nuevo método para correos HTML
     @Async("mailTaskExecutor")
     public void enviarCorreoHTML(String destinatario, String asunto, String cuerpoHTML) {
         try {
@@ -38,7 +38,7 @@ public class EmailService {
 
             mailSender.send(mensaje);
         } catch (MessagingException e) {
-            throw new RuntimeException("Error al enviar el correo HTML", e);
+            throw new ServiceException("Error al enviar el correo HTML", e);
         }
     }
 
