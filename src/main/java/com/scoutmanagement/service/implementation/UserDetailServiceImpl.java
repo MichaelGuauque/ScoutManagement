@@ -2,8 +2,10 @@ package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.dto.UserRegistroDTO;
+import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.RoleEntity;
 import com.scoutmanagement.persistence.model.UserEntity;
+import com.scoutmanagement.persistence.repository.PersonaRepository;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.interfaces.IUserEntity;
@@ -29,6 +31,9 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private PersonaRepository personaRepository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -160,4 +165,25 @@ public class UserDetailServiceImpl implements IUserEntity, UserDetailsService {
         save(usuario);
     }
 
+    @Override
+    public void recuperarPassword(String email) {
+        UserEntity usuario = userRepository.findUserEntityByUsername(email)
+                .orElseThrow(() -> new ServiceException("La dirección de correo electrónico no está registrada."));
+
+        String nuevaPassword = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+        usuario.setPassword(bCryptPasswordEncoder.encode(nuevaPassword));
+        userRepository.save(usuario);
+
+        String asunto = "Recuperación de Contraseña - Scout Management";
+
+        Persona persona = personaRepository.findByUserEntity_Id(usuario.getId()).orElse(null);
+
+        String nombreUsuario = persona.getPrimerNombre() + " " + persona.getPrimerApellido();
+
+        String mensajeHTML = emailService.generarTemplateRecuperacionPassword(nuevaPassword, nombreUsuario);
+
+        emailService.enviarCorreoHTML(email, asunto, mensajeHTML);
+    }
+
 }
+
