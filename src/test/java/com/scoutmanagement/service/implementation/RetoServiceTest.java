@@ -281,6 +281,16 @@ class RetoServiceTest {
     void testEliminarReto() {
         // Arrange
         Long id = 1L;
+
+        // Act
+        retoService.delete(id);
+
+        // Assert
+        InOrder inOrder = inOrder(progresoRepository, retoRepository);
+        inOrder.verify(progresoRepository).deleteByRetoId(id);
+        inOrder.verify(retoRepository).deleteById(id);
+    }
+
     @Test
     void testUpdateThrowsWhenEtapaNotFound() {
         Reto reto = new Reto();
@@ -297,14 +307,6 @@ class RetoServiceTest {
         Assertions.assertTrue(exception.getMessage().contains("Etapa no encontrada"));
     }
 
-        // Act
-        retoService.delete(id);
-
-        // Assert
-        InOrder inOrder = inOrder(progresoRepository, retoRepository);
-        inOrder.verify(progresoRepository).deleteByRetoId(id);
-        inOrder.verify(retoRepository).deleteById(id);
-    }
     @Test
     void testUpdateThrowsWhenNumeroDuplicado() {
         Etapa etapa = new Etapa();
