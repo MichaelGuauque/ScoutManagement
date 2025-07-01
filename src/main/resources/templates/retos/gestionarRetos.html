@@ -84,7 +84,7 @@
                                     <img th:src="@{/img/modify.svg}" alt="Modificar" class="dropdown-icon">
                                     <span>Modificar</span>
                                 </div>
-                                <div class="dropdown-item">
+                                <div class="dropdown-item" th:onclick="'showModalDelete(' + ${reto.id} + ')'">
                                     <img th:src="@{/img/trash.svg}" alt="Eliminar" class="dropdown-icon">
                                     <span>Eliminar</span>
                                 </div>
@@ -207,6 +207,18 @@
             </div>
         </div>
         <div class="modal-overlay"></div>
+    </div>
+
+    <div id="deleteModal" class="modalDelete" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal()">&times;</span>
+            <p>¿Estás seguro de que deseas eliminar este reto?</p>
+            <form id="deleteForm" th:action="@{/retos/remove}" method="post">
+                <input type="hidden" id="retoId" name="id" />
+                <button class="btn-primary boton-modal save-button" type="submit">Confirmar</button>
+                <button class="btn-secondary boton-modal cancel-button" type="button" onclick="hideModal()">Cancelar</button>
+            </form>
+        </div>
     </div>
 
     </div>
@@ -567,6 +579,16 @@
             window.history.replaceState({}, document.title, newUrl);
         }
     });
+
+    function showModalDelete(id) {
+        console.log("ID recibido:", id);
+        document.getElementById('retoId').value = id;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function hideModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
 
 </script>
 </body>

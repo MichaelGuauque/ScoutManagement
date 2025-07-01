@@ -16,4 +16,6 @@ public interface ProgresoRepository extends CrudRepository<Progreso, Long> {
     List<Progreso> findByPersonaAndEstadoTrue(Persona persona);
 
     Optional<Progreso> findByPersonaAndReto(Persona persona, Reto reto);
+
+    void deleteByRetoId(Long retoId);
 }

@@ -10,6 +10,7 @@ import com.scoutmanagement.persistence.repository.ProgresoRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.service.interfaces.IRetoService;
 import com.scoutmanagement.util.exception.ServiceException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,6 +106,13 @@ public class RetoService implements IRetoService {
         } catch (Exception e) {
             throw new ServiceException("Error al obtener los retos completados: " + e.getMessage());
         }
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        progresoRepository.deleteByRetoId(id);
+        retoRepository.deleteById(id);
     }
 
 }
