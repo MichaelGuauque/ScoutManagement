@@ -52,9 +52,17 @@ public class RetoService implements IRetoService {
     }
 
     @Override
-    public void update(Reto reto) {
+    public Reto update(Reto reto) {
         try {
-            retoRepository.save(reto);
+            Etapa etapaCompleta = etapaRepository.findById(reto.getEtapa().getId())
+                    .orElseThrow(() -> new ServiceException("Etapa no encontrada con ID: " + reto.getEtapa().getId()));
+            reto.setEtapa(etapaCompleta);
+
+            Optional<Reto> retoExistente = retoRepository.findRetoByNumeroAndEtapa(reto.getNumero(), etapaCompleta);
+            if (retoExistente.isPresent() && !retoExistente.get().getId().equals(reto.getId())) {
+                throw new ServiceException("Ya existe un reto con el número " + reto.getNumero() + " en la etapa " + etapaCompleta.getNombre());
+            }
+            return retoRepository.save(reto);
         } catch (Exception e) {
             throw new ServiceException("No se pudo actualizar el reto: " + e.getMessage());
         }

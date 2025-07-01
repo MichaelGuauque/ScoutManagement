@@ -187,7 +187,7 @@
                     <div class="form-row">
                         <div class="form-group" style="flex: 0 0 185px; max-width: 185px;">
                             <label for="challenge-number">Numero del Reto</label>
-                            <input type="number" id="challenge-number" name="numero" required placeholder="Ingresa el número...">
+                            <input type="number" id="challenge-number" name="numero" placeholder="Ingresa el número..." required min="1">
                         </div>
 
                         <div class="form-group">
@@ -206,7 +206,7 @@
                         <div class="form-group">
                             <label for="activity-description">Descripcion del Reto</label>
                             <textarea id="activity-description" name="descripcion"
-                                      placeholder="Ingresa aquí la descripción de la actividad..." ></textarea>
+                                      placeholder="Ingresa aquí la descripción de la actividad..." required ></textarea>
                         </div>
                     </div>
                 </div>
@@ -354,7 +354,7 @@
                     // Evitar el cierre del modal y el envío si el formulario no es válido
                     if (!form.checkValidity()) {
                         event.preventDefault(); // Prevenir el envío
-                        alert("Por favor, rellene todos los campos obligatorios."); // Alerta de advertencia
+                        return;
                     } else {
                         // Si el formulario es válido, puedes realizar el envío o el proceso correspondiente
                         hideModalById('modal-crearReto');
@@ -394,7 +394,12 @@
             // Botón guardar del modal modificar reto
             const saveButtonModificar = modificarRetoModal.querySelector('.save-button');
             if (saveButtonModificar) {
-                saveButtonModificar.addEventListener('click', function () {
+                saveButtonModificar.addEventListener('click', function (event) {
+                    const formModificar = document.getElementById('formularioModificarReto');
+                    if (!formModificar.reportValidity()) {
+                        event.preventDefault();
+                        return;
+                    }
                     hideModalById('modal-modificarReto');
                     // Aquí puedes agregar la lógica para guardar los datos modificados
                 });

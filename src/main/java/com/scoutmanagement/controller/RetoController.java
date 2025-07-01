@@ -93,21 +93,18 @@ public class RetoController {
 
         if (rol.equals(Rol.ADULTO.name())) {
             try {
-                retoService.update(reto);
-                redirectAttributes.addFlashAttribute("type", "success");
-                redirectAttributes.addFlashAttribute("message", "Reto modificado con éxito.");
+                Reto retoActualizado = retoService.update(reto);
+                String etapaNombre = URLEncoder.encode(retoActualizado.getEtapa().getNombre(), StandardCharsets.UTF_8);
 
-                Optional<Etapa> etapaCompleta = etapaService.findById(reto.getEtapa().getId());
-                String etapaNombre = etapaCompleta.isPresent()
-                        ? URLEncoder.encode(etapaCompleta.get().getNombre(), StandardCharsets.UTF_8)
-                        : "";
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Reto modificado con éxito.");
 
-                return "redirect:/progresiones?etapaSeleccionada=" + etapaNombre;
+                return VISTA_PROGRESIONES + "?etapaSeleccionada=" + etapaNombre;
             } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("type", "error");
-                redirectAttributes.addFlashAttribute("message", "Error al modificar el reto.");
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
             }
-            return "redirect:/progresiones";
+            return VISTA_PROGRESIONES;
         }
 
         return VISTA_ERROR;
