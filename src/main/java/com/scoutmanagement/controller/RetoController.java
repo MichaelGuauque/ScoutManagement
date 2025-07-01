@@ -7,9 +7,8 @@ import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IRetoService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 import static com.scoutmanagement.util.constants.AppConstants.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/retos")
@@ -72,6 +74,42 @@ public class RetoController {
                 return VISTA_PROGRESIONES;
             }
         }
+        return VISTA_ERROR;
+    }
+
+    @GetMapping("/modificar/{id}")
+    @ResponseBody
+    public ResponseEntity<Reto> obtenerRetoPorId(@PathVariable Long id) {
+        return retoService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/modificar")
+    public String modificarReto(@ModelAttribute Reto reto, RedirectAttributes redirectAttributes, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+
+        if (rol == null) return VISTA_LOGIN;
+
+        if (rol.equals(Rol.ADULTO.name())) {
+            try {
+                retoService.update(reto);
+                redirectAttributes.addFlashAttribute("type", "success");
+                redirectAttributes.addFlashAttribute("message", "Reto modificado con éxito.");
+
+                Optional<Etapa> etapaCompleta = etapaService.findById(reto.getEtapa().getId());
+                String etapaNombre = etapaCompleta.isPresent()
+                        ? URLEncoder.encode(etapaCompleta.get().getNombre(), StandardCharsets.UTF_8)
+                        : "";
+
+                return "redirect:/progresiones?etapaSeleccionada=" + etapaNombre;
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("type", "error");
+                redirectAttributes.addFlashAttribute("message", "Error al modificar el reto.");
+            }
+            return "redirect:/progresiones";
+        }
+
         return VISTA_ERROR;
     }
 
