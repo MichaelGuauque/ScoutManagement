@@ -31,7 +31,6 @@ public class RetoController {
     private IEtapaService etapaService;
     @Autowired
     private IPersonaService personaService;
-
     private static final String ID_USUARIO = "idUsuario";
 
     @GetMapping("/registrar")
@@ -108,6 +107,21 @@ public class RetoController {
         }
 
         return VISTA_ERROR;
+    }
+
+    @PostMapping("/remove")
+    public String eliminarReto(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+
+        try{
+            retoService.delete(id);
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Reto eliminado con éxito.");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+            return VISTA_PROGRESIONES;
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+            return VISTA_PROGRESIONES;
+        }
     }
 
 

@@ -11,6 +11,7 @@ import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -20,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.mockito.Mockito.inOrder;
 
 @SpringBootTest
 class RetoServiceTest {
@@ -275,6 +278,10 @@ class RetoServiceTest {
     }
 
     @Test
+    void testEliminarReto() {
+        // Arrange
+        Long id = 1L;
+    @Test
     void testUpdateThrowsWhenEtapaNotFound() {
         Reto reto = new Reto();
         Etapa etapa = new Etapa();
@@ -290,6 +297,14 @@ class RetoServiceTest {
         Assertions.assertTrue(exception.getMessage().contains("Etapa no encontrada"));
     }
 
+        // Act
+        retoService.delete(id);
+
+        // Assert
+        InOrder inOrder = inOrder(progresoRepository, retoRepository);
+        inOrder.verify(progresoRepository).deleteByRetoId(id);
+        inOrder.verify(retoRepository).deleteById(id);
+    }
     @Test
     void testUpdateThrowsWhenNumeroDuplicado() {
         Etapa etapa = new Etapa();
