@@ -7,9 +7,8 @@ import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IRetoService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 import static com.scoutmanagement.util.constants.AppConstants.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/retos")
@@ -29,7 +31,6 @@ public class RetoController {
     private IEtapaService etapaService;
     @Autowired
     private IPersonaService personaService;
-
     private static final String ID_USUARIO = "idUsuario";
 
     @GetMapping("/registrar")
@@ -73,6 +74,54 @@ public class RetoController {
             }
         }
         return VISTA_ERROR;
+    }
+
+    @GetMapping("/modificar/{id}")
+    @ResponseBody
+    public ResponseEntity<Reto> obtenerRetoPorId(@PathVariable Long id) {
+        return retoService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/modificar")
+    public String modificarReto(@ModelAttribute Reto reto, RedirectAttributes redirectAttributes, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+
+        if (rol == null) return VISTA_LOGIN;
+
+        if (rol.equals(Rol.ADULTO.name())) {
+            try {
+                Reto retoActualizado = retoService.update(reto);
+                String etapaNombre = URLEncoder.encode(retoActualizado.getEtapa().getNombre(), StandardCharsets.UTF_8);
+
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Reto modificado con éxito.");
+
+                return VISTA_PROGRESIONES + "?etapaSeleccionada=" + etapaNombre;
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+            }
+            return VISTA_PROGRESIONES;
+        }
+
+        return VISTA_ERROR;
+    }
+
+    @PostMapping("/remove")
+    public String eliminarReto(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+
+        try{
+            retoService.delete(id);
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Reto eliminado con éxito.");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+            return VISTA_PROGRESIONES;
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+            return VISTA_PROGRESIONES;
+        }
     }
 
 

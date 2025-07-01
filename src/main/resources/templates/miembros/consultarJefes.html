@@ -144,7 +144,8 @@
 
                                 </div>
                                 <div class="dropdown-item">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" width="13" height="13"
+                                    <!-- Ícono de Deshabilitar (cuando el usuario está activo) -->
+                                    <svg th:if="${jefe.userEntity.activo}" xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" width="13" height="13"
                                          viewBox="0 0 13 13" fill="none">
                                         <g clip-path="url(#clip0_69_607)">
                                             <path d="M2.84375 2.70825L10.4271 10.2916" stroke="#909090"
@@ -158,6 +159,20 @@
                                             </clipPath>
                                         </defs>
                                     </svg>
+
+                                    <!-- Ícono de Habilitar (cuando el usuario está inactivo) -->
+                                    <svg th:unless="${jefe.userEntity.activo}" xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" width="14" height="14" viewBox="0 0 13 13" fill="none">
+                                        <g clip-path="url(#clip0_69_717)">
+                                            <path d="M11.9167 6.49992C11.9167 3.50837 9.49156 1.08325 6.50004 1.08325C3.5085 1.08325 1.08337 3.50837 1.08337 6.49992C1.08337 9.49144 3.5085 11.9166 6.50004 11.9166C9.49156 11.9166 11.9167 9.49144 11.9167 6.49992Z" stroke="#909090" stroke-width="1.3"/>
+                                            <path d="M4.33337 6.77083L5.68754 8.125L8.66671 4.875" stroke="#909090" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_69_717">
+                                                <rect width="13" height="13" fill="white"/>
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+
                                     <!-- Si el usuario está activo, muestra formulario para desactivar -->
                                     <form th:if="${jefe.userEntity.activo}" th:action="@{/usuarios/desactivar}" method="post" style="display:inline;">
                                         <input type="hidden" name="idUsuario" th:value="${jefe.userEntity.id}" />

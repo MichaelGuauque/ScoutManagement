@@ -18,6 +18,9 @@ public class AppConstants {
     public static final String PROGRESOJSON = "progresoJson";
     public static final String PALABRA_MIEMBRO="miembro";
     public static final String VISTA_JEFES="redirect:/miembros/jefes";
+    public static final String RAMAS="ramas";
+    public static final String VISTA_ACTIVIDADES="redirect:/actividades";
+
 
 
     private AppConstants() {

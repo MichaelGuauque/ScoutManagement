@@ -14,7 +14,7 @@ public interface IRetoService {
 
     void save(RetoDTO retoDTO);
 
-    void update(Reto reto);
+    Reto update(Reto reto);
 
     List<Reto> findAll();
 
@@ -23,4 +23,6 @@ public interface IRetoService {
     Reto cambiarRetoDTO(RetoDTO retoDTO);
 
     List<Reto> findCompletadosByPersonaAndEtapa(Persona persona, Etapa etapa);
+
+    void delete(Long id);
 }
