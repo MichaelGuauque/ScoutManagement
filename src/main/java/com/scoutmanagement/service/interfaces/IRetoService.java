@@ -14,7 +14,7 @@ public interface IRetoService {
 
     void save(RetoDTO retoDTO);
 
-    void update(Reto reto);
+    Reto update(Reto reto);
 
     List<Reto> findAll();
 
