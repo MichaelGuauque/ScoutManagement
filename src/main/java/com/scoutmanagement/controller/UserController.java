@@ -59,12 +59,12 @@ public class UserController {
 
                 if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
                     if (rol.equals("ADULTO")) {
-                        session.setAttribute("idUsuario", usuarioBuscado.getId());
+                        session.setAttribute(ID_USUARIO, usuarioBuscado.getId());
                         session.setAttribute("rol", rol);
                         return "redirect:/home-admin";
 
                     } else if (rol.equals("JOVEN")) {
-                        session.setAttribute("idUsuario", usuarioBuscado.getId());
+                        session.setAttribute(ID_USUARIO, usuarioBuscado.getId());
                         session.setAttribute("rol", rol);
                         return "redirect:/home-user";
                     }
@@ -201,7 +201,7 @@ public class UserController {
 
     @GetMapping("/cerrar")
     public String cerrarSesion(HttpSession session) {
-        session.removeAttribute("idUsuario");
+        session.removeAttribute(ID_USUARIO);
         session.removeAttribute("rol");
         return VISTA_LOGIN;
     }

@@ -69,11 +69,13 @@ public class PersonaService implements IPersonaService {
 
     @Override
     public Persona personaModelSession(String nombreSession, HttpSession session) {
-        Optional<UserEntity> optionalUserEntity = userRepository.findById(Long.parseLong(session.getAttribute(nombreSession).toString()));
-        UserEntity usuario = optionalUserEntity.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Optional<Persona> optionalPersona = findByUsuarioId(usuario.getId());
-        Persona persona = optionalPersona.orElseThrow(() -> new RuntimeException("Persona no encontrada"));
-        return persona;
+        Long userId = Long.parseLong(session.getAttribute(nombreSession).toString());
+
+        UserEntity usuario = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        return findByUsuarioId(usuario.getId())
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
     }
 
     public List<Persona> findJefes() {

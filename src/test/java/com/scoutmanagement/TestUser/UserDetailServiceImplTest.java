@@ -61,9 +61,9 @@ class UserDetailServiceImplTest {
     private RedirectAttributes redirectAttributes;
 
     private Persona mockPersona;
-    private UserRegistroDTO userDTO;
+    private UserRegistroDTO userRegistroDTO;
     private UserEntity userEntity;
-    private RoleEntity roleEntity;
+    private RoleEntity roleRegistroEntity;
 
 
 
@@ -72,16 +72,16 @@ class UserDetailServiceImplTest {
         MockitoAnnotations.openMocks(this);
 
 
-        userDTO = new UserRegistroDTO("correito@gmail.com", Rol.ADULTO);
+        userRegistroDTO = new UserRegistroDTO("correito@gmail.com", Rol.ADULTO);
 
-        roleEntity = new RoleEntity();
-        roleEntity.setRole(userDTO.getRol());
+        roleRegistroEntity = new RoleEntity();
+        roleRegistroEntity.setRole(userRegistroDTO.getRol());
 
         userEntity = UserEntity.builder()
                 .id(1L)
                 .username("correito@gmail.com")
                 .password("passwordEncoded")
-                .roles(Set.of(roleEntity))
+                .roles(Set.of(roleRegistroEntity))
                 .accountNoExpired(true)
                 .accountNoLocked(true)
                 .credentialNoExpired(true)
@@ -278,18 +278,18 @@ class UserDetailServiceImplTest {
     @Test
     public void testSave_ExceptionThrown() {
 
-        UserEntity userEntity = UserEntity.builder()
+        UserEntity nuevoUserEntity = UserEntity.builder()
                 .username("testUser@gmail.com")
                 .password("password")
                 .build();
 
 
         doThrow(new RuntimeException("Base de datos caída"))
-                .when(userRepository).save(userEntity);
+                .when(userRepository).save(nuevoUserEntity);
 
 
         ServiceException exception = assertThrows(ServiceException.class, () -> {
-            userDetailService.save(userEntity);
+            userDetailService.save(nuevoUserEntity);
         });
 
         assertTrue(exception.getMessage().contains("No se pudo guardar el usuario"));
