@@ -109,4 +109,5 @@ public class ConfiguracionController {
 
         return "redirect:/configuracion";
     }
+
 }

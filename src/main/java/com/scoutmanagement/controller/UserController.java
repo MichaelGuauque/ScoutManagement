@@ -58,16 +58,11 @@ public class UserController {
                 String rol = rolEnum.name();
 
                 if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
-                    if (rol.equals("ADULTO")) {
-                        session.setAttribute("idUsuario", usuarioBuscado.getId());
-                        session.setAttribute("rol", rol);
-                        return "redirect:/home-admin";
+                    session.setAttribute("idUsuario", usuarioBuscado.getId());
+                    session.setAttribute("rol", rol);
 
-                    } else if (rol.equals("JOVEN")) {
-                        session.setAttribute("idUsuario", usuarioBuscado.getId());
-                        session.setAttribute("rol", rol);
-                        return "redirect:/home-user";
-                    }
+                    // Una sola redirección para ambos roles
+                    return "redirect:/home";
                 } else {
                     throw new ServiceException("Contraseña incorrecta");
                 }
@@ -150,33 +145,24 @@ public class UserController {
         }
     }
 
-    @GetMapping("/home-admin")
-    public String showAdminHomePage(Model model, HttpSession session) {
+    @GetMapping("/home")
+    public String showHomePage(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
 
-        if (session.getAttribute("rol") == Rol.ADULTO.name()) {
-            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
-            return "admin/home";
-        }
         if (rol == null) {
             return VISTA_LOGIN;
         }
-        return VISTA_ERROR;
-    }
 
-    @GetMapping("/home-user")
-    public String showUserHomePage(Model model, HttpSession session) {
-        Object rol = session.getAttribute("rol");
-
-        if (session.getAttribute("rol") == Rol.JOVEN.name()) {
+        if (session.getAttribute("rol").equals(Rol.ADULTO.name())) {
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
+            return "admin/home";
+        } else if (session.getAttribute("rol").equals(Rol.JOVEN.name())) {
             Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
             model.addAttribute(ATRIBUTO_PERSONA, sesionDelMiembro);
             return "user/home";
         }
-        if (rol == null) {
-            return VISTA_LOGIN;
-        }
+
         return VISTA_ERROR;
     }
 
@@ -236,5 +222,30 @@ public class UserController {
         model.addAttribute("roles", Rol.values());
         model.addAttribute("cargos", Cargo.values());
         model.addAttribute("tiposDeDocumento", TipoDeDocumento.values());
+    }
+
+    @GetMapping("/terminos-condiciones")
+    public String mostrarTerminosCondiciones(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+
+        String userType;
+        if (session.getAttribute("rol").equals(Rol.ADULTO.name())) {
+            userType = "admin";
+            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
+        } else if (session.getAttribute("rol").equals(Rol.JOVEN.name())) {
+            userType = "user";
+            Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
+            model.addAttribute(ATRIBUTO_PERSONA, sesionDelMiembro);
+        } else {
+            return VISTA_ERROR;
+        }
+
+        model.addAttribute("userType", userType);
+        return "user/terminosCondiciones";
     }
 }
