@@ -66,7 +66,7 @@ public class AsistenciaController {
         if (rol == null) {
             return VISTA_LOGIN;
         }
-        model.addAttribute(EXCEPTION_MESSAGE, "No tiene permisos para acceder a esta función");
+        model.addAttribute(EXCEPTION_MESSAGE, NO_PERMISO);
         model.addAttribute("type", EXCEPTION_ERROR);
         return VISTA_ERROR;
     }
@@ -113,7 +113,7 @@ public class AsistenciaController {
         if (rol == null) {
             return VISTA_LOGIN;
         }
-        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "No tiene permisos para acceder a esta función");
+        redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, NO_PERMISO);
         redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
         return VISTA_ACTIVIDADES_TAB + tabSeleccionada;
     }
@@ -154,7 +154,7 @@ public class AsistenciaController {
         if (rol == null) {
             return VISTA_LOGIN;
         }
-        model.addAttribute(EXCEPTION_MESSAGE, "No tiene permisos para acceder a esta función");
+        model.addAttribute(EXCEPTION_MESSAGE, NO_PERMISO);
         model.addAttribute("type", EXCEPTION_ERROR);
         return VISTA_ERROR;
     }

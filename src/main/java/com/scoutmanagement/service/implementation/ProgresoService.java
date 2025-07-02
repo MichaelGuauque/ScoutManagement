@@ -67,7 +67,7 @@ public class ProgresoService implements IProgresoService {
     @Override
     public List<Progreso> findAllByPersona(Persona persona) {
         try {
-            return (List<Progreso>) progresoRepository.findAllByPersona(persona);
+            return progresoRepository.findAllByPersona(persona);
         } catch (Exception e) {
             throw new ServiceException("No se encontraron los datos de la persona: " + e.getMessage());
         }

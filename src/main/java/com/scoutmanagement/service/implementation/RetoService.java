@@ -82,7 +82,7 @@ public class RetoService implements IRetoService {
     @Override
     public List<Reto> findAllRetosEtapa(Etapa etapa) {
         try {
-            return (List<Reto>) retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa);
+            return retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa);
         } catch (Exception e) {
             throw new ServiceException("No se encontraron los retos por etapa: " + e.getMessage());
         }

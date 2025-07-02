@@ -51,7 +51,7 @@ public class ObtencionService implements IObtencionService {
     @Override
     public List<Obtencion> findAllByPersona(Persona persona) {
         try {
-            return (List<Obtencion>) obtencionRepository.findAllByPersona(persona);
+            return obtencionRepository.findAllByPersona(persona);
         } catch (Exception e) {
             throw new ServiceException("No se encontraron los datos de la persona: " + e.getMessage());
         }

@@ -46,14 +46,16 @@ public class EtapaController {
     );
 
     private Persona adultoSession(String nombreSession, HttpSession session) {
-        Optional<UserEntity> optionalUserEntity = userService.findById(Long.parseLong(session.getAttribute(nombreSession).toString()));
-        UserEntity usuario = optionalUserEntity.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Optional<Persona> optionalPersona = personaService.findByUsuarioId(usuario.getId());
-        Persona persona = optionalPersona.orElseThrow(() -> new RuntimeException("Persona no encontrada"));
-        return persona;
+        Long userId = Long.parseLong(session.getAttribute(nombreSession).toString());
+
+        UserEntity usuario = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        return personaService.findByUsuarioId(usuario.getId())
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
     }
 
-    private final String ID_USUARIO = "idUsuario";
+    private static final String ID_USUARIO = "idUsuario";
 
     @GetMapping()
     public String progresiones(@RequestParam(name = "etapaSeleccionada", required = false) String etapaSeleccionada,

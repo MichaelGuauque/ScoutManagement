@@ -36,7 +36,7 @@ public class ActividadController {
     @Autowired
     private IPersonaService personaService;
 
-    private final String ID_USUARIO = "idUsuario";
+    private static final String ID_USUARIO = "idUsuario";
 
     @GetMapping
     public String actividades(Model model, HttpSession session,
