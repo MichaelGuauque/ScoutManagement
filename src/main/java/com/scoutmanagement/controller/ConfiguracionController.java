@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -66,21 +67,18 @@ public class ConfiguracionController {
                 return VISTA_LOGIN;
             }
 
-            // Validar que las contraseñas nuevas coincidan
             if (!newPassword.equals(confirmPassword)) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Las contraseñas nuevas no coinciden");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 return "redirect:/configuracion";
             }
 
-            // Validar longitud mínima de la contraseña
             if (newPassword.length() < 6) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "La nueva contraseña debe tener al menos 6 caracteres");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
                 return "redirect:/configuracion";
             }
 
-            // Obtener el usuario actual
             Optional<UserEntity> userOptional = userService.findById(idUsuario);
             if (userOptional.isEmpty()) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Usuario no encontrado");
@@ -91,7 +89,19 @@ public class ConfiguracionController {
             UserEntity user = userOptional.get();
             String username = user.getUsername();
 
-            // Llamar al servicio para actualizar la contraseña
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "La contraseña actual es incorrecta");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+                return "redirect:/configuracion";
+            }
+
+            if (passwordEncoder.matches(newPassword, user.getPassword())) {
+                redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "La nueva contraseña debe ser diferente a la contraseña actual");
+                redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+                return "redirect:/configuracion";
+            }
+
             userService.updatePassword(username, currentPassword, newPassword);
 
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Contraseña actualizada exitosamente");
