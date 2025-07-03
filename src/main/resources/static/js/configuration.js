@@ -1,200 +1,285 @@
+// Esperar a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
-    // Elementos del DOM
-    const passwordForm = document.getElementById('passwordForm');
-    const currentPasswordInput = document.getElementById('currentPassword');
-    const newPasswordInput = document.getElementById('newPassword');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const strengthBar = document.getElementById('strengthBar');
-    const strengthText = document.getElementById('strengthText');
-    const matchError = document.getElementById('matchError');
-    const reqLength = document.getElementById('reqLength');
-    const reqUppercase = document.getElementById('reqUppercase');
-
-    // Estado
-    let passwordData = {
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
+    let passwordValidation = {
+        length: false,
+        uppercase: false,
+        number: false,
+        match: false
     };
 
-    // Función para actualizar la fortaleza de la contraseña
-    function updatePasswordStrength() {
-        const password = passwordData.newPassword;
+    function validatePassword(password) {
+        const newPasswordInput = document.getElementById('newPassword');
 
-        if (!password) {
-            strengthBar.style.width = '0';
-            strengthBar.style.backgroundColor = '';
-            strengthText.textContent = 'Ingresa tu nueva contraseña';
-            return;
-        }
+        // Validar longitud (6-15 caracteres)
+        const lengthValid = password.length >= 6 && password.length <= 15;
+        passwordValidation.length = lengthValid;
+        updateRequirement('length', lengthValid);
 
-        // Verificar requisitos
-        const hasMinLength = password.length >= 8;
-        const hasUppercase = /[A-Z]/.test(password);
+        // Validar mayúscula
+        const uppercaseValid = /[A-Z]/.test(password);
+        passwordValidation.uppercase = uppercaseValid;
+        updateRequirement('uppercase', uppercaseValid);
 
-        // Actualizar indicadores de requisitos
-        if (hasMinLength) {
-            reqLength.classList.add('valid');
-        } else {
-            reqLength.classList.remove('valid');
-        }
+        // Validar número
+        const numberValid = /\d/.test(password);
+        passwordValidation.number = numberValid;
+        updateRequirement('number', numberValid);
 
-        if (hasUppercase) {
-            reqUppercase.classList.add('valid');
-        } else {
-            reqUppercase.classList.remove('valid');
-        }
+        // Actualizar barra de progreso
+        updatePasswordStrengthBar();
 
-        // Determinar fortaleza
-        let strength = 0;
-        let strengthColor = '';
-        let strengthMessage = '';
-
-        if (password.length < 6) {
-            strength = 25;
-            strengthColor = '#ef4444'; // rojo
-            strengthMessage = 'Contraseña débil';
-        } else if (password.length < 10) {
-            strength = 50;
-            strengthColor = '#f59e0b'; // amarillo
-            strengthMessage = 'Contraseña media';
-        } else {
-            strength = 100;
-            strengthColor = '#10b981'; // verde
-            strengthMessage = 'Contraseña fuerte';
-        }
-
-        // Actualizar UI
-        strengthBar.style.width = `${strength}%`;
-        strengthBar.style.backgroundColor = strengthColor;
-        strengthText.textContent = strengthMessage;
-    }
-
-    // Función para verificar si las contraseñas coinciden
-    function checkPasswordsMatch() {
-        const { newPassword, confirmPassword } = passwordData;
-
-        if (newPassword && confirmPassword) {
-            if (newPassword !== confirmPassword) {
-                matchError.style.display = 'block';
-                confirmPasswordInput.style.borderColor = '#ef4444';
+        // Actualizar clase del input
+        const allValid = lengthValid && uppercaseValid && numberValid;
+        if (password.length > 0) {
+            if (allValid) {
+                newPasswordInput.classList.remove('invalid');
+                newPasswordInput.classList.add('valid');
             } else {
-                matchError.style.display = 'none';
-                confirmPasswordInput.style.borderColor = '';
+                newPasswordInput.classList.remove('valid');
+                newPasswordInput.classList.add('invalid');
             }
         } else {
-            matchError.style.display = 'none';
-            confirmPasswordInput.style.borderColor = '';
+            newPasswordInput.classList.remove('valid', 'invalid');
+        }
+
+        // Validar coincidencia de contraseñas si ya hay algo en confirmar
+        validatePasswordMatch();
+
+        // Actualizar estado del botón
+        updateSubmitButton();
+    }
+
+    function updatePasswordStrengthBar() {
+        const progressBar = document.querySelector('.password-strength-progress');
+        if (!progressBar) return;
+
+        const validRequirements = [passwordValidation.length, passwordValidation.uppercase, passwordValidation.number].filter(Boolean).length;
+        const totalRequirements = 3; // length, uppercase, number
+
+        const percentage = (validRequirements / totalRequirements) * 100;
+        progressBar.style.width = `${percentage}%`;
+
+        // Cambiar color según el progreso
+        if (percentage === 100) {
+            progressBar.style.backgroundColor = '#10b981'; // Verde
+        } else if (percentage >= 66) {
+            progressBar.style.backgroundColor = '#f59e0b'; // Amarillo
+        } else if (percentage >= 33) {
+            progressBar.style.backgroundColor = '#ef4444'; // Rojo
+        } else {
+            progressBar.style.backgroundColor = '#d1d5db'; // Gris
         }
     }
 
-    // Event listeners para los inputs
-    currentPasswordInput.addEventListener('input', function(e) {
-        passwordData.currentPassword = e.target.value;
-    });
+    function updateRequirement(requirement, isValid) {
+        const footerElement = document.querySelector(`[data-requirement="${requirement}-footer"]`);
 
-    newPasswordInput.addEventListener('input', function(e) {
-        passwordData.newPassword = e.target.value;
-        updatePasswordStrength();
-        checkPasswordsMatch();
-    });
+        if (footerElement) {
+            footerElement.classList.remove('valid', 'invalid');
+            footerElement.classList.add(isValid ? 'valid' : 'invalid');
+        }
+    }
 
-    confirmPasswordInput.addEventListener('input', function(e) {
-        passwordData.confirmPassword = e.target.value;
-        checkPasswordsMatch();
-    });
+    function validatePasswordMatch() {
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const matchMessage = document.getElementById('passwordMatchMessage');
 
-    // Event listener para el formulario - CORREGIDO
-    passwordForm.addEventListener('submit', function(e) {
-        // Validaciones antes del envío
-        let isValid = true;
+        // Solo validar si ambos campos tienen contenido
+        if (confirmPassword.length > 0 && newPassword.length > 0) {
+            const passwordsMatch = newPassword === confirmPassword;
+            passwordValidation.match = passwordsMatch;
 
-        // Validar que todos los campos estén llenos
-        if (!passwordData.currentPassword.trim()) {
-            isValid = false;
+            if (passwordsMatch) {
+                confirmPasswordInput.classList.remove('invalid');
+                confirmPasswordInput.classList.add('valid');
+                if (matchMessage) {
+                    matchMessage.classList.remove('show', 'invalid');
+                    matchMessage.classList.add('valid');
+                    matchMessage.textContent = 'Las contraseñas coinciden';
+                    matchMessage.classList.add('show');
+                }
+            } else {
+                confirmPasswordInput.classList.remove('valid');
+                confirmPasswordInput.classList.add('invalid');
+                if (matchMessage) {
+                    matchMessage.classList.remove('valid');
+                    matchMessage.classList.add('invalid', 'show');
+                    matchMessage.textContent = 'Las contraseñas no coinciden';
+                }
+            }
+        } else {
+            // Si no hay contenido en confirmPassword, no mostrar error pero no marcar como válido
+            passwordValidation.match = (confirmPassword.length === 0) ? false : passwordValidation.match;
+            confirmPasswordInput.classList.remove('valid', 'invalid');
+            if (matchMessage) {
+                matchMessage.classList.remove('show');
+            }
         }
 
-        if (!passwordData.newPassword.trim()) {
-            isValid = false;
+        updateSubmitButton();
+    }
+
+    function updateSubmitButton() {
+        const submitBtn = document.getElementById('submitBtn');
+        if (!submitBtn) return;
+
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        // Verificar que todas las validaciones pasen
+        const allValidationsPass = passwordValidation.length &&
+            passwordValidation.uppercase &&
+            passwordValidation.number &&
+            passwordValidation.match;
+
+        // Verificar que todos los campos estén llenos
+        const allFieldsFilled = currentPassword.length > 0 &&
+            newPassword.length > 0 &&
+            confirmPassword.length > 0;
+
+        // Verificar que las contraseñas coincidan exactamente
+        const passwordsMatch = newPassword === confirmPassword && newPassword.length > 0;
+
+        // El botón se habilita solo si todo está correcto
+        if (allValidationsPass && allFieldsFilled && passwordsMatch) {
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.6';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+    }
+
+    function resetPasswordForm() {
+        const form = document.querySelector('.password-form');
+        if (form) {
+            form.reset();
         }
 
-        if (!passwordData.confirmPassword.trim()) {
-            isValid = false;
+        // Limpiar clases de validación
+        document.querySelectorAll('.inputContraseña').forEach(input => {
+            input.classList.remove('valid', 'invalid');
+        });
+
+        // Limpiar requisitos
+        document.querySelectorAll('.requirement').forEach(req => {
+            req.classList.remove('valid', 'invalid');
+        });
+
+        // Ocultar mensaje de coincidencia
+        const matchMessage = document.getElementById('passwordMatchMessage');
+        if (matchMessage) {
+            matchMessage.classList.remove('show', 'valid', 'invalid');
         }
 
-        // Validar que las contraseñas coincidan
-        if (passwordData.newPassword !== passwordData.confirmPassword) {
-            matchError.style.display = 'block';
-            confirmPasswordInput.style.borderColor = '#ef4444';
-            isValid = false;
+        // Resetear barra de progreso
+        const progressBar = document.querySelector('.password-strength-progress');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            progressBar.style.backgroundColor = '#d1d5db';
         }
 
-        // Validar longitud mínima
-        if (passwordData.newPassword.length < 6) {
-            isValid = false;
-        }
+        // Resetear validaciones
+        passwordValidation = {
+            length: false,
+            uppercase: false,
+            number: false,
+            match: false
+        };
 
-        // Si hay errores, prevenir el envío
-        if (!isValid) {
-            e.preventDefault();
+        // Deshabilitar botón
+        const submitBtn = document.getElementById('submitBtn');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.6';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+    }
+
+    // FUNCIÓN CORREGIDA: No prevenir el envío del formulario
+    function handleSubmit(event) {
+        // NO usar preventDefault() aquí
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        // Validación final antes de enviar
+        if (newPassword !== confirmPassword) {
+            event.preventDefault(); // Solo prevenir si hay error
+            alert('Las contraseñas no coinciden');
             return false;
         }
 
-        // Si llegamos aquí, el formulario es válido
-        // NO llamamos e.preventDefault() para permitir el envío normal al servidor
-        console.log('Formulario válido, enviando al servidor...');
+        // Validar que todas las validaciones pasen
+        const allValidationsPass = passwordValidation.length &&
+            passwordValidation.uppercase &&
+            passwordValidation.number &&
+            passwordValidation.match;
 
-        // El formulario se enviará automáticamente al controlador Spring Boot
-        // No necesitamos hacer nada más aquí
-    });
-});
+        if (!allValidationsPass) {
+            event.preventDefault(); // Solo prevenir si hay error
+            alert('La contraseña no cumple con todos los requisitos');
+            return false;
+        }
 
-// Función para resetear el formulario (llamada desde el botón Cancelar)
-function resetPasswordForm() {
+        // Si todo está correcto, permitir que el formulario se envíe normalmente
+        console.log('Formulario enviándose al servidor...');
+        return true;
+    }
+
+    // Agregar eventos para validar en tiempo real
     const currentPasswordInput = document.getElementById('currentPassword');
     const newPasswordInput = document.getElementById('newPassword');
     const confirmPasswordInput = document.getElementById('confirmPassword');
-    const strengthBar = document.getElementById('strengthBar');
-    const strengthText = document.getElementById('strengthText');
-    const matchError = document.getElementById('matchError');
-    const reqLength = document.getElementById('reqLength');
-    const reqUppercase = document.getElementById('reqUppercase');
+    const passwordForm = document.querySelector('.password-form');
 
-    // Resetear campos
-    currentPasswordInput.value = '';
-    newPasswordInput.value = '';
-    confirmPasswordInput.value = '';
+    if (currentPasswordInput) {
+        currentPasswordInput.addEventListener('input', function() {
+            updateSubmitButton();
+        });
+    }
 
-    // Resetear estado
-    let passwordData = {
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-    };
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', function() {
+            validatePassword(this.value);
+        });
+    }
 
-    // Resetear UI
-    strengthBar.style.width = '0';
-    strengthBar.style.backgroundColor = '';
-    strengthText.textContent = 'Ingresa tu nueva contraseña';
-    matchError.style.display = 'none';
-    confirmPasswordInput.style.borderColor = '';
+    if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', function() {
+            validatePasswordMatch();
+        });
+    }
 
-    // Resetear indicadores de requisitos
-    reqLength.classList.remove('valid');
-    reqUppercase.classList.remove('valid');
-}
+    // EVENTO SUBMIT CORREGIDO
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', handleSubmit);
+    }
 
-// ===== FUNCIONALIDAD DE SUBIR IMÁGENES (SIN CAMBIOS) =====
+    // Hacer las funciones globales para que puedan ser llamadas desde HTML
+    window.resetPasswordForm = resetPasswordForm;
+    window.handleSubmit = handleSubmit;
+    window.validatePassword = validatePassword;
+    window.validatePasswordMatch = validatePasswordMatch;
+});
 
-// Elementos del DOM
+// CÓDIGO PARA EL FORMULARIO DE IMAGEN DE PERFIL
+// Elementos del DOM para la imagen
 const uploadArea = document.getElementById('uploadArea');
 const uploadPlaceholder = document.getElementById('uploadPlaceholder');
 const fileInput = document.getElementById('fileInput');
 const imagePreview = document.getElementById('imagePreview');
 const uploadStatus = document.getElementById('uploadStatus');
 const statusText = document.getElementById('statusText');
-const uploadBtn = document.getElementById('uploadBtn');
-const cancelBtn = document.getElementById('cancelBtn');
+
+// Seleccionar botones por clase ya que no tienen ID
+const cancelBtn = document.querySelector('.btn-secondary');
+const uploadBtn = document.querySelector('.btn-primary');
 
 // Función para procesar el archivo seleccionado
 function processFile(file) {
@@ -208,12 +293,12 @@ function processFile(file) {
         // Actualizar el estado
         statusText.textContent = `Imagen seleccionada: ${file.name}`;
         uploadStatus.innerHTML = `
-            <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <div class="status-text">Imagen seleccionada: ${file.name}</div>
-        `;
+              <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <div class="status-text">Imagen seleccionada: ${file.name}</div>
+          `;
 
         // Crear un objeto URL para la vista previa
         const imageUrl = URL.createObjectURL(file);
@@ -223,80 +308,113 @@ function processFile(file) {
         imagePreview.style.display = 'block';
         uploadPlaceholder.style.display = 'none';
 
-        // Habilitar botones
-        uploadBtn.disabled = false;
+        // Habilitar botón de actualizar
+        if (uploadBtn) {
+            uploadBtn.disabled = false;
+            uploadBtn.style.opacity = '1';
+            uploadBtn.style.cursor = 'pointer';
+        }
     } else {
         alert('Por favor, selecciona un archivo de imagen válido (JPG o PNG).');
     }
 }
 
-// Abrir selector de archivos al hacer clic en el área
-uploadArea.addEventListener('click', () => fileInput.click());
+// Función para resetear el formulario
+function resetImageForm() {
+    // Resetear input de archivo
+    if (fileInput) {
+        fileInput.value = '';
+    }
+
+    // Ocultar vista previa y mostrar placeholder
+    if (imagePreview) {
+        imagePreview.style.display = 'none';
+        imagePreview.src = '';
+    }
+
+    if (uploadPlaceholder) {
+        uploadPlaceholder.style.display = 'flex';
+    }
+
+    // Resetear el estado del upload
+    if (uploadStatus) {
+        uploadStatus.innerHTML = `
+              <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              <div class="status-text">No has seleccionado ninguna imagen</div>
+          `;
+    }
+
+    // Deshabilitar botón de actualizar
+    if (uploadBtn) {
+        uploadBtn.disabled = true;
+        uploadBtn.style.opacity = '0.5';
+        uploadBtn.style.cursor = 'not-allowed';
+    }
+}
+
+// Event listeners solo si los elementos existen
+if (uploadArea) {
+    // Abrir selector de archivos al hacer clic en el área
+    uploadArea.addEventListener('click', () => {
+        if (fileInput) fileInput.click();
+    });
+
+    // Eventos para arrastrar y soltar
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadArea.classList.remove('drag-over');
+
+        const file = e.dataTransfer.files[0];
+        if (file) processFile(file);
+    });
+}
 
 // Procesar archivo seleccionado
-fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) processFile(file);
-});
+if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) processFile(file);
+    });
+}
 
-// Eventos para arrastrar y soltar
-uploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    uploadArea.classList.add('drag-over');
-});
+// BOTÓN DE CANCELAR - Funcionalidad principal
+if (cancelBtn) {
+    cancelBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevenir cualquier comportamiento por defecto
+        resetImageForm();
+    });
+}
 
-uploadArea.addEventListener('dragenter', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    uploadArea.classList.add('drag-over');
-});
-
-uploadArea.addEventListener('dragleave', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    uploadArea.classList.remove('drag-over');
-});
-
-uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    uploadArea.classList.remove('drag-over');
-
-    const file = e.dataTransfer.files[0];
-    if (file) processFile(file);
-});
-
-// Cancelar selección
-cancelBtn.addEventListener('click', () => {
-    // Resetear
-    fileInput.value = '';
-    imagePreview.style.display = 'none';
-    uploadPlaceholder.style.display = 'flex';
-
-    // Actualizar el estado
-    uploadStatus.innerHTML = `
-        <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="16"></line>
-            <line x1="8" y1="12" x2="16" y2="12"></line>
-        </svg>
-        <div class="status-text">No has seleccionado ninguna imagen</div>
-    `;
-
-    // Deshabilitar botones
+// Botón de actualizar/guardar
+if (uploadBtn) {
+    // Inicialmente deshabilitar el botón
     uploadBtn.disabled = true;
-});
+    uploadBtn.style.opacity = '0.5';
+    uploadBtn.style.cursor = 'not-allowed';
 
-// Simular subida
-uploadBtn.addEventListener('click', () => {
-    alert('Imagen subida correctamente.');
-
-    // En un caso real, aquí harías una petición fetch
-    // const formData = new FormData();
-    // formData.append('profileImage', fileInput.files[0]);
-    // fetch('/api/upload-profile-image', {
-    //     method: 'POST',
-    //     body: formData
-    // });
-});
+    // No necesita event listener ya que el formulario se enviará al controlador
+    // El botón solo se habilita/deshabilita según si hay imagen seleccionada
+}

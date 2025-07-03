@@ -318,75 +318,174 @@
           </p>
         </div>
       </div>
-      <div class="card-content">
-        <form id="passwordForm" class="password-form" th:action="@{/configuracion/cambiar-password}" method="post">
+      <div class="card-content" style="padding-top: 0rem">
+        <form id="passwordForm" class="password-form" action="/configuracion/cambiar-password" method="post">
           <div class="password-grid">
             <div class="form-group">
               <label for="currentPassword">Contraseña Actual</label>
               <div class="input-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="input-icon"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                >
+                  <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
                 </svg>
-                <input type="password" id="currentPassword" name="currentPassword" class="inputContraseña" required>
+                <input
+                        type="password"
+                        id="currentPassword"
+                        name="currentPassword"
+                        class="inputContraseña"
+                        required
+                        placeholder="Ingrese su contraseña actual"
+                />
               </div>
             </div>
+
             <div class="form-group">
               <label for="newPassword">Nueva Contraseña</label>
               <div class="input-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="input-icon"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                >
+                  <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                  />
                 </svg>
-                <input type="password" id="newPassword" name="newPassword" class="inputContraseña" required>
-              </div>
-              <div class="password-strength-container">
-                <div class="password-strength-bar">
-                  <div id="strengthBar" class="password-strength-progress"></div>
-                </div>
-                <p id="strengthText" class="password-strength-text">Ingresa tu nueva contraseña</p>
+                <input
+                        type="password"
+                        id="newPassword"
+                        name="newPassword"
+                        class="inputContraseña"
+                        required
+                        placeholder="Ingrese su nueva contraseña"
+                />
               </div>
             </div>
+
             <div class="form-group">
               <label for="confirmPassword">Confirmar Contraseña</label>
               <div class="input-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="input-icon"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                >
+                  <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-                <input type="password" id="confirmPassword" name="confirmPassword" class="inputContraseña" required>
+                <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        class="inputContraseña"
+                        required
+                        placeholder="Vuelve a ingresar tu nueva contraseña"
+                />
               </div>
-              <p id="matchError" class="password-match-error">Las contraseñas no coinciden</p>
+              <div class="password-match-message" id="passwordMatchMessage">
+                Las contraseñas no coinciden
+              </div>
             </div>
           </div>
+
           <div class="password-footer">
             <div class="password-requirements">
-              <ul>
-                <li id="reqLength" class="requirement">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="requirement-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Mínimo 6 caracteres
-                </li>
-                <li id="reqUppercase" class="requirement">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="requirement-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  Al menos una mayúscula
-                </li>
-              </ul>
+              <div class="requirements-list">
+                <small class="text-muted">
+                  La contraseña debe cumplir con los siguientes requisitos:
+                </small>
+                <ul class="password-validation-list footer-requirements">
+                  <li class="requirement" data-requirement="length-footer">
+                    <svg
+                            class="requirement-icon"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                    >
+                      <path
+                              fill-rule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    Entre 6 y 15 caracteres
+                  </li>
+                  <li
+                          class="requirement"
+                          data-requirement="uppercase-footer"
+                  >
+                    <svg
+                            class="requirement-icon"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                    >
+                      <path
+                              fill-rule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    Al menos una mayúscula
+                  </li>
+                  <li class="requirement" data-requirement="number-footer">
+                    <svg
+                            class="requirement-icon"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                    >
+                      <path
+                              fill-rule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    Al menos un número
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div class="buttons">
-              <button type="button" class="btn-secondary botones" onclick="resetPasswordForm()">
+
+            <div class="password-buttons">
+              <button
+                      type="button"
+                      class="btn-secondary botones"
+                      onclick="resetPasswordForm()"
+              >
                 Cancelar
               </button>
-              <button type="submit" class="btn-primary botones">
+              <button
+                      type="submit"
+                      class="btn-primary botones"
+                      id="submitBtn"
+                      disabled
+              >
                 Cambiar Contraseña
               </button>
             </div>
-
           </div>
         </form>
       </div>
     </div>
-
     <div class="upload-container">
       <div class="card-header password-header">
         <div class="upload-icon">
