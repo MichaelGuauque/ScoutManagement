@@ -3,10 +3,7 @@ package com.scoutmanagement.TestUser;
 import com.scoutmanagement.controller.UserController;
 import com.scoutmanagement.dto.UserDTO;
 import com.scoutmanagement.dto.UserRegistroDTO;
-import com.scoutmanagement.persistence.model.Persona;
-import com.scoutmanagement.persistence.model.Rol;
-import com.scoutmanagement.persistence.model.RoleEntity;
-import com.scoutmanagement.persistence.model.UserEntity;
+import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
@@ -61,7 +58,6 @@ class UserDetailServiceImplTest {
 
     @Mock
     private RedirectAttributes redirectAttributes;
-
 
     private Persona mockPersona;
     private UserRegistroDTO userRegistroDTO;
@@ -553,6 +549,14 @@ class UserDetailServiceImplTest {
         verify(roleRepository, times(1)).findByRole(Rol.JOVEN);
         verify(passwordEncoder, times(1)).encode(anyString());
         verify(emailService, times(1)).enviarPasswordTemporal(eq("correito@gmail.com"), anyString());
+    }
+
+    @Test
+    void testDescripciones() {
+        assertEquals("Cédula de Ciudadanía", TipoDeDocumento.CC.getDescripcion());
+        assertEquals("Tarjeta de Identidad", TipoDeDocumento.TI.getDescripcion());
+        assertEquals("Cédula de Extranjería", TipoDeDocumento.CE.getDescripcion());
+        assertEquals("Registro Civil", TipoDeDocumento.RC.getDescripcion());
     }
 
 }
