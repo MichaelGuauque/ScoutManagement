@@ -9,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 @Service
 public class EmailService {
@@ -16,15 +18,8 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Async("mailTaskExecutor")
-    public void enviarCorreo(String destinatario, String asunto, String cuerpo) {
-        SimpleMailMessage mensaje = new SimpleMailMessage();
-        mensaje.setTo(destinatario);
-        mensaje.setSubject(asunto);
-        mensaje.setText(cuerpo);
-
-        mailSender.send(mensaje);
-    }
+    @Autowired
+    private TemplateEngine templateEngine;
 
     @Async("mailTaskExecutor")
     public void enviarCorreoHTML(String destinatario, String asunto, String cuerpoHTML) {
@@ -238,6 +233,23 @@ public class EmailService {
     </html>
     """.formatted(nombreUsuario, nuevaPassword);
     }
+    @Async("mailTaskExecutor")
+    public void enviarPasswordTemporal(String destinatario, String passwordTemporal) throws MessagingException {
+        String htmlContent = generarHtmlConThymeleaf(passwordTemporal);
 
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+        helper.setTo(destinatario);
+        helper.setSubject("Tu contraseña temporal - Scout Management");
+        helper.setText(htmlContent, true);
+        mailSender.send(mimeMessage);
+    }
+
+    public String generarHtmlConThymeleaf(String passwordTemporal) {
+        Context context = new Context();
+        context.setVariable("passwordTemporal", passwordTemporal);
+        context.setVariable("loginUrl", "http://localhost:8080");
+        return templateEngine.process("email/password-temporal", context);
+    }
 }
 

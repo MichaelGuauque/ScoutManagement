@@ -14,6 +14,7 @@ import com.scoutmanagement.service.implementation.EmailService;
 import com.scoutmanagement.service.implementation.UserDetailServiceImpl;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.util.Optional;
 import java.util.Set;
@@ -59,6 +61,7 @@ class UserDetailServiceImplTest {
 
     @Mock
     private RedirectAttributes redirectAttributes;
+
 
     private Persona mockPersona;
     private UserRegistroDTO userRegistroDTO;
@@ -117,44 +120,6 @@ class UserDetailServiceImplTest {
         assertThrows(ServiceException.class, () -> userDetailService.loadUserByUsername("correito@gmail.com"));
         verify(userRepository, times(1)).findUserEntityByUsername("correito@gmail.com");
     }
-
-    @Test
-    void testCambioUserDTO_Success() {
-
-        UserRegistroDTO userDTO = new UserRegistroDTO();
-        userDTO.setUsername("correito@gmail.com");
-        userDTO.setRol(Rol.JOVEN);
-
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setRole(Rol.JOVEN);
-
-
-        when(roleRepository.findByRole(Rol.JOVEN)).thenReturn(roleEntity);
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-
-        doNothing().when(emailService).enviarCorreo(anyString(), anyString(), anyString());
-
-
-        UserEntity result = userDetailService.cambioUserDTO(userDTO);
-
-
-        assertNotNull(result);
-        assertEquals("correito@gmail.com", result.getUsername());
-        assertEquals("encodedPassword", result.getPassword());
-        assertTrue(result.getRoles().contains(roleEntity));
-        assertTrue(result.isAccountNoExpired());
-        assertTrue(result.isAccountNoLocked());
-        assertTrue(result.isCredentialNoExpired());
-        assertTrue(result.isEnabled());
-        assertTrue(result.isActivo());
-
-
-        verify(roleRepository, times(1)).findByRole(Rol.JOVEN);
-        verify(passwordEncoder, times(1)).encode(anyString());
-        verify(emailService, times(1)).enviarCorreo(anyString(), anyString(), anyString());
-    }
-
-
 
     @Test
     void testUpdatePassword_UserFoundAndPasswordMatches() {
@@ -551,6 +516,43 @@ class UserDetailServiceImplTest {
                         !password.contains("-") &&
                         password.matches("[a-zA-Z0-9]+")
         ));
+    }
+    @Test
+    void testCambioUserDTO_Success() throws MessagingException {
+        // Arrange: DTO de entrada
+        UserRegistroDTO userDTO = new UserRegistroDTO();
+        userDTO.setUsername("correito@gmail.com");
+        userDTO.setRol(Rol.JOVEN);
+
+
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setRole(Rol.JOVEN);
+
+
+        when(roleRepository.findByRole(Rol.JOVEN)).thenReturn(roleEntity);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
+
+        doNothing().when(emailService).enviarPasswordTemporal(anyString(), anyString());
+
+
+        UserEntity result = userDetailService.cambioUserDTO(userDTO);
+
+        // Assert: validaciones
+        assertNotNull(result);
+        assertEquals("correito@gmail.com", result.getUsername());
+        assertEquals("encodedPassword", result.getPassword());
+        assertTrue(result.getRoles().contains(roleEntity));
+        assertTrue(result.isAccountNoExpired());
+        assertTrue(result.isAccountNoLocked());
+        assertTrue(result.isCredentialNoExpired());
+        assertTrue(result.isEnabled());
+        assertTrue(result.isActivo());
+
+        // 🔍 Verificaciones
+        verify(roleRepository, times(1)).findByRole(Rol.JOVEN);
+        verify(passwordEncoder, times(1)).encode(anyString());
+        verify(emailService, times(1)).enviarPasswordTemporal(eq("correito@gmail.com"), anyString());
     }
 
 }
