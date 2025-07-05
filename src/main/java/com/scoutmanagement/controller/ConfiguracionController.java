@@ -31,6 +31,7 @@ public class ConfiguracionController {
 
     private static final String ID_USUARIO = "idUsuario";
     private static final String ATRIBUTO_PERSONA = "persona";
+    private static final String REDIRECT_CONFIGURACION = "redirect:/configuracion";
 
     @GetMapping
     public String mostrarConfiguracion(Model model, HttpSession session) {
@@ -62,7 +63,7 @@ public class ConfiguracionController {
                                   RedirectAttributes redirectAttributes) {
         try {
             Object rol = session.getAttribute("rol");
-            Long idUsuario = (Long) session.getAttribute("idUsuario");
+            Long idUsuario = (Long) session.getAttribute(ID_USUARIO);
 
             if (rol == null || idUsuario == null) {
                 return VISTA_LOGIN;
@@ -71,20 +72,20 @@ public class ConfiguracionController {
             if (!newPassword.equals(confirmPassword)) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Las contraseñas nuevas no coinciden");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                return "redirect:/configuracion";
+                return REDIRECT_CONFIGURACION;
             }
 
             if (newPassword.length() < 6) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "La nueva contraseña debe tener al menos 6 caracteres");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                return "redirect:/configuracion";
+                return REDIRECT_CONFIGURACION;
             }
 
             Optional<UserEntity> userOptional = userService.findById(idUsuario);
             if (userOptional.isEmpty()) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Usuario no encontrado");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                return "redirect:/configuracion";
+                return REDIRECT_CONFIGURACION;
             }
 
             UserEntity user = userOptional.get();
@@ -94,13 +95,13 @@ public class ConfiguracionController {
             if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "La contraseña actual es incorrecta");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                return "redirect:/configuracion";
+                return REDIRECT_CONFIGURACION;
             }
 
             if (passwordEncoder.matches(newPassword, user.getPassword())) {
                 redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "La nueva contraseña debe ser diferente a la contraseña actual");
                 redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
-                return "redirect:/configuracion";
+                return REDIRECT_CONFIGURACION;
             }
 
             userService.updatePassword(username, currentPassword, newPassword);
@@ -118,7 +119,7 @@ public class ConfiguracionController {
             redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
         }
 
-        return "redirect:/configuracion";
+        return REDIRECT_CONFIGURACION;
     }
 
 }

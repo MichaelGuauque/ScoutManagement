@@ -59,7 +59,7 @@ public class UserController {
 
                 if (passwordEncoder.matches(userDTO.password(), usuarioBuscado.getPassword())) {
 
-                    session.setAttribute("idUsuario", usuarioBuscado.getId());
+                    session.setAttribute(ID_USUARIO, usuarioBuscado.getId());
                     session.setAttribute("rol", rol);
 
                     // Una sola redirección para ambos roles
