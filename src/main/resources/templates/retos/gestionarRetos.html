@@ -80,11 +80,15 @@
                                 </div>
                             </button>
                             <div class="dropdown-menu">
-                                <div class="dropdown-item">
+                                <div class="dropdown-item modificar-reto-btn"
+                                     th:data-reto-id="${reto.id}"
+                                     th:data-reto-numero="${reto.numero}"
+                                     th:data-reto-descripcion="${reto.descripcion}"
+                                     th:data-etapa-id="${reto.etapa.id}">
                                     <img th:src="@{/img/modify.svg}" alt="Modificar" class="dropdown-icon">
                                     <span>Modificar</span>
                                 </div>
-                                <div class="dropdown-item">
+                                <div class="dropdown-item" th:onclick="'showModalDelete(' + ${reto.id} + ')'">
                                     <img th:src="@{/img/trash.svg}" alt="Eliminar" class="dropdown-icon">
                                     <span>Eliminar</span>
                                 </div>
@@ -162,51 +166,69 @@
     </form>
 
     <!-- Modal de Modificar Retos -->
-    <div id="modal-modificarReto" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Modificar Reto</h2>
-                <p>Aquí puedes la información de un reto correspondiente a una etapa de progresión. Asegúrate de que sea
-                    claro, alcanzable y esté alineado con los objetivos de la rama.</p>
-                <p style="margin-top: 12px;">Este reto será visible para todos los miembros de la etapa
-                    seleccionada.</p>
-            </div>
-            <div class="section">
-                <h2 class="section-title">Información del Reto</h2>
-                <p class="section-subtitle">Datos básicos sobre el reto.</p>
-
-                <!-- Ambos campos en la misma fila -->
-                <div class="form-row">
-                    <div class="form-group" style="flex: 0 0 185px; max-width: 185px;">
-                        <label for="challenge-number">Numero del Reto</label>
-                        <input type="text" id="challenge-number" placeholder="Ingresa el número...">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="activity-branch">Etapa a la que esta dirigida</label>
-                        <select id="activity-branch">
-                            <option value="" disabled selected>Selecciona la Etapa...</option>
-                            <option value="rama1">Rama 1</option>
-                            <option value="rama2">Rama 2</option>
-                            <option value="rama3">Rama 3</option>
-                        </select>
-                    </div>
+    <form id="formularioModificarReto" th:action="@{/retos/modificar}" method="post" th:object="${reto}">
+        <div id="modal-modificarReto" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Modificar Reto</h2>
+                    <p>Aquí puedes modificar la información de un reto correspondiente a una etapa de progresión. Asegúrate de que sea
+                        claro, alcanzable y esté alineado con los objetivos de la rama.</p>
+                    <p style="margin-top: 12px;">Este reto será visible para todos los miembros de la etapa
+                        seleccionada.</p>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="activity-description">Descripcion del Reto</label>
-                        <textarea id="activity-description"
-                                  placeholder="Ingresa aquí la descripción de la actividad..."></textarea>
+                <div class="section">
+                    <h2 class="section-title">Información del Reto</h2>
+                    <p class="section-subtitle">&nbsp;</p>
+
+                    <input type="hidden" id="reto-id" name="id"/>
+
+                    <!-- Ambos campos en la misma fila -->
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 0 0 185px; max-width: 185px;">
+                            <label for="challenge-number">Numero del Reto</label>
+                            <input type="number" id="challenge-number" name="numero" placeholder="Ingresa el número..." required min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="activity-branch">Etapa a la que esta dirigida</label>
+                            <select id="activity-branch" name="etapa.id" required>
+                                <option value="" disabled>Selecciona la Etapa...</option>
+                                <option th:each="etapa : ${etapas}"
+                                        th:value="${etapa.id}"
+                                        th:text="${etapa.nombre}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="activity-description">Descripcion del Reto</label>
+                            <textarea id="activity-description" name="descripcion"
+                                      placeholder="Ingresa aquí la descripción de la actividad..." required ></textarea>
+                        </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="submit" class="botones btn-primary save-button">Guardar</button>
+                    <button type="button" class="botones btn-secondary cancel-button" onclick="cancelarRegistro()">Cancelar</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button class="botones btn-secondary cancel-button">Cancelar</button>
-                <button class="botones btn-primary save-button">Guardar</button>
-            </div>
+            <div class="modal-overlay"></div>
         </div>
-        <div class="modal-overlay"></div>
+    </form>
+
+    <div id="deleteModal" class="modalDelete" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal()">&times;</span>
+            <p>¿Estás seguro de que deseas eliminar este reto?</p>
+            <form id="deleteForm" th:action="@{/retos/remove}" method="post">
+                <input type="hidden" id="retoId" name="id" />
+                <button class="btn-primary boton-modal save-button" type="submit">Confirmar</button>
+                <button class="btn-secondary boton-modal cancel-button" type="button" onclick="hideModal()">Cancelar</button>
+            </form>
+        </div>
     </div>
 
     </div>
@@ -291,6 +313,30 @@
             document.body.style.overflow = 'auto'; // Restaura el scroll del body
         }
 
+        document.querySelectorAll('.modificar-reto-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Obtener los datos del atributo data-*
+                const retoId = this.getAttribute('data-reto-id');
+                const numero = this.getAttribute('data-reto-numero');
+                const descripcion = this.getAttribute('data-reto-descripcion');
+                const etapaId = this.getAttribute('data-etapa-id');
+
+                // Llenar los campos del formulario
+                document.getElementById('reto-id').value = retoId;
+                document.getElementById('challenge-number').value = numero;
+                document.getElementById('activity-description').value = descripcion;
+                document.getElementById('activity-branch').value = etapaId;
+
+                // Mostrar el modal
+                showModalById('modal-modificarReto');
+            });
+        });
+
+        // Función para cerrar el modal de modificar reto
+        function cerrarModalModificar() {
+            hideModalById('modal-modificarReto');
+        }
+
         // --- MODAL CREAR RETO ---
         const crearRetoModal = document.getElementById('modal-crearReto');
         if (crearRetoModal) {
@@ -320,7 +366,7 @@
                     // Evitar el cierre del modal y el envío si el formulario no es válido
                     if (!form.checkValidity()) {
                         event.preventDefault(); // Prevenir el envío
-                        alert("Por favor, rellene todos los campos obligatorios."); // Alerta de advertencia
+                        return;
                     } else {
                         // Si el formulario es válido, puedes realizar el envío o el proceso correspondiente
                         hideModalById('modal-crearReto');
@@ -360,7 +406,12 @@
             // Botón guardar del modal modificar reto
             const saveButtonModificar = modificarRetoModal.querySelector('.save-button');
             if (saveButtonModificar) {
-                saveButtonModificar.addEventListener('click', function () {
+                saveButtonModificar.addEventListener('click', function (event) {
+                    const formModificar = document.getElementById('formularioModificarReto');
+                    if (!formModificar.reportValidity()) {
+                        event.preventDefault();
+                        return;
+                    }
                     hideModalById('modal-modificarReto');
                     // Aquí puedes agregar la lógica para guardar los datos modificados
                 });
@@ -567,6 +618,16 @@
             window.history.replaceState({}, document.title, newUrl);
         }
     });
+
+    function showModalDelete(id) {
+        console.log("ID recibido:", id);
+        document.getElementById('retoId').value = id;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function hideModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
 
 </script>
 </body>

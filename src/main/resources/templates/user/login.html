@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <label for="password">Contraseña</label>
                     <div class="input-container">
-                        <img src="img/lockIcon.svg" alt="contraseña" class="input-icon-password">
+                        <img th:src="@{/img/lockIcon.svg}" alt="contraseña" class="input-icon-password">
                         <input type="password" name="password" id="password" placeholder="Ingresa aquí tu contraseña..." required minlength="4" maxlength="15">
                         <div class="password-toggle-container">
                                 <span id="togglePassword" style="position: absolute; top: 50%; transform: translateY(-50%); cursor: pointer;">
@@ -46,7 +46,7 @@
                     </div>
                     <!-- Mensaje de error personalizado irá aquí -->
                     <div class="password-recovery">
-                        <span class="forgot-password">¿Olvidaste tu Contraseña?</span>
+                        <a th:href="@{/recuperar}" style="text-decoration: none" class="forgot-password">¿Olvidaste tu Contraseña?</a>
                     </div>
                 </div>
                 <button type="submit" class="login-button">Iniciar Sesión</button>
@@ -57,7 +57,7 @@
     <div class="logo-section">
         <div class="logo-section-intern">
             <div class="logo-container">
-                <img src="img/logo605.svg" alt="logo Scouts 605" class="logo-img">
+                <img th:src="@{/img/logo605.svg}" alt="logo Scouts 605" class="logo-img">
             </div>
         </div>
     </div>
@@ -68,7 +68,7 @@
         showSimpleNotification("[[${message}]]", "[[${type}]]");
     }
 </script>
-<script src="custom-validation.js"></script>
+<script th:src="@{/js/custom-validation.js}"></script>
 <script>
 
     // Mostrar/ocultar contraseña con icono hugeIcons

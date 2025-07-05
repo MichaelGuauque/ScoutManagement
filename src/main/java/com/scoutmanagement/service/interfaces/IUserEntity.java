@@ -22,4 +22,6 @@ public interface IUserEntity {
     void desactivarUsuarioPorId(Long idUsuario);
 
     void activarUsuarioPorId(Long idUsuario);
+
+    void recuperarPassword(String email);
 }

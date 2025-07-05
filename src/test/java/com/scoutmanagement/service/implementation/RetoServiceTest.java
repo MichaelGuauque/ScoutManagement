@@ -11,6 +11,7 @@ import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.util.exception.ServiceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -20,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.mockito.Mockito.inOrder;
 
 @SpringBootTest
 class RetoServiceTest {
@@ -67,12 +70,49 @@ class RetoServiceTest {
     @Test
     void testUpdate() {
         Etapa etapa = new Etapa();
+        etapa.setId(1L);
+        etapa.setNombre("Etapa Test");
+
         Reto reto = new Reto(2L, 2, "Actualizado", etapa);
 
+        // Simular que la etapa existe
+        Mockito.when(etapaRepository.findById(1L)).thenReturn(Optional.of(etapa));
+
+        // Simular que no hay otro reto con el mismo número en la misma etapa
+        Mockito.when(retoRepository.findRetoByNumeroAndEtapa(2, etapa)).thenReturn(Optional.of(reto));
+
+        // Ejecutar el método
         retoService.update(reto);
 
-        Mockito.verify(retoRepository).save(reto);
+        // Verificar que se guarde con la etapa actualizada
+        Mockito.verify(retoRepository).save(Mockito.argThat(r ->
+                r.getId().equals(2L) &&
+                        r.getNumero() == 2 &&
+                        r.getDescripcion().equals("Actualizado") &&
+                        r.getEtapa() == etapa
+        ));
     }
+
+    @Test
+    void testUpdateThrowsExceptionPorNumeroDuplicado() {
+        Etapa etapa = new Etapa();
+        etapa.setId(1L);
+        etapa.setNombre("Etapa Test");
+
+        Reto retoAActualizar = new Reto(5L, 2, "Nuevo Reto", etapa);
+        Reto otroRetoExistente = new Reto(99L, 2, "Reto Existente", etapa); // ID distinto pero mismo número
+
+        Mockito.when(etapaRepository.findById(1L)).thenReturn(Optional.of(etapa));
+        Mockito.when(retoRepository.findRetoByNumeroAndEtapa(2, etapa))
+                .thenReturn(Optional.of(otroRetoExistente));
+
+        ServiceException ex = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.update(retoAActualizar);
+        });
+
+        Assertions.assertTrue(ex.getMessage().contains("Ya existe un reto con el número"));
+    }
+
 
     @Test
     void testFindAll() {
@@ -274,7 +314,55 @@ class RetoServiceTest {
         Assertions.assertEquals(retoCorrecto, resultado.get(0));
     }
 
+    @Test
+    void testEliminarReto() {
+        // Arrange
+        Long id = 1L;
 
+        // Act
+        retoService.delete(id);
 
+        // Assert
+        InOrder inOrder = inOrder(progresoRepository, retoRepository);
+        inOrder.verify(progresoRepository).deleteByRetoId(id);
+        inOrder.verify(retoRepository).deleteById(id);
+    }
+
+    @Test
+    void testUpdateThrowsWhenEtapaNotFound() {
+        Reto reto = new Reto();
+        Etapa etapa = new Etapa();
+        etapa.setId(100L);
+        reto.setEtapa(etapa);
+
+        Mockito.when(etapaRepository.findById(100L)).thenReturn(Optional.empty());
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.update(reto);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Etapa no encontrada"));
+    }
+
+    @Test
+    void testUpdateThrowsWhenNumeroDuplicado() {
+        Etapa etapa = new Etapa();
+        etapa.setId(1L);
+        etapa.setNombre("Pionero");
+
+        Reto retoNuevo = new Reto(10L, 3, "Actualizar Reto", etapa);
+
+        Reto retoExistente = new Reto(99L, 3, "Ya existe", etapa); // mismo número, diferente ID
+
+        Mockito.when(etapaRepository.findById(1L)).thenReturn(Optional.of(etapa));
+        Mockito.when(retoRepository.findRetoByNumeroAndEtapa(3, etapa))
+                .thenReturn(Optional.of(retoExistente)); // Simula que ya existe otro reto
+
+        ServiceException exception = Assertions.assertThrows(ServiceException.class, () -> {
+            retoService.update(retoNuevo);
+        });
+
+        Assertions.assertTrue(exception.getMessage().contains("Ya existe un reto con el número"));
+    }
 
 }

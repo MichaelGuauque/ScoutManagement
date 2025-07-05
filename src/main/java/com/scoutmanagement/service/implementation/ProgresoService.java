@@ -5,6 +5,7 @@ import com.scoutmanagement.persistence.model.Persona;
 import com.scoutmanagement.persistence.model.Progreso;
 import com.scoutmanagement.persistence.model.Reto;
 import com.scoutmanagement.persistence.repository.ProgresoRepository;
+import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IProgresoService;
 import com.scoutmanagement.service.interfaces.IRetoService;
 import com.scoutmanagement.util.exception.ServiceException;
@@ -23,6 +24,8 @@ public class ProgresoService implements IProgresoService {
     private ProgresoRepository progresoRepository;
     @Autowired
     private IRetoService retoService;
+    @Autowired
+    private IPersonaService personaService;
 
     @Override
     public Optional<Progreso> findById(long id) {
@@ -64,7 +67,7 @@ public class ProgresoService implements IProgresoService {
     @Override
     public List<Progreso> findAllByPersona(Persona persona) {
         try {
-            return (List<Progreso>) progresoRepository.findAllByPersona(persona);
+            return progresoRepository.findAllByPersona(persona);
         } catch (Exception e) {
             throw new ServiceException("No se encontraron los datos de la persona: " + e.getMessage());
         }
@@ -126,6 +129,29 @@ public class ProgresoService implements IProgresoService {
             return estadoRetosPorEtapa;
         } catch (Exception e) {
             throw new ServiceException("Error al calcular los estados de los retos: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void toggleProgresoDesdeUsuario(Long usuarioId, Long retoId) {
+        Persona persona = personaService.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new ServiceException("Persona no encontrada para el usuario"));
+        Reto reto = retoService.findById(retoId)
+                .orElseThrow(() -> new ServiceException("Reto no encontrado"));
+
+        Optional<Progreso> optional = progresoRepository.findByPersonaAndReto(persona, reto);
+
+        if (optional.isEmpty()) {
+            // Si no existe, se crea como hecho
+            Progreso nuevo = Progreso.builder()
+                    .persona(persona)
+                    .reto(reto)
+                    .estado(true)
+                    .build();
+            progresoRepository.save(nuevo);
+        } else {
+            // Si existe, se elimina para no guardar datos innecesarios
+            progresoRepository.delete(optional.get());
         }
     }
 }
