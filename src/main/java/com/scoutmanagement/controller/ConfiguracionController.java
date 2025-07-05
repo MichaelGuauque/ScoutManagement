@@ -35,22 +35,23 @@ public class ConfiguracionController {
     @GetMapping
     public String mostrarConfiguracion(Model model, HttpSession session) {
         Object rol = session.getAttribute("rol");
-
         if (rol == null) {
             return VISTA_LOGIN;
         }
 
-        if (session.getAttribute("rol").equals(Rol.ADULTO.name())) {
-            Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
-            return "admin/configuracionAdmin";
-        } else if (session.getAttribute("rol").equals(Rol.JOVEN.name())) {
-            Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
-            model.addAttribute(ATRIBUTO_PERSONA, sesionDelMiembro);
-            return "user/configuracionUser";
+        if (rol.equals(Rol.ADULTO.name())) {
+            return configurarVista(model, session, "admin/configuracionAdmin");
+        } else if (rol.equals(Rol.JOVEN.name())) {
+            return configurarVista(model, session, "user/configuracionUser");
         }
 
         return VISTA_ERROR;
+    }
+
+    private String configurarVista(Model model, HttpSession session, String vista) {
+        Persona persona = personaService.personaModelSession(ID_USUARIO, session);
+        model.addAttribute(ATRIBUTO_PERSONA, persona);
+        return vista;
     }
 
     @PostMapping("/cambiar-password")
