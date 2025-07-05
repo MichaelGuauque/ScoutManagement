@@ -46,14 +46,16 @@ public class EtapaController {
     );
 
     private Persona adultoSession(String nombreSession, HttpSession session) {
-        Optional<UserEntity> optionalUserEntity = userService.findById(Long.parseLong(session.getAttribute(nombreSession).toString()));
-        UserEntity usuario = optionalUserEntity.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Optional<Persona> optionalPersona = personaService.findByUsuarioId(usuario.getId());
-        Persona persona = optionalPersona.orElseThrow(() -> new RuntimeException("Persona no encontrada"));
-        return persona;
+        Long userId = Long.parseLong(session.getAttribute(nombreSession).toString());
+
+        UserEntity usuario = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        return personaService.findByUsuarioId(usuario.getId())
+                .orElseThrow(() -> new RuntimeException("Persona no encontrada"));
     }
 
-    private final String ID_USUARIO = "idUsuario";
+    private static final String ID_USUARIO = "idUsuario";
 
     @GetMapping()
     public String progresiones(@RequestParam(name = "etapaSeleccionada", required = false) String etapaSeleccionada,
@@ -198,7 +200,8 @@ public class EtapaController {
     }
 
     @GetMapping("/progreso/{id}")
-    public String progresoMiembro(@PathVariable Long id, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String progresoMiembro(@PathVariable Long id, @RequestParam(required = false) String etapa,
+                                  Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 
         Object rol = session.getAttribute("rol");
         if (rol == null) {
@@ -224,8 +227,13 @@ public class EtapaController {
             Map<String, Map<Long, Boolean>> estadoRetosPorEtapa = progresoService.calcularEstadoRetos(etapas, miembro);
             Map<String, List<Reto>> retosPorEtapa = progresoService.prepararRetosPorEtapa(etapas, estadoRetosPorEtapa);
             Set<Long> etapasObtenidas = obtencionService.findIdEtapasObtenidasByPersona(miembro);
-            Etapa etapaDestacada = etapas.isEmpty() ? null : etapas.getFirst();
 
+            String etapaDestacada;
+            if (etapa != null && etapas.stream().anyMatch(e -> e.getNombre().equalsIgnoreCase(etapa))) {
+                etapaDestacada = etapa;
+            } else {
+                etapaDestacada = etapas.isEmpty() ? "" : etapas.getFirst().getNombre();
+            }
             model.addAttribute(PERSONA, persona);
             model.addAttribute("miembro", miembro);
             model.addAttribute(ETAPAS, etapas);
@@ -233,7 +241,7 @@ public class EtapaController {
             model.addAttribute("retosPorEtapa", retosPorEtapa);
             model.addAttribute("estadoRetosPorEtapa", estadoRetosPorEtapa);
             model.addAttribute("etapasObtenidas", etapasObtenidas);
-            model.addAttribute("etapaDestacada", etapaDestacada != null ? etapaDestacada.getNombre() : "");
+            model.addAttribute("etapaDestacada", etapaDestacada);
             model.addAttribute("gruposRamas", GRUPOS_RAMAS);
 
             return "progresiones/progreso";
@@ -250,6 +258,24 @@ public class EtapaController {
             return objectMapper.writeValueAsString(progresoPorEtapa);
         } catch (Exception e) {
             return "{}";
+        }
+    }
+
+    @PostMapping("/toggle")
+    public String toggleProgreso(@RequestParam Long usuarioId,
+                                 @RequestParam Long retoId,
+                                 RedirectAttributes redirectAttributes,
+                                 @RequestParam String etapaNombre
+                                 ) {
+        try {
+            progresoService.toggleProgresoDesdeUsuario(usuarioId, retoId);
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Obtención modificada con éxito.");
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+            return "redirect:/progresiones/progreso/" + usuarioId + "?etapa=" + etapaNombre;
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("type", "error");
+            redirectAttributes.addFlashAttribute("message", "No se pudo cambiar el estado del reto.");
+            return "redirect:/progresiones/progreso/" + usuarioId + "?etapa=" + etapaNombre;
         }
     }
 

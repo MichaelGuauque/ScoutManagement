@@ -10,6 +10,7 @@ import com.scoutmanagement.persistence.repository.ProgresoRepository;
 import com.scoutmanagement.persistence.repository.RetoRepository;
 import com.scoutmanagement.service.interfaces.IRetoService;
 import com.scoutmanagement.util.exception.ServiceException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,9 +53,17 @@ public class RetoService implements IRetoService {
     }
 
     @Override
-    public void update(Reto reto) {
+    public Reto update(Reto reto) {
         try {
-            retoRepository.save(reto);
+            Etapa etapaCompleta = etapaRepository.findById(reto.getEtapa().getId())
+                    .orElseThrow(() -> new ServiceException("Etapa no encontrada con ID: " + reto.getEtapa().getId()));
+            reto.setEtapa(etapaCompleta);
+
+            Optional<Reto> retoExistente = retoRepository.findRetoByNumeroAndEtapa(reto.getNumero(), etapaCompleta);
+            if (retoExistente.isPresent() && !retoExistente.get().getId().equals(reto.getId())) {
+                throw new ServiceException("Ya existe un reto con el número " + reto.getNumero() + " en la etapa " + etapaCompleta.getNombre());
+            }
+            return retoRepository.save(reto);
         } catch (Exception e) {
             throw new ServiceException("No se pudo actualizar el reto: " + e.getMessage());
         }
@@ -73,7 +82,7 @@ public class RetoService implements IRetoService {
     @Override
     public List<Reto> findAllRetosEtapa(Etapa etapa) {
         try {
-            return (List<Reto>) retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa);
+            return retoRepository.findAllRetosByEtapaOrderByNumeroAsc(etapa);
         } catch (Exception e) {
             throw new ServiceException("No se encontraron los retos por etapa: " + e.getMessage());
         }
@@ -105,6 +114,13 @@ public class RetoService implements IRetoService {
         } catch (Exception e) {
             throw new ServiceException("Error al obtener los retos completados: " + e.getMessage());
         }
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        progresoRepository.deleteByRetoId(id);
+        retoRepository.deleteById(id);
     }
 
 }

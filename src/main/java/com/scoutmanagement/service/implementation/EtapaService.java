@@ -57,7 +57,7 @@ public class EtapaService implements IEtapaService {
     @Override
     public List<Etapa> findAllByRama(Rama rama) {
         try {
-            return (List<Etapa>) etapaRepository.findAllByRamaOrderByOrdenAsc(rama);
+            return etapaRepository.findAllByRamaOrderByOrdenAsc(rama);
 
         } catch (Exception e) {
             throw new ServiceException("No se encontraron los datos de la rama: " + e.getMessage());
