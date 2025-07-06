@@ -50,8 +50,8 @@
                         <input type="text" name="primerNombre" id="primerNombre" required maxlength="25"
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                data-error-pattern="Solo se permiten letras, sin espacios."
-                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.primerNombre :
-                               ((errorPersona != null && errorPersona) ? persona?.primerNombre : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.primerNombre :
+                               ((errorPersona != null && errorPersona) ? personaAgregada?.primerNombre : '')}"
                                placeholder="Ingresa el primer nombre...">
                     </div>
 
@@ -60,8 +60,8 @@
                         <input type="text" name="segundoNombre" id="segundoNombre" maxlength="25"
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]*"
                                data-error-pattern="Solo se permiten letras."
-                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.segundoNombre :
-                               ((errorPersona != null && errorPersona) ? persona?.segundoNombre : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.segundoNombre :
+                               ((errorPersona != null && errorPersona) ? personaAgregada?.segundoNombre : '')}"
                                placeholder="Ingresa el segundo nombre...">
                     </div>
 
@@ -70,8 +70,8 @@
                         <input type="text" name="primerApellido" id="primerApellido" maxlength="25" required
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ]+"
                                data-error-pattern="Solo se permiten letras, sin espacios."
-                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.primerApellido :
-                               ((errorPersona != null && errorPersona) ? persona?.primerApellido : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.primerApellido :
+                               ((errorPersona != null && errorPersona) ? personaAgregada?.primerApellido : '')}"
                                placeholder="Ingresa el primer apellido...">
                     </div>
 
@@ -80,8 +80,8 @@
                         <input type="text" name="segundoApellido" id="segundoApellido" maxlength="25"
                                pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]*"
                                data-error-pattern="Solo se permiten letras."
-                               th:value="${(errorCorreo != null && errorCorreo) ? persona?.segundoApellido :
-                               ((errorPersona != null && errorPersona) ? persona?.segundoApellido : '')}"
+                               th:value="${(errorCorreo != null && errorCorreo) ? personaAgregada?.segundoApellido :
+                               ((errorPersona != null && errorPersona) ? personaAgregada?.segundoApellido : '')}"
                                placeholder="Ingresa el segundo apellido...">
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                             <th:block th:each="tipoDeDocumento : ${tiposDeDocumento}">
                                 <option th:value="${tipoDeDocumento.name()}" th:text="${tipoDeDocumento.descripcion}"
                                         th:selected="${(errorCorreo != null || errorPersona != null)
-                                        and persona?.tipoDeDocumento == tipoDeDocumento}">
+                                        and personaAgregada?.tipoDeDocumento == tipoDeDocumento}">
                                 </option>
                             </th:block>
                         </select>
@@ -105,13 +105,13 @@
                         <label for="numeroDeDocumento">Número Documento</label>
                         <input type="number" name="numeroDeDocumento" id="numeroDeDocumento" min="1000000"
                                max="99999999999" required placeholder="Ingresa aquí el documento..."
-                               th:value="${(errorCorreo != null || errorPersona != null) ? persona?.numeroDeDocumento : ''}">
+                               th:value="${(errorCorreo != null || errorPersona != null) ? personaAgregada?.numeroDeDocumento : ''}">
                     </div>
 
                     <div class="form-group">
                         <label>Correo Electrónico</label>
                         <input type="email" name="usuario.username" id="usuario.username" maxlength="50" required
-                               th:value="${errorCorreo != null and errorCorreo} ? ${usuario.username} : ''"
+                               th:value="${(errorCorreo != null || errorPersona != null) ? usuario.username : ''}"
                                placeholder="Ingresa aquí el correo...">
                     </div>
                     <div class="form-group"></div>

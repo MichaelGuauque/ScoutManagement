@@ -107,31 +107,35 @@ public class UserController {
             }
             if (session.getAttribute("rol") == Rol.ADULTO.name()) {
                 boolean documentoExiste = personaService.existsByNumeroDeDocumento(dto.getNumeroDeDocumento());
-                UserEntity user = userService.cambioUserDTO(dto.getUsuario());
+
+                UserEntity tempUser = new UserEntity();
+                tempUser.setUsername(dto.getUsuario().getUsername());
+
                 if (documentoExiste) {
                     prepararVistaConErrores(
                             redirectAttributes,
                             "El número de documento ya está registrado.",
                             EXCEPTION_ERROR,
                             false,
-                            user,
+                            tempUser,
                             dto
                     );
                     return VISTA_REGISTRAR;
                 }
-                boolean correoExiste = userService.existsByUsername(user.getUsername());
+                boolean correoExiste = userService.existsByUsername(dto.getUsuario().getUsername());
                 if (correoExiste) {
                     prepararVistaConErrores(
                             redirectAttributes,
                             "El correo electrónico ya está registrado.",
                             EXCEPTION_ERROR,
                             true,
-                            user,
+                            tempUser,
                             dto
                     );
                     return VISTA_REGISTRAR;
 
                 }
+                UserEntity user = userService.cambioUserDTO(dto.getUsuario());
                 userService.save(user);
                 personaService.save(dto, user);
 
