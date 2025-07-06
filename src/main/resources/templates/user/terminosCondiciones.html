@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminos y Condiciones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+     <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/terminosCondicionesStyle.css}">
+</head>
+<body>
+    <!-- Botón hamburguesa para móviles -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <span class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
+    </button>
+    
+    <!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div th:switch="${userType}">
+        <div th:case="'admin'" th:include="admin/template_admin.html::header"></div>
+        <div th:case="'user'" th:include="user/template_user.html::header"></div>
+    </div>
+    
+    <!-- Contenido principal -->
+    <main>
+        <!-- Aquí va el contenido de la página -->
+
+        <div class="container">
+            <div class="header">
+                <h1>Términos y Condiciones</h1>
+                <p>Aplicativo Jaguares 605 - Grupo Scout Palmira, Colombia</p>
+            </div>
+
+            <div class="terms-grid">
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Legal</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Aceptación de los Términos</h3>
+                        <div class="card-description">
+                            <p>Al acceder y utilizar este aplicativo web, usted acepta estar sujeto a los presentes términos y condiciones de uso, todas las leyes y regulaciones aplicables, y reconoce que es responsable de cumplir con las leyes locales. Si no está de acuerdo con alguno de estos términos, le está prohibido usar o acceder a este sitio.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Obligatorio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Servicio</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Descripción del Servicio</h3>
+                        <div class="card-description">
+                            <p>Este aplicativo está diseñado para facilitar la gestión de actividades, asistencia, miembros, progresiones y retos del Grupo Scout Jaguares 605. Permite a los administradores gestionar diversas funciones, mientras que los miembros pueden consultar sus progresiones y datos de contacto de sus compañeros de rama. Tanto administradores como miembros pueden actualizar su información personal.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <span>Funcional</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Normas</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Uso Aceptable</h3>
+                        <div class="card-description">
+                            <h3>Responsabilidad del Usuario:</h3>
+                            <p>Usted se compromete a utilizar el aplicativo de manera responsable y para los fines previstos. Queda prohibido el uso indebido que pueda dañar, deshabilitar, sobrecargar o perjudicar el servidor.</p>
+                            <h3>Contenido del Usuario:</h3>
+                            <p>Cualquier información que usted cargue es de su exclusiva responsabilidad. No subir contenido ilegal, ofensivo, difamatorio, obsceno o que viole derechos de autor.</p>
+                            <h3>Confidencialidad:</h3>
+                            <p>La información debe ser tratada con máxima confidencialidad, especialmente la relacionada con otros miembros.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Usuarios</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Cuentas de Usuario</h3>
+                        <div class="card-description">
+                            <h3>Creación de Cuentas:</h3>
+                            <p>Las cuentas de usuario son creadas por los administradores del Grupo Scout Jaguares 605.</p>
+                            <h3>Responsabilidad de la Cuenta:</h3>
+                            <p>Usted es responsable de mantener la confidencialidad de su contraseña y de todas las actividades que ocurran bajo su cuenta. Se compromete a notificar inmediatamente cualquier uso no autorizado.</p>
+                            <h3>Precisión de la Información:</h3>
+                            <p>Es su responsabilidad asegurarse de que la información de su perfil (nombre, datos de contacto, foto) sea precisa y esté actualizada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Privacidad</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Privacidad de los Datos</h3>
+                        <div class="card-description">
+                            <div class="highlight">
+                                <p><strong>Importante:</strong> El Grupo Scout Jaguares 605 se compromete a proteger la privacidad de sus usuarios. La recopilación y el uso de la información personal se rigen por nuestra Política de Privacidad, la cual forma parte integral de estos términos y condiciones.</p>
+                            </div>
+                            <p>Al utilizar el aplicativo, usted acepta la recopilación y el uso de su información de acuerdo con nuestra Política de Privacidad.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                                <span>Protegido</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Derechos</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Propiedad Intelectual</h3>
+                        <div class="card-description">
+                            <p>Todo el contenido y el diseño del aplicativo (incluyendo textos, gráficos, logos, iconos, imágenes y software) son propiedad del Grupo Scout Jaguares 605 o de sus licenciantes y están protegidos por las leyes de derechos de autor y otras leyes de propiedad intelectual. No se permite la reproducción, distribución, modificación o uso de ningún material sin el consentimiento expreso por escrito del Grupo Scout Jaguares 605.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Responsabilidad</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Limitación de Responsabilidad</h3>
+                        <div class="card-description">
+                            <p>El Grupo Scout Jaguares 605 no será responsable por ningún daño directo, indirecto, incidental, especial, consecuente o ejemplar que resulte del uso o la imposibilidad de usar el aplicativo, incluso si el Grupo Jaguares 605 ha sido advertido de la posibilidad de tales daños.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                                </svg>
+                                <span>Limitado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Cambios</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Modificaciones de los Términos</h3>
+                        <div class="card-description">
+                            <p>El Grupo Scout Jaguares 605 se reserva el derecho de revisar estos términos de servicio en cualquier momento sin previo aviso. Al usar este aplicativo, usted acepta estar vinculado por la versión actual de estos términos y condiciones de uso.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-card">
+                    <div class="card-header">
+                        <div class="card-tag">Jurisdicción</div>
+                        <div class="card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Ley Aplicable y Jurisdicción</h3>
+                        <div class="card-description">
+                            <p>Estos términos y condiciones se rigen e interpretan de acuerdo con las leyes de Colombia, y usted se somete irrevocablemente a la jurisdicción exclusiva de los tribunales de Palmira, Valle del Cauca, Colombia.</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span>Colombia</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:include="admin/template_admin.html::footer"></div>
+
+
+    </main>
+
+    <!-- Footer -->
+    
+    <!-- JavaScript para la funcionalidad -->
+     <script>
+        // Animación de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.term-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Script para el menú de perfil
+        document.querySelector('.perfil-flecha').addEventListener('click', function () {
+            const perfilMenu = document.getElementById('perfilMenu');
+            perfilMenu.classList.toggle('show-menu');
+        });
+
+        // Cerrar el menú al hacer clic fuera de él
+        document.addEventListener('click', function (event) {
+            const perfilMenu = document.getElementById('perfilMenu');
+            const perfilFlecha = document.querySelector('.perfil-flecha');
+
+            // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+            if (!perfilMenu.contains(event.target) && !perfilFlecha.contains(event.target)) {
+                perfilMenu.classList.remove('show-menu');
+            }
+        });
+
+        // Script para los menús desplegables de navegación
+        document.querySelectorAll('.main-button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+                event.stopPropagation();
+
+                const parent = button.parentElement;
+                const wasActive = parent.classList.contains('active');
+
+                // Cerrar todos los menús activos
+                document.querySelectorAll('.menu-item.active').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Si no estaba activo, activarlo
+                if (!wasActive) {
+                    parent.classList.add('active');
+                }
+            });
+        });
+
+        // Script para toggle del sidebar en móviles
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const hamburger = document.getElementById('hamburger');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        sidebarToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('open');
+            hamburger.classList.toggle('open');
+            overlay.classList.toggle('active');
+
+            // Mover el botón también cuando el sidebar está abierto
+            sidebarToggle.classList.toggle('moved');
+        });
+
+        // Cerrar sidebar al hacer clic en el overlay
+        overlay.addEventListener('click', function () {
+            sidebar.classList.remove('open');
+            hamburger.classList.remove('open');
+            overlay.classList.remove('active');
+            sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+        });
+
+        // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+        document.querySelectorAll('.nav-link').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                    hamburger.classList.remove('open');
+                    overlay.classList.remove('active');
+                    sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+                }
+            });
+        });
+
+        // Ajustar al cambiar el tamaño de la ventana
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('open');
+                hamburger.classList.remove('open');
+                overlay.classList.remove('active');
+                sidebarToggle.classList.remove('moved'); // Regresar el botón a su posición original
+            }
+        });
+
+
+        // Espera a que el documento cargue
+        document.addEventListener("DOMContentLoaded", function () {
+            // Captura todos los enlaces de paginación
+            const paginationLinks = document.querySelectorAll(".pagination a");
+
+            // Añadir un listener para cada enlace de paginación
+            paginationLinks.forEach(function (link) {
+                link.addEventListener("click", function (e) {
+                    // Realiza el scroll hacia la sección de actividades
+                    document.getElementById("actividadesSection").scrollIntoView({
+                        behavior: "smooth", // Desplazamiento suave
+                        block: "start"      // Inicia el scroll desde la parte superior de la sección
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

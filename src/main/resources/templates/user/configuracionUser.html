@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuracion</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/configuracionUserStyle.css}" />
+    <link rel="stylesheet" th:href="@{/style/notification.css}" />
+    <script th:src="@{/js/notification.js}"></script>
+</head>
+<body>
+<!-- Botón hamburguesa para móviles -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</button>
+
+<!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div th:include="user/template_user.html::header"></div>
+
+<!-- Contenido principal -->
+<main>
+    <!-- Aquí va el contenido de la página -->
+
+    <div class="container">
+        <div class="header">
+            <h1 class="encabezado">Perfil de Usuario</h1>
+            <p class="description">
+                Consulta y gestiona tu información personal desde aquí. Aquí puedes
+                actualizar tus datos de perfil o cambiar tu contraseña de forma
+                segura y rápida.
+            </p>
+        </div>
+
+        <div class="profile-container">
+            <!-- Header con avatar y nombre -->
+            <div class="profile-header">
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <img
+                                th:src="@{/img/perfil.svg}"
+                                alt="Avatar"
+                                class="profile-avatar-icon"
+                        />
+                    </div>
+                    <div class="profile-name-container">
+                        <h1>Miguel Andres Marin Fernandez</h1>
+                        <div class="profile-email">miguelito@gmail.com</div>
+                        <div class="profile-status">Activo</div>
+                    </div>
+                </div>
+
+                <button class="edit-button create-reto-btn">
+                    <span>Modificar</span>
+                    <img
+                            th:src="@{/img/modificar.svg}"
+                            alt="Arrow"
+                            width="16"
+                            height="16"
+                    />
+                </button>
+            </div>
+
+            <!-- Información Personal -->
+            <div class="section">
+                <h2 class="section-title">Información Personal</h2>
+                <p class="section-subtitle">Datos básicos sobre el miembro.</p>
+
+                <div class="form-row">
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Primer Nombre</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Miguel"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Segundo Nombre</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Andres"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Primer Apellido</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Marin"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Segundo Apellido</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Fernandez"
+                                disabled
+                        />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Tipo de Documento</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Tarjeta de Identidad"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Numero de Documento</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="1112041392"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Telefono</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="3167448590"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Correo</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="miguelito@gmail.com"
+                                disabled
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos de Acudiente -->
+            <div class="section">
+                <h2 class="section-title">Datos de Acudiente</h2>
+
+                <div class="form-row">
+                    <div class="form-group form-group-33">
+                        <label class="form-label">Nombre Acudiente</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="John Edward Kenway"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-25">
+                        <label class="form-label">Teléfono</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="3187658970"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-20">
+                        <label class="form-label">Tipo de Documento</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Cedula de Ciudadania"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-20">
+                        <label class="form-label">Numero Documento</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="17782498"
+                                disabled
+                        />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-group-100">
+                        <label class="form-label">Dirección</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Carrera 9 #36-12, Barrio San Fernando, Cali"
+                                disabled
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos Medicos -->
+            <div class="section">
+                <h2 class="section-title">Datos Medicos</h2>
+
+                <div class="form-row">
+                    <div class="form-group full-width" style="flex: 2.14">
+                        <label class="form-label">Alergias</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Miguel"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tipo de sangre</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Marin"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">EPS</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Fernandez"
+                                disabled
+                        />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-group-20">
+                        <label class="form-label">Toma Medicamentos?</label>
+                        <input type="text" class="form-control" value="ji" disabled />
+                    </div>
+                    <div class="form-group full-width" style="flex: 3.3">
+                        <label class="form-label">Frecuencia</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Andres"
+                                disabled
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contactos de Emergencia -->
+            <div class="section">
+                <h2 class="section-title">Contactos de Emergencia</h2>
+
+                <div class="form-row">
+                    <div class="form-group form-section-header form-group-50">
+                        <label class="form-label">Contacto de Emergencia #1</label>
+                    </div>
+                    <div class="form-group form-section-header form-group-50">
+                        <label class="form-label">Contacto de Emergencia #2</label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-group-33">
+                        <label class="form-label">Nombre Contacto</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Lady Johanna"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-20">
+                        <label class="form-label">Teléfono</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="3168970989"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-33">
+                        <label class="form-label">Nombre Contacto</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Felipe Restrepo"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-20">
+                        <label class="form-label">Teléfono</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="3168400989"
+                                disabled
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Funcion dentro del Grupo -->
+            <div class="section">
+                <h2 class="section-title">Funcion dentro del Grupo</h2>
+                <p class="section-subtitle">
+                    El rol y la rama a la que pertenece el miembro.
+                </p>
+                <div class="form-row">
+                    <div class="form-group form-group-33">
+                        <label class="form-label">Rol</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="Joven"
+                                disabled
+                        />
+                    </div>
+                    <div class="form-group form-group-33">
+                        <label class="form-label">Cargo (Rama)</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                value="MANADA"
+                                disabled
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card password-card">
+            <div class="password-bg"></div>
+            <div class="card-header password-header">
+                <div class="password-icon-container">
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="password-icon"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                    >
+                        <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                        />
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="card-title">Cambiar Contraseña</h2>
+                    <p class="password-subtitle">
+                        Actualiza tu contraseña regularmente para mantener tu cuenta
+                        segura
+                    </p>
+                </div>
+            </div>
+            <div class="card-content" style="padding-top: 0rem">
+                <form id="passwordForm" class="password-form" action="/configuracion/cambiar-password" method="post">
+                    <div class="password-grid">
+                        <div class="form-group">
+                            <label for="currentPassword">Contraseña Actual</label>
+                            <div class="input-icon-wrapper">
+                                <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="input-icon"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                >
+                                    <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                    />
+                                </svg>
+                                <input
+                                        type="password"
+                                        id="currentPassword"
+                                        name="currentPassword"
+                                        class="inputContraseña"
+                                        required
+                                        placeholder="Ingrese su contraseña actual"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">Nueva Contraseña</label>
+                            <div class="input-icon-wrapper">
+                                <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="input-icon"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                >
+                                    <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                                    />
+                                </svg>
+                                <input
+                                        type="password"
+                                        id="newPassword"
+                                        name="newPassword"
+                                        class="inputContraseña"
+                                        required
+                                        placeholder="Ingrese su nueva contraseña"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirmar Contraseña</label>
+                            <div class="input-icon-wrapper">
+                                <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="input-icon"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                >
+                                    <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                <input
+                                        type="password"
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        class="inputContraseña"
+                                        required
+                                        placeholder="Vuelve a ingresar tu nueva contraseña"
+                                />
+                            </div>
+                            <div class="password-match-message" id="passwordMatchMessage">
+                                Las contraseñas no coinciden
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="password-footer">
+                        <div class="password-requirements">
+                            <div class="requirements-list">
+                                <small class="text-muted">
+                                    La contraseña debe cumplir con los siguientes requisitos:
+                                </small>
+                                <ul class="password-validation-list footer-requirements">
+                                    <li class="requirement" data-requirement="length-footer">
+                                        <svg
+                                                class="requirement-icon"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                        >
+                                            <path
+                                                    fill-rule="evenodd"
+                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd"
+                                            ></path>
+                                        </svg>
+                                        Entre 6 y 15 caracteres
+                                    </li>
+                                    <li
+                                            class="requirement"
+                                            data-requirement="uppercase-footer"
+                                    >
+                                        <svg
+                                                class="requirement-icon"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                        >
+                                            <path
+                                                    fill-rule="evenodd"
+                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd"
+                                            ></path>
+                                        </svg>
+                                        Al menos una mayúscula
+                                    </li>
+                                    <li class="requirement" data-requirement="number-footer">
+                                        <svg
+                                                class="requirement-icon"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                        >
+                                            <path
+                                                    fill-rule="evenodd"
+                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                    clip-rule="evenodd"
+                                            ></path>
+                                        </svg>
+                                        Al menos un número
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="password-buttons">
+                            <button
+                                    type="button"
+                                    class="btn-secondary botones"
+                                    onclick="resetPasswordForm()"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                    type="submit"
+                                    class="btn-primary botones"
+                                    id="submitBtn"
+                                    disabled
+                            >
+                                Cambiar Contraseña
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="upload-container">
+            <div class="card-header password-header">
+                <div class="upload-icon">
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    >
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </div>
+                <div class="upload-title-container">
+                    <div class="card-title">Imagen de Perfil</div>
+                    <div class="password-subtitle">
+                        Sube una imagen para personalizar tu perfil
+                    </div>
+                </div>
+            </div>
+
+            <div class="upload-content">
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <svg
+                                    class="upload-placeholder-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                            >
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <div class="upload-placeholder-text">
+                                Arrastra tu imagen aquí
+                            </div>
+                            <div class="upload-placeholder-hint">
+                                o haz clic para seleccionar
+                            </div>
+                        </div>
+                        <img
+                                id="imagePreview"
+                                class="upload-preview"
+                                alt="Vista previa"
+                        />
+                    </div>
+
+                    <div class="upload-info">
+                        <div class="upload-status" id="uploadStatus">
+                            <svg
+                                    class="status-icon"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                            >
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                            </svg>
+                            <div class="status-text" id="statusText">
+                                No has seleccionado ninguna imagen
+                            </div>
+                        </div>
+
+                        <input
+                                type="file"
+                                id="fileInput"
+                                class="file-input"
+                                accept="image/*"
+                        />
+
+                        <div class="file-requirements">
+                            <div class="file-requirement">
+                                <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                >
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>Formatos permitidos: JPG, PNG</span>
+                            </div>
+                            <div class="file-requirement">
+                                <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                >
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>Tamaño máximo: 5 MB</span>
+                            </div>
+                        </div>
+
+                        <div class="upload-recommendations">
+                            <div class="recommendations-content">
+                                <div class="recommendations-text">
+                                    Para obtener mejores resultados, utiliza una imagen
+                                    cuadrada con buena iluminación. La imagen se mostrará como
+                                    un círculo en tu perfil.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button type="button" class="btn-secondary botones">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary botones">
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:include="admin/template_admin.html::footer"></div>
+</main>
+
+<!-- Notificaciones -->
+<div id="notifications"></div>
+
+<!-- JavaScript para la funcionalidad -->
+<script th:if="${message != null}">
+    window.onload = function () {
+        showSimpleNotification("[[${message}]]", "[[${type}]]");
+    };
+</script>
+<script th:src="@{/js/configuration.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const contentAreas = document.querySelectorAll(".content-area");
+
+        tabButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+                // Remove active class from all buttons and content areas
+                tabButtons.forEach((btn) => btn.classList.remove("active"));
+                contentAreas.forEach((content) =>
+                    content.classList.remove("active")
+                );
+
+                // Add active class to clicked button
+                this.classList.add("active");
+
+                // Show corresponding content area
+                const tabId = this.getAttribute("data-tab");
+                document.getElementById(tabId).classList.add("active");
+            });
+        });
+    });
+
+    // Funciones para los modales
+    document.addEventListener("DOMContentLoaded", function () {
+        // --- FUNCIONES COMPARTIDAS ---
+
+        // Función genérica para mostrar un modal
+        function showModalById(modalId) {
+            document.getElementById(modalId).style.display = "block";
+            document.body.style.overflow = "hidden"; // Evita el scroll del body
+        }
+
+        // Función genérica para ocultar un modal
+        function hideModalById(modalId) {
+            document.getElementById(modalId).style.display = "none";
+            document.body.style.overflow = "auto"; // Restaura el scroll del body
+        }
+
+        // --- MODAL CREAR RETO ---
+
+        // Botón "Nuevo Reto" - Abre el modal de crear reto
+        const createRetoBtn = document.querySelector(".create-reto-btn");
+        if (createRetoBtn) {
+            createRetoBtn.addEventListener("click", function () {
+                showModalById("modal-crearReto");
+            });
+        }
+
+        // Configuración para cerrar el modal crear reto
+        const crearRetoModal = document.getElementById("modal-crearReto");
+        if (crearRetoModal) {
+            // Botón cancelar del modal crear reto
+            const cancelButtonCrear =
+                crearRetoModal.querySelector(".cancel-button");
+            if (cancelButtonCrear) {
+                cancelButtonCrear.addEventListener("click", function () {
+                    hideModalById("modal-crearReto");
+                });
+            }
+
+            // Botón guardar del modal crear reto
+            const saveButtonCrear = crearRetoModal.querySelector(".save-button");
+            if (saveButtonCrear) {
+                saveButtonCrear.addEventListener("click", function () {
+                    hideModalById("modal-crearReto");
+                    // Aquí puedes agregar la lógica para guardar los datos del reto
+                });
+            }
+
+            // Cerrar al hacer click en el overlay
+            const overlayCrear = crearRetoModal.querySelector(".modal-overlay");
+            if (overlayCrear) {
+                overlayCrear.addEventListener("click", function () {
+                    hideModalById("modal-crearReto");
+                });
+            }
+
+            // Evitar cierre al hacer click en el contenido
+            const contentCrear = crearRetoModal.querySelector(".modal-content");
+            if (contentCrear) {
+                contentCrear.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                });
+            }
+        }
+
+        // --- MODAL MODIFICAR RETO ---
+
+        // Configuración para abrir el modal modificar reto desde opciones de "Asistencia"
+        const dropdownMenus = document.querySelectorAll(".dropdown-menu");
+        dropdownMenus.forEach((menu) => {
+            const asistenciaItem = menu.querySelector(
+                ".dropdown-item:nth-child(1)"
+            );
+            if (asistenciaItem) {
+                asistenciaItem.addEventListener("click", function (e) {
+                    e.stopPropagation(); // Evita que el click se propague
+                    showModalById("modal-modificarReto");
+
+                    // Cerrar el dropdown al abrir el modal
+                    const activeDropdowns = document.querySelectorAll(
+                        ".dropdown-menu.active"
+                    );
+                    activeDropdowns.forEach((dropdown) => {
+                        dropdown.classList.remove("active");
+                    });
+
+                    const activeButtons =
+                        document.querySelectorAll(".expand-btn.active");
+                    activeButtons.forEach((button) => {
+                        button.classList.remove("active");
+                    });
+                });
+            }
+        });
+
+        // Configuración para cerrar el modal modificar reto
+        const modificarRetoModal = document.getElementById(
+            "modal-modificarReto"
+        );
+        if (modificarRetoModal) {
+            // Botón cancelar del modal modificar reto
+            const cancelButtonModificar =
+                modificarRetoModal.querySelector(".cancel-button");
+            if (cancelButtonModificar) {
+                cancelButtonModificar.addEventListener("click", function () {
+                    hideModalById("modal-modificarReto");
+                });
+            }
+
+            // Botón guardar del modal modificar reto
+            const saveButtonModificar =
+                modificarRetoModal.querySelector(".save-button");
+            if (saveButtonModificar) {
+                saveButtonModificar.addEventListener("click", function () {
+                    hideModalById("modal-modificarReto");
+                    // Aquí puedes agregar la lógica para guardar los datos modificados
+                });
+            }
+
+            // Cerrar al hacer click en el overlay
+            const overlayModificar =
+                modificarRetoModal.querySelector(".modal-overlay");
+            if (overlayModificar) {
+                overlayModificar.addEventListener("click", function () {
+                    hideModalById("modal-modificarReto");
+                });
+            }
+
+            // Evitar cierre al hacer click en el contenido
+            const contentModificar =
+                modificarRetoModal.querySelector(".modal-content");
+            if (contentModificar) {
+                contentModificar.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                });
+            }
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Manejar clic en los botones de expansión
+        document.querySelectorAll(".expand-btn").forEach((button) => {
+            button.addEventListener("click", function (e) {
+                e.stopPropagation();
+
+                // Cerrar otros dropdowns abiertos
+                document.querySelectorAll(".expand-btn").forEach((btn) => {
+                    if (btn !== this) {
+                        btn.classList.remove("active");
+                        const menu = btn.nextElementSibling;
+                        if (menu && menu.classList.contains("dropdown-menu")) {
+                            menu.classList.remove("active");
+                        }
+                        // Remover clase menu-active del contenedor
+                        const container = btn.closest(".dropdown-container");
+                        if (container) {
+                            container.classList.remove("menu-active");
+                        }
+                    }
+                });
+
+                // Toggle el dropdown actual
+                this.classList.toggle("active");
+                const dropdownMenu = this.nextElementSibling;
+                if (
+                    dropdownMenu &&
+                    dropdownMenu.classList.contains("dropdown-menu")
+                ) {
+                    dropdownMenu.classList.toggle("active");
+
+                    // Añadir o remover clase menu-active al contenedor
+                    const container = this.closest(".dropdown-container");
+                    if (container) {
+                        if (dropdownMenu.classList.contains("active")) {
+                            container.classList.add("menu-active");
+                        } else {
+                            container.classList.remove("menu-active");
+                        }
+                    }
+                }
+            });
+        });
+
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener("click", function () {
+            document.querySelectorAll(".expand-btn.active").forEach((btn) => {
+                btn.classList.remove("active");
+                const menu = btn.nextElementSibling;
+                if (menu && menu.classList.contains("dropdown-menu")) {
+                    menu.classList.remove("active");
+                }
+                // Remover clase menu-active del contenedor
+                const container = btn.closest(".dropdown-container");
+                if (container) {
+                    container.classList.remove("menu-active");
+                }
+            });
+        });
+
+        // Manejar clic en las opciones del dropdown
+        document.querySelectorAll(".dropdown-item").forEach((item) => {
+            item.addEventListener("click", function (e) {
+                e.stopPropagation();
+
+                // Marcar la opción seleccionada
+                const parentMenu = this.closest(".dropdown-menu");
+                parentMenu
+                    .querySelectorAll(".dropdown-item")
+                    .forEach((menuItem) => {
+                        menuItem.classList.remove("active");
+                    });
+                this.classList.add("active");
+
+                // Aquí puedes añadir la lógica para cada opción
+                const action = this.querySelector("span").textContent;
+                console.log(`Acción seleccionada: ${action}`);
+
+                // Cerrar el dropdown después de seleccionar
+                const expandButton = parentMenu.previousElementSibling;
+                if (expandButton && expandButton.classList.contains("expand-btn")) {
+                    expandButton.classList.remove("active");
+                    parentMenu.classList.remove("active");
+
+                    // Remover clase menu-active del contenedor
+                    const container = expandButton.closest(".dropdown-container");
+                    if (container) {
+                        container.classList.remove("menu-active");
+                    }
+                }
+            });
+        });
+    });
+
+    // Script para el menú de perfil
+    document
+        .querySelector(".perfil-flecha")
+        .addEventListener("click", function () {
+            const perfilMenu = document.getElementById("perfilMenu");
+            perfilMenu.classList.toggle("show-menu");
+        });
+
+    // Cerrar el menú al hacer clic fuera de él
+    document.addEventListener("click", function (event) {
+        const perfilMenu = document.getElementById("perfilMenu");
+        const perfilFlecha = document.querySelector(".perfil-flecha");
+
+        // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+        if (
+            !perfilMenu.contains(event.target) &&
+            !perfilFlecha.contains(event.target)
+        ) {
+            perfilMenu.classList.remove("show-menu");
+        }
+    });
+
+    // Script para los menús desplegables de navegación
+    document.querySelectorAll(".main-button").forEach((button) => {
+        button.addEventListener("click", (event) => {
+            // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+            event.stopPropagation();
+
+            const parent = button.parentElement;
+            const wasActive = parent.classList.contains("active");
+
+            // Cerrar todos los menús activos
+            document.querySelectorAll(".menu-item.active").forEach((item) => {
+                item.classList.remove("active");
+            });
+
+            // Si no estaba activo, activarlo
+            if (!wasActive) {
+                parent.classList.add("active");
+            }
+        });
+    });
+
+    // Script para toggle del sidebar en móviles
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    const sidebar = document.getElementById("sidebar");
+    const hamburger = document.getElementById("hamburger");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    sidebarToggle.addEventListener("click", function () {
+        sidebar.classList.toggle("open");
+        hamburger.classList.toggle("open");
+        overlay.classList.toggle("active");
+
+        // Mover el botón también cuando el sidebar está abierto
+        sidebarToggle.classList.toggle("moved");
+    });
+
+    // Cerrar sidebar al hacer clic en el overlay
+    overlay.addEventListener("click", function () {
+        sidebar.classList.remove("open");
+        hamburger.classList.remove("open");
+        overlay.classList.remove("active");
+        sidebarToggle.classList.remove("moved"); // Regresar el botón a su posición original
+    });
+
+    // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+    document.querySelectorAll(".nav-link").forEach((item) => {
+        item.addEventListener("click", () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove("open");
+                hamburger.classList.remove("open");
+                overlay.classList.remove("active");
+                sidebarToggle.classList.remove("moved"); // Regresar el botón a su posición original
+            }
+        });
+    });
+
+    // Ajustar al cambiar el tamaño de la ventana
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove("open");
+            hamburger.classList.remove("open");
+            overlay.classList.remove("active");
+            sidebarToggle.classList.remove("moved"); // Regresar el botón a su posición original
+        }
+    });
+</script>
+</body>
+</html>
