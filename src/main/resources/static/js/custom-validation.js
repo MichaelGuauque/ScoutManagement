@@ -6,11 +6,18 @@
 (function() {
     // Estilos CSS para los mensajes de error
     const styles = `
+    .form-group {
+      position: relative;
+      padding-bottom: 1.25rem; /* Espacio para el mensaje de error */
+    }
     .error-message {
       color: #dc2626;
       font-size: 0.75rem;
-      margin-top: 0.25rem;
       display: none;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
     }
     
     .error-message.show {
@@ -35,8 +42,8 @@
         patternMismatch: "Formato incorrecto",
         tooLong: "Texto demasiado largo",
         tooShort: "Texto demasiado corto",
-        rangeUnderflow: "Valor demasiado bajo",
-        rangeOverflow: "Valor demasiado alto",
+        rangeUnderflow: "El documento debe tener entre 7 y 11 dígitos.",
+        rangeOverflow: "El documento debe tener entre 7 y 11 dígitos.",
         stepMismatch: "Valor no permitido",
         badInput: "Valor inválido",
         default: "Campo inválido"
@@ -96,42 +103,43 @@
         document.head.appendChild(styleElement);
     }
 
-    // Crear un elemento de mensaje de error para un elemento
+    // Crear o encontrar un elemento de mensaje de error para un campo
     function createErrorMessage(element) {
-        // Buscar el contenedor padre adecuado (input-container)
-        let container = element.closest('.input-container');
-        if (!container) container = element.parentElement;
-        // Verificar si ya existe un mensaje de error
-        let errorElement = container.nextElementSibling;
-        if (errorElement && errorElement.classList && errorElement.classList.contains('error-message')) {
-            return errorElement;
+        const formGroup = element.closest('.form-group'); // Buscar el .form-group más cercano
+        if (!formGroup) {
+            console.error('No se encontró un .form-group para el elemento:', element);
+            return null; // O manejar el error de otra manera
         }
 
-        // Crear nuevo elemento de error
-        errorElement = document.createElement('div');
-        errorElement.className = 'error-message';
+        let errorElement = formGroup.querySelector('.error-message');
 
-        // Insertar mensaje después del input-container
-        if (container.nextSibling) {
-            container.parentElement.insertBefore(errorElement, container.nextSibling);
-        } else {
-            container.parentElement.appendChild(errorElement);
+        if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.className = 'error-message';
+
+            const inputContainer = element.closest('.input-container');
+            if (inputContainer) {
+                // Si hay un input-container, insertar después de él
+                inputContainer.after(errorElement);
+            } else {
+                // Si no, insertar después del propio elemento (input/select)
+                element.after(errorElement);
+            }
         }
-
         return errorElement;
     }
 
     // Mostrar mensaje de error
     function showErrorMessage(element) {
         const errorElement = createErrorMessage(element);
-        // Usar mensaje personalizado en lugar del mensaje del navegador
+        if (!errorElement) return; // Salir si no se pudo crear el elemento de error
+
         const message = getCustomMessage(element);
         errorElement.textContent = message;
         errorElement.classList.add('show');
         element.classList.add('error-highlight');
-        // Eliminar listeners previos para evitar duplicados
-        element.removeEventListener('input', element._hideErrorHandler);
-        // Crear y guardar el handler para poder removerlo después
+
+        // Handler para ocultar el error al escribir
         element._hideErrorHandler = function() {
             hideErrorMessage(element);
             element.removeEventListener('input', element._hideErrorHandler);
@@ -141,11 +149,11 @@
 
     // Ocultar mensaje de error
     function hideErrorMessage(element) {
-        // Buscar el contenedor padre adecuado (input-container)
-        let container = element.closest('.input-container');
-        if (!container) container = element.parentElement;
-        let errorElement = container.nextElementSibling;
-        if (errorElement && errorElement.classList && errorElement.classList.contains('error-message')) {
+        const formGroup = element.closest('.form-group');
+        if (!formGroup) return; // Salir si no se encuentra el form-group
+
+        const errorElement = formGroup.querySelector('.error-message');
+        if (errorElement) {
             errorElement.classList.remove('show');
             element.classList.remove('error-highlight');
         }
