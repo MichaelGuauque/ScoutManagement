@@ -98,7 +98,7 @@
                                 oninput="this.setCustomValidity('')">
                             <option value="" disabled selected>Seleccione...</option>
                             <th:block th:each="tipoDeDocumento : ${tiposDeDocumento}">
-                                <option th:value="${tipoDeDocumento}" th:text="${tipoDeDocumento}"
+                                <option th:value="${tipoDeDocumento.name()}" th:text="${tipoDeDocumento.descripcion}"
                                         th:selected="${(errorCorreo != null || errorPersona != null)
                                         and persona?.tipoDeDocumento == tipoDeDocumento}">
                                 </option>
