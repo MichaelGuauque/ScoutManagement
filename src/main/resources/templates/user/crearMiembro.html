@@ -147,10 +147,9 @@
                         <label for="rama">Rama</label>
                         <select class="form-select" name="rama" id="rama"
                                 style="pointer-events: none;background-color: #f3f3f3;">
-                            <option value="" selected="">Seleccione...</option>
+                            <option value="" disabled selected>Seleccione...</option>
                             <th:block th:each="rama : ${ramas}">
-                                <option th:value="${rama}" th:text="${rama}" th:selected="${(errorCorreo != null || errorPersona != null)
-                                        and personaAgregada?.rama == rama}"></option>
+                                <option th:value="${rama}" th:text="${rama}"></option>
                             </th:block>
                         </select>
                     </div>

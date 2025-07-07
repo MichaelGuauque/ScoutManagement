@@ -8,16 +8,12 @@
     const styles = `
     .form-group {
       position: relative;
-      padding-bottom: 1.25rem; /* Espacio para el mensaje de error */
     }
     .error-message {
       color: #dc2626;
       font-size: 0.75rem;
       display: none;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
+      margin-top: 0.25rem; /* Espacio entre el campo y el mensaje de error */
     }
     
     .error-message.show {
