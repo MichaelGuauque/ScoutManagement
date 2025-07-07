@@ -148,6 +148,15 @@ public class PersonaService implements IPersonaService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Long contarMiembrosActivos() {
+        return personaRepository.countMiembrosActivos();
+    }
+
+    @Override
+    public Long contarJefesActivos() {
+        return personaRepository.countJefesActivos();
+    }
 
 
 }

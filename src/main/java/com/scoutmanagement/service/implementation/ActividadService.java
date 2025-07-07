@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -109,6 +110,15 @@ public class ActividadService implements IActividadService {
                     .ifPresent(actividad -> actividadEsMasProxima.put(actividad.getId(), true));
         }
         return actividadEsMasProxima;
+    }
+
+    public Long contarActividadesPendientes() {
+        return actividadRepository.contarActividadesPendientes();
+    }
+
+    public Long contarActividadesEstaSemana() {
+        LocalDate finSemana = LocalDate.now().with(DayOfWeek.SUNDAY);
+        return actividadRepository.contarActividadesEstaSemana(finSemana);
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface PersonaRepository extends CrudRepository<Persona, Long> {
-    
+
     // Buscar personas por rama
     List<Persona> findByRama(Rama rama);
     boolean existsByNumeroDeDocumento(Long numeroDeDocumento);
@@ -31,5 +31,12 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
     Optional<Persona> findByNumeroDeDocumento(Long numeroDeDocumento);
 
     List<Persona> findByUserEntityActivoTrueAndRama(Rama rama);
+
+    @Query("SELECT COUNT(p) FROM Persona p WHERE str(p.cargo) NOT LIKE 'JEFE_%' AND p.userEntity.activo = true")
+    Long countMiembrosActivos();
+
+    // Contar todos los jefes activos
+    @Query("SELECT COUNT(p) FROM Persona p WHERE str(p.cargo) LIKE 'JEFE_%' AND p.userEntity.activo = true")
+    Long countJefesActivos();
 
 }

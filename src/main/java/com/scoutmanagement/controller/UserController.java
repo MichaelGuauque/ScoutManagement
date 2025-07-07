@@ -6,6 +6,7 @@ import com.scoutmanagement.persistence.model.*;
 
 import static com.scoutmanagement.util.constants.AppConstants.*;
 
+import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
@@ -36,6 +37,9 @@ public class UserController {
     @Autowired
     private IPersonaService personaService;
 
+    @Autowired
+    private IActividadService actividadService;
+
     @GetMapping()
     public String login() {
         return "user/login";
@@ -62,7 +66,6 @@ public class UserController {
                     session.setAttribute(ID_USUARIO, usuarioBuscado.getId());
                     session.setAttribute("rol", rol);
 
-                    // Una sola redirección para ambos roles
                     return "redirect:/home";
                 } else {
                     throw new ServiceException("Contraseña incorrecta");
@@ -157,6 +160,7 @@ public class UserController {
         if (session.getAttribute("rol").equals(Rol.ADULTO.name())) {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
+            agregarEstadisticasDashboard(model);
             return "admin/home";
         } else if (session.getAttribute("rol").equals(Rol.JOVEN.name())) {
             Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
@@ -165,6 +169,30 @@ public class UserController {
         }
 
         return VISTA_ERROR;
+    }
+
+    private void agregarEstadisticasDashboard(Model model) {
+        try {
+            Long totalMiembros = personaService.contarMiembrosActivos();
+            Long totalJefes = personaService.contarJefesActivos();
+            Long totalActividades = actividadService.contarActividadesPendientes();
+            Long actividadesEstaSemana = actividadService.contarActividadesEstaSemana();
+
+            model.addAttribute("totalMiembros", totalMiembros);
+            model.addAttribute("totalJefes", totalJefes);
+            model.addAttribute("totalActividades", totalActividades);
+            model.addAttribute("actividadesEstaSemana", actividadesEstaSemana);
+
+            logger.info("Dashboard stats - Miembros: {}, Jefes: {}, Actividades pendientes: {}, Esta semana: {}",
+                    totalMiembros, totalJefes, totalActividades, actividadesEstaSemana);
+
+        } catch (Exception e) {
+            logger.error("Error al obtener estadísticas del dashboard: {}", e.getMessage());
+            model.addAttribute("totalMiembros", 0L);
+            model.addAttribute("totalJefes", 0L);
+            model.addAttribute("totalActividades", 0L);
+            model.addAttribute("actividadesEstaSemana", 0L);
+        }
     }
 
     @GetMapping("/recuperar")
