@@ -89,7 +89,7 @@ public class UserController {
         if (session.getAttribute("rol") == Rol.ADULTO.name()) {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             prepararModeloDeRegistro(model, sesionDelJefe);
-            return "/user/crearMiembro";
+            return "user/crearMiembro";
         }
         if (rol == null) {
             return VISTA_LOGIN;
