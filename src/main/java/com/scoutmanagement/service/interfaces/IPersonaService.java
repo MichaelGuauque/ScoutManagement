@@ -34,4 +34,8 @@ public interface IPersonaService {
 
     public List<Persona> filtrarYOrdenarPorEstado(List<Persona> personas, String tab);
 
+    Long contarMiembrosActivos();
+
+    Long contarJefesActivos();
+
 }

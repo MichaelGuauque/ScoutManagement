@@ -35,4 +35,7 @@ public interface IActividadService {
 
     public Map<Long, Boolean> encontrarActividadMasProxima(List<Actividad> actividades, int page, String tab);
 
+    public Long contarActividadesPendientes();
+
+    public Long contarActividadesEstaSemana();
 }

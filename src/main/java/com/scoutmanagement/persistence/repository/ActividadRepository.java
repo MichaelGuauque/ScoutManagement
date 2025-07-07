@@ -22,4 +22,9 @@ public interface ActividadRepository extends CrudRepository<Actividad, Long> {
     @Query("SELECT a FROM Actividad a ORDER BY a.fecha ASC")
     List<Actividad> findAllOrderByFechaAsc();
 
+    @Query("SELECT COUNT(a) FROM Actividad a WHERE a.fecha >= CURRENT_DATE")
+    Long contarActividadesPendientes();
+
+    @Query("SELECT COUNT(a) FROM Actividad a WHERE a.fecha >= CURRENT_DATE AND a.fecha <= :finSemana")
+    Long contarActividadesEstaSemana(LocalDate finSemana);
 }

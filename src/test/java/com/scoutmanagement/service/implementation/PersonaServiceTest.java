@@ -525,4 +525,120 @@ public class PersonaServiceTest {
 
         assertEquals("redirect:/miembros", resultado);
     }
+
+    @Test
+    void testContarMiembrosActivos_deberiaRetornarConteoCorrect() {
+        Long expectedCount = 8L;
+        when(personaRepository.countMiembrosActivos()).thenReturn(expectedCount);
+
+        Long resultado = personaService.contarMiembrosActivos();
+
+        assertEquals(expectedCount, resultado);
+        verify(personaRepository, times(1)).countMiembrosActivos();
+    }
+
+    @Test
+    void testContarMiembrosActivos_deberiaRetornarCero_cuandoNoHayMiembrosActivos() {
+        Long expectedCount = 0L;
+        when(personaRepository.countMiembrosActivos()).thenReturn(expectedCount);
+
+        Long resultado = personaService.contarMiembrosActivos();
+
+        assertEquals(expectedCount, resultado);
+        verify(personaRepository, times(1)).countMiembrosActivos();
+    }
+
+    @Test
+    void testContarMiembrosActivos_deberiaLanzarExcepcion_cuandoRepositoryFalla() {
+        when(personaRepository.countMiembrosActivos())
+                .thenThrow(new RuntimeException("Error de conexión a base de datos"));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            personaService.contarMiembrosActivos();
+        });
+
+        assertEquals("Error de conexión a base de datos", exception.getMessage());
+        verify(personaRepository, times(1)).countMiembrosActivos();
+    }
+
+    @Test
+    void testContarJefesActivos_deberiaRetornarConteoCorrect() {
+        Long expectedCount = 5L;
+        when(personaRepository.countJefesActivos()).thenReturn(expectedCount);
+
+        Long resultado = personaService.contarJefesActivos();
+
+        assertEquals(expectedCount, resultado);
+        verify(personaRepository, times(1)).countJefesActivos();
+    }
+
+    @Test
+    void testContarJefesActivos_deberiaRetornarCero_cuandoNoHayJefesActivos() {
+        Long expectedCount = 0L;
+        when(personaRepository.countJefesActivos()).thenReturn(expectedCount);
+
+        Long resultado = personaService.contarJefesActivos();
+
+        assertEquals(expectedCount, resultado);
+        verify(personaRepository, times(1)).countJefesActivos();
+    }
+
+    @Test
+    void testContarJefesActivos_deberiaLanzarExcepcion_cuandoRepositoryFalla() {
+        when(personaRepository.countJefesActivos())
+                .thenThrow(new RuntimeException("Error al acceder a la base de datos"));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            personaService.contarJefesActivos();
+        });
+
+        assertEquals("Error al acceder a la base de datos", exception.getMessage());
+        verify(personaRepository, times(1)).countJefesActivos();
+    }
+
+    @Test
+    void testContarMiembrosActivos_deberiaRetornarValorPositivo() {
+        Long expectedCount = 15L;
+        when(personaRepository.countMiembrosActivos()).thenReturn(expectedCount);
+
+        Long resultado = personaService.contarMiembrosActivos();
+
+        assertTrue(resultado > 0, "El conteo de miembros activos debería ser positivo");
+        assertEquals(expectedCount, resultado);
+        verify(personaRepository, times(1)).countMiembrosActivos();
+    }
+
+    @Test
+    void testContarJefesActivos_deberiaRetornarValorPositivo() {
+        Long expectedCount = 3L;
+        when(personaRepository.countJefesActivos()).thenReturn(expectedCount);
+
+        Long resultado = personaService.contarJefesActivos();
+
+        assertTrue(resultado > 0, "El conteo de jefes activos debería ser positivo");
+        assertEquals(expectedCount, resultado);
+        verify(personaRepository, times(1)).countJefesActivos();
+    }
+
+    @Test
+    void testContarMiembrosActivos_verificaLlamadaUnicaAlRepositorio() {
+        Long expectedCount = 12L;
+        when(personaRepository.countMiembrosActivos()).thenReturn(expectedCount);
+
+        personaService.contarMiembrosActivos();
+
+        verify(personaRepository, times(1)).countMiembrosActivos();
+        verifyNoMoreInteractions(personaRepository);
+    }
+
+    @Test
+    void testContarJefesActivos_verificaLlamadaUnicaAlRepositorio() {
+        Long expectedCount = 4L;
+        when(personaRepository.countJefesActivos()).thenReturn(expectedCount);
+
+        personaService.contarJefesActivos();
+
+        verify(personaRepository, times(1)).countJefesActivos();
+        verifyNoMoreInteractions(personaRepository);
+    }
 }

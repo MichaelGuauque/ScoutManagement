@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  scout-app:
+    build: .
+    container_name: scout-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_NAME_SCOUT: scoutmanagementdb
+      USER_DB: root
+      PASSWORD_DB: roottoor
+      EMAIL_SCOUT: jaguaresscoutmanagement@gmail.com
+    restart: always
