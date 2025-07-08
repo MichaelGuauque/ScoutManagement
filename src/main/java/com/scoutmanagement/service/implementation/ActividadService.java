@@ -4,8 +4,10 @@ import com.scoutmanagement.dto.ActividadDTO;
 import com.scoutmanagement.persistence.model.Actividad;
 import com.scoutmanagement.persistence.model.Rama;
 import com.scoutmanagement.persistence.repository.ActividadRepository;
+import com.scoutmanagement.persistence.repository.AsistenciaRepository;
 import com.scoutmanagement.service.interfaces.IActividadService;
 import com.scoutmanagement.util.exception.ServiceException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class ActividadService implements IActividadService {
 
     @Autowired
     private ActividadRepository actividadRepository;
+
+    @Autowired
+    private AsistenciaRepository asistenciaRepository;
 
     @Override
     public Optional<Actividad> findById(Long id) {
@@ -49,7 +54,12 @@ public class ActividadService implements IActividadService {
     }
 
     @Override
+    @Transactional
     public void eliminarActividad(Long id) {
+        if (!actividadRepository.existsById(id)) {
+            throw new IllegalArgumentException("Actividad no encontrada con ID: " + id);
+        }
+        asistenciaRepository.deleteByActividadId(id);
         actividadRepository.deleteById(id);
     }
 
@@ -119,6 +129,11 @@ public class ActividadService implements IActividadService {
     public Long contarActividadesEstaSemana() {
         LocalDate finSemana = LocalDate.now().with(DayOfWeek.SUNDAY);
         return actividadRepository.contarActividadesEstaSemana(finSemana);
+    }
+
+    @Override
+    public List<Actividad> obtenerTresProximasActividades() {
+        return actividadRepository.findTop3ByFechaGreaterThanEqualOrderByFechaAsc(LocalDate.now());
     }
 
 }

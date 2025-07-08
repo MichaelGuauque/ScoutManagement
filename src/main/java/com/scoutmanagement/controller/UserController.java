@@ -165,6 +165,8 @@ public class UserController {
             Persona sesionDelJefe = personaService.personaModelSession(ID_USUARIO, session);
             model.addAttribute(ATRIBUTO_PERSONA, sesionDelJefe);
             agregarEstadisticasDashboard(model);
+            List<Actividad> proximas = actividadService.obtenerTresProximasActividades();
+            model.addAttribute("actividades", proximas);
             return "admin/home";
         } else if (session.getAttribute("rol").equals(Rol.JOVEN.name())) {
             Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
