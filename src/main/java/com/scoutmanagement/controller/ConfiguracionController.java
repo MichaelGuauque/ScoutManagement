@@ -143,11 +143,17 @@ public class ConfiguracionController {
     }
 
     @PostMapping("/actualizarInformacion")
-    public String actualizarInformacion(HttpSession session, @ModelAttribute InformacionPersonaDTO informacionPersonaDTO){
-        Persona persona = personaService.personaModelSession(ID_USUARIO, session);
-        logger.info("Actualizando persona: {}", informacionPersonaDTO.toString());
-        System.out.println("DTO recibido: " + informacionPersonaDTO);
-        return "redirect:/configuracion";
+    public String actualizarInformacion(HttpSession session, @ModelAttribute InformacionPersonaDTO informacionPersonaDTO, RedirectAttributes redirectAttributes){
+        try {
+            personaService.actualizarInformacionPerosnal(informacionPersonaDTO, session);
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Información modificado con éxito.");
+            return REDIRECT_CONFIGURACION;
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+        }
+        return REDIRECT_CONFIGURACION;
     }
 
 }

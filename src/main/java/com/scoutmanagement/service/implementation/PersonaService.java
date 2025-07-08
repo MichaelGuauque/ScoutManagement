@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.implementation;
 
+import com.scoutmanagement.dto.InformacionPersonaDTO;
 import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.*;
@@ -32,6 +33,8 @@ public class PersonaService implements IPersonaService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    private static final String ID_USUARIO = "idUsuario";
 
     @Override
     public void save(PersonaRegistroDTO personaRegistroDTO, UserEntity userEntity) {
@@ -156,6 +159,26 @@ public class PersonaService implements IPersonaService {
     @Override
     public Long contarJefesActivos() {
         return personaRepository.countJefesActivos();
+    }
+
+    @Override
+    public void actualizarInformacionPerosnal(InformacionPersonaDTO dto, HttpSession session) {
+        Persona persona = personaModelSession(ID_USUARIO, session);
+        persona.setPrimerNombre(dto.primerNombre());
+        persona.setSegundoNombre(dto.segundoNombre());
+        persona.setPrimerApellido(dto.primerApellido());
+        persona.setSegundoApellido(dto.segundoApellido());
+        persona.setNumeroDeDocumento(dto.numeroDeDocumento());
+        persona.setEspecificacionAlergiasYRestricciones(dto.alergias());
+        persona.setTipoDeSangre(TipoDeSangre.fromAlias(dto.tipoDeSangre()));
+        persona.setEps(dto.eps());
+        persona.setTomaMedicamentos(dto.medicamentos());
+        persona.setEspecificacionMedicamentos(dto.especificacionMedicamentos());
+        persona.setNombrePrimerContacto(dto.primerContacto());
+        persona.setNumeroPrimerContacto(dto.numeroPrimerContacto());
+        persona.setNombreSegundoContacto(dto.segundoContacto());
+        persona.setNumeroSegundoContacto(dto.numeroSegundoContacto());
+        personaRepository.save(persona);
     }
 
 

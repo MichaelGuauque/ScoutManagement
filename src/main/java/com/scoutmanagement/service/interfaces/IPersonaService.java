@@ -1,5 +1,6 @@
 package com.scoutmanagement.service.interfaces;
 
+import com.scoutmanagement.dto.InformacionPersonaDTO;
 import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
 import com.scoutmanagement.persistence.model.Persona;
@@ -37,5 +38,7 @@ public interface IPersonaService {
     Long contarMiembrosActivos();
 
     Long contarJefesActivos();
+
+    void actualizarInformacionPerosnal(InformacionPersonaDTO dto, HttpSession session);
 
 }

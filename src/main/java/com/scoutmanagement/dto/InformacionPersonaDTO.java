@@ -1,7 +1,5 @@
 package com.scoutmanagement.dto;
 
-import com.scoutmanagement.persistence.model.TipoDeSangre;
-
 public record InformacionPersonaDTO(
         String primerNombre,
         String segundoNombre,
@@ -11,7 +9,7 @@ public record InformacionPersonaDTO(
         String alergias,
         String tipoDeSangre,
         String eps,
-        String medicamentos,
+        boolean medicamentos,
         String especificacionMedicamentos,
         String primerContacto,
         long numeroPrimerContacto,
