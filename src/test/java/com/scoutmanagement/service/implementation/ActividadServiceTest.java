@@ -469,4 +469,65 @@ class ActividadServiceTest {
         assertTrue(resultado >= 1L, "Debería contar al menos la actividad futura");
     }
 
+    @Test
+    void testEliminarActividad_NoExiste_DeberiaLanzarExcepcion() {
+        // ID que no existe
+        Long idInexistente = 9999L;
+
+        // Verificar que lanza IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> {
+            actividadService.eliminarActividad(idInexistente);
+        }, "Debería lanzar excepción si la actividad no existe");
+    }
+
+    @Test
+    void testObtenerTresProximasActividades() {
+        LocalDate hoy = LocalDate.now();
+
+        ActividadDTO a1 = new ActividadDTO(
+                "Actividad 1 Miércoles",
+                "Primera actividad del miércoles",
+                Rama.MANADA,
+                LocalDate.now().plusDays(1),
+                "Ubicación 1"
+        );
+
+        ActividadDTO a2 = new ActividadDTO(
+                "Actividad 2 Miércoles",
+                "Segunda actividad del miércoles",
+                Rama.TROPA,
+                LocalDate.now().plusDays(2),
+                "Ubicación 2"
+        );
+
+        ActividadDTO a3 = new ActividadDTO(
+                "Actividad 3 Miércoles",
+                "Tercera actividad del miércoles",
+                Rama.CLAN,
+                LocalDate.now().plusDays(3),
+                "Ubicación 3"
+        );
+
+        ActividadDTO a4 = new ActividadDTO(
+                "Actividad 4 Miércoles proxima semana",
+                "Cuarta actividad del miércoles",
+                Rama.CLAN,
+                LocalDate.now().plusDays(6),
+                "Ubicación 4"
+        );
+
+        actividadService.crearActividad(a1);
+        actividadService.crearActividad(a2);
+        actividadService.crearActividad(a3);
+        actividadService.crearActividad(a4);
+
+        List<Actividad> resultado = actividadService.obtenerTresProximasActividades();
+
+        assertEquals(3, resultado.size(), "Debe devolver solo 3 actividades");
+        assertTrue(resultado.stream().allMatch(a -> !a.getFecha().isBefore(hoy)), "Todas deben ser desde hoy en adelante");
+        assertEquals(List.of(a1.fecha(), a2.fecha(), a3.fecha()),
+                resultado.stream().map(Actividad::getFecha).toList(),
+                "Deben estar ordenadas por fecha ascendente");
+    }
+
 }
