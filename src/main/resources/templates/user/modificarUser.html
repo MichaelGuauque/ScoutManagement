@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modificar Perfil User</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="modificarAdminStyle.css" />
+  </head>
+  <body>
+    <!-- Botón hamburguesa para móviles -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </button>
+
+    <!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="logo-contenedor">
+        <img src="img/logoApli.svg" alt="Scout Management" class="logo" />
+      </div>
+
+      <div class="perfil-contenedor">
+        <img src="img/perfil.svg" alt="Perfil" class="perfil" />
+        <div class="perfil-info">
+          <p class="nombre-perfil">Miguel Andres M...</p>
+          <p class="cargo-perfil">Joven - LOBATO</p>
+        </div>
+        <div class="perfil-flecha">
+          <img src="img/flechita.svg" alt="Desplegar" />
+        </div>
+
+        <!-- Menú desplegable del perfil -->
+        <div class="perfil-menu" id="perfilMenu">
+          <ul>
+            <li class="nav-link">
+              <img
+                src="img/sesion.svg"
+                alt="Ver Perfil"
+                class="perfil-menu-icon"
+              />
+              <span>Ver Perfil</span>
+            </li>
+            <li class="nav-link">
+              <img
+                src="img/cierreSesion.svg"
+                alt="Cerrar Sesión"
+                class="perfil-menu-icon"
+              />
+              <span>Cerrar Sesión</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="linea-divisoria"></div>
+
+      <div class="contenido-central">
+        <nav class="menu">
+          <ul>
+            <li class="menu-item">
+              <div class="main-button nav-link">
+                <img src="img/Casa.svg" alt="Inicio" />
+                <span>Inicio</span>
+              </div>
+            </li>
+
+            <li class="menu-item">
+              <div class="main-button">
+                <img src="img/grafico.svg" alt="Progresiones" />
+                <span>Progresiones</span>
+                <img
+                  src="img/flechita.svg"
+                  alt="Flecha"
+                  class="arrow-img"
+                  style="width: 15px; height: 15px"
+                />
+              </div>
+              <ul class="submenu">
+                <li class="nav-link">
+                  <img
+                    src="img/retos.svg"
+                    alt="Consultar"
+                    class="submenu-icon"
+                  />Consultar Avances
+                </li>
+              </ul>
+            </li>
+
+            <li class="menu-item">
+              <div class="main-button">
+                <img src="img/usuarios.svg" alt="Miembros" />
+                <span>Miembros</span>
+                <img
+                  src="img/flechita.svg"
+                  alt="Flecha"
+                  class="arrow-img"
+                  style="width: 15px; height: 15px"
+                />
+              </div>
+              <ul class="submenu">
+                <li class="nav-link">
+                  <img
+                    src="img/usuario(buscar).svg"
+                    alt="Consultar"
+                    class="submenu-icon"
+                  />Compañeros de Rama
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="linea-divisoria"></div>
+
+      <div class="configuracion nav-link">
+        <img src="img/tuerca.svg" alt="Configuración" />
+        <span>Configuración de Cuenta</span>
+      </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <main>
+      <!-- Aquí va el contenido de la página -->
+
+      <div class="container">
+        <div class="header">
+          <h1 class="encabezado">Modificar Perfil</h1>
+          <p class="description">
+            Desde aquí puedes actualizar tu información personal.
+          </p>
+        </div>
+
+        <!-- Información Personal -->
+        <div class="section" style="margin-top: 2rem">
+          <h2 class="section-title">Información Personal</h2>
+          <p class="section-subtitle">Datos básicos sobre el miembro.</p>
+
+          <div class="form-row">
+            <div class="form-group form-group-25">
+              <label class="form-label">Primer Nombre</label>
+              <input type="text" class="form-control" value="Miguel" />
+            </div>
+            <div class="form-group form-group-25">
+              <label class="form-label">Segundo Nombre</label>
+              <input type="text" class="form-control" value="Andres" />
+            </div>
+            <div class="form-group form-group-25">
+              <label class="form-label">Primer Apellido</label>
+              <input type="text" class="form-control" value="Marin" />
+            </div>
+            <div class="form-group form-group-25">
+              <label class="form-label">Segundo Apellido</label>
+              <input type="text" class="form-control" value="Fernandez" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-group-25">
+              <label class="form-label">Tipo de Documento</label>
+              <input
+                type="text"
+                class="form-control"
+                value="Tarjeta de Identidad"
+              />
+            </div>
+            <div class="form-group form-group-25">
+              <label class="form-label">Numero de Documento</label>
+              <input type="text" class="form-control" value="11464392" />
+            </div>
+            <div class="form-group form-group-25">
+              <label class="form-label">Telefono</label>
+              <input type="text" class="form-control" value="3167448590" />
+            </div>
+            <div class="form-group form-group-25">
+              <label class="form-label">Correo</label>
+              <input
+                type="text"
+                class="form-control"
+                value="miguelito@gmail.com"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Datos de Acudiente -->
+        <div class="section">
+          <h2 class="section-title">Datos de Acudiente</h2>
+
+          <div class="form-row">
+            <div class="form-group form-group-33">
+              <label class="form-label">Nombre Acudiente</label>
+              <input
+                type="text"
+                class="form-control"
+                value="John Edward Kenway"
+              />
+            </div>
+            <div class="form-group form-group-25">
+              <label class="form-label">Teléfono</label>
+              <input type="text" class="form-control" value="3187658970" />
+            </div>
+            <div class="form-group form-group-20">
+              <label class="form-label">Tipo de Documento</label>
+              <input
+                type="text"
+                class="form-control"
+                value="Cedula de Ciudadania"
+              />
+            </div>
+            <div class="form-group form-group-20">
+              <label class="form-label">Numero Documento</label>
+              <input type="text" class="form-control" value="17782498" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-group-100">
+              <label class="form-label">Dirección</label>
+              <input
+                type="text"
+                class="form-control"
+                value="Carrera 9 #36-12, Barrio San Fernando, Cali"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Datos Medicos -->
+        <div class="section">
+          <h2 class="section-title">Datos Medicos</h2>
+
+          <div class="form-row">
+            <div class="form-group full-width" style="flex: 2.14">
+              <label class="form-label">Alergias</label>
+              <input type="text" class="form-control" value="Miguel" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tipo de sangre</label>
+              <input type="text" class="form-control" value="Marin" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">EPS</label>
+              <input type="text" class="form-control" value="Fernandez" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-group-20">
+              <label class="form-label">Toma Medicamentos?</label>
+              <input type="text" class="form-control" value="ji" />
+            </div>
+            <div class="form-group full-width" style="flex: 3.3">
+              <label class="form-label">Frecuencia</label>
+              <input type="text" class="form-control" value="Andres" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Contactos de Emergencia -->
+        <div class="section">
+          <h2 class="section-title">Contactos de Emergencia</h2>
+
+          <div class="form-row">
+            <div class="form-group form-section-header form-group-50">
+              <label class="form-label">Contacto de Emergencia #1</label>
+            </div>
+            <div class="form-group form-section-header form-group-50">
+              <label class="form-label">Contacto de Emergencia #2</label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group form-group-33">
+              <label class="form-label">Nombre Contacto</label>
+              <input type="text" class="form-control" value="Lady Johanna" />
+            </div>
+            <div class="form-group form-group-20">
+              <label class="form-label">Teléfono</label>
+              <input type="text" class="form-control" value="3168970989" />
+            </div>
+            <div class="form-group form-group-33">
+              <label class="form-label">Nombre Contacto</label>
+              <input type="text" class="form-control" value="Felipe Restrepo" />
+            </div>
+            <div class="form-group form-group-20">
+              <label class="form-label">Teléfono</label>
+              <input type="text" class="form-control" value="3168400989" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Funcion dentro del Grupo -->
+        <div class="section">
+          <h2 class="section-title">Funcion dentro del Grupo</h2>
+          <p class="section-subtitle">
+            El rol y la rama a la que pertenece el miembro.
+          </p>
+          <div class="form-row">
+            <div class="form-group form-group-33">
+              <label class="form-label">Rol</label>
+              <input type="text" class="form-control" value="Joven" />
+            </div>
+            <div class="form-group form-group-33">
+              <label class="form-label">Cargo (Rama)</label>
+              <input type="text" class="form-control" value="MANADA" />
+            </div>
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn-secondary botones">Cancelar</button>
+          <button type="submit" class="btn-primary botones">Modificar</button>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-top">
+            <div class="footer-logo">
+              <img
+                src="img/logo605.png"
+                alt="Scouts Jaguares 605"
+                class="logo-img"
+              />
+            </div>
+
+            <div class="footer-info">
+              <div class="footer-title">
+                <div class="dot"></div>
+                <h2>Scouts Jaguares 605</h2>
+              </div>
+              <p class="footer-slogan">
+                Listos para servir, listos para rugir.
+              </p>
+
+              <div class="footer-address">
+                <img
+                  src="img/ubicacion.svg"
+                  alt="Ubicación"
+                  class="ubicacion-icon"
+                />
+                <p class="footer-ubi">
+                  Palmira, Valle del Cauca – Barrio Las Delicias<br />
+                  Sede: Casa de la Juventud, Calle 30 #29-15
+                </p>
+              </div>
+            </div>
+
+            <div class="footer-social">
+              <a href="#" class="social-icon">
+                <img src="img/facebook.svg" alt="Facebook" />
+              </a>
+              <a href="#" class="social-icon">
+                <img src="img/instagram.svg" alt="Instagram" />
+              </a>
+              <a href="#" class="social-icon">
+                <img src="img/tiktok.svg" alt="TikTok" />
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <nav class="footer-nav">
+              <a href="#" class="footer-link">Inicio</a>
+              <a href="#" class="footer-link"
+                >Política de Tratamiento de Datos</a
+              >
+              <a href="#" class="footer-link">Configuración</a>
+            </nav>
+            <p class="footer-copyright">© 2025 Todos los derechos reservados</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const contentAreas = document.querySelectorAll(".content-area");
+
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // Remove active class from all buttons and content areas
+            tabButtons.forEach((btn) => btn.classList.remove("active"));
+            contentAreas.forEach((content) =>
+              content.classList.remove("active")
+            );
+
+            // Add active class to clicked button
+            this.classList.add("active");
+
+            // Show corresponding content area
+            const tabId = this.getAttribute("data-tab");
+            document.getElementById(tabId).classList.add("active");
+          });
+        });
+      });
+
+      // Funciones para los modales
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- FUNCIONES COMPARTIDAS ---
+
+        // Función genérica para mostrar un modal
+        function showModalById(modalId) {
+          document.getElementById(modalId).style.display = "block";
+          document.body.style.overflow = "hidden"; // Evita el scroll del body
+        }
+
+        // Función genérica para ocultar un modal
+        function hideModalById(modalId) {
+          document.getElementById(modalId).style.display = "none";
+          document.body.style.overflow = "auto"; // Restaura el scroll del body
+        }
+
+        // --- MODAL CREAR RETO ---
+
+        // Botón "Nuevo Reto" - Abre el modal de crear reto
+        const createRetoBtn = document.querySelector(".create-reto-btn");
+        if (createRetoBtn) {
+          createRetoBtn.addEventListener("click", function () {
+            showModalById("modal-crearReto");
+          });
+        }
+
+        // Configuración para cerrar el modal crear reto
+        const crearRetoModal = document.getElementById("modal-crearReto");
+        if (crearRetoModal) {
+          // Botón cancelar del modal crear reto
+          const cancelButtonCrear =
+            crearRetoModal.querySelector(".cancel-button");
+          if (cancelButtonCrear) {
+            cancelButtonCrear.addEventListener("click", function () {
+              hideModalById("modal-crearReto");
+            });
+          }
+
+          // Botón guardar del modal crear reto
+          const saveButtonCrear = crearRetoModal.querySelector(".save-button");
+          if (saveButtonCrear) {
+            saveButtonCrear.addEventListener("click", function () {
+              hideModalById("modal-crearReto");
+              // Aquí puedes agregar la lógica para guardar los datos del reto
+            });
+          }
+
+          // Cerrar al hacer click en el overlay
+          const overlayCrear = crearRetoModal.querySelector(".modal-overlay");
+          if (overlayCrear) {
+            overlayCrear.addEventListener("click", function () {
+              hideModalById("modal-crearReto");
+            });
+          }
+
+          // Evitar cierre al hacer click en el contenido
+          const contentCrear = crearRetoModal.querySelector(".modal-content");
+          if (contentCrear) {
+            contentCrear.addEventListener("click", function (e) {
+              e.stopPropagation();
+            });
+          }
+        }
+
+        // --- MODAL MODIFICAR RETO ---
+
+        // Configuración para abrir el modal modificar reto desde opciones de "Asistencia"
+        const dropdownMenus = document.querySelectorAll(".dropdown-menu");
+        dropdownMenus.forEach((menu) => {
+          const asistenciaItem = menu.querySelector(
+            ".dropdown-item:nth-child(1)"
+          );
+          if (asistenciaItem) {
+            asistenciaItem.addEventListener("click", function (e) {
+              e.stopPropagation(); // Evita que el click se propague
+              showModalById("modal-modificarReto");
+
+              // Cerrar el dropdown al abrir el modal
+              const activeDropdowns = document.querySelectorAll(
+                ".dropdown-menu.active"
+              );
+              activeDropdowns.forEach((dropdown) => {
+                dropdown.classList.remove("active");
+              });
+
+              const activeButtons =
+                document.querySelectorAll(".expand-btn.active");
+              activeButtons.forEach((button) => {
+                button.classList.remove("active");
+              });
+            });
+          }
+        });
+
+        // Configuración para cerrar el modal modificar reto
+        const modificarRetoModal = document.getElementById(
+          "modal-modificarReto"
+        );
+        if (modificarRetoModal) {
+          // Botón cancelar del modal modificar reto
+          const cancelButtonModificar =
+            modificarRetoModal.querySelector(".cancel-button");
+          if (cancelButtonModificar) {
+            cancelButtonModificar.addEventListener("click", function () {
+              hideModalById("modal-modificarReto");
+            });
+          }
+
+          // Botón guardar del modal modificar reto
+          const saveButtonModificar =
+            modificarRetoModal.querySelector(".save-button");
+          if (saveButtonModificar) {
+            saveButtonModificar.addEventListener("click", function () {
+              hideModalById("modal-modificarReto");
+              // Aquí puedes agregar la lógica para guardar los datos modificados
+            });
+          }
+
+          // Cerrar al hacer click en el overlay
+          const overlayModificar =
+            modificarRetoModal.querySelector(".modal-overlay");
+          if (overlayModificar) {
+            overlayModificar.addEventListener("click", function () {
+              hideModalById("modal-modificarReto");
+            });
+          }
+
+          // Evitar cierre al hacer click en el contenido
+          const contentModificar =
+            modificarRetoModal.querySelector(".modal-content");
+          if (contentModificar) {
+            contentModificar.addEventListener("click", function (e) {
+              e.stopPropagation();
+            });
+          }
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Manejar clic en los botones de expansión
+        document.querySelectorAll(".expand-btn").forEach((button) => {
+          button.addEventListener("click", function (e) {
+            e.stopPropagation();
+
+            // Cerrar otros dropdowns abiertos
+            document.querySelectorAll(".expand-btn").forEach((btn) => {
+              if (btn !== this) {
+                btn.classList.remove("active");
+                const menu = btn.nextElementSibling;
+                if (menu && menu.classList.contains("dropdown-menu")) {
+                  menu.classList.remove("active");
+                }
+                // Remover clase menu-active del contenedor
+                const container = btn.closest(".dropdown-container");
+                if (container) {
+                  container.classList.remove("menu-active");
+                }
+              }
+            });
+
+            // Toggle el dropdown actual
+            this.classList.toggle("active");
+            const dropdownMenu = this.nextElementSibling;
+            if (
+              dropdownMenu &&
+              dropdownMenu.classList.contains("dropdown-menu")
+            ) {
+              dropdownMenu.classList.toggle("active");
+
+              // Añadir o remover clase menu-active al contenedor
+              const container = this.closest(".dropdown-container");
+              if (container) {
+                if (dropdownMenu.classList.contains("active")) {
+                  container.classList.add("menu-active");
+                } else {
+                  container.classList.remove("menu-active");
+                }
+              }
+            }
+          });
+        });
+
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener("click", function () {
+          document.querySelectorAll(".expand-btn.active").forEach((btn) => {
+            btn.classList.remove("active");
+            const menu = btn.nextElementSibling;
+            if (menu && menu.classList.contains("dropdown-menu")) {
+              menu.classList.remove("active");
+            }
+            // Remover clase menu-active del contenedor
+            const container = btn.closest(".dropdown-container");
+            if (container) {
+              container.classList.remove("menu-active");
+            }
+          });
+        });
+
+        // Manejar clic en las opciones del dropdown
+        document.querySelectorAll(".dropdown-item").forEach((item) => {
+          item.addEventListener("click", function (e) {
+            e.stopPropagation();
+
+            // Marcar la opción seleccionada
+            const parentMenu = this.closest(".dropdown-menu");
+            parentMenu
+              .querySelectorAll(".dropdown-item")
+              .forEach((menuItem) => {
+                menuItem.classList.remove("active");
+              });
+            this.classList.add("active");
+
+            // Aquí puedes añadir la lógica para cada opción
+            const action = this.querySelector("span").textContent;
+            console.log(`Acción seleccionada: ${action}`);
+
+            // Cerrar el dropdown después de seleccionar
+            const expandButton = parentMenu.previousElementSibling;
+            if (expandButton && expandButton.classList.contains("expand-btn")) {
+              expandButton.classList.remove("active");
+              parentMenu.classList.remove("active");
+
+              // Remover clase menu-active del contenedor
+              const container = expandButton.closest(".dropdown-container");
+              if (container) {
+                container.classList.remove("menu-active");
+              }
+            }
+          });
+        });
+      });
+
+      // Script para el menú de perfil
+      document
+        .querySelector(".perfil-flecha")
+        .addEventListener("click", function () {
+          const perfilMenu = document.getElementById("perfilMenu");
+          perfilMenu.classList.toggle("show-menu");
+        });
+
+      // Cerrar el menú al hacer clic fuera de él
+      document.addEventListener("click", function (event) {
+        const perfilMenu = document.getElementById("perfilMenu");
+        const perfilFlecha = document.querySelector(".perfil-flecha");
+
+        // Si el clic no fue en el menú ni en el botón de la flecha, cerrar el menú
+        if (
+          !perfilMenu.contains(event.target) &&
+          !perfilFlecha.contains(event.target)
+        ) {
+          perfilMenu.classList.remove("show-menu");
+        }
+      });
+
+      // Script para los menús desplegables de navegación
+      document.querySelectorAll(".main-button").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          // Evitar que se cierre el sidebar si solo estamos desplegando submenu
+          event.stopPropagation();
+
+          const parent = button.parentElement;
+          const wasActive = parent.classList.contains("active");
+
+          // Cerrar todos los menús activos
+          document.querySelectorAll(".menu-item.active").forEach((item) => {
+            item.classList.remove("active");
+          });
+
+          // Si no estaba activo, activarlo
+          if (!wasActive) {
+            parent.classList.add("active");
+          }
+        });
+      });
+
+      // Script para toggle del sidebar en móviles
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const sidebar = document.getElementById("sidebar");
+      const hamburger = document.getElementById("hamburger");
+      const overlay = document.getElementById("sidebarOverlay");
+
+      sidebarToggle.addEventListener("click", function () {
+        sidebar.classList.toggle("open");
+        hamburger.classList.toggle("open");
+        overlay.classList.toggle("active");
+
+        // Mover el botón también cuando el sidebar está abierto
+        sidebarToggle.classList.toggle("moved");
+      });
+
+      // Cerrar sidebar al hacer clic en el overlay
+      overlay.addEventListener("click", function () {
+        sidebar.classList.remove("open");
+        hamburger.classList.remove("open");
+        overlay.classList.remove("active");
+        sidebarToggle.classList.remove("moved"); // Regresar el botón a su posición original
+      });
+
+      // Cerrar sidebar SOLO cuando se hace clic en enlaces de navegación
+      document.querySelectorAll(".nav-link").forEach((item) => {
+        item.addEventListener("click", () => {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove("open");
+            hamburger.classList.remove("open");
+            overlay.classList.remove("active");
+            sidebarToggle.classList.remove("moved"); // Regresar el botón a su posición original
+          }
+        });
+      });
+
+      // Ajustar al cambiar el tamaño de la ventana
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove("open");
+          hamburger.classList.remove("open");
+          overlay.classList.remove("active");
+          sidebarToggle.classList.remove("moved"); // Regresar el botón a su posición original
+        }
+      });
+    </script>
+  </body>
+</html>

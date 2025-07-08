@@ -1,5 +1,6 @@
 package com.scoutmanagement.controller;
 
+import com.scoutmanagement.dto.InformacionPersonaDTO;
 import com.scoutmanagement.persistence.model.*;
 import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
@@ -53,6 +54,8 @@ public class ConfiguracionController {
         Persona persona = personaService.personaModelSession(ID_USUARIO, session);
         model.addAttribute("rol", persona.getUserEntity().getRoles().stream().findFirst().map(RoleEntity::getRole).orElse(null));
         model.addAttribute(ATRIBUTO_PERSONA, persona);
+        model.addAttribute("tiposDeSangre", TipoDeSangre.values());
+
         return vista;
     }
 
@@ -121,6 +124,30 @@ public class ConfiguracionController {
         }
 
         return REDIRECT_CONFIGURACION;
+    }
+
+    @GetMapping("/modificar")
+    public String modificarPerfil(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+
+        if (rol.equals(Rol.ADULTO.name())) {
+            return configurarVista(model, session, "admin/modificarAdmin");
+        } else if (rol.equals(Rol.JOVEN.name())) {
+            return configurarVista(model, session, "user/modificarUser");
+        }
+
+        return VISTA_ERROR;
+    }
+
+    @PostMapping("/actualizarInformacion")
+    public String actualizarInformacion(HttpSession session, @ModelAttribute InformacionPersonaDTO informacionPersonaDTO){
+        Persona persona = personaService.personaModelSession(ID_USUARIO, session);
+        logger.info("Actualizando persona: {}", informacionPersonaDTO.toString());
+        System.out.println("DTO recibido: " + informacionPersonaDTO);
+        return "redirect:/configuracion";
     }
 
 }
