@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -127,8 +128,9 @@ public class ActividadService implements IActividadService {
     }
 
     public Long contarActividadesEstaSemana() {
-        LocalDate finSemana = LocalDate.now().with(DayOfWeek.SUNDAY);
-        return actividadRepository.contarActividadesEstaSemana(finSemana);
+        LocalDate inicioSemana = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate finSemana = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        return actividadRepository.contarActividadesEstaSemana(inicioSemana,finSemana);
     }
 
     @Override
