@@ -55,9 +55,9 @@
                         />
                     </div>
                     <div class="profile-name-container">
-                        <h1>Miguel Andres Marin Fernandez</h1>
-                        <div class="profile-email">miguelito@gmail.com</div>
-                        <div class="profile-status">Activo</div>
+                        <h1 th:text="${persona.getNombreCompleto()}"></h1>
+                        <div class="profile-email" th:text="${persona.getUserEntity.getUsername()}"></div>
+                        <div class="profile-status" th:text="${persona.getUserEntity.isActivo()}"></div>
                     </div>
                 </div>
 
@@ -83,7 +83,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Miguel"
+                                th:value="${persona.getPrimerNombre()}"
                                 disabled
                         />
                     </div>
@@ -92,7 +92,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Andres"
+                                th:value="${persona.getSegundoNombre()}"
                                 disabled
                         />
                     </div>
@@ -101,7 +101,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Marin"
+                                th:value="${persona.getPrimerApellido()}"
                                 disabled
                         />
                     </div>
@@ -110,7 +110,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Fernandez"
+                                th:value="${persona.getSegundoApellido()}"
                                 disabled
                         />
                     </div>
@@ -122,7 +122,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Tarjeta de Identidad"
+                                th:value="${persona.getTipoDeDocumento()}"
                                 disabled
                         />
                     </div>
@@ -131,25 +131,17 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="1112041392"
+                                th:value="${persona.getNumeroDeDocumento()}"
                                 disabled
                         />
                     </div>
-                    <div class="form-group form-group-25">
-                        <label class="form-label">Telefono</label>
-                        <input
-                                type="text"
-                                class="form-control"
-                                value="3167448590"
-                                disabled
-                        />
-                    </div>
+
                     <div class="form-group form-group-25">
                         <label class="form-label">Correo</label>
                         <input
                                 type="text"
                                 class="form-control"
-                                value="miguelito@gmail.com"
+                                th:value="${persona.getUserEntity.getUsername()}"
                                 disabled
                         />
                     </div>
@@ -166,7 +158,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="John Edward Kenway"
+                                th:value="${persona.getResponsable.getNombreCompleto()}"
                                 disabled
                         />
                     </div>
@@ -175,7 +167,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="3187658970"
+                                th:value="${persona.getResponsable.getTelefono()}"
                                 disabled
                         />
                     </div>
@@ -184,7 +176,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Cedula de Ciudadania"
+                                th:value="${persona.getResponsable.getTipoDeDocumento()}"
                                 disabled
                         />
                     </div>
@@ -193,7 +185,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="17782498"
+                                th:value="${persona.getResponsable.getNumeroDocumento()}"
                                 disabled
                         />
                     </div>
@@ -205,7 +197,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Carrera 9 #36-12, Barrio San Fernando, Cali"
+                                th:value="${persona.getDireccion()}"
                                 disabled
                         />
                     </div>
@@ -222,7 +214,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Miguel"
+                                th:value="${persona.getEspecificacionAlergiasYRestricciones()}"
                                 disabled
                         />
                     </div>
@@ -231,7 +223,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Marin"
+                                th:value="${persona.getTipoDeSangre()}"
                                 disabled
                         />
                     </div>
@@ -240,7 +232,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Fernandez"
+                                th:value="${persona.getEps()}"
                                 disabled
                         />
                     </div>
@@ -248,15 +240,19 @@
 
                 <div class="form-row">
                     <div class="form-group form-group-20">
-                        <label class="form-label">Toma Medicamentos?</label>
-                        <input type="text" class="form-control" value="ji" disabled />
+                        <label class="form-label">¿Toma Medicamentos?</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                th:value="${persona.isTomaMedicamentos()}"
+                                disabled />
                     </div>
                     <div class="form-group full-width" style="flex: 3.3">
                         <label class="form-label">Frecuencia</label>
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Andres"
+                                th:value="${persona.getEspecificacionMedicamentos()}"
                                 disabled
                         />
                     </div>
@@ -282,7 +278,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Lady Johanna"
+                                th:value="${persona.getNombrePrimerContacto()}"
                                 disabled
                         />
                     </div>
@@ -291,8 +287,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="3168970989"
-                                disabled
+                                th:value="${persona.getNumeroPrimerContacto()}"                                disabled
                         />
                     </div>
                     <div class="form-group form-group-33">
@@ -300,8 +295,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Felipe Restrepo"
-                                disabled
+                                th:value="${persona.getNombreSegundoContacto()}"                                disabled
                         />
                     </div>
                     <div class="form-group form-group-20">
@@ -309,7 +303,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="3168400989"
+                                th:value="${persona.getNumeroSegundoContacto()}"
                                 disabled
                         />
                     </div>
@@ -328,7 +322,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="Joven"
+                                th:value="${rol}"
                                 disabled
                         />
                     </div>
@@ -337,7 +331,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                value="MANADA"
+                                th:value="${persona.getRama()}"
                                 disabled
                         />
                     </div>

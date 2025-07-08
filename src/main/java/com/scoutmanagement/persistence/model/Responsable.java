@@ -21,11 +21,17 @@ public class Responsable {
     private String nombres;
     @Column(nullable = true, columnDefinition = "VARCHAR(50)")
     private String apellidos;
+    @Enumerated(EnumType.STRING)
+    private TipoDeDocumento tipoDeDocumento;
     @Column(nullable = true, unique = true, length = 10)
     private Long numeroDocumento;
     @Column(nullable = true, length = 10)
     private long telefono;
     @OneToMany(mappedBy = "responsable")
     private List<Persona> personas;
+
+    public String getNombreCompleto() {
+        return nombres + " " + apellidos;
+    }
 
 }

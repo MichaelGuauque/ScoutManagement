@@ -59,6 +59,11 @@ public class Persona {
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
     private UserEntity userEntity;
 
+    private String nombrePrimerContacto;
+    private long numeroPrimerContacto;
+    private String nombreSegundoContacto;
+    private long numeroSegundoContacto;
+
     public String getNombreCompleto(){
         return this.primerNombre + " " +  this.segundoNombre + " " + this.primerApellido + " " + this.segundoApellido;
     }

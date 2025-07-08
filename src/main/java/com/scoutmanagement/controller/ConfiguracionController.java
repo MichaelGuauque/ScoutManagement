@@ -51,6 +51,7 @@ public class ConfiguracionController {
 
     private String configurarVista(Model model, HttpSession session, String vista) {
         Persona persona = personaService.personaModelSession(ID_USUARIO, session);
+        model.addAttribute("rol", persona.getUserEntity().getRoles().stream().findFirst().map(RoleEntity::getRole).orElse(null));
         model.addAttribute(ATRIBUTO_PERSONA, persona);
         return vista;
     }
