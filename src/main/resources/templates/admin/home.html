@@ -165,54 +165,22 @@
                             <p class="current-date" id="currentDate"></p>
                         </div>
                         <div class="more-button">
-                            <a href="#">Mas
+                            <a th:href="@{/actividades}">Más
                                 <img th:src="@{/img/arrowMas.svg}" class="arrowMas">
                             </a>
                         </div>
                     </div>
                     <div class="activities">
-                        <div class="activity-wrapper">
+                        <div th:each="actividad : ${actividades}" class="activity-wrapper">
                             <div class="fecha">
-                                <div class="dia">12</div>
-                                <div class="mes">Abril</div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="striped-background"></div>
-                                <div class="activity-item-content">
-                                    <div class="activity-details">
-                                        <h2>Caminata al Cerro del Águila</h2>
-                                        <p>Punto de encuentro - Parque El Mirador</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="progress-line-container">
-                                <div class="progress-line"></div>
-                            </div>
-                        </div>
-                        <div class="activity-wrapper">
-                            <div class="fecha">
-                                <div class="dia">18</div>
-                                <div class="mes">Abril</div>
+                                <div class="dia" th:text="${#temporals.format(actividad.fecha, 'dd')}">08</div>
+                                <div class="mes" th:text="${#temporals.format(actividad.fecha, 'MMMM')}">julio</div>
                             </div>
                             <div class="activity-item">
                                 <div class="activity-item-content">
                                     <div class="activity-details">
-                                        <h2>Primeros Auxilios Básicos</h2>
-                                        <p>Cruz Roja Local, Aula Comunitaria</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="activity-wrapper">
-                            <div class="fecha">
-                                <div class="dia">12</div>
-                                <div class="mes">Mayo</div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-item-content">
-                                    <div class="activity-details">
-                                        <h2>Caminata al Cerro del Águila</h2>
-                                        <p>Punto de encuentro - Parque El Mirador</p>
+                                        <h2 th:text="${actividad.nombre}">Nombre actividad</h2>
+                                        <p th:text="${actividad.ubicacion}">Ubicación</p>
                                     </div>
                                 </div>
                             </div>

@@ -25,4 +25,13 @@ public enum TipoDeSangre {
     public String toString() {
         return alias;
     }
+
+    public static TipoDeSangre fromAlias(String alias) {
+        for (TipoDeSangre tipo : values()) {
+            if (tipo.alias.equalsIgnoreCase(alias)) {
+                return tipo;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with alias: " + alias);
+    }
 }

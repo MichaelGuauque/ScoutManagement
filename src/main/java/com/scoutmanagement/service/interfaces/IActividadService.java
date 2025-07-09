@@ -38,4 +38,6 @@ public interface IActividadService {
     public Long contarActividadesPendientes();
 
     public Long contarActividadesEstaSemana();
+
+    List<Actividad> obtenerTresProximasActividades();
 }

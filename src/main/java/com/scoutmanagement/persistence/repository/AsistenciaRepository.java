@@ -25,5 +25,6 @@ public interface AsistenciaRepository extends CrudRepository<Asistencia, Long> {
     @Query("SELECT a FROM Asistencia a JOIN FETCH a.miembro WHERE a.actividad.id = :actividadId ORDER BY a.miembro.id")
     List<Asistencia> findByActividadOrdenado(@Param("actividadId") Long actividadId);
 
+    void deleteByActividadId(Long actividadId);
 
 }

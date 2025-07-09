@@ -1,5 +1,7 @@
 package com.scoutmanagement.controller;
 
+import com.scoutmanagement.dto.InformacionPersonaDTO;
+import com.scoutmanagement.dto.ResponsablePersonaDTO;
 import com.scoutmanagement.persistence.model.*;
 import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
@@ -53,6 +55,8 @@ public class ConfiguracionController {
         Persona persona = personaService.personaModelSession(ID_USUARIO, session);
         model.addAttribute("rol", persona.getUserEntity().getRoles().stream().findFirst().map(RoleEntity::getRole).orElse(null));
         model.addAttribute(ATRIBUTO_PERSONA, persona);
+        model.addAttribute("tiposDeSangre", TipoDeSangre.values());
+
         return vista;
     }
 
@@ -120,6 +124,45 @@ public class ConfiguracionController {
             redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
         }
 
+        return REDIRECT_CONFIGURACION;
+    }
+
+    @GetMapping("/modificar")
+    public String modificarPerfil(Model model, HttpSession session) {
+        Object rol = session.getAttribute("rol");
+        if (rol == null) {
+            return VISTA_LOGIN;
+        }
+
+        if (rol.equals(Rol.ADULTO.name())) {
+            return configurarVista(model, session, "admin/modificarAdmin");
+        } else if (rol.equals(Rol.JOVEN.name())) {
+            return configurarVista(model, session, "user/modificarUser");
+        }
+
+        return VISTA_ERROR;
+    }
+
+    @PostMapping("/actualizarInformacion")
+    public String actualizarInformacion(HttpSession session,
+                                        @ModelAttribute InformacionPersonaDTO informacionPersonaDTO,
+                                        @ModelAttribute ResponsablePersonaDTO responsablePersonaDTO,
+                                        RedirectAttributes redirectAttributes){
+        try {
+            Object rol = session.getAttribute("rol");
+            if (rol.equals(Rol.ADULTO.name())){
+                personaService.actualizarInformacionPersonal(informacionPersonaDTO, session, null);
+
+            }else if (rol.equals(Rol.JOVEN.name())) {
+                personaService.actualizarInformacionPersonal(informacionPersonaDTO, session, responsablePersonaDTO);
+            }
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Información modificado con éxito.");
+            return REDIRECT_CONFIGURACION;
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
+            redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
+        }
         return REDIRECT_CONFIGURACION;
     }
 

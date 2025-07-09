@@ -1,8 +1,10 @@
 package com.scoutmanagement.service.implementation;
 
 import com.scoutmanagement.controller.PersonaController;
+import com.scoutmanagement.dto.InformacionPersonaDTO;
 import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
+import com.scoutmanagement.dto.ResponsablePersonaDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
 import com.scoutmanagement.persistence.repository.RoleRepository;
@@ -39,11 +41,15 @@ public class PersonaServiceTest {
     @Mock
     private HttpSession httpSession;
 
+    @Spy
     @InjectMocks
     private PersonaService personaService;
 
     @Captor
     private ArgumentCaptor<Persona> personaCaptor;
+
+    @Mock
+    private HttpSession session;
 
     @BeforeEach
     void setUp() {
@@ -640,5 +646,82 @@ public class PersonaServiceTest {
 
         verify(personaRepository, times(1)).countJefesActivos();
         verifyNoMoreInteractions(personaRepository);
+    }
+
+    @Test
+    void testActualizarInformacionPersonal_conResponsable() {
+        // Arrange
+        Long userId = 1L;
+        when(session.getAttribute("idUsuario")).thenReturn(userId.toString());
+
+        UserEntity user = UserEntity.builder().id(userId).build();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        Responsable responsable = Responsable.builder().id(10L).build();
+        Persona persona = Persona.builder()
+                .id(1L)
+                .primerNombre("Carlos")
+                .responsable(responsable)
+                .userEntity(user)
+                .build();
+
+        when(personaRepository.findByUserEntity_Id(userId)).thenReturn(Optional.of(persona));
+
+        InformacionPersonaDTO dto = new InformacionPersonaDTO(
+                "Juan", "Luis", "Pérez", "Gómez",
+                123456789L, "Polvo", "O+", "Sura",
+                true, "Ibuprofeno", "María", 3214567890L, "Pedro", 3007891234L
+        );
+
+        ResponsablePersonaDTO responsableDTO = new ResponsablePersonaDTO(
+                "Ana", "Ramírez", 1010101010L, "Calle 123", 3001234567L
+        );
+
+        // Act
+        personaService.actualizarInformacionPersonal(dto, session, responsableDTO);
+
+        // Assert
+        assertEquals("Juan", persona.getPrimerNombre());
+        assertEquals("Ana", persona.getResponsable().getNombres());
+        assertEquals("Calle 123", persona.getDireccion());
+        verify(personaRepository).save(persona);
+    }
+
+    @Test
+    void testActualizarInformacionPersonal_sinResponsable() {
+        // Arrange
+        Long userId = 2L;
+        when(session.getAttribute("idUsuario")).thenReturn(userId.toString());
+
+        UserEntity user = UserEntity.builder().id(userId).build();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        Persona persona = Persona.builder()
+                .id(2L)
+                .primerNombre("Camila")
+                .responsable(null)
+                .userEntity(user)
+                .build();
+
+        when(personaRepository.findByUserEntity_Id(userId)).thenReturn(Optional.of(persona));
+
+        InformacionPersonaDTO dto = new InformacionPersonaDTO(
+                "Laura", "Sofia", "Martínez", "Ruiz",
+                987654321L, "Ninguna", "A-", "Nueva EPS",
+                false, null, "Carlos", 3001112233L, "Diana", 3019988776L
+        );
+
+        ResponsablePersonaDTO responsableDTO = new ResponsablePersonaDTO(
+                "Luis", "García", 1122334455L, "Carrera 45 #20-10", 3112233445L
+        );
+
+        // Act
+        personaService.actualizarInformacionPersonal(dto, session, responsableDTO);
+
+        // Assert
+        assertNotNull(persona.getResponsable());
+        assertEquals("Luis", persona.getResponsable().getNombres());
+        assertEquals("Carrera 45 #20-10", persona.getDireccion());
+        verify(personaRepository).save(persona);
     }
 }
