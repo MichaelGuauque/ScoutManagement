@@ -167,7 +167,7 @@ public class PersonaService implements IPersonaService {
     }
 
     @Override
-    public void actualizarInformacionPerosnal(InformacionPersonaDTO dto, HttpSession session, ResponsablePersonaDTO responsableDTO) {
+    public void actualizarInformacionPersonal(InformacionPersonaDTO dto, HttpSession session, ResponsablePersonaDTO responsableDTO) {
         Persona persona = personaModelSession(ID_USUARIO, session);
         persona.setPrimerNombre(dto.primerNombre());
         persona.setSegundoNombre(dto.segundoNombre());

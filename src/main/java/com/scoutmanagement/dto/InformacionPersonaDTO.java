@@ -12,8 +12,8 @@ public record InformacionPersonaDTO(
         boolean medicamentos,
         String especificacionMedicamentos,
         String primerContacto,
-        long numeroPrimerContacto,
+        Long numeroPrimerContacto,
         String segundoContacto,
-        long numeroSegundoContacto
+        Long numeroSegundoContacto
 ) {
 }

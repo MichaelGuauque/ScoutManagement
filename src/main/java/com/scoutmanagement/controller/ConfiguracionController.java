@@ -151,10 +151,10 @@ public class ConfiguracionController {
         try {
             Object rol = session.getAttribute("rol");
             if (rol.equals(Rol.ADULTO.name())){
-                personaService.actualizarInformacionPerosnal(informacionPersonaDTO, session, null);
+                personaService.actualizarInformacionPersonal(informacionPersonaDTO, session, null);
 
             }else if (rol.equals(Rol.JOVEN.name())) {
-                personaService.actualizarInformacionPerosnal(informacionPersonaDTO, session, responsablePersonaDTO);
+                personaService.actualizarInformacionPersonal(informacionPersonaDTO, session, responsablePersonaDTO);
             }
             redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Información modificado con éxito.");

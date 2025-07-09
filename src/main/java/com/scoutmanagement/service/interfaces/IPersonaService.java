@@ -40,6 +40,6 @@ public interface IPersonaService {
 
     Long contarJefesActivos();
 
-    void actualizarInformacionPerosnal(InformacionPersonaDTO dto, HttpSession session, ResponsablePersonaDTO responsablePersonaDTO);
+    void actualizarInformacionPersonal(InformacionPersonaDTO dto, HttpSession session, ResponsablePersonaDTO responsablePersonaDTO);
 
 }
