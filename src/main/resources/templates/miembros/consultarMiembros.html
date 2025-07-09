@@ -119,7 +119,29 @@
                                 </div>
                             </button>
                             <div class="dropdown-menu">
-                                <div class="dropdown-item">
+                                <div class="dropdown-item"
+                                     th:data-nombre="${miembro.nombreCompleto}"
+                                     th:data-email="${miembro.userEntity.username}"
+                                     th:data-estado="${miembro.userEntity.activo ? 'Activo' : 'Inactivo'}"
+                                     th:data-nacimiento="${miembro.fechaNacimiento}"
+                                     th:data-tipo-doc="${miembro.tipoDeDocumento}"
+                                     th:data-num-doc="${miembro.numeroDeDocumento}"
+                                     th:data-rama="${miembro.rama}"
+                                     th:data-direccion="${miembro.direccion}"
+                                     th:data-nombreac="${miembro.responsable.nombreCompleto}"
+                                     th:data-tipodocac="${miembro.responsable.tipoDeDocumento}"
+                                     th:data-numdocac="${miembro.responsable.numeroDocumento}"
+                                     th:data-telefonoac="${miembro.responsable.telefono}"
+                                     th:data-nombrecontacto1="${miembro.nombrePrimerContacto}"
+                                     th:data-telefonocontacto1="${miembro.numeroPrimerContacto}"
+                                     th:data-nombrecontacto2="${miembro.nombreSegundoContacto}"
+                                     th:data-telefonocontacto2="${miembro.numeroSegundoContacto}"
+                                     th:data-eps="${miembro.eps}"
+                                     th:data-sangre="${miembro.tipoDeSangre}"
+                                     th:data-medicamentos="${miembro.tomaMedicamentos}"
+                                     th:data-meds="${miembro.especificacionMedicamentos}"
+                                     th:data-alergias="${miembro.especificacionAlergiasYRestricciones}"
+                                     data-bs-toggle="modal" data-bs-target="#modal-verPerfil">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" width="16" height="16"
                                          viewBox="0 0 16 16" fill="none">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -215,9 +237,9 @@
                 <div class="profile-header">
                     <img th:src="@{/img/miembro.svg}" alt="Eliminar" class="profile-image">
                     <div class="profile-info">
-                        <h1 class="name-profile">Miguel Andres Marin Fernandez</h1>
-                        <p class="email-profile">miguelito@gmail.com</p>
-                        <p class="state-profile">Activo</p>
+                        <h1 id="perfil-nombre" class="name-profile"></h1>
+                        <p id="perfil-correo" class="email-profile"></p>
+                        <p id="perfil-estado" class="state-profile"></p>
                     </div>
                 </div>
             </div>
@@ -225,15 +247,15 @@
                 <div class="info-grid1">
                     <div class="info-item">
                         <p class="info-label">Fecha Nacimiento</p>
-                        <p class="info-value">11-12-2005</p>
+                        <p id="perfil-fecha" class="info-value"></p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Documento</p>
-                        <p class="info-value">CC.1112041392</p>
+                        <p id="perfil-documento" class="info-value"></p>
                     </div>
                     <div class="info-item">
                         <p class="info-label">Rama</p>
-                        <p class="info-value">MANADA</p>
+                        <p id="perfil-rama" class="info-value"></p>
                     </div>
                 </div>
             </div>
@@ -242,22 +264,93 @@
 
             <div class="section">
                 <h2 class="section-title">Datos de Contacto</h2>
-                <div class="info-grid">
+                <div class="info-grid1">
                     <div class="info-item">
-                        <p class="info-label">Dirección Residencia</p>
-                        <p class="info-value">Carrera 9 #36-12, Barrio San Fernando, Cali</p>
+                        <p class="info-label">Nombre Acudiente</p>
+                        <p id="acud-nombre" class="info-value"></p>
                     </div>
-
                     <div class="info-item">
-                        <p class="info-label">Teléfono</p>
-                        <p class="info-value">316-358-7463</p>
+                        <p class="info-label">Documento Acudiente</p>
+                        <p id="acud-documento" class="info-value"></p>
+                    </div>
+                    <div class="info-item">
+                        <p class="info-label">Teléfono Acudiente</p>
+                        <p id="acud-telefono" class="info-value"></p>
                     </div>
                 </div>
-
+                <div class="info-item">
+                    <p class="info-label">Dirección Residencia</p>
+                    <p id="perfil-direccion" class="info-value"></p>
+                </div>
             </div>
 
             <div class="divider"></div>
 
+            <div class="section">
+                <h2 class="section-title">Datos Médicos</h2>
+                <div class="info-grid1">
+                    <div class="info-item">
+                        <p class="info-label">Alergias</p>
+                        <p id="perfil-alergias" class="info-value"></p>
+                    </div>
+                    <div class="info-item">
+                        <p class="info-label">T. Sangre</p>
+                        <p id="perfil-sangre" class="info-value"></p>
+                    </div>
+                    <div class="info-item">
+                        <p class="info-label">EPS</p>
+                        <p id="perfil-eps" class="info-value"></p>
+                    </div>
+                </div>
+                <div class="info-grid1">
+                    <div class="info-item">
+                        <p class="info-label">¿Toma Medicamentos?</p>
+                        <p id="perfil-medicamentos" class="info-value"></p>
+                    </div>
+                    <div class="info-item">
+                        <p class="info-label">Frecuencia</p>
+                        <p id="perfil-meds" class="info-value long-text"></p>
+                    </div>
+                    <div class="info-item"></div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <h2 class="section-title">Contactos de Emergencia</h2>
+                <div class="emergency-contact">
+                    <p class="info-label-title">Contacto de Emergencia #1</p>
+                    <div class="info-grid1">
+                        <div class="info-item">
+                            <p class="info-label">Nombre</p>
+                            <p id="contacto1-nombre" class="info-value"></p>
+                        </div>
+                        <div class="info-item">
+                            <p class="info-label">Teléfono</p>
+                            <p id="contacto1-telefono" class="info-value"></p>
+                        </div>
+                        <div class="info-item"></div>
+                    </div>
+                </div>
+                <div class="emergency-contact">
+                    <p class="info-label-title">Contacto de Emergencia #2</p>
+                    <div class="info-grid1">
+                        <div class="info-item">
+                            <p class="info-label">Nombre</p>
+                            <p id="contacto2-nombre" class="info-value"></p>
+                        </div>
+                        <div class="info-item">
+                            <p class="info-label">Teléfono</p>
+                            <p id="contacto2-telefono" class="info-value"></p>
+                        </div>
+                        <div class="info-item"></div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+            </div>
 
             <div class="modal-footer">
                 <button class="modal-button cancel-button">Cerrar</button>
@@ -619,6 +712,39 @@
             }
         });
     }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const botonesVerPerfil = document.querySelectorAll("[data-bs-toggle='modal'][data-bs-target='#modal-verPerfil']");
+
+        botonesVerPerfil.forEach(boton => {
+            boton.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                document.getElementById("perfil-nombre").textContent = this.dataset.nombre || '';
+                document.getElementById("perfil-correo").textContent = this.dataset.email || '';
+                document.getElementById("perfil-estado").textContent = this.dataset.estado || '';
+                document.getElementById("perfil-fecha").textContent = this.dataset.nacimiento || 'No disponible';
+                document.getElementById("perfil-documento").textContent = `${this.dataset.tipoDoc || ''}.${this.dataset.numDoc || ''}`;
+                document.getElementById("perfil-rama").textContent = this.dataset.rama || '';
+                document.getElementById("perfil-direccion").textContent = this.dataset.direccion || 'No disponible';
+                document.getElementById("acud-nombre").textContent = this.dataset.nombreac || 'No disponible';
+                document.getElementById("acud-documento").textContent = `${this.dataset.tipodocac || ''}.${this.dataset.numdocac || 'No Disponible'}`;
+                document.getElementById("acud-telefono").textContent = this.dataset.telefonoac || 'No disponible';
+                document.getElementById("contacto1-nombre").textContent = this.dataset.nombrecontacto1 || '';
+                document.getElementById("contacto1-telefono").textContent = this.dataset.telefonocontacto1 || '';
+                document.getElementById("contacto2-nombre").textContent = this.dataset.nombrecontacto2 || '';
+                document.getElementById("contacto2-telefono").textContent = this.dataset.telefonocontacto2 || '';
+                document.getElementById("perfil-eps").textContent = this.dataset.eps || 'No Disponible';
+                document.getElementById("perfil-sangre").textContent = this.dataset.sangre || 'No Disponible';
+                const tomaMedicamentos = this.dataset.medicamentos;
+                document.getElementById("perfil-medicamentos").textContent =
+                    tomaMedicamentos === "true" ? "Sí" : (tomaMedicamentos === "false" ? "No" : "No Disponible");
+                document.getElementById("perfil-meds").textContent = this.dataset.meds || 'No Aplica';
+                document.getElementById("perfil-alergias").textContent = this.dataset.alergias || 'No Aplica';
+            });
+        });
+    });
 </script>
 </body>
 </html>
