@@ -1,5 +1,7 @@
 package com.scoutmanagement.service.implementation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +14,7 @@ import java.nio.file.Paths;
 @Service
 public class UploadFileService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UploadFileService.class);
     private String folder="images//";
 
     public String saveImage(MultipartFile file) throws IOException {
@@ -26,11 +29,16 @@ public class UploadFileService {
 
     public void deleteImage(String nombre) {
         String ruta="images//";
-        File file= new File(ruta+nombre);
-        boolean eliminado = file.delete();
-
-        if (!eliminado) {
-            System.err.println("No se pudo eliminar la imagen: " + nombre);
+        Path path = Paths.get(ruta + nombre);
+        try{
+            Files.delete(path);
+        }catch(IOException e){
+            logger.error(e.getMessage());
         }
+//        boolean eliminado = file.delete();
+//
+//        if (!eliminado) {
+//            logger.warn("No se pudo eliminar la imagen: {}", nombre);
+//        }
     }
 }

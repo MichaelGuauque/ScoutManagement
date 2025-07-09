@@ -184,7 +184,6 @@ public class ConfiguracionController {
         if (persona.getImagen() == null || persona.getImagen().equals(IMAGEN_DEFAULT)){
             String fileName = uploadFileService.saveImage(file);
             persona.setImagen(fileName);
-            System.out.println("Nombre de la imagen: " + persona.getImagen());
         } else if (persona.getImagen() != null && !persona.getImagen().equals(IMAGEN_DEFAULT)) {
             uploadFileService.deleteImage(persona.getImagen());
             String fileName = uploadFileService.saveImage(file);
