@@ -49,7 +49,7 @@
                 <div class="profile-info">
                     <div class="profile-avatar">
                         <img
-                                th:src="@{/img/perfil.svg}"
+                                th:src="${persona.imagen != null} ? @{/images/{img}(img=${persona.imagen})} : @{/img/perfil.svg}"
                                 alt="Avatar"
                                 class="profile-avatar-icon"
                         />
@@ -560,68 +560,12 @@
             </div>
 
             <div class="upload-content">
-                <div class="upload-section">
-                    <div class="upload-area" id="uploadArea">
-                        <div class="upload-placeholder" id="uploadPlaceholder">
-                            <svg
-                                    class="upload-placeholder-icon"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                            >
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="17 8 12 3 7 8"></polyline>
-                                <line x1="12" y1="3" x2="12" y2="15"></line>
-                            </svg>
-                            <div class="upload-placeholder-text">
-                                Arrastra tu imagen aquí
-                            </div>
-                            <div class="upload-placeholder-hint">
-                                o haz clic para seleccionar
-                            </div>
-                        </div>
-                        <img
-                                id="imagePreview"
-                                class="upload-preview"
-                                alt="Vista previa"
-                        />
-                    </div>
-
-                    <div class="upload-info">
-                        <div class="upload-status" id="uploadStatus">
-                            <svg
-                                    class="status-icon"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                            >
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="16"></line>
-                                <line x1="8" y1="12" x2="16" y2="12"></line>
-                            </svg>
-                            <div class="status-text" id="statusText">
-                                No has seleccionado ninguna imagen
-                            </div>
-                        </div>
-
-                        <input
-                                type="file"
-                                id="fileInput"
-                                class="file-input"
-                                accept="image/*"
-                        />
-
-                        <div class="file-requirements">
-                            <div class="file-requirement">
+                <form method="post" th:action="@{/configuracion/modificar}" enctype="multipart/form-data">
+                    <div class="upload-section">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-placeholder" id="uploadPlaceholder">
                                 <svg
+                                        class="upload-placeholder-icon"
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
                                         fill="none"
@@ -630,12 +574,28 @@
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                 >
-                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
                                 </svg>
-                                <span>Formatos permitidos: JPG, PNG</span>
+                                <div class="upload-placeholder-text">
+                                    Arrastra tu imagen aquí
+                                </div>
+                                <div class="upload-placeholder-hint">
+                                    o haz clic para seleccionar
+                                </div>
                             </div>
-                            <div class="file-requirement">
+                            <img
+                                    id="imagePreview"
+                                    class="upload-preview"
+                                    alt="Vista previa"
+                            />
+                        </div>
+
+                        <div class="upload-info">
+                            <div class="upload-status" id="uploadStatus">
                                 <svg
+                                        class="status-icon"
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
                                         fill="none"
@@ -644,32 +604,77 @@
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                 >
-                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                                    <line x1="8" y1="12" x2="16" y2="12"></line>
                                 </svg>
-                                <span>Tamaño máximo: 5 MB</span>
+                                <div class="status-text" id="statusText">
+                                    No has seleccionado ninguna imagen
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="upload-recommendations">
-                            <div class="recommendations-content">
-                                <div class="recommendations-text">
-                                    Para obtener mejores resultados, utiliza una imagen
-                                    cuadrada con buena iluminación. La imagen se mostrará como
-                                    un círculo en tu perfil.
+                            <input
+                                    type="file"
+                                    id="fileInput"
+                                    name="fileInput"
+                                    class="file-input"
+                                    accept="image/*"
+                                    required
+                            />
+
+                            <div class="file-requirements">
+                                <div class="file-requirement">
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                    >
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    <span>Formatos permitidos: JPG, PNG</span>
+                                </div>
+                                <div class="file-requirement">
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                    >
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    <span>Tamaño máximo: 5 MB</span>
+                                </div>
+                            </div>
+
+                            <div class="upload-recommendations">
+                                <div class="recommendations-content">
+                                    <div class="recommendations-text">
+                                        Para obtener mejores resultados, utiliza una imagen
+                                        cuadrada con buena iluminación. La imagen se mostrará como
+                                        un círculo en tu perfil.
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="buttons">
-                    <button type="button" class="btn-secondary botones">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn-primary botones">
-                        Actualizar
-                    </button>
-                </div>
+                    <div class="buttons">
+                        <button type="button" class="btn-secondary botones">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary botones">
+                            Actualizar
+                        </button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>

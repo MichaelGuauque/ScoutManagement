@@ -41,7 +41,7 @@
             <div class="card" th:each="miembro: ${miembros}">
                 <div class="card-header">
                     <div class="avatar">
-                        <img th:src="@{/img/joven.svg}" alt="Avatar" class="avatar-icon">
+                        <img th:src="${miembro.imagen != null} ? @{/images/{img}(img=${miembro.imagen})} : @{/img/perfil.svg}" alt="Avatar" class="avatar-icon">
                     </div>
                 </div>
                 <div class="card-body" style="min-height: 190px">

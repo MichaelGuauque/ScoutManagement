@@ -91,7 +91,7 @@
                 <tr th:each="miembro : ${miembros}">
                     <td>
                         <div class="user-container">
-                            <img th:src="@{/img/miembro.svg}" alt="Profile" class="profile-img">
+                            <img th:src="${miembro.imagen != null} ? @{/images/{img}(img=${miembro.imagen})} : @{/img/perfil.svg}" alt="Profile" class="profile-img">
                             <span th:text="${miembro.primerNombre+ ' '+miembro.segundoNombre+' '+miembro.primerApellido+
                             ' '+miembro.segundoApellido}">Nombre del miembro</span>
                         </div>
@@ -140,6 +140,7 @@
                                      th:data-sangre="${miembro.tipoDeSangre}"
                                      th:data-medicamentos="${miembro.tomaMedicamentos}"
                                      th:data-meds="${miembro.especificacionMedicamentos}"
+                                     th:data-imagen="${miembro.imagen != null} ? @{/images/{img}(img=${miembro.imagen})} : @{/img/perfil.svg}"
                                      th:data-alergias="${miembro.especificacionAlergiasYRestricciones}"
                                      data-bs-toggle="modal" data-bs-target="#modal-verPerfil">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="dropdown-icon" width="16" height="16"
@@ -235,7 +236,7 @@
             <div class="modal-header">
 
                 <div class="profile-header">
-                    <img th:src="@{/img/miembro.svg}" alt="Eliminar" class="profile-image">
+                    <img id="foto-miembro" th:src="@{/img/perfil.svg}" alt="Eliminar" class="profile-image">
                     <div class="profile-info">
                         <h1 id="perfil-nombre" class="name-profile"></h1>
                         <p id="perfil-correo" class="email-profile"></p>
@@ -736,6 +737,7 @@
                 document.getElementById("contacto2-nombre").textContent = this.dataset.nombrecontacto2 || '';
                 document.getElementById("contacto2-telefono").textContent = this.dataset.telefonocontacto2 || '';
                 document.getElementById("perfil-eps").textContent = this.dataset.eps || 'No Disponible';
+                document.getElementById("foto-miembro").src = this.dataset.imagen ;
                 document.getElementById("perfil-sangre").textContent = this.dataset.sangre || 'No Disponible';
                 const tomaMedicamentos = this.dataset.medicamentos;
                 document.getElementById("perfil-medicamentos").textContent =

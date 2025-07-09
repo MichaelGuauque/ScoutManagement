@@ -63,6 +63,7 @@ public class Persona {
     private long numeroPrimerContacto;
     private String nombreSegundoContacto;
     private long numeroSegundoContacto;
+    private String imagen;
 
     public String getNombreCompleto(){
         return this.primerNombre + " " +  this.segundoNombre + " " + this.primerApellido + " " + this.segundoApellido;

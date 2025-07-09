@@ -14,5 +14,6 @@ import java.util.List;
 public class MiembroRamaDTO {
     private String nombreCompleto;
     private String cargo;
+    private String imagen;
     private List<Obtencion> insignias;
 }

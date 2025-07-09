@@ -4,6 +4,9 @@ import com.scoutmanagement.dto.InformacionPersonaDTO;
 import com.scoutmanagement.dto.ResponsablePersonaDTO;
 import com.scoutmanagement.persistence.model.*;
 import static com.scoutmanagement.util.constants.AppConstants.*;
+
+import com.scoutmanagement.persistence.repository.PersonaRepository;
+import com.scoutmanagement.service.implementation.UploadFileService;
 import com.scoutmanagement.service.interfaces.IPersonaService;
 import com.scoutmanagement.service.interfaces.IUserEntity;
 import com.scoutmanagement.util.exception.ServiceException;
@@ -15,8 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -31,9 +36,16 @@ public class ConfiguracionController {
     @Autowired
     private IPersonaService personaService;
 
+    @Autowired
+    private UploadFileService uploadFileService;
+
+    @Autowired
+    private PersonaRepository personaRepository;
+
     private static final String ID_USUARIO = "idUsuario";
     private static final String ATRIBUTO_PERSONA = "persona";
     private static final String REDIRECT_CONFIGURACION = "redirect:/configuracion";
+    private static final String IMAGEN_DEFAULT = "miembro.svg";
 
     @GetMapping
     public String mostrarConfiguracion(Model model, HttpSession session) {
@@ -163,6 +175,24 @@ public class ConfiguracionController {
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, e.getMessage());
             redirectAttributes.addFlashAttribute("type", EXCEPTION_ERROR);
         }
+        return REDIRECT_CONFIGURACION;
+    }
+
+    @PostMapping("/modificar")
+    public String modificarImagen(@RequestParam("fileInput") MultipartFile file, HttpSession session) throws IOException {
+        Persona persona = personaService.personaModelSession(ID_USUARIO, session);
+        if (persona.getImagen() == null || persona.getImagen().equals(IMAGEN_DEFAULT)){
+            String fileName = uploadFileService.saveImage(file);
+            persona.setImagen(fileName);
+        } else if (persona.getImagen() != null && !persona.getImagen().equals(IMAGEN_DEFAULT)) {
+            uploadFileService.deleteImage(persona.getImagen());
+            String fileName = uploadFileService.saveImage(file);
+            persona.setImagen(fileName);
+        } else if (file.isEmpty()) {
+            persona.setImagen(IMAGEN_DEFAULT);
+        }
+
+        personaRepository.save(persona);
         return REDIRECT_CONFIGURACION;
     }
 
