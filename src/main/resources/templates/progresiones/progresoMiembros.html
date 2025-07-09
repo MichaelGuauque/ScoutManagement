@@ -76,7 +76,7 @@
                 <tr th:each="miembro : ${miembros}">
                     <td>
                         <div class="user-container">
-                            <img th:src="@{/img/miembro.svg}" alt="Profile" class="profile-img">
+                            <img th:src="${miembro.imagen != null} ? @{/images/{img}(img=${miembro.imagen})} : @{/img/perfil.svg}" alt="Profile" class="profile-img">
                             <span th:text="${miembro.primerNombre+ ' '+miembro.segundoNombre+' '+miembro.primerApellido+
                             ' '+miembro.segundoApellido}">Nombre del miembro</span>
                         </div>

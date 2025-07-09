@@ -5,7 +5,9 @@
         </div>
 
         <div class="perfil-contenedor">
-            <img th:src="@{/img/perfil.svg}" alt="Perfil" class="perfil">
+            <img th:src="${persona.imagen != null} ? @{/images/{img}(img=${persona.imagen})} : @{/img/perfil.svg}"
+                 style="border-radius: 10px"
+                 alt="Perfil" class="perfil">
             <div class="perfil-info">
                 <p class="nombre-perfil"
                    th:text="${persona.getNombreCompleto()}">Nombre

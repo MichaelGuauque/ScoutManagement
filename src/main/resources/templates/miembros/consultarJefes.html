@@ -90,7 +90,7 @@
                 <tr th:each="jefe : ${jefes}">
                     <td>
                         <div class="user-container">
-                            <img th:src="@{/img/miembro.svg}" alt="Profile" class="profile-img">
+                            <img th:src="${jefe.imagen != null} ? @{/images/{img}(img=${jefe.imagen})} : @{/img/perfil.svg}" alt="Profile" class="profile-img">
                             <span th:text="${jefe.primerNombre+ ' '+jefe.segundoNombre+' '+jefe.primerApellido+
                             ' '+jefe.segundoApellido}">Nombre del jefe</span>
                         </div>
@@ -214,7 +214,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="profile-header">
-                    <img th:src="@{/img/miembro.svg}" alt="Eliminar" class="profile-image">
+                    <img th:src="${persona.imagen != null} ? @{/images/{img}(img=${persona.imagen})} : @{/img/perfil.svg}" alt="Eliminar" class="profile-image">
                     <div class="profile-info">
                         <h1 id="perfil-nombre" class="name-profile"></h1>
                         <p id="perfil-correo" class="email-profile"></p>

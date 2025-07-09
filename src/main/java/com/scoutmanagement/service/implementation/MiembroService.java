@@ -27,6 +27,7 @@ public class MiembroService implements IMiembroService {
             miembrosRama.add(MiembroRamaDTO.builder()
                     .nombreCompleto(miembro.getNombreCompleto())
                     .cargo(miembro.getCargo().toString())
+                    .imagen(miembro.getImagen())
                     .insignias(obtencionService.ultimasObtenciones(miembro))
                     .build());
         }
