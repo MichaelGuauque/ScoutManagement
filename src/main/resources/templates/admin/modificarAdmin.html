@@ -50,7 +50,7 @@
             <div class="form-row">
               <div class="form-group form-group-25">
                 <label class="form-label">Primer Nombre</label>
-                <input type="text" id="primerNombre" name="primerNombre" class="form-control" th:value="${persona.getPrimerNombre()}" />
+                <input type="text" id="primerNombre" name="primerNombre" class="form-control" required th:value="${persona.getPrimerNombre()}" />
               </div>
               <div class="form-group form-group-25">
                 <label class="form-label">Segundo Nombre</label>
@@ -58,7 +58,7 @@
               </div>
               <div class="form-group form-group-25">
                 <label class="form-label">Primer Apellido</label>
-                <input type="text" name="primerApellido" id="primerApellido" class="form-control" th:value="${persona.getPrimerApellido()}" />
+                <input type="text" name="primerApellido" id="primerApellido" class="form-control" required th:value="${persona.getPrimerApellido()}" />
               </div>
               <div class="form-group form-group-25">
                 <label class="form-label">Segundo Apellido</label>
@@ -100,34 +100,37 @@
             <div class="form-row">
               <div class="form-group full-width" style="flex: 2.14">
                 <label class="form-label">Alergias</label>
-                <input type="text" name="alergias" id="alergias" class="form-control" th:value="${persona.getEspecificacionAlergiasYRestricciones()}" />
+                <input type="text" name="alergias" id="alergias" class="form-control" required th:value="${persona.getEspecificacionAlergiasYRestricciones()}" />
               </div>
               <div class="form-group">
                 <label class="form-label">Tipo de sangre</label>
-                <select class="form-control" name="tipoDeSangre" id="tipoDeSangre">
-                  <option th:value="${persona.getTipoDeSangre()}" selected></option>
-                  <th:block th:each="ts : ${tiposDeSangre}">
-                    <option th:value="${ts}" th:text="${ts}"></option>
-                  </th:block>
+                <select class="form-control" name="tipoDeSangre" required id="tipoDeSangre">
+                  <option value="" selected></option>
+                  <option
+                          th:each="ts : ${tiposDeSangre}"
+                          th:value="${ts}"
+                          th:text="${ts}"
+                          th:selected="${ts} == ${persona.tipoDeSangre}">
+                  </option>
                 </select>
               </div>
               <div class="form-group">
                 <label class="form-label">EPS</label>
-                <input type="text" name="eps" id="eps" class="form-control" th:value="${persona.getEps()}" />
+                <input type="text" name="eps" id="eps" class="form-control" required th:value="${persona.getEps()}" />
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group form-group-20">
                 <label class="form-label">¿Toma Medicamentos?</label>
-                <select name="medicamentos" id="medicamentos" class="form-control">
+                <select name="medicamentos" id="medicamentos" class="form-control" required>
                   <option th:value="true" th:selected="${persona.tomaMedicamentos} == true">Sí</option>
                   <option th:value="false" th:selected="${persona.tomaMedicamentos} == false">No</option>
                 </select>
               </div>
               <div class="form-group full-width" style="flex: 3.3">
                 <label class="form-label">Frecuencia</label>
-                <input type="text" name="especificacionMedicamentos" id="especificacionMedicamentos" class="form-control" th:value="${persona.getEspecificacionMedicamentos()}" />
+                <input type="text" name="especificacionMedicamentos" id="especificacionMedicamentos" class="form-control" required th:value="${persona.getEspecificacionMedicamentos()}" />
               </div>
             </div>
           </div>
@@ -148,26 +151,26 @@
             <div class="form-row">
               <div class="form-group form-group-33">
                 <label class="form-label">Nombre Contacto</label>
-                <input type="text" name="primerContacto" id="primerContacto" class="form-control" th:value="${persona.getNombrePrimerContacto()}" />
+                <input type="text" name="primerContacto" id="primerContacto" class="form-control" required th:value="${persona.getNombrePrimerContacto()}" />
               </div>
               <div class="form-group form-group-20">
                 <label class="form-label">Teléfono</label>
-                <input type="number" name="numeroPrimerContacto" id="numeroPrimerContacto" class="form-control" th:value="${persona.getNumeroPrimerContacto()}" />
+                <input type="number" name="numeroPrimerContacto" id="numeroPrimerContacto" class="form-control" required th:value="${persona.getNumeroPrimerContacto()}" />
               </div>
               <div class="form-group form-group-33">
                 <label class="form-label">Nombre Contacto</label>
-                <input type="text" name="segundoContacto" id="segundoContacto" class="form-control" th:value="${persona.getNombreSegundoContacto()}" />
+                <input type="text" name="segundoContacto" id="segundoContacto" class="form-control" required th:value="${persona.getNombreSegundoContacto()}" />
               </div>
               <div class="form-group form-group-20">
                 <label class="form-label">Teléfono</label>
-                <input type="number" name="numeroSegundoContacto" id="numeroSegundoContacto" class="form-control" th:value="${persona.getNumeroSegundoContacto()}" />
+                <input type="number" name="numeroSegundoContacto" id="numeroSegundoContacto" class="form-control" required th:value="${persona.getNumeroSegundoContacto()}" />
               </div>
             </div>
           </div>
 
           <div class="buttons">
-            <button type="button" class="btn-secondary botones">Cancelar</button>
             <button type="submit" class="btn-primary botones">Modificar</button>
+            <button type="button" class="btn-secondary botones" onclick="cancelarRegistro()">Cancelar</button>
           </div>
         </form>
       </div>
@@ -197,6 +200,9 @@
         });
       });
 
+      function cancelarRegistro(){
+        window.history.back();
+      }
       // Funciones para los modales
       document.addEventListener("DOMContentLoaded", function () {
         // --- FUNCIONES COMPARTIDAS ---

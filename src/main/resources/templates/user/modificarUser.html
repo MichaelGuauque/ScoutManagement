@@ -8,7 +8,10 @@
       href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="modificarAdminStyle.css" />
+    <link rel="stylesheet" th:href="@{/style/modificarAdminStyle.css}" />
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/configuracionAdminStyle.css}">
+    <link rel="stylesheet" th:href="@{/style/notification.css}">
   </head>
   <body>
     <!-- Botón hamburguesa para móviles -->
@@ -24,110 +27,7 @@
     <!-- Overlay para fondos oscuros al abrir sidebar en móvil -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <div class="sidebar" id="sidebar">
-      <div class="logo-contenedor">
-        <img src="img/logoApli.svg" alt="Scout Management" class="logo" />
-      </div>
-
-      <div class="perfil-contenedor">
-        <img src="img/perfil.svg" alt="Perfil" class="perfil" />
-        <div class="perfil-info">
-          <p class="nombre-perfil">Miguel Andres M...</p>
-          <p class="cargo-perfil">Joven - LOBATO</p>
-        </div>
-        <div class="perfil-flecha">
-          <img src="img/flechita.svg" alt="Desplegar" />
-        </div>
-
-        <!-- Menú desplegable del perfil -->
-        <div class="perfil-menu" id="perfilMenu">
-          <ul>
-            <li class="nav-link">
-              <img
-                src="img/sesion.svg"
-                alt="Ver Perfil"
-                class="perfil-menu-icon"
-              />
-              <span>Ver Perfil</span>
-            </li>
-            <li class="nav-link">
-              <img
-                src="img/cierreSesion.svg"
-                alt="Cerrar Sesión"
-                class="perfil-menu-icon"
-              />
-              <span>Cerrar Sesión</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="linea-divisoria"></div>
-
-      <div class="contenido-central">
-        <nav class="menu">
-          <ul>
-            <li class="menu-item">
-              <div class="main-button nav-link">
-                <img src="img/Casa.svg" alt="Inicio" />
-                <span>Inicio</span>
-              </div>
-            </li>
-
-            <li class="menu-item">
-              <div class="main-button">
-                <img src="img/grafico.svg" alt="Progresiones" />
-                <span>Progresiones</span>
-                <img
-                  src="img/flechita.svg"
-                  alt="Flecha"
-                  class="arrow-img"
-                  style="width: 15px; height: 15px"
-                />
-              </div>
-              <ul class="submenu">
-                <li class="nav-link">
-                  <img
-                    src="img/retos.svg"
-                    alt="Consultar"
-                    class="submenu-icon"
-                  />Consultar Avances
-                </li>
-              </ul>
-            </li>
-
-            <li class="menu-item">
-              <div class="main-button">
-                <img src="img/usuarios.svg" alt="Miembros" />
-                <span>Miembros</span>
-                <img
-                  src="img/flechita.svg"
-                  alt="Flecha"
-                  class="arrow-img"
-                  style="width: 15px; height: 15px"
-                />
-              </div>
-              <ul class="submenu">
-                <li class="nav-link">
-                  <img
-                    src="img/usuario(buscar).svg"
-                    alt="Consultar"
-                    class="submenu-icon"
-                  />Compañeros de Rama
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
-      <div class="linea-divisoria"></div>
-
-      <div class="configuracion nav-link">
-        <img src="img/tuerca.svg" alt="Configuración" />
-        <span>Configuración de Cuenta</span>
-      </div>
-    </div>
+    <div th:include="user/template_user.html::header"></div>
 
     <!-- Contenido principal -->
     <main>
@@ -142,245 +42,215 @@
         </div>
 
         <!-- Información Personal -->
-        <div class="section" style="margin-top: 2rem">
-          <h2 class="section-title">Información Personal</h2>
-          <p class="section-subtitle">Datos básicos sobre el miembro.</p>
-
-          <div class="form-row">
-            <div class="form-group form-group-25">
-              <label class="form-label">Primer Nombre</label>
-              <input type="text" class="form-control" value="Miguel" />
-            </div>
-            <div class="form-group form-group-25">
-              <label class="form-label">Segundo Nombre</label>
-              <input type="text" class="form-control" value="Andres" />
-            </div>
-            <div class="form-group form-group-25">
-              <label class="form-label">Primer Apellido</label>
-              <input type="text" class="form-control" value="Marin" />
-            </div>
-            <div class="form-group form-group-25">
-              <label class="form-label">Segundo Apellido</label>
-              <input type="text" class="form-control" value="Fernandez" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group form-group-25">
-              <label class="form-label">Tipo de Documento</label>
-              <input
-                type="text"
-                class="form-control"
-                value="Tarjeta de Identidad"
-              />
-            </div>
-            <div class="form-group form-group-25">
-              <label class="form-label">Numero de Documento</label>
-              <input type="text" class="form-control" value="11464392" />
-            </div>
-            <div class="form-group form-group-25">
-              <label class="form-label">Telefono</label>
-              <input type="text" class="form-control" value="3167448590" />
-            </div>
-            <div class="form-group form-group-25">
-              <label class="form-label">Correo</label>
-              <input
-                type="text"
-                class="form-control"
-                value="miguelito@gmail.com"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Datos de Acudiente -->
-        <div class="section">
-          <h2 class="section-title">Datos de Acudiente</h2>
-
-          <div class="form-row">
-            <div class="form-group form-group-33">
-              <label class="form-label">Nombre Acudiente</label>
-              <input
-                type="text"
-                class="form-control"
-                value="John Edward Kenway"
-              />
-            </div>
-            <div class="form-group form-group-25">
-              <label class="form-label">Teléfono</label>
-              <input type="text" class="form-control" value="3187658970" />
-            </div>
-            <div class="form-group form-group-20">
-              <label class="form-label">Tipo de Documento</label>
-              <input
-                type="text"
-                class="form-control"
-                value="Cedula de Ciudadania"
-              />
-            </div>
-            <div class="form-group form-group-20">
-              <label class="form-label">Numero Documento</label>
-              <input type="text" class="form-control" value="17782498" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group form-group-100">
-              <label class="form-label">Dirección</label>
-              <input
-                type="text"
-                class="form-control"
-                value="Carrera 9 #36-12, Barrio San Fernando, Cali"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Datos Medicos -->
-        <div class="section">
-          <h2 class="section-title">Datos Medicos</h2>
-
-          <div class="form-row">
-            <div class="form-group full-width" style="flex: 2.14">
-              <label class="form-label">Alergias</label>
-              <input type="text" class="form-control" value="Miguel" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Tipo de sangre</label>
-              <input type="text" class="form-control" value="Marin" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">EPS</label>
-              <input type="text" class="form-control" value="Fernandez" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group form-group-20">
-              <label class="form-label">Toma Medicamentos?</label>
-              <input type="text" class="form-control" value="ji" />
-            </div>
-            <div class="form-group full-width" style="flex: 3.3">
-              <label class="form-label">Frecuencia</label>
-              <input type="text" class="form-control" value="Andres" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Contactos de Emergencia -->
-        <div class="section">
-          <h2 class="section-title">Contactos de Emergencia</h2>
-
-          <div class="form-row">
-            <div class="form-group form-section-header form-group-50">
-              <label class="form-label">Contacto de Emergencia #1</label>
-            </div>
-            <div class="form-group form-section-header form-group-50">
-              <label class="form-label">Contacto de Emergencia #2</label>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group form-group-33">
-              <label class="form-label">Nombre Contacto</label>
-              <input type="text" class="form-control" value="Lady Johanna" />
-            </div>
-            <div class="form-group form-group-20">
-              <label class="form-label">Teléfono</label>
-              <input type="text" class="form-control" value="3168970989" />
-            </div>
-            <div class="form-group form-group-33">
-              <label class="form-label">Nombre Contacto</label>
-              <input type="text" class="form-control" value="Felipe Restrepo" />
-            </div>
-            <div class="form-group form-group-20">
-              <label class="form-label">Teléfono</label>
-              <input type="text" class="form-control" value="3168400989" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Funcion dentro del Grupo -->
-        <div class="section">
-          <h2 class="section-title">Funcion dentro del Grupo</h2>
-          <p class="section-subtitle">
-            El rol y la rama a la que pertenece el miembro.
-          </p>
-          <div class="form-row">
-            <div class="form-group form-group-33">
-              <label class="form-label">Rol</label>
-              <input type="text" class="form-control" value="Joven" />
-            </div>
-            <div class="form-group form-group-33">
-              <label class="form-label">Cargo (Rama)</label>
-              <input type="text" class="form-control" value="MANADA" />
-            </div>
-          </div>
-        </div>
-        <div class="buttons">
-          <button type="button" class="btn-secondary botones">Cancelar</button>
-          <button type="submit" class="btn-primary botones">Modificar</button>
-        </div>
-      </div>
-
-      <footer class="footer">
-        <div class="footer-container">
-          <div class="footer-top">
-            <div class="footer-logo">
-              <img
-                src="img/logo605.png"
-                alt="Scouts Jaguares 605"
-                class="logo-img"
-              />
-            </div>
-
-            <div class="footer-info">
-              <div class="footer-title">
-                <div class="dot"></div>
-                <h2>Scouts Jaguares 605</h2>
+        <form method="post" th:action="@{/configuracion/actualizarInformacion}">
+          <div class="section" style="margin-top: 2rem">
+            <h2 class="section-title">Información Personal</h2>
+            <p class="section-subtitle">Datos básicos sobre el miembro.</p>
+            <div class="form-row">
+              <div class="form-group form-group-25">
+                <label class="form-label">Primer Nombre</label>
+                <input type="text" id="primerNombre" name="primerNombre" class="form-control" required th:value="${persona.getPrimerNombre()}" />
               </div>
-              <p class="footer-slogan">
-                Listos para servir, listos para rugir.
-              </p>
+              <div class="form-group form-group-25">
+                <label class="form-label">Segundo Nombre</label>
+                <input type="text" id="segundoNombre" name="segundoNombre" class="form-control"  th:value="${persona.getSegundoNombre()}" />
+              </div>
+              <div class="form-group form-group-25">
+                <label class="form-label">Primer Apellido</label>
+                <input type="text" name="primerApellido" id="primerApellido" class="form-control" required th:value="${persona.getPrimerApellido()}" />
+              </div>
+              <div class="form-group form-group-25">
+                <label class="form-label">Segundo Apellido</label>
+                <input type="text" name="segundoApellido" id="segundoApellido" class="form-control" th:value="${persona.getSegundoApellido()}" />
+              </div>
+            </div>
 
-              <div class="footer-address">
-                <img
-                  src="img/ubicacion.svg"
-                  alt="Ubicación"
-                  class="ubicacion-icon"
+            <div class="form-row">
+              <div class="form-group form-group-25">
+                <label class="form-label">Tipo de Documento</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        th:value="${persona.getTipoDeDocumento()}"
+                        disabled
                 />
-                <p class="footer-ubi">
-                  Palmira, Valle del Cauca – Barrio Las Delicias<br />
-                  Sede: Casa de la Juventud, Calle 30 #29-15
-                </p>
+              </div>
+              <div class="form-group form-group-25">
+                <label class="form-label">Numero de Documento</label>
+                <input type="number" id="numeroDeDocumento" name="numeroDeDocumento" min="1000000"
+                       max="99999999999" required class="form-control" th:value="${persona.getNumeroDeDocumento()}" />
+              </div>
+              <div class="form-group form-group-25">
+                <label class="form-label">Correo</label>
+                <input
+                        type="email"
+                        maxlength="50" disabled
+                        class="form-control"
+                        th:value="${persona.getUserEntity.getUsername()}"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Datos de Acudiente -->
+          <div class="section">
+            <h2 class="section-title">Datos de Acudiente</h2>
+
+            <div class="form-row">
+              <div class="form-group form-group-33">
+                <label class="form-label">Nombres del acudiente</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        name="nombresAcudiente"
+                        id="nombresAcudiente"
+                        required
+                        th:value="${persona.getResponsable.getNombres()}"
+                />
+              </div>
+              <div class="form-group form-group-25">
+                <label class="form-label">Apellidosdel acudiente</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        name="apellidosAcudiente"
+                        id="apellidosAcudiente"
+                        required
+                        th:value="${persona.getResponsable.getApellidos()}"
+                />
+              </div>
+              <div class="form-group form-group-20">
+                <label class="form-label">Tipo de Documento</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        th:value="${persona.getResponsable.getTipoDeDocumento()}"
+                        disabled
+                />
+              </div>
+              <div class="form-group form-group-20">
+                <label class="form-label">Numero Documento</label>
+                <input
+                        type="number"
+                        class="form-control"
+                        name="numeroDocumentoResponsable"
+                        id="numeroDocumentoResponsable"
+                        required
+                        th:value="${persona.getResponsable.getNumeroDocumento()}"
+                />
               </div>
             </div>
 
-            <div class="footer-social">
-              <a href="#" class="social-icon">
-                <img src="img/facebook.svg" alt="Facebook" />
-              </a>
-              <a href="#" class="social-icon">
-                <img src="img/instagram.svg" alt="Instagram" />
-              </a>
-              <a href="#" class="social-icon">
-                <img src="img/tiktok.svg" alt="TikTok" />
-              </a>
+            <div class="form-row">
+              <div class="form-group form-group-100">
+                <label class="form-label">Dirección</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        name="direccion"
+                        id="direccion"
+                        required
+                        th:value="${persona.getDireccion()}"
+                />
+              </div>
+              <div class="form-group form-group-25">
+                <label class="form-label">Teléfono</label>
+                <input
+                        type="number"
+                        class="form-control"
+                        name="telefonoResponsable"
+                        id="telefonoResponsable"
+                        required
+                        th:value="${persona.getResponsable.getTelefono()}"
+                />
+              </div>
             </div>
           </div>
 
-          <div class="footer-bottom">
-            <nav class="footer-nav">
-              <a href="#" class="footer-link">Inicio</a>
-              <a href="#" class="footer-link"
-                >Política de Tratamiento de Datos</a
-              >
-              <a href="#" class="footer-link">Configuración</a>
-            </nav>
-            <p class="footer-copyright">© 2025 Todos los derechos reservados</p>
+          <!-- Datos Medicos -->
+          <div class="section">
+            <h2 class="section-title">Datos Medicos</h2>
+
+            <div class="form-row">
+              <div class="form-group full-width" style="flex: 2.14">
+                <label class="form-label">Alergias</label>
+                <input type="text" name="alergias" id="alergias" class="form-control" required th:value="${persona.getEspecificacionAlergiasYRestricciones()}" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tipo de sangre</label>
+                <select class="form-control" name="tipoDeSangre" id="tipoDeSangre" required>
+                  <option value="" selected></option>
+                  <option
+                          th:each="ts : ${tiposDeSangre}"
+                          th:value="${ts}"
+                          th:text="${ts}"
+                          th:selected="${ts} == ${persona.tipoDeSangre}">
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">EPS</label>
+                <input type="text" name="eps" id="eps" class="form-control" required th:value="${persona.getEps()}" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group form-group-20">
+                <label class="form-label">¿Toma Medicamentos?</label>
+                <select name="medicamentos" id="medicamentos" class="form-control" required>
+                  <option th:value="true" th:selected="${persona.tomaMedicamentos} == true">Sí</option>
+                  <option th:value="false" th:selected="${persona.tomaMedicamentos} == false">No</option>
+                </select>
+              </div>
+              <div class="form-group full-width" style="flex: 3.3">
+                <label class="form-label">Frecuencia</label>
+                <input type="text" name="especificacionMedicamentos" id="especificacionMedicamentos" class="form-control" th:value="${persona.getEspecificacionMedicamentos()}" />
+              </div>
+            </div>
           </div>
+
+          <!-- Contactos de Emergencia -->
+          <div class="section">
+            <h2 class="section-title">Contactos de Emergencia</h2>
+
+            <div class="form-row">
+              <div class="form-group form-section-header form-group-50">
+                <label class="form-label">Contacto de Emergencia #1</label>
+              </div>
+              <div class="form-group form-section-header form-group-50">
+                <label class="form-label">Contacto de Emergencia #2</label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group form-group-33">
+                <label class="form-label">Nombre Contacto</label>
+                <input type="text" name="primerContacto" id="primerContacto" class="form-control" required th:value="${persona.getNombrePrimerContacto()}" />
+              </div>
+              <div class="form-group form-group-20">
+                <label class="form-label">Teléfono</label>
+                <input type="number" name="numeroPrimerContacto" id="numeroPrimerContacto" class="form-control" required th:value="${persona.getNumeroPrimerContacto()}" />
+              </div>
+              <div class="form-group form-group-33">
+                <label class="form-label">Nombre Contacto</label>
+                <input type="text" name="segundoContacto" id="segundoContacto" class="form-control" required th:value="${persona.getNombreSegundoContacto()}" />
+              </div>
+              <div class="form-group form-group-20">
+                <label class="form-label">Teléfono</label>
+                <input type="number" name="numeroSegundoContacto" id="numeroSegundoContacto" class="form-control" required th:value="${persona.getNumeroSegundoContacto()}" />
+              </div>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button type="submit" class="btn-primary botones">Modificar</button>
+            <button type="button" class="btn-secondary botones" onclick="cancelarRegistro()">Cancelar</button>
+          </div>
+        </form>
         </div>
-      </footer>
+
+
+      <div th:include="admin/template_admin.html::footer"></div>
     </main>
 
     <script>
@@ -544,6 +414,9 @@
         }
       });
 
+      function cancelarRegistro(){
+        window.history.back();
+      }
       document.addEventListener("DOMContentLoaded", function () {
         // Manejar clic en los botones de expansión
         document.querySelectorAll(".expand-btn").forEach((button) => {

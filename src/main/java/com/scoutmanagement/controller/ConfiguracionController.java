@@ -1,6 +1,7 @@
 package com.scoutmanagement.controller;
 
 import com.scoutmanagement.dto.InformacionPersonaDTO;
+import com.scoutmanagement.dto.ResponsablePersonaDTO;
 import com.scoutmanagement.persistence.model.*;
 import static com.scoutmanagement.util.constants.AppConstants.*;
 import com.scoutmanagement.service.interfaces.IPersonaService;
@@ -143,9 +144,18 @@ public class ConfiguracionController {
     }
 
     @PostMapping("/actualizarInformacion")
-    public String actualizarInformacion(HttpSession session, @ModelAttribute InformacionPersonaDTO informacionPersonaDTO, RedirectAttributes redirectAttributes){
+    public String actualizarInformacion(HttpSession session,
+                                        @ModelAttribute InformacionPersonaDTO informacionPersonaDTO,
+                                        @ModelAttribute ResponsablePersonaDTO responsablePersonaDTO,
+                                        RedirectAttributes redirectAttributes){
         try {
-            personaService.actualizarInformacionPerosnal(informacionPersonaDTO, session);
+            Object rol = session.getAttribute("rol");
+            if (rol.equals(Rol.ADULTO.name())){
+                personaService.actualizarInformacionPerosnal(informacionPersonaDTO, session, null);
+
+            }else if (rol.equals(Rol.JOVEN.name())) {
+                personaService.actualizarInformacionPerosnal(informacionPersonaDTO, session, responsablePersonaDTO);
+            }
             redirectAttributes.addFlashAttribute("type", EXCEPTION_SUCCESS);
             redirectAttributes.addFlashAttribute(EXCEPTION_MESSAGE, "Información modificado con éxito.");
             return REDIRECT_CONFIGURACION;

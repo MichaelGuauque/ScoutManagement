@@ -3,8 +3,10 @@ package com.scoutmanagement.service.implementation;
 import com.scoutmanagement.dto.InformacionPersonaDTO;
 import com.scoutmanagement.dto.PersonaActualizacionDTO;
 import com.scoutmanagement.dto.PersonaRegistroDTO;
+import com.scoutmanagement.dto.ResponsablePersonaDTO;
 import com.scoutmanagement.persistence.model.*;
 import com.scoutmanagement.persistence.repository.PersonaRepository;
+import com.scoutmanagement.persistence.repository.ResponsableRepository;
 import com.scoutmanagement.persistence.repository.RoleRepository;
 import com.scoutmanagement.persistence.repository.UserRepository;
 import com.scoutmanagement.service.interfaces.IPersonaService;
@@ -33,6 +35,9 @@ public class PersonaService implements IPersonaService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ResponsableRepository  responsableRepository;
 
     private static final String ID_USUARIO = "idUsuario";
 
@@ -162,7 +167,7 @@ public class PersonaService implements IPersonaService {
     }
 
     @Override
-    public void actualizarInformacionPerosnal(InformacionPersonaDTO dto, HttpSession session) {
+    public void actualizarInformacionPerosnal(InformacionPersonaDTO dto, HttpSession session, ResponsablePersonaDTO responsableDTO) {
         Persona persona = personaModelSession(ID_USUARIO, session);
         persona.setPrimerNombre(dto.primerNombre());
         persona.setSegundoNombre(dto.segundoNombre());
@@ -178,6 +183,24 @@ public class PersonaService implements IPersonaService {
         persona.setNumeroPrimerContacto(dto.numeroPrimerContacto());
         persona.setNombreSegundoContacto(dto.segundoContacto());
         persona.setNumeroSegundoContacto(dto.numeroSegundoContacto());
+        if (persona.getResponsable() != null) {
+            Responsable responsable = persona.getResponsable();
+            responsable.setNombres(responsableDTO.nombresAcudiente());
+            responsable.setApellidos(responsableDTO.apellidosAcudiente());
+            responsable.setNumeroDocumento(responsableDTO.numeroDocumentoResponsable());
+            responsable.setTelefono(responsableDTO.telefonoResponsable());
+            persona.setDireccion(responsableDTO.direccion());
+        }else {
+            if (responsableDTO != null && responsableDTO.nombresAcudiente() != null) {
+                Responsable responsable = new Responsable();
+                responsable.setNombres(responsableDTO.nombresAcudiente());
+                responsable.setApellidos(responsableDTO.apellidosAcudiente());
+                responsable.setNumeroDocumento(responsableDTO.numeroDocumentoResponsable());
+                responsable.setTelefono(responsableDTO.telefonoResponsable());
+                persona.setDireccion(responsableDTO.direccion());
+                persona.setResponsable(responsable);
+            }
+        }
         personaRepository.save(persona);
     }
 

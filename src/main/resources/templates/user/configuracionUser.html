@@ -57,11 +57,11 @@
                     <div class="profile-name-container">
                         <h1 th:text="${persona.getNombreCompleto()}"></h1>
                         <div class="profile-email" th:text="${persona.getUserEntity.getUsername()}"></div>
-                        <div class="profile-status" th:text="${persona.getUserEntity.isActivo()}"></div>
+                        <div class="profile-status" th:text="${persona.getUserEntity.isActivo()} ? 'Activo' : 'Inactivo'"></div>
                     </div>
                 </div>
 
-                <button class="edit-button create-reto-btn">
+                <a class="edit-button create-reto-btn" th:href="@{/configuracion/modificar}">
                     <span>Modificar</span>
                     <img
                             th:src="@{/img/modificar.svg}"
@@ -69,7 +69,7 @@
                             width="16"
                             height="16"
                     />
-                </button>
+                </a>
             </div>
 
             <!-- Información Personal -->
@@ -244,7 +244,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.isTomaMedicamentos()}"
+                                th:value="${persona.isTomaMedicamentos()} ? 'Sí' : 'No'"
                                 disabled />
                     </div>
                     <div class="form-group full-width" style="flex: 3.3">
