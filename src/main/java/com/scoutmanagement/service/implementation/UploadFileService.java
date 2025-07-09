@@ -35,10 +35,5 @@ public class UploadFileService {
         }catch(IOException e){
             logger.error(e.getMessage());
         }
-//        boolean eliminado = file.delete();
-//
-//        if (!eliminado) {
-//            logger.warn("No se pudo eliminar la imagen: {}", nombre);
-//        }
     }
 }
