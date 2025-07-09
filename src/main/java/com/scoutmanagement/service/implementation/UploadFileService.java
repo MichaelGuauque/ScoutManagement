@@ -27,6 +27,10 @@ public class UploadFileService {
     public void deleteImage(String nombre) {
         String ruta="images//";
         File file= new File(ruta+nombre);
-        file.delete();
+        boolean eliminado = file.delete();
+
+        if (!eliminado) {
+            System.err.println("No se pudo eliminar la imagen: " + nombre);
+        }
     }
 }
