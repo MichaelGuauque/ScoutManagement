@@ -264,11 +264,14 @@
                 }
 
                 function renderTablePage(page) {
-                    table.innerHTML = '';
                     const start = (page - 1) * rowsPerPage;
                     const end = start + rowsPerPage;
-                    rows.slice(start, end).forEach(row => {
-                        table.appendChild(row);
+                    rows.forEach((row, index) => {
+                        if (index >= start && index < end) {
+                            row.style.display = ''; // Show the row
+                        } else {
+                            row.style.display = 'none'; // Hide the row
+                        }
                     });
 
                     if (totalPages > 1) {
