@@ -98,15 +98,17 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
+            <div class="pagination-container">
+                <div class="pagination">
+                    <a class="pagination-btn prevPage" style="display: none;">Anterior</a>
+                    <span class="pagination-info pageInfo"></span>
+                    <a class="pagination-btn nextPage" style="display: none;">Siguiente</a>
 
-        <div class="pagination-container">
-            <div class="pagination">
-                <a class="pagination-btn" id="prevPage" style="display: none;">Anterior</a>
-                <span class="pagination-info" id="pageInfo"></span>
-                <a class="pagination-btn" id="nextPage" style="display: none;">Siguiente</a>
+                </div>
             </div>
         </div>
+
+
     </div>
 
     <!-- Modal de Crear Retos -->
@@ -171,7 +173,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2>Modificar Reto</h2>
-                    <p>Aquí puedes modificar la información de un reto correspondiente a una etapa de progresión. Asegúrate de que sea
+                    <p>Aquí puedes modificar la información de un reto correspondiente a una etapa de progresión.
+                        Asegúrate de que sea
                         claro, alcanzable y esté alineado con los objetivos de la rama.</p>
                     <p style="margin-top: 12px;">Este reto será visible para todos los miembros de la etapa
                         seleccionada.</p>
@@ -187,7 +190,8 @@
                     <div class="form-row">
                         <div class="form-group" style="flex: 0 0 185px; max-width: 185px;">
                             <label for="challenge-number">Numero del Reto</label>
-                            <input type="number" id="challenge-number" name="numero" placeholder="Ingresa el número..." required min="1">
+                            <input type="number" id="challenge-number" name="numero" placeholder="Ingresa el número..."
+                                   required min="1">
                         </div>
 
                         <div class="form-group">
@@ -206,13 +210,15 @@
                         <div class="form-group">
                             <label for="activity-description">Descripcion del Reto</label>
                             <textarea id="activity-description" name="descripcion"
-                                      placeholder="Ingresa aquí la descripción de la actividad..." required ></textarea>
+                                      placeholder="Ingresa aquí la descripción de la actividad..." required></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="botones btn-primary save-button">Guardar</button>
-                    <button type="button" class="botones btn-secondary cancel-button" onclick="cancelarRegistro()">Cancelar</button>
+                    <button type="button" class="botones btn-secondary cancel-button" onclick="cancelarRegistro()">
+                        Cancelar
+                    </button>
                 </div>
             </div>
             <div class="modal-overlay"></div>
@@ -224,9 +230,10 @@
             <span class="close" onclick="hideModal()">&times;</span>
             <p>¿Estás seguro de que deseas eliminar este reto?</p>
             <form id="deleteForm" th:action="@{/retos/remove}" method="post">
-                <input type="hidden" id="retoId" name="id" />
+                <input type="hidden" id="retoId" name="id"/>
                 <button class="btn-primary boton-modal save-button" type="submit">Confirmar</button>
-                <button class="btn-secondary boton-modal cancel-button" type="button" onclick="hideModal()">Cancelar</button>
+                <button class="btn-secondary boton-modal cancel-button" type="button" onclick="hideModal()">Cancelar
+                </button>
             </form>
         </div>
     </div>
@@ -237,53 +244,61 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const rowsPerPage = 10;
-            const table = document.querySelector('table tbody');
-            const rows = Array.from(table.querySelectorAll('tr'));
-            const prevButton = document.getElementById('prevPage');
-            const nextButton = document.getElementById('nextPage');
-            const pageInfo = document.getElementById('pageInfo');
-            const paginationContainer = document.querySelector('.pagination-container'); // Agregamos
-            const retosSection = document.getElementById('retosSection');
-            let currentPage = 1;
-            const totalPages = Math.ceil(rows.length / rowsPerPage);
+            const rowsPerPage = 5;
+            const allContentAreas = document.querySelectorAll('.content-area');
 
-            function renderTablePage(page) {
-                table.innerHTML = '';
-                const start = (page - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
-                rows.slice(start, end).forEach(row => {
-                    table.appendChild(row);
-                });
+            allContentAreas.forEach(contentArea => {
+                const table = contentArea.querySelector('table tbody');
+                const rows = Array.from(table.querySelectorAll('tr'));
+                const paginationContainer = contentArea.querySelector('.pagination-container');
+                const prevButton = contentArea.querySelector('.prevPage');
+                const nextButton = contentArea.querySelector('.nextPage');
+                const pageInfo = contentArea.querySelector('.pageInfo');
 
-                // Mostrar solo si hay más de una página
-                if (totalPages > 1) {
-                    paginationContainer.style.display = 'flex';
-                    pageInfo.textContent = `Página ${page} de ${totalPages}`;
-                    prevButton.style.display = page > 1 ? 'inline-block' : 'none';
-                    nextButton.style.display = page < totalPages ? 'inline-block' : 'none';
-                } else {
-                    paginationContainer.style.display = 'none'; // Ocultamos todo si solo hay una página
+                let currentPage = 1;
+                const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+                if (!table || rows.length === 0) {
+                    if (paginationContainer) paginationContainer.style.display = 'none';
+                    return;
                 }
-            }
 
-            prevButton.addEventListener('click', function () {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderTablePage(currentPage);
-                    retosSection.scrollIntoView({behavior: 'smooth'});
+                function renderTablePage(page) {
+                    table.innerHTML = '';
+                    const start = (page - 1) * rowsPerPage;
+                    const end = start + rowsPerPage;
+                    rows.slice(start, end).forEach(row => {
+                        table.appendChild(row);
+                    });
+
+                    if (totalPages > 1) {
+                        paginationContainer.style.display = 'flex';
+                        pageInfo.textContent = `Página ${page} de ${totalPages}`;
+                        prevButton.style.display = page > 1 ? 'inline-block' : 'none';
+                        nextButton.style.display = page < totalPages ? 'inline-block' : 'none';
+                    } else {
+                        paginationContainer.style.display = 'none';
+                    }
                 }
+
+                if (prevButton && nextButton) {
+                    prevButton.addEventListener('click', function () {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            renderTablePage(currentPage);
+                        }
+                    });
+
+                    nextButton.addEventListener('click', function () {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            renderTablePage(currentPage);
+                        }
+                    });
+                }
+
+                renderTablePage(currentPage);
             });
-
-            nextButton.addEventListener('click', function () {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderTablePage(currentPage);
-                    retosSection.scrollIntoView({behavior: 'smooth'});
-                }
-            });
-
-            renderTablePage(currentPage);
         });
     </script>
 
@@ -314,7 +329,7 @@
         }
 
         document.querySelectorAll('.modificar-reto-btn').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 // Obtener los datos del atributo data-*
                 const retoId = this.getAttribute('data-reto-id');
                 const numero = this.getAttribute('data-reto-numero');

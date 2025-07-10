@@ -6,9 +6,7 @@ import com.scoutmanagement.persistence.model.*;
 
 import static com.scoutmanagement.util.constants.AppConstants.*;
 
-import com.scoutmanagement.service.interfaces.IActividadService;
-import com.scoutmanagement.service.interfaces.IPersonaService;
-import com.scoutmanagement.service.interfaces.IUserEntity;
+import com.scoutmanagement.service.interfaces.*;
 import com.scoutmanagement.util.exception.ServiceException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,7 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/")
@@ -40,6 +40,12 @@ public class UserController {
     @Autowired
     private IActividadService actividadService;
 
+    @Autowired
+    private IObtencionService obtencionService;
+
+    @Autowired
+    private IEtapaService etapaService;
+
     @GetMapping()
     public String login() {
         return "user/login";
@@ -48,6 +54,13 @@ public class UserController {
     private static final String ID_USUARIO = "idUsuario";
 
     private static final String ATRIBUTO_PERSONA = "persona";
+
+    private static final Map<String, Integer> GRUPOS_RAMAS = Map.of(
+            "MANADA", 30,
+            "TROPA", 31,
+            "COMUNIDAD", 32,
+            "CLAN", 33
+    );
 
     @PostMapping("/acceder")
     public String acceder(@ModelAttribute UserDTO userDTO, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
@@ -171,6 +184,13 @@ public class UserController {
         } else if (session.getAttribute("rol").equals(Rol.JOVEN.name())) {
             Persona sesionDelMiembro = personaService.personaModelSession(ID_USUARIO, session);
             model.addAttribute(ATRIBUTO_PERSONA, sesionDelMiembro);
+            Rama rama = sesionDelMiembro.getRama();
+            List<Etapa> etapas = etapaService.findAllByRama(rama);
+            model.addAttribute(ETAPAS, etapas);
+            Set<Long> etapasObtenidas = obtencionService.findIdEtapasObtenidasByPersona(sesionDelMiembro);
+            model.addAttribute("etapasObtenidas", etapasObtenidas);
+            model.addAttribute("gruposRamas", GRUPOS_RAMAS);
+
             return "user/home";
         }
 

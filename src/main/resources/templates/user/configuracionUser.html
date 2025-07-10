@@ -122,7 +122,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.getTipoDeDocumento()}"
+                                th:value="${persona.getTipoDeDocumento().getDescripcion()}"
                                 disabled
                         />
                     </div>
@@ -176,7 +176,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.getResponsable.getTipoDeDocumento()}"
+                                th:value="${persona.getResponsable.getTipoDeDocumento().getDescripcion()}"
                                 disabled
                         />
                     </div>
