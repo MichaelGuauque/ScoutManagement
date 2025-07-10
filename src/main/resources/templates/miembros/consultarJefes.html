@@ -90,7 +90,7 @@
                 <tr th:each="jefe : ${jefes}">
                     <td>
                         <div class="user-container">
-                            <img th:src="${jefe.imagen != null} ? @{/images/{img}(img=${jefe.imagen})} : @{/img/perfil.svg}" alt="Profile" class="profile-img">
+                            <img th:src="${jefe.imagen != null} ? @{/images/{img}(img=${jefe.imagen})} : @{/images/miembro.svg}" alt="Profile" class="profile-img">
                             <span th:text="${jefe.primerNombre+ ' '+jefe.segundoNombre+' '+jefe.primerApellido+
                             ' '+jefe.segundoApellido}">Nombre del jefe</span>
                         </div>
