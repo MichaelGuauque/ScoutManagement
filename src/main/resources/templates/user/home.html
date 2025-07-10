@@ -181,93 +181,26 @@
                 </div>
                 <div class="card-content-progress">
                     <div class="progress-grid">
-                        <!-- Pata tierna -->
-                        <div class="progress-item" id="pata-tierna">
-                            <div class="progress-bar" style="width: 100%;"></div>
-                            <div class="progress-content">
-                                <h3 class="progress-title">Pata Tierna</h3>
-                                <div class="progress-bottom">
-                                    <div class="progress-percentage">
-                                        70<span class="progress-percentage-symbol">%</span>
-                                    </div>
-                                    <div class="progress-circle">
-                                        <svg viewBox="0 0 36 36">
-                                            <path class="progress-circle-bg"
-                                                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                            <path class="progress-circle-value progress-high"
-                                                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                                  stroke-dasharray="10, 100"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Saltador -->
-                        <div class="progress-item" id="saltador">
-                            <div class="progress-bar" style="width: 40%;"></div>
-                            <div class="progress-content">
-                                <h3 class="progress-title">Saltador</h3>
-                                <div class="progress-bottom">
-                                    <div class="progress-percentage">
-                                        40<span class="progress-percentage-symbol">%</span>
-                                    </div>
-                                    <div class="progress-circle">
-                                        <svg viewBox="0 0 36 36">
-                                            <path class="progress-circle-bg"
-                                                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                            <path class="progress-circle-value progress-medium"
-                                                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                                  stroke-dasharray="40, 100"/>
-                                        </svg>
+                        <th:block th:each="etapa : ${etapas}">
+                            <div class="progress-item" th:id="'etapa-' + ${etapa.id}" th:data-progreso="${progresoPorEtapa[etapa.id]}">
+                                <div class="progress-bar"></div>
+                                <div class="progress-content">
+                                    <h3 class="progress-title" th:text="${etapa.nombre}">Nombre Etapa</h3>
+                                    <div class="progress-bottom">
+                                        <div class="progress-percentage">0<span class="progress-percentage-symbol">%</span></div>
+                                        <div class="progress-circle">
+                                            <svg viewBox="0 0 36 36">
+                                                <path class="progress-circle-bg"
+                                                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                                <path class="progress-circle-value"
+                                                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                      stroke-dasharray="0, 100"/>
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- rastreador -->
-                        <div class="progress-item" id="rastreador">
-                            <div class="progress-bar" style="width: 90%;"></div>
-                            <div class="progress-content">
-                                <h3 class="progress-title">Rastreador</h3>
-                                <div class="progress-bottom">
-                                    <div class="progress-percentage">
-                                        90<span class="progress-percentage-symbol">%</span>
-                                    </div>
-                                    <div class="progress-circle">
-                                        <svg viewBox="0 0 36 36">
-                                            <path class="progress-circle-bg"
-                                                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                            <path class="progress-circle-value progress-high"
-                                                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                                  stroke-dasharray="90, 100"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- tigreso -->
-                        <div class="progress-item" id="cazador">
-                            <div class="progress-bar" style="width: 55%;"></div>
-                            <div class="progress-content">
-                                <h3 class="progress-title">Cazador</h3>
-                                <div class="progress-bottom">
-                                    <div class="progress-percentage">
-                                        55<span class="progress-percentage-symbol">%</span>
-                                    </div>
-                                    <div class="progress-circle">
-                                        <svg viewBox="0 0 36 36">
-                                            <path class="progress-circle-bg"
-                                                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                            <path class="progress-circle-value progress-medium"
-                                                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                                  stroke-dasharray="55, 100"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </th:block>
                     </div>
                 </div>
             </div>
@@ -291,7 +224,7 @@
         if (!progressItem) return;
 
         // Limitar el valor entre 0 y 100
-        value = Math.max(0, Math.min(100, value));
+        value = Math.round(Math.max(0, Math.min(100, value)));
 
         // Determinar la clase de color según el valor
         let colorClass;
@@ -573,6 +506,14 @@
                     block: "start"      // Inicia el scroll desde la parte superior de la sección
                 });
             });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".progress-item").forEach(item => {
+            const progreso = parseFloat(item.dataset.progreso);
+            const id = item.id;
+            setProgress(id, progreso);
         });
     });
 </script>
