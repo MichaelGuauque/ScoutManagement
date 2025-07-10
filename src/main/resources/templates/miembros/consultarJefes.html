@@ -263,66 +263,93 @@
 
     <div th:include="admin/template_admin.html::footer"></div>
 </main>
-<script>
-    const itemsPerPage = 5; // Número de elementos por página
-    let currentPage = 1; // Página actual
-    const items = document.querySelectorAll('#tablaJefes tr'); // Todos los elementos de la tabla
-    const totalItems = items.length; // Total de elementos
-    const totalPages = Math.ceil(totalItems / itemsPerPage); // Total de páginas
 
-    // Función para actualizar la tabla según la página actual
-    function updateTable() {
-        // Mostrar los elementos de la página actual
-        const start = (currentPage - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        items.forEach((item, index) => {
-            if (index >= start && index < end) {
-                item.style.display = ''; // Mostrar el elemento
-            } else {
-                item.style.display = 'none'; // Ocultar el elemento
+<script>
+    let currentPage = 1;
+    const rowsPerPage = 5;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputBusqueda = document.querySelector(".filter-search");
+        const botonLimpiar = document.querySelector(".search-btn");
+
+        inputBusqueda.addEventListener("input", () => {
+            currentPage = 1;
+            filtrarMiembrosYMostrarPagina(currentPage);
+        });
+
+        botonLimpiar.addEventListener("click", (e) => {
+            e.preventDefault();
+            inputBusqueda.value = "";
+            currentPage = 1;
+            filtrarMiembrosYMostrarPagina(currentPage);
+        });
+
+        // Carga inicial
+        filtrarMiembrosYMostrarPagina(currentPage);
+    });
+
+    function filtrarMiembrosYMostrarPagina(pagina) {
+        const filtro = document.querySelector(".filter-search").value.toLowerCase();
+        const filas = document.querySelectorAll("#tablaMiembros tr");
+
+        // Marcar las que coinciden
+        filas.forEach(fila => {
+            const spanNombre = fila.querySelector(".user-container span");
+            if (spanNombre) {
+                const nombreCompleto = spanNombre.innerText.toLowerCase();
+                fila.dataset.visible = nombreCompleto.includes(filtro) ? "true" : "false";
             }
         });
 
-        // Actualizar la información de la página
-        const pageInfoElement = document.getElementById('pageInfo');
-        if (totalPages <= 1) {
-            // Ocultar el mensaje de paginación cuando solo hay una página
-            pageInfoElement.style.display = 'none';
-        } else {
-            pageInfoElement.style.display = '';
-            pageInfoElement.textContent = `Página ${currentPage} de ${totalPages}`;
-        }
-
-        // Mostrar u ocultar los botones de "Anterior" y "Siguiente"
-        document.getElementById('prevPage').style.display = currentPage > 1 ? '' : 'none';
-        document.getElementById('nextPage').style.display = currentPage < totalPages ? '' : 'none';
-
-        // Opcionalmente, ocultar también los botones de navegación cuando solo hay una página
-        const paginationControls = document.getElementById('paginationControls');
-        if (paginationControls) {
-            paginationControls.style.display = totalPages <= 1 ? 'none' : '';
-        }
+        mostrarPagina(pagina);
     }
 
-    // Manejar el botón "Anterior"
-    document.getElementById('prevPage').addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            updateTable();
-        }
-    });
+    function mostrarPagina(pagina) {
+        const filas = Array.from(document.querySelectorAll("#tablaMiembros tr"));
+        const visibles = filas.filter(fila => fila.dataset.visible === "true");
 
-    // Manejar el botón "Siguiente"
-    document.getElementById('nextPage').addEventListener('click', () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            updateTable();
-        }
-    });
+        const totalPaginas = Math.ceil(visibles.length / rowsPerPage);
+        const inicio = (pagina - 1) * rowsPerPage;
+        const fin = inicio + rowsPerPage;
 
-    // Inicializar la tabla
-    updateTable();
+        filas.forEach(fila => fila.style.display = "none"); // Oculta todas
+        visibles.forEach((fila, index) => {
+            if (index >= inicio && index < fin) {
+                fila.style.display = "";
+            }
+        });
+
+        const pageInfo = document.getElementById("pageInfo");
+        if (totalPaginas > 1) {
+            pageInfo.textContent = `Página ${pagina} de ${totalPaginas}`;
+            pageInfo.style.display = "inline-block";
+        } else {
+            pageInfo.textContent = "";
+            pageInfo.style.display = "none";
+        }
+
+        const btnPrev = document.getElementById("prevPage");
+        const btnNext = document.getElementById("nextPage");
+
+        btnPrev.style.display = (pagina > 1) ? "inline-block" : "none";
+        btnNext.style.display = (pagina < totalPaginas) ? "inline-block" : "none";
+
+        btnPrev.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                mostrarPagina(currentPage);
+            }
+        };
+
+        btnNext.onclick = () => {
+            if (currentPage < totalPaginas) {
+                currentPage++;
+                mostrarPagina(currentPage);
+            }
+        };
+    }
 </script>
+
 <script>
 
     // Funciones para los modales
@@ -587,33 +614,6 @@
             window.history.replaceState({}, document.title, newUrl);
         }
     });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const inputBusqueda = document.querySelector(".filter-search");
-        const botonLimpiar = document.querySelector(".search-btn");
-
-
-        inputBusqueda.addEventListener("input", filtrarJefes);
-        botonLimpiar.addEventListener("click", (e) => {
-            e.preventDefault(); // Evita recarga si está dentro de un <form>
-            inputBusqueda.value = ""; // Limpia el campo
-            filtrarJefes(); // Muestra todos
-        });
-    });
-
-    function filtrarJefes() {
-        const filtro = document.querySelector(".filter-search").value.toLowerCase();
-        const filas = document.querySelectorAll("#tablaJefes tr");
-
-        filas.forEach(fila => {
-            const spanNombre = fila.querySelector(".user-container span");
-            if (spanNombre) {
-                const nombreCompleto = spanNombre.innerText.toLowerCase();
-                fila.style.display = (nombreCompleto.includes(filtro) || filtro.trim() === "") ? "" : "none";
-            }
-        });
-    }
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {

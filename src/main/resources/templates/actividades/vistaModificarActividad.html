@@ -59,7 +59,7 @@
                             <option value="" selected>Selecciona la Rama...</option>
                             <th:block th:each="rama : ${ramas}">
                                 <option th:value="${rama}" th:text="${rama}"
-                                        th:selected="${actividad.rama}">
+                                        th:selected="${rama} == ${actividad.rama}">
                                 </option>
                             </th:block>
                         </select>

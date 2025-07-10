@@ -109,7 +109,7 @@
                 />
               </div>
               <div class="form-group form-group-25">
-                <label class="form-label">Apellidosdel acudiente</label>
+                <label class="form-label">Apellidos del acudiente</label>
                 <input
                         type="text"
                         class="form-control"
@@ -151,6 +151,7 @@
                         id="direccion"
                         required
                         th:value="${persona.getDireccion()}"
+
                 />
               </div>
               <div class="form-group form-group-25">
@@ -161,7 +162,8 @@
                         name="telefonoResponsable"
                         id="telefonoResponsable"
                         required
-                        th:value="${persona.getResponsable.getTelefono()}"
+                        th:value="${persona.responsable.telefono != null and persona.responsable.telefono != 0 ? persona.responsable.telefono : ''}"
+
                 />
               </div>
             </div>
@@ -233,11 +235,11 @@
               </div>
               <div class="form-group form-group-33">
                 <label class="form-label">Nombre Contacto</label>
-                <input type="text" name="segundoContacto" id="segundoContacto" class="form-control" required th:value="${persona.getNombreSegundoContacto()}" />
+                <input type="text" name="segundoContacto" id="segundoContacto" class="form-control" th:value="${persona.getNombreSegundoContacto()}" />
               </div>
               <div class="form-group form-group-20">
                 <label class="form-label">Teléfono</label>
-                <input type="number" name="numeroSegundoContacto" id="numeroSegundoContacto" class="form-control" required th:value="${persona.getNumeroSegundoContacto()}" />
+                <input type="number" name="numeroSegundoContacto" id="numeroSegundoContacto" class="form-control" th:value="${persona.getNumeroSegundoContacto()}" />
               </div>
             </div>
           </div>
