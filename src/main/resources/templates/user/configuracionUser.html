@@ -158,7 +158,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.getResponsable.getNombreCompleto()}"
+                                th:value="${persona.responsable != null and persona.responsable.nombreCompleto != null and !#strings.contains(persona.responsable.nombreCompleto.toLowerCase(), 'null') ? persona.responsable.nombreCompleto : ''}"
                                 disabled
                         />
                     </div>
@@ -167,7 +167,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.getResponsable.getTelefono()}"
+                                th:value="${persona.responsable != null and persona.responsable.telefono != null and persona.responsable.telefono != 0 ? persona.responsable.telefono : ''}"
                                 disabled
                         />
                     </div>
@@ -176,7 +176,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.getResponsable.getTipoDeDocumento().getDescripcion()}"
+                                th:value="${persona.responsable?.tipoDeDocumento?.descripcion}"
                                 disabled
                         />
                     </div>
@@ -287,7 +287,8 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.getNumeroPrimerContacto()}"                                disabled
+                                th:value="${persona.numeroPrimerContacto != null and persona.numeroPrimerContacto != 0 ? persona.numeroPrimerContacto : ''}"
+                                disabled
                         />
                     </div>
                     <div class="form-group form-group-33">
@@ -295,7 +296,8 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.getNombreSegundoContacto()}"                                disabled
+                                th:value="${persona.getNombreSegundoContacto()}"
+                                disabled
                         />
                     </div>
                     <div class="form-group form-group-20">
@@ -303,7 +305,7 @@
                         <input
                                 type="text"
                                 class="form-control"
-                                th:value="${persona.getNumeroSegundoContacto()}"
+                                th:value="${persona.numeroSegundoContacto != null and persona.numeroSegundoContacto != 0 ? persona.numeroSegundoContacto : ''}"
                                 disabled
                         />
                     </div>

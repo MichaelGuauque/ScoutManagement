@@ -72,7 +72,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  th:value="${persona.getTipoDeDocumento()}"
+                  th:value="${persona.getTipoDeDocumento().getDescripcion()}"
                   disabled
                 />
               </div>
@@ -130,7 +130,7 @@
               </div>
               <div class="form-group full-width" style="flex: 3.3">
                 <label class="form-label">Frecuencia</label>
-                <input type="text" name="especificacionMedicamentos" id="especificacionMedicamentos" class="form-control" required th:value="${persona.getEspecificacionMedicamentos()}" />
+                <input type="text" name="especificacionMedicamentos" id="especificacionMedicamentos" class="form-control" th:value="${persona.getEspecificacionMedicamentos()}" />
               </div>
             </div>
           </div>
@@ -159,11 +159,11 @@
               </div>
               <div class="form-group form-group-33">
                 <label class="form-label">Nombre Contacto</label>
-                <input type="text" name="segundoContacto" id="segundoContacto" class="form-control" required th:value="${persona.getNombreSegundoContacto()}" />
+                <input type="text" name="segundoContacto" id="segundoContacto" class="form-control" th:value="${persona.getNombreSegundoContacto()}" />
               </div>
               <div class="form-group form-group-20">
                 <label class="form-label">Teléfono</label>
-                <input type="number" name="numeroSegundoContacto" id="numeroSegundoContacto" class="form-control" required th:value="${persona.getNumeroSegundoContacto()}" />
+                <input type="number" name="numeroSegundoContacto" id="numeroSegundoContacto" class="form-control" th:value="${persona.getNumeroSegundoContacto()}" />
               </div>
             </div>
           </div>

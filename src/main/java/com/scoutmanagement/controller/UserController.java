@@ -46,6 +46,9 @@ public class UserController {
     @Autowired
     private IEtapaService etapaService;
 
+    @Autowired
+    private IProgresoService progresoService;
+
     @GetMapping()
     public String login() {
         return "user/login";
@@ -186,7 +189,9 @@ public class UserController {
             model.addAttribute(ATRIBUTO_PERSONA, sesionDelMiembro);
             Rama rama = sesionDelMiembro.getRama();
             List<Etapa> etapas = etapaService.findAllByRama(rama);
+            Map<Long, Float> progresoPorEtapa = progresoService.calcularProgresosPorEtapa(etapas, sesionDelMiembro);
             model.addAttribute(ETAPAS, etapas);
+            model.addAttribute("progresoPorEtapa", progresoPorEtapa);
             Set<Long> etapasObtenidas = obtencionService.findIdEtapasObtenidasByPersona(sesionDelMiembro);
             model.addAttribute("etapasObtenidas", etapasObtenidas);
             model.addAttribute("gruposRamas", GRUPOS_RAMAS);

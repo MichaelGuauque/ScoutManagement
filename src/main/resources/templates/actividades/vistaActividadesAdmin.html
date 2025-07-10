@@ -62,7 +62,7 @@
                 <div class="search-container">
                     <form method="get" action="/actividades" id="filtroForm" class="search-container">
                         <div class="select-container">
-                            <select name="ramaSeleccionada" onchange="this.form.submit()" class="filter-select">
+                            <select name="ramaSeleccionada" onchange="this.form.submit()" class="filter-select" id="filter-rama">
                                 <option value="" th:selected="${ramaSeleccionada == null}">Todas</option>
                                 <option th:each="rama : ${ramas}"
                                         th:value="${rama}"
@@ -944,6 +944,7 @@
 
     function limpiarFecha() {
         document.getElementById('filter-date').value = "";
+        document.getElementById('filter-rama').value = "";
         document.getElementById('filtroForm').submit();
     }
 </script>

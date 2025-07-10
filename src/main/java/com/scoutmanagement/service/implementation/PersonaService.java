@@ -183,7 +183,7 @@ public class PersonaService implements IPersonaService {
         persona.setNumeroPrimerContacto(dto.numeroPrimerContacto());
         persona.setNombreSegundoContacto(dto.segundoContacto());
         persona.setNumeroSegundoContacto(dto.numeroSegundoContacto());
-        if (persona.getResponsable() != null) {
+        if (persona.getResponsable() != null && responsableDTO!=null) {
             Responsable responsable = persona.getResponsable();
             responsable.setNombres(responsableDTO.nombresAcudiente());
             responsable.setApellidos(responsableDTO.apellidosAcudiente());
